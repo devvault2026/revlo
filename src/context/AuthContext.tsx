@@ -21,8 +21,14 @@ export const AuthProvider: React.FC<{ children: React.ReactNode }> = ({ children
         try {
             const data = await getProfile(userId);
             setProfile(data);
-        } catch (error) {
-            console.error('Error fetching profile:', error);
+        } catch (error: any) {
+            if (error?.name === 'AbortError') return;
+            // Only log actual errors, not 'no rows found' which is expected for new users
+            if (error?.code !== 'PGRST116') {
+                console.error('CRITICAL: Profile fetch failed:', error?.message || error);
+            } else {
+                console.log('SYSTEM: Profile not yet initialized for user.');
+            }
         }
     };
 
@@ -30,24 +36,37 @@ export const AuthProvider: React.FC<{ children: React.ReactNode }> = ({ children
         let mounted = true;
 
         const initAuth = async () => {
-            // Safety timeout to prevent infinite loading
+            // Safety timeout - extended to 8s for cold starts
             const timeoutId = setTimeout(() => {
                 if (mounted && loading) {
-                    console.warn("Auth initialization timed out, forcing load completion.");
+                    console.warn("AUTH_GATE: Initialization taking longer than expected. Bypassing gate...");
                     setLoading(false);
                 }
-            }, 3000);
+            }, 8000);
 
             try {
-                const { data: { session } } = await supabase.auth.getSession();
-                if (mounted) {
-                    setUser(session?.user ?? null);
-                    if (session?.user) {
-                        await fetchProfile(session.user.id);
+                // Get initial state
+                console.log("AUTH_GATE: Querying session...");
+                const { data: { session }, error } = await supabase.auth.getSession();
+
+                if (error) {
+                    // Handle AbortError specifically
+                    if (error.name === 'AbortError') {
+                        console.warn("AUTH_GATE: Session query aborted. Retrying via state listener...");
+                    } else {
+                        throw error;
                     }
                 }
-            } catch (error) {
-                console.error('Auth initialization error:', error);
+
+                if (mounted) {
+                    const currentUser = session?.user ?? null;
+                    setUser(currentUser);
+                    if (currentUser) {
+                        await fetchProfile(currentUser.id);
+                    }
+                }
+            } catch (error: any) {
+                console.error('AUTH_GATE: Failed to initialize session:', error?.message || error);
             } finally {
                 clearTimeout(timeoutId);
                 if (mounted) setLoading(false);
@@ -56,17 +75,20 @@ export const AuthProvider: React.FC<{ children: React.ReactNode }> = ({ children
 
         initAuth();
 
-        const { data: { subscription } } = supabase.auth.onAuthStateChange(async (_event, session) => {
+        const { data: { subscription } } = supabase.auth.onAuthStateChange(async (event, session) => {
             if (!mounted) return;
 
-            setUser(session?.user ?? null);
-            if (session?.user) {
-                await fetchProfile(session.user.id);
+            console.log(`AUTH_GATE: State changed [${event}]`);
+            const currentUser = session?.user ?? null;
+            setUser(currentUser);
+
+            if (currentUser) {
+                await fetchProfile(currentUser.id);
             } else {
                 setProfile(null);
             }
-            // Ensure loading is false after any auth state change
-            setLoading(false);
+
+            if (mounted) setLoading(false);
         });
 
         return () => {

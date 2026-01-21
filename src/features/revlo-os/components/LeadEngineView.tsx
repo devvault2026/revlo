@@ -53,21 +53,28 @@ const LeadEngineView: React.FC<LeadEngineViewProps> = ({
     const activeAgent = agents.find(a => a.id === selectedAgentId) || agents[0];
 
     const triggerChain = async (trigger: string) => {
-        if (!activeAgent) return;
-        const chain = activeAgent.chaining?.find(c => c.trigger === trigger);
+        if (!activeAgent || !activeAgent.chaining) return;
+
+        const chain = activeAgent.chaining.find(c => c.trigger === trigger);
         if (chain && chain.nextAgentId) {
             const nextAgent = agents.find(a => a.id === chain.nextAgentId);
             if (nextAgent) {
-                setSelectedAgentId(nextAgent.id);
+                console.log(`SYSTEM: Triggering handshake [${trigger}] -> ${nextAgent.name}`);
                 showToast(`Neural Handshake: ${nextAgent.name} responding...`, "success");
 
                 // Allow state to settle before next execution
-                await new Promise(r => setTimeout(r, 800));
+                await new Promise(r => setTimeout(r, 1200));
+
+                setSelectedAgentId(nextAgent.id);
 
                 if (trigger === 'On Deep Dive Completion') {
                     handleGenerateStrategy();
                 } else if (trigger === 'On PRD Completion') {
                     handleBuildSite();
+                } else if (trigger === 'On Asset Compilation') {
+                    setActiveTab('outreach');
+                } else if (trigger === 'On Outreach Sent') {
+                    showToast("Pipeline Cycle Complete", "success");
                 }
             }
         }
@@ -216,10 +223,11 @@ const LeadEngineView: React.FC<LeadEngineViewProps> = ({
         } catch (e) { console.error(e); } finally { setLoading(false); }
     };
 
-    const handleSendOutreach = () => {
+    const handleSendOutreach = async () => {
         if (!selectedLead) return;
         onSendOutreach(selectedLead);
         setOutreachSent(true);
+        await triggerChain('On Outreach Sent');
     };
 
     return (
@@ -348,6 +356,18 @@ const LeadEngineView: React.FC<LeadEngineViewProps> = ({
                             </div>
 
                             <div className="flex items-center space-x-3">
+                                {/* Agent Personality Switcher */}
+                                <div className="flex items-center gap-2 px-3 py-1.5 bg-slate-50 border border-slate-100 rounded-lg">
+                                    <Bot size={14} className="text-purple-600" />
+                                    <select
+                                        value={selectedAgentId}
+                                        onChange={(e) => setSelectedAgentId(e.target.value)}
+                                        className="bg-transparent text-[10px] font-black uppercase tracking-widest focus:outline-none cursor-pointer text-slate-900 pr-4"
+                                    >
+                                        {agents.map(a => <option key={a.id} value={a.id}>{a.name}</option>)}
+                                    </select>
+                                </div>
+                                <div className="w-px h-6 bg-slate-200" />
                                 {selectedLead.status === LeadStatus.SCOUTED && (
                                     <button onClick={handleDeepDive} className="p-2 text-slate-500 hover:text-purple-600 hover:bg-purple-50 rounded-lg transition-colors" title="Deep Dive Analysis"><BarChart2 size={18} /></button>
                                 )}
@@ -445,18 +465,42 @@ const LeadEngineView: React.FC<LeadEngineViewProps> = ({
                         </div>
                     </>
                 ) : (
-                    <div className="flex-1 flex flex-col items-center justify-center p-12 text-center">
-                        <div className="w-24 h-24 bg-white rounded-full flex items-center justify-center mb-10 border border-slate-100 shadow-2xl">
-                            <Target size={40} className="text-purple-300 animate-pulse" />
+                    <div className="flex-1 flex flex-col items-center justify-center p-12 text-center bg-white relative overflow-hidden">
+                        {/* Background Decoration */}
+                        <div className="absolute top-1/2 left-1/2 -translate-x-1/2 -translate-y-1/2 w-[600px] h-[600px] bg-purple-50/50 rounded-full blur-3xl -z-10" />
+
+                        <div className="w-24 h-24 bg-white rounded-3xl flex items-center justify-center mb-10 border border-slate-100 shadow-2xl relative">
+                            <Target size={40} className="text-purple-600 animate-pulse" />
+                            <div className="absolute -top-1 -right-1 w-4 h-4 bg-red-500 rounded-full border-2 border-white" />
                         </div>
-                        <h2 className="text-xl font-black text-slate-900 uppercase tracking-[0.3em] leading-none mb-4">Engine Inactive</h2>
-                        <p className="max-w-xs mx-auto text-slate-400 font-bold text-sm leading-relaxed uppercase tracking-widest opacity-60">
-                            Select a primary target or press
-                            <span className="text-purple-600 font-black bg-purple-50 px-2.5 py-1 rounded-lg border border-purple-100 mx-1.5 shadow-sm inline-flex items-center gap-1">
-                                ⌘ K
-                            </span>
-                            to initialize research protocols.
+
+                        <h2 className="text-2xl font-black text-slate-900 uppercase tracking-[0.3em] mb-4">Neural Engine Standby</h2>
+                        <p className="max-w-md mx-auto text-slate-500 font-bold text-xs leading-relaxed uppercase tracking-widest opacity-80 mb-12">
+                            Awaiting coordinate input or target selection to initialize high-fidelity research and deployment protocols.
                         </p>
+
+                        <div className="grid grid-cols-1 md:grid-cols-3 gap-6 w-full max-w-4xl px-4">
+                            <div className="p-6 bg-slate-50 border border-slate-100 rounded-2xl text-center hover:bg-white hover:shadow-xl transition-all group">
+                                <Search size={24} className="mx-auto mb-4 text-slate-400 group-hover:text-blue-600" />
+                                <h3 className="text-[10px] font-black uppercase text-slate-900 mb-2">1. Scout Targets</h3>
+                                <p className="text-[10px] text-slate-500 font-medium">Define your niche and location to populate the pipeline.</p>
+                            </div>
+                            <div className="p-6 bg-slate-50 border border-slate-100 rounded-2xl text-center hover:bg-white hover:shadow-xl transition-all group">
+                                <BarChart2 size={24} className="mx-auto mb-4 text-slate-400 group-hover:text-purple-600" />
+                                <h3 className="text-[10px] font-black uppercase text-slate-900 mb-2">2. Deep Dive</h3>
+                                <p className="text-[10px] text-slate-500 font-medium">Execute atomic scoring and psychology profiling on a lead.</p>
+                            </div>
+                            <div className="p-6 bg-slate-50 border border-slate-100 rounded-2xl text-center hover:bg-white hover:shadow-xl transition-all group">
+                                <Zap size={24} className="mx-auto mb-4 text-slate-400 group-hover:text-green-600" />
+                                <h3 className="text-[10px] font-black uppercase text-slate-900 mb-2">3. Chain Agents</h3>
+                                <p className="text-[10px] text-slate-500 font-medium">Use handshake protocols to automate the entire build sequence.</p>
+                            </div>
+                        </div>
+
+                        <div className="mt-16 flex items-center gap-4 text-slate-400">
+                            <span className="text-[10px] font-bold uppercase tracking-widest bg-slate-100 px-3 py-1 rounded-lg">Shift + S for Scout</span>
+                            <span className="text-[10px] font-bold uppercase tracking-widest bg-slate-100 px-3 py-1 rounded-lg">Shift + A for Agents</span>
+                        </div>
                     </div>
                 )}
             </div>

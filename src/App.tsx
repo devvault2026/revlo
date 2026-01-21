@@ -17,6 +17,7 @@ import ContactPage from './pages/ContactPage';
 import LoginPage from './pages/LoginPage';
 import RegisterPage from './pages/RegisterPage';
 import ForgotPasswordPage from './pages/ForgotPasswordPage';
+import NotFoundPage from './pages/NotFoundPage';
 
 // Admin Pages
 import AdminPage from './pages/AdminPage';
@@ -87,27 +88,27 @@ function App() {
 
                                     {/* Admin Routes (Protected) */}
                                     <Route path="/admin" element={
-                                        <ProtectedRoute>
+                                        <ProtectedRoute requiredRole="super_admin">
                                             <AdminPage />
                                         </ProtectedRoute>
                                     } />
                                     <Route path="/admin/leads" element={
-                                        <ProtectedRoute>
+                                        <ProtectedRoute requiredRole="super_admin">
                                             <LeadsPage />
                                         </ProtectedRoute>
                                     } />
                                     <Route path="/admin/campaigns" element={
-                                        <ProtectedRoute>
+                                        <ProtectedRoute requiredRole="super_admin">
                                             <AdminPage />
                                         </ProtectedRoute>
                                     } />
                                     <Route path="/admin/analytics" element={
-                                        <ProtectedRoute>
+                                        <ProtectedRoute requiredRole="super_admin">
                                             <AdminPage />
                                         </ProtectedRoute>
                                     } />
                                     <Route path="/admin/settings" element={
-                                        <ProtectedRoute>
+                                        <ProtectedRoute requiredRole="super_admin">
                                             <AdminPage />
                                         </ProtectedRoute>
                                     } />
@@ -118,6 +119,9 @@ function App() {
                                             <DashboardPage />
                                         </ProtectedRoute>
                                     } />
+
+                                    {/* Catch-all 404 Route */}
+                                    <Route path="*" element={<NotFoundPage />} />
                                 </Routes>
                             </AnimatePresence>
                         </div>

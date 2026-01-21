@@ -1,5 +1,5 @@
 
-import React, { useState, useEffect, useMemo } from 'react';
+import React, { useState, useEffect, useMemo, useCallback } from 'react';
 import { Lead, LeadStatus, Settings as SettingsType, EngineSession, AgentProfile, VaultDocument, SystemUsage } from '../features/revlo-os/types';
 import LeadEngineView from '../features/revlo-os/components/LeadEngineView';
 import DashboardView from '../features/revlo-os/components/DashboardView';
@@ -15,7 +15,10 @@ import CommandPalette from '../features/revlo-os/components/CommandPalette';
 import * as GeminiService from '../features/revlo-os/services/geminiService';
 import * as EmailService from '../features/revlo-os/services/emailService';
 import RevloOSLayout, { View } from '../features/revlo-os/RevloOSLayout';
-import { supabase, upsertLead, getLeads, getVaultDocuments, upsertVaultDocument, deleteVaultDocument } from '../lib/supabase';
+import {
+    supabase, upsertLead, getLeads, getVaultDocuments, upsertVaultDocument, deleteVaultDocument,
+    getAgents, getSettings, upsertAgent, deleteAgent, upsertSettings
+} from '../lib/supabase';
 import { useAuth } from '../context/AuthContext';
 import { useNotifications } from '../context/NotificationContext';
 import { useToast } from '../features/revlo-os/context/ToastContext';
@@ -57,9 +60,9 @@ const RevloOSAppPageContent: React.FC = () => {
 
         const loadContent = async () => {
             try {
-                const data = await getLeads();
-                // Map DB leads to UI Lead types if necessary
-                const mappedLeads = (data || []).map(l => ({
+                // 1. Load Leads
+                const leadData = await getLeads();
+                const mappedLeads = (leadData || []).map(l => ({
                     ...l,
                     createdAt: l.created_at,
                     status: l.status as LeadStatus,
@@ -68,11 +71,56 @@ const RevloOSAppPageContent: React.FC = () => {
                 })) as unknown as Lead[];
 
                 setRemoteLeads(mappedLeads);
-                // For simplicity in this OS version, we put all leads in the default session 
-                // but real-world would have sessions table.
                 setSessions([{ id: 'default', name: 'Main Pipeline', createdAt: new Date().toISOString(), leads: mappedLeads }]);
-            } catch (err) {
-                console.error('Failed to sync with Supabase:', err);
+
+                // 2. Load Agents
+                let agentData = await getAgents(user.id);
+                if (!agentData || agentData.length === 0) {
+                    // Seed from defaults
+                    const { DEFAULT_AGENTS } = await import('../features/revlo-os/components/AgentStudioView');
+                    for (const defAgent of DEFAULT_AGENTS) {
+                        await upsertAgent({ ...defAgent, user_id: user.id });
+                    }
+                    agentData = await getAgents(user.id);
+                }
+
+                if (agentData && agentData.length > 0) {
+                    setAgents(agentData.map(a => ({
+                        id: a.id,
+                        name: a.name,
+                        role: a.role as any,
+                        version: a.version || 1,
+                        mandate: a.mandate as any,
+                        responsibilities: a.responsibilities as any,
+                        outputContract: a.output_contract as any,
+                        behavior: a.behavior as any,
+                        capabilities: a.capabilities as any,
+                        chaining: a.chaining as any,
+                        memoryType: a.memory_type as any,
+                        stats: a.stats as any
+                    })));
+                }
+
+                // 3. Load Settings
+                const settingsData = await getSettings(user.id);
+                if (settingsData) {
+                    setSettings({
+                        apiKey: settingsData.api_key || '',
+                        scrapingBatchSize: settingsData.scraping_batch_size || 5,
+                        niche: settingsData.niche || 'Plumbers',
+                        location: settingsData.location || 'Austin, TX',
+                        outreach: (settingsData.outreach_config as any) || DEFAULT_SETTINGS.outreach,
+                        vapi: (settingsData.vapi_config as any) || DEFAULT_SETTINGS.vapi
+                    });
+                }
+
+                // 4. Load Vault
+                const vaultData = await getVaultDocuments();
+                setVaultDocs((vaultData || []).map(d => ({ ...d, createdAt: d.created_at, type: d.type as any, tags: d.tags || [] })) as any);
+
+            } catch (err: any) {
+                if (err?.name === 'AbortError') return;
+                console.error('SYSTEM: Backend sync failed:', err?.message || err);
             }
         };
 
@@ -106,23 +154,30 @@ const RevloOSAppPageContent: React.FC = () => {
         }
     }, [profile]);
 
-    // Sync usage back to Supabase (debounced ideally, but here direct after Gemini completions)
+    // Sync usage back to Supabase (incremental logic)
     useEffect(() => {
-        const unsub = GeminiService.onUsageUpdate(async (newUsage) => {
+        const unsub = GeminiService.onUsageUpdate(async (incremental) => {
+            // Update local state by adding the incremental change
             setUsage(prev => ({
                 ...prev,
-                ...newUsage,
-                totalApiCalls: (profile?.api_calls_made || 0) + newUsage.totalApiCalls,
-                totalTokens: Number(profile?.tokens_consumed || 0) + newUsage.totalTokens
+                totalApiCalls: prev.totalApiCalls + incremental.calls,
+                totalTokens: prev.totalTokens + incremental.totalTokens,
+                promptTokens: prev.promptTokens + incremental.promptTokens,
+                completionTokens: prev.completionTokens + incremental.completionTokens
             }));
 
-            // Persist to Supabase Profile
-            if (user) {
+            // Persist to Supabase by adding to DB current value (Best effort client-side increment)
+            if (user && profile) {
+                const newTotalCalls = (profile.api_calls_made || 0) + incremental.calls;
+                const newTotalTokens = (profile.tokens_consumed || 0) + incremental.totalTokens;
+
                 await supabase.from('profiles').update({
-                    api_calls_made: (profile?.api_calls_made || 0) + newUsage.totalApiCalls,
-                    tokens_consumed: Number(profile?.tokens_consumed || 0) + newUsage.totalTokens
+                    api_calls_made: newTotalCalls,
+                    tokens_consumed: newTotalTokens
                 }).eq('id', user.id);
-                refreshProfile();
+
+                // We don't call refreshProfile here to avoid excessive fetch cycles
+                // the local 'usage' state handles the UI. profile will sync eventually.
             }
         });
         return unsub;
@@ -243,6 +298,75 @@ const RevloOSAppPageContent: React.FC = () => {
         }
     };
 
+    const handleUpdateAgents = async (updatedAgents: AgentProfile[] | ((prev: AgentProfile[]) => AgentProfile[])) => {
+        const nextAgents = typeof updatedAgents === 'function' ? updatedAgents(agents) : updatedAgents;
+
+        // Sync deletions if list shrunk
+        if (user && nextAgents.length < agents.length) {
+            const removed = agents.filter(a => !nextAgents.some(na => na.id === a.id));
+            for (const r of removed) {
+                try {
+                    await deleteAgent(r.id);
+                } catch (err) {
+                    console.error("Failed to delete agent:", r.id, err);
+                }
+            }
+        }
+
+        setAgents(nextAgents);
+
+        // Sync changes/additions
+        if (user) {
+            try {
+                for (const agent of nextAgents) {
+                    await upsertAgent({
+                        ...agent,
+                        user_id: user.id,
+                        output_contract: agent.outputContract,
+                        updated_at: new Date().toISOString()
+                    });
+                }
+            } catch (err) {
+                console.error("Agent sync failed", err);
+            }
+        }
+    };
+
+    const debouncedSyncSettings = useMemo(
+        () => {
+            let timeout: any;
+            return (newSettings: SettingsType, userId: string) => {
+                clearTimeout(timeout);
+                timeout = setTimeout(async () => {
+                    try {
+                        await upsertSettings({
+                            user_id: userId,
+                            api_key: newSettings.apiKey,
+                            scraping_batch_size: newSettings.scrapingBatchSize,
+                            niche: newSettings.niche,
+                            location: newSettings.location,
+                            vapi_config: newSettings.vapi,
+                            outreach_config: newSettings.outreach,
+                            updated_at: new Date().toISOString()
+                        });
+                        showToast("System parameters synchronized", "success");
+                    } catch (err: any) {
+                        if (err?.name === 'AbortError') return;
+                        console.error("Settings sync failed:", err);
+                    }
+                }, 1000);
+            };
+        },
+        [showToast]
+    );
+
+    const handleUpdateSettings = (newSettings: SettingsType) => {
+        setSettings(newSettings);
+        if (user) {
+            debouncedSyncSettings(newSettings, user.id);
+        }
+    };
+
     // --- RENDER ---
 
     const currentSession = sessions.find(s => s.id === currentSessionId) || sessions[0];
@@ -261,14 +385,14 @@ const RevloOSAppPageContent: React.FC = () => {
                         onSendOutreach={handleSendOutreach}
                     />
                 )}
-                {currentView === 'agents' && <AgentStudioView agents={agents} onUpdateAgents={setAgents} />}
+                {currentView === 'agents' && <AgentStudioView agents={agents} onUpdateAgents={handleUpdateAgents} />}
                 {currentView === 'crm' && <CRMView leads={allLeads} />}
                 {currentView === 'pipeline' && <PipelineView leads={allLeads} onMoveLead={handleMoveLead} />}
                 {currentView === 'inbox' && <InboxView leads={allLeads} onSendMessage={handleSendMessage} />}
                 {currentView === 'phone' && <PhoneView leads={allLeads} agents={agents} vapiConfig={settings.vapi} updateLead={handleUpdateLead} />}
                 {currentView === 'vault' && <VaultView documents={vaultDocs} onUpdate={handleUpdateVaultDoc} onDelete={handleDeleteVaultDoc} />}
                 {currentView === 'docs' && <DocsView />}
-                {currentView === 'settings' && <SettingsView settings={settings} onUpdate={setSettings} />}
+                {currentView === 'settings' && <SettingsView settings={settings} onUpdate={handleUpdateSettings} />}
 
                 {/* SUBSCRIPTION OVERLAY / GATE */}
                 {profile?.subscription_tier === 'free' && usage.totalApiCalls > 50 && (

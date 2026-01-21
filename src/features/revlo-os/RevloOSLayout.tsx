@@ -39,10 +39,14 @@ const RevloOSLayout: React.FC<RevloOSLayoutProps> = ({ children, currentView, se
 
     const handleSignOut = async () => {
         try {
+            // Optimistic navigation + direct cleanup
+            console.log("Initializing secure sign-out sequence...");
             await signOut();
-            navigate('/login');
+            navigate('/login', { replace: true });
         } catch (error) {
-            console.error("Sign out failed", error);
+            console.error("Sign out process interrupted:", error);
+            // Forced fallback redirect
+            window.location.href = '/login';
         }
     };
 
@@ -102,7 +106,7 @@ const RevloOSLayout: React.FC<RevloOSLayoutProps> = ({ children, currentView, se
                     width: isSidebarCollapsed ? 90 : 280
                 }}
                 transition={{ type: "spring", damping: 25, stiffness: 200 }}
-                className={`fixed lg:relative z-40 h-full bg-white border-r border-slate-200 shadow-xl lg:shadow-none`}
+                className={`fixed lg:relative z-[100] h-full bg-white border-r border-slate-200 shadow-xl lg:shadow-none`}
             >
                 <div className="flex flex-col h-full">
                     {/* Logo Section */}
@@ -204,12 +208,36 @@ const RevloOSLayout: React.FC<RevloOSLayoutProps> = ({ children, currentView, se
                             )}
                         </div>
 
+                        {/* SECURE SIGN OUT */}
                         <button
-                            onClick={handleSignOut}
-                            className={`w-full mt-3 flex items-center transition-colors group ${isSidebarCollapsed ? 'justify-center py-3' : 'gap-3 px-4 py-2'}`}
+                            type="button"
+                            onClick={async (e) => {
+                                e.preventDefault();
+                                e.stopPropagation();
+                                console.log("SYSTEM: Terminating encryption keys and session...");
+                                try {
+                                    // 1. Wipe local state
+                                    localStorage.clear();
+                                    sessionStorage.clear();
+
+                                    // 2. Kill Supabase session
+                                    await signOut();
+
+                                    // 3. Final atomic exit
+                                    window.location.replace('/login');
+                                } catch (err) {
+                                    console.error("EXIT ERROR:", err);
+                                    window.location.replace('/login');
+                                }
+                            }}
+                            className={`w-full mt-4 flex items-center transition-all duration-300 group relative z-50 ${isSidebarCollapsed ? 'justify-center py-4' : 'gap-3 px-4 py-3 bg-slate-50 hover:bg-red-50 rounded-2xl border border-slate-100 hover:border-red-100 shadow-sm hover:shadow-md'}`}
                         >
-                            <LogOut className="w-4 h-4 text-slate-400 group-hover:text-red-500 transition-colors" />
-                            {!isSidebarCollapsed && <span className="text-xs font-black text-slate-600 group-hover:text-red-600 uppercase tracking-widest">Sign Out</span>}
+                            <LogOut className={`w-4 h-4 ${isSidebarCollapsed ? 'text-slate-400 group-hover:text-red-500' : 'text-slate-400 group-hover:text-red-500'} transition-colors`} />
+                            {!isSidebarCollapsed && (
+                                <span className="text-[10px] font-black text-slate-500 group-hover:text-red-600 uppercase tracking-[0.2em] transition-colors">
+                                    Sign Out Protocol
+                                </span>
+                            )}
                         </button>
                     </div>
                 </div>

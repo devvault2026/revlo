@@ -4,9 +4,10 @@ import {
     Bot, Save, Trash2, Plus, Brain, Sparkles, Briefcase,
     Shield, Terminal, Sliders, FileJson, Play, RefreshCw, Layers,
     Code, Monitor, ChevronRight, X, MapPin, Target, Loader2,
-    CheckCircle2
+    CheckCircle2, Maximize2, Minimize2
 } from 'lucide-react';
-import { motion } from 'framer-motion';
+import { motion, AnimatePresence } from 'framer-motion';
+import Editor from '@monaco-editor/react';
 import * as GeminiService from '../services/geminiService';
 import { useToast } from '../context/ToastContext';
 
@@ -16,7 +17,7 @@ interface AgentStudioViewProps {
     onUpdateAgents?: React.Dispatch<React.SetStateAction<AgentProfile[]>>;
 }
 
-const DEFAULT_AGENTS: AgentProfile[] = [
+export const DEFAULT_AGENTS: AgentProfile[] = [
     {
         id: 'agent-1',
         name: 'Alpha (Real Estate)',
@@ -185,7 +186,25 @@ const AgentStudioView: React.FC<AgentStudioViewProps> = ({ agents, setAgents, on
     const [testOutput, setTestOutput] = useState('');
     const [isTesting, setIsTesting] = useState(false);
     const [viewMode, setViewMode] = useState<'code' | 'preview'>('preview');
+    const [isAgentSidebarCollapsed, setIsAgentSidebarCollapsed] = useState(false);
+    const [isPromptOpen, setIsPromptOpen] = useState(false);
+    const [isLabFullscreen, setIsLabFullscreen] = useState(false);
     const { showToast } = useToast();
+
+    // Keyboard shortcut listener for Ctrl+I
+    useEffect(() => {
+        const handleKey = (e: KeyboardEvent) => {
+            if ((e.ctrlKey || e.metaKey) && e.key === 'i') {
+                e.preventDefault();
+                setIsPromptOpen(prev => !prev);
+            }
+            if (e.key === 'Escape' && isPromptOpen) {
+                setIsPromptOpen(false);
+            }
+        };
+        window.addEventListener('keydown', handleKey);
+        return () => window.removeEventListener('keydown', handleKey);
+    }, [isPromptOpen]);
 
     useEffect(() => {
         if (agents.length === 0) handleUpdateAgents(DEFAULT_AGENTS);
@@ -429,8 +448,7 @@ const AgentStudioView: React.FC<AgentStudioViewProps> = ({ agents, setAgents, on
                                             <div className="grid grid-cols-2 gap-6">
                                                 <div>
                                                     <label className="text-[9px] font-black text-slate-400 uppercase tracking-widest">Synthesis Trigger</label>
-                                                    <input
-                                                        placeholder="e.g., On PRD Completion"
+                                                    <select
                                                         value={link.trigger}
                                                         onChange={e => {
                                                             const newChaining = [...formData.chaining];
@@ -438,7 +456,13 @@ const AgentStudioView: React.FC<AgentStudioViewProps> = ({ agents, setAgents, on
                                                             setFormData({ ...formData, chaining: newChaining });
                                                         }}
                                                         className="w-full bg-slate-50 border border-slate-50 rounded-xl p-3 text-xs font-bold focus:bg-white focus:outline-none focus:border-purple-200 mt-1 transition-all"
-                                                    />
+                                                    >
+                                                        <option value="">Select Trigger...</option>
+                                                        <option value="On Deep Dive Completion">On Deep Dive Completion</option>
+                                                        <option value="On PRD Completion">On PRD Completion</option>
+                                                        <option value="On Asset Compilation">On Asset Compilation</option>
+                                                        <option value="On Outreach Sent">On Outreach Sent</option>
+                                                    </select>
                                                 </div>
                                                 <div>
                                                     <label className="text-[9px] font-black text-slate-400 uppercase tracking-widest">Next Operative</label>
@@ -481,181 +505,201 @@ const AgentStudioView: React.FC<AgentStudioViewProps> = ({ agents, setAgents, on
                     </div>
                 );
             case 'lab':
-                const isPossibleHtml = testOutput.trim().includes('<html') || testOutput.trim().includes('<!DOCTYPE') || testOutput.trim().includes('<div') || testOutput.toLowerCase().includes('tailwindcss');
-
                 return (
-                    <div className="flex flex-col h-[750px] animate-in fade-in slide-in-from-bottom-4 duration-700">
-                        {/* Lab Header */}
-                        <div className="flex justify-between items-end mb-8">
-                            <div>
-                                <div className="flex items-center gap-2 mb-2">
-                                    <div className="w-2 h-4 bg-purple-600 rounded-full animate-pulse" />
-                                    <h2 className="text-[10px] font-black text-slate-400 uppercase tracking-[0.2em]">Neural Simulation Studio</h2>
-                                </div>
-                                <h3 className="text-3xl font-black text-slate-900 tracking-tight leading-none">Intelligence Sandbox</h3>
-                            </div>
+                    <div className={`flex flex-col animate-in fade-in slide-in-from-bottom-4 duration-700 ${isLabFullscreen ? 'fixed inset-0 z-[200] bg-slate-950 p-0 m-0' : 'h-[750px] relative overflow-hidden rounded-[3rem] border border-slate-100 bg-white shadow-2xl shadow-slate-200/50'}`}>
 
-                            <div className="flex bg-slate-100/50 backdrop-blur-md rounded-[1.25rem] p-1.5 border border-slate-200/50 shadow-inner">
+                        {/* Floating Control Dock - Matches uploaded_image_1768989535244.png */}
+                        <div className="absolute top-8 left-1/2 -translate-x-1/2 z-[110] flex items-center gap-3 p-1.5 bg-[#0a0a0f]/95 backdrop-blur-3xl border border-white/5 rounded-[2.5rem] shadow-[0_30px_100px_rgba(0,0,0,0.8)] scale-110 border-t-white/10">
+                            {/* Ask AI Pill */}
+                            <button
+                                onClick={() => setIsPromptOpen(true)}
+                                className="flex items-center gap-3 px-6 py-3 bg-gradient-to-br from-purple-500 via-purple-600 to-indigo-600 text-white rounded-[1.8rem] text-[10px] font-black uppercase tracking-widest hover:brightness-110 transition-all border border-white/10 shadow-[0_0_20px_rgba(147,51,234,0.3)] group/ask"
+                            >
+                                <Sparkles size={16} className="group-hover/ask:rotate-12 transition-transform" /> ASK AI
+                            </button>
+
+                            {/* Mode Pill */}
+                            <div className="flex bg-white/5 rounded-[1.8rem] p-1 gap-1 border border-white/5 h-12 items-center">
                                 <button
                                     onClick={() => setViewMode('preview')}
-                                    className={`px-8 py-3 text-[10px] font-black uppercase tracking-widest rounded-xl transition-all flex items-center gap-2 ${viewMode === 'preview' ? 'bg-white text-purple-600 shadow-md scale-[1.02]' : 'text-slate-400 hover:text-slate-600'}`}
+                                    className={`px-6 py-2.5 text-[10px] font-black uppercase tracking-widest rounded-[1.4rem] transition-all flex items-center gap-2 ${viewMode === 'preview' ? 'bg-white text-slate-950 shadow-2xl scale-[1.05]' : 'text-white/40 hover:text-white/70 hover:bg-white/5'}`}
                                 >
-                                    <Monitor size={14} /> Live Render
+                                    <Monitor size={14} /> PREVIEW
                                 </button>
                                 <button
                                     onClick={() => setViewMode('code')}
-                                    className={`px-8 py-3 text-[10px] font-black uppercase tracking-widest rounded-xl transition-all flex items-center gap-2 ${viewMode === 'code' ? 'bg-white text-slate-900 shadow-md scale-[1.02]' : 'text-slate-400 hover:text-slate-600'}`}
+                                    className={`px-6 py-2.5 text-[10px] font-black uppercase tracking-widest rounded-[1.4rem] transition-all flex items-center gap-2 ${viewMode === 'code' ? 'bg-white text-slate-950 shadow-2xl scale-[1.05]' : 'text-white/40 hover:text-white/70 hover:bg-white/5'}`}
                                 >
-                                    <Terminal size={14} /> Neural Code
+                                    <Terminal size={14} /> CODE
                                 </button>
                             </div>
+
+                            {/* Minimize/Maximize Button */}
+                            <button
+                                onClick={() => setIsLabFullscreen(!isLabFullscreen)}
+                                className={`w-12 h-12 flex items-center justify-center rounded-[1rem] transition-all shadow-xl group/min ${isLabFullscreen ? 'bg-red-500 text-white border border-red-400' : 'bg-[#1a1a2e] text-white/40 hover:text-white border border-white/5'}`}
+                            >
+                                {isLabFullscreen ? <Minimize2 size={18} /> : <Maximize2 size={18} />}
+                            </button>
                         </div>
 
-                        {/* Professional Split Layout */}
-                        <div className="flex-1 flex gap-8 overflow-hidden">
-                            {/* Controller Panel */}
-                            <div className="w-[420px] flex flex-col gap-6 shrink-0">
-                                <div className="flex-1 bg-white border border-slate-100 rounded-[2.5rem] p-8 shadow-xl shadow-slate-200/40 flex flex-col relative overflow-hidden group">
-                                    <div className="absolute top-0 right-0 p-6 opacity-[0.03] group-hover:opacity-[0.07] transition-opacity">
-                                        <Bot size={120} />
-                                    </div>
-
-                                    <div className="flex-1 flex flex-col">
-                                        <div className="flex justify-between items-center mb-6">
-                                            <label className="text-[10px] font-black text-slate-400 uppercase tracking-widest">Objective Input</label>
-                                            <div className="flex gap-1.5">
-                                                <div className="w-1.5 h-1.5 bg-red-400 rounded-full" />
-                                                <div className="w-1.5 h-1.5 bg-yellow-400 rounded-full" />
-                                                <div className="w-1.5 h-1.5 bg-green-400 rounded-full" />
+                        {/* Viewport Area */}
+                        <div className="flex-1 relative">
+                            {testOutput ? (
+                                viewMode === 'preview' ? (
+                                    <div className="w-full h-full bg-white relative">
+                                        <iframe
+                                            srcDoc={testOutput}
+                                            className="w-full h-full border-none"
+                                            sandbox="allow-scripts allow-forms allow-same-origin"
+                                        />
+                                        {isTesting && (
+                                            <div className="absolute bottom-10 right-10 flex items-center gap-3 bg-slate-900/90 backdrop-blur-xl px-6 py-4 rounded-3xl shadow-2xl border border-white/10 animate-in slide-in-from-bottom-4">
+                                                <div className="w-5 h-5 border-2 border-purple-500/30 border-t-purple-500 rounded-full animate-spin" />
+                                                <span className="text-[10px] font-black text-white uppercase tracking-[0.2em]">Neural Synthesis Active</span>
                                             </div>
-                                        </div>
-                                        <textarea
-                                            value={testInput}
-                                            onChange={e => setTestInput(e.target.value)}
-                                            placeholder="Deploy a neural objective... (e.g. Architect a $25k Real Estate Site for Jaryd Paquette)"
-                                            className="flex-1 w-full bg-slate-50 border-2 border-slate-100 rounded-3xl p-6 text-sm font-bold text-slate-800 focus:bg-white focus:border-purple-500 focus:outline-none transition-all resize-none shadow-inner placeholder:text-slate-300"
+                                        )}
+                                    </div>
+                                ) : (
+                                    <div className="w-full h-full">
+                                        <Editor
+                                            height="100%"
+                                            defaultLanguage="html"
+                                            value={testOutput}
+                                            theme="vs-dark"
+                                            options={{
+                                                readOnly: false,
+                                                minimap: { enabled: true },
+                                                fontSize: 14,
+                                                lineNumbers: 'on',
+                                                scrollBeyondLastLine: false,
+                                                automaticLayout: true,
+                                                wordWrap: 'on',
+                                                padding: { top: 80 }
+                                            }}
                                         />
                                     </div>
-
-                                    <button
-                                        onClick={runTest}
-                                        disabled={isTesting || !testInput.trim()}
-                                        className={`mt-6 h-20 rounded-3xl flex items-center justify-center gap-4 transition-all relative overflow-hidden group/btn ${isTesting || !testInput.trim() ? 'bg-slate-50 text-slate-300 pointer-events-none' : 'bg-purple-600 text-white hover:bg-purple-700 shadow-2xl shadow-purple-200 active:scale-95'}`}
-                                    >
-                                        {isTesting && (
-                                            <motion.div
-                                                initial={{ width: 0 }}
-                                                animate={{ width: '100%' }}
-                                                transition={{ duration: 15, ease: "linear" }}
-                                                className="absolute inset-0 bg-purple-500"
-                                            />
-                                        )}
-                                        <div className="relative z-10 flex items-center gap-3">
-                                            {isTesting ? (
-                                                <>
-                                                    <RefreshCw className="animate-spin" size={20} />
-                                                    <span className="text-xs font-black uppercase tracking-[0.3em]">Synthesizing...</span>
-                                                </>
-                                            ) : (
-                                                <>
-                                                    <Play size={20} fill="currentColor" />
-                                                    <span className="text-xs font-black uppercase tracking-[0.3em]">Initialize Neural Build</span>
-                                                </>
-                                            )}
+                                )
+                            ) : (
+                                <div className="h-full bg-slate-950 flex flex-col items-center justify-center text-slate-800 transition-all">
+                                    <div className="relative">
+                                        <div className="absolute inset-0 bg-purple-500/5 blur-[100px] rounded-full animate-pulse" />
+                                        <div className="w-40 h-40 bg-slate-900/50 rounded-[4rem] flex items-center justify-center border border-white/5 shadow-2xl relative z-10">
+                                            <Bot size={64} className="text-purple-500/20" />
                                         </div>
-                                    </button>
-                                </div>
-
-                                {/* Status Card */}
-                                <div className="bg-slate-900 rounded-[2rem] p-6 shadow-2xl flex items-center gap-5 border border-slate-800">
-                                    <div className={`w-12 h-12 rounded-2xl flex items-center justify-center transition-all duration-500 ${isTesting ? 'bg-purple-500 animate-pulse' : 'bg-slate-800'}`}>
-                                        <Target className={isTesting ? 'text-white' : 'text-slate-600'} size={24} />
                                     </div>
-                                    <div className="flex-1">
-                                        <p className="text-[9px] font-black text-slate-500 uppercase tracking-widest mb-1">Operative Status</p>
-                                        <p className="text-xs font-bold text-white uppercase tracking-wider">
-                                            {isTesting ? 'Signal Transmission Active' : testOutput ? 'Synthesis Complete' : 'Awaiting Injection'}
-                                        </p>
+                                    <div className="mt-12 text-center relative z-10">
+                                        <p className="text-[10px] font-black uppercase tracking-[0.5em] text-slate-500">Neural Workspace Offline</p>
+                                        <p className="text-[9px] font-bold text-slate-600 mt-2 uppercase tracking-widest">Awaiting Command Input (⌘I)</p>
                                     </div>
-                                    {isTesting && (
-                                        <div className="flex gap-1">
-                                            {[1, 2, 3].map(i => (
-                                                <motion.div
-                                                    key={i}
-                                                    animate={{ height: [8, 16, 8] }}
-                                                    transition={{ duration: 0.6, repeat: Infinity, delay: i * 0.2 }}
-                                                    className="w-1 bg-purple-500 rounded-full"
-                                                />
-                                            ))}
-                                        </div>
-                                    )}
                                 </div>
-                            </div>
-
-                            {/* Dynamic Workspace */}
-                            <div className="flex-1 bg-white border border-slate-100 rounded-[3rem] shadow-2xl shadow-slate-200/50 relative overflow-hidden flex flex-col">
-                                <div className="h-14 bg-slate-50/50 border-b border-slate-100 flex items-center px-8 justify-between">
-                                    <div className="flex items-center gap-2">
-                                        <div className="w-2.5 h-2.5 rounded-full bg-slate-200" />
-                                        <span className="text-[10px] font-black text-slate-400 uppercase tracking-[0.2em]">{viewMode === 'preview' ? 'Viewport' : 'Terminal Output'}</span>
-                                    </div>
-                                    {testOutput && isPossibleHtml && viewMode === 'code' && (
-                                        <div className="flex items-center gap-2 px-3 py-1 bg-green-50 text-green-600 rounded-lg border border-green-100 animate-in fade-in zoom-in">
-                                            <CheckCircle2 size={12} />
-                                            <span className="text-[9px] font-black uppercase tracking-widest">Valid Code Pattern Detected</span>
-                                        </div>
-                                    )}
-                                </div>
-
-                                <div className="flex-1 relative overflow-hidden">
-                                    {testOutput ? (
-                                        viewMode === 'preview' ? (
-                                            <div className="w-full h-full relative">
-                                                <iframe
-                                                    srcDoc={testOutput}
-                                                    className="w-full h-full border-none"
-                                                    sandbox="allow-scripts allow-forms allow-same-origin"
-                                                />
-                                                {isTesting && (
-                                                    <div className="absolute top-6 right-6 flex items-center gap-3 bg-white/90 backdrop-blur-md px-5 py-3 rounded-2xl shadow-xl border border-purple-100 animate-in slide-in-from-right-4">
-                                                        <div className="relative">
-                                                            <div className="w-4 h-4 border-2 border-purple-200 border-t-purple-600 rounded-full animate-spin" />
-                                                        </div>
-                                                        <span className="text-[10px] font-black text-purple-900 uppercase tracking-widest">Streaming Intelligence...</span>
-                                                    </div>
-                                                )}
-                                            </div>
-                                        ) : (
-                                            <div className="w-full h-full bg-[#0F172A] p-0 overflow-hidden flex flex-col">
-                                                <div className="bg-slate-800/50 h-10 flex items-center px-6 gap-2 shrink-0">
-                                                    <Terminal size={12} className="text-slate-500" />
-                                                    <span className="text-[9px] font-bold text-slate-500 uppercase tracking-widest">root@revlo-os:~/neural-stream</span>
-                                                </div>
-                                                <pre className="flex-1 p-8 text-[13px] font-mono text-blue-300 overflow-y-auto custom-scrollbar leading-relaxed">
-                                                    <code className="block">
-                                                        {testOutput}
-                                                        {isTesting && <span className="inline-block w-2.5 h-5 bg-purple-500 ml-1 animate-pulse align-middle" />}
-                                                    </code>
-                                                </pre>
-                                            </div>
-                                        )
-                                    ) : (
-                                        <div className="h-full flex flex-col items-center justify-center text-slate-200 transition-all">
-                                            <div className="relative">
-                                                <div className="absolute inset-0 bg-purple-500/10 blur-[60px] rounded-full animate-pulse" />
-                                                <div className="w-32 h-32 bg-slate-50 rounded-[3rem] flex items-center justify-center border border-slate-50 shadow-inner relative z-10">
-                                                    <Terminal size={56} className="opacity-10" />
-                                                </div>
-                                            </div>
-                                            <div className="mt-10 text-center relative z-10">
-                                                <p className="text-[10px] font-black uppercase tracking-[0.5em] text-slate-300">Workspace Empty</p>
-                                                <p className="text-[9px] font-bold text-slate-400 mt-2 uppercase tracking-widest">Awaiting Signal Injection...</p>
-                                            </div>
-                                        </div>
-                                    )}
-                                </div>
-                            </div>
+                            )}
                         </div>
+
+                        {/* Consumer-Friendly Prompt Overlay */}
+                        <AnimatePresence>
+                            {isPromptOpen && (
+                                <motion.div
+                                    initial={{ opacity: 0 }}
+                                    animate={{ opacity: 1 }}
+                                    exit={{ opacity: 0 }}
+                                    className="absolute inset-0 bg-black/40 backdrop-blur-md z-[210] flex items-center justify-center p-6"
+                                    onClick={() => setIsPromptOpen(false)}
+                                >
+                                    <motion.div
+                                        initial={{ scale: 0.9, opacity: 0 }}
+                                        animate={{ scale: 1, opacity: 1 }}
+                                        exit={{ scale: 0.9, opacity: 0 }}
+                                        transition={{ type: "spring", damping: 25, stiffness: 300 }}
+                                        onClick={(e) => e.stopPropagation()}
+                                        className="w-full max-w-2xl bg-white rounded-[2rem] shadow-2xl border border-slate-200 overflow-hidden"
+                                    >
+                                        {/* Header */}
+                                        <div className="bg-gradient-to-r from-purple-600 to-indigo-600 px-8 py-6 flex items-center justify-between">
+                                            <div className="flex items-center gap-4">
+                                                <div className="w-12 h-12 bg-white/20 rounded-2xl flex items-center justify-center backdrop-blur-sm">
+                                                    <Sparkles className="text-white" size={24} />
+                                                </div>
+                                                <div>
+                                                    <h3 className="text-white font-black text-xl tracking-tight">Intelligence Prompt</h3>
+                                                    <p className="text-purple-100 text-[10px] font-bold uppercase tracking-widest opacity-80">Describe your neural vision</p>
+                                                </div>
+                                            </div>
+                                            <button
+                                                onClick={() => setIsPromptOpen(false)}
+                                                className="w-10 h-10 bg-white/10 hover:bg-white/20 rounded-xl flex items-center justify-center transition-all group"
+                                            >
+                                                <X className="text-white group-hover:rotate-90 transition-transform" size={20} />
+                                            </button>
+                                        </div>
+
+                                        {/* Input Area */}
+                                        <div className="p-8">
+                                            <div className="flex flex-wrap gap-2 mb-6">
+                                                {['Build Portfolio', 'SaaS Landing Page', 'Real Estate Site', 'Luxury E-commerce'].map(sug => (
+                                                    <button
+                                                        key={sug}
+                                                        onClick={() => setTestInput(sug)}
+                                                        className="px-4 py-2 bg-slate-50 hover:bg-purple-600 hover:text-white rounded-xl text-[10px] font-black uppercase tracking-widest transition-all border border-slate-100"
+                                                    >
+                                                        {sug}
+                                                    </button>
+                                                ))}
+                                            </div>
+                                            <textarea
+                                                value={testInput}
+                                                onChange={(e) => setTestInput(e.target.value)}
+                                                onKeyDown={(e) => {
+                                                    if (e.key === 'Enter' && !e.shiftKey) {
+                                                        e.preventDefault();
+                                                        if (testInput.trim() && !isTesting) {
+                                                            runTest();
+                                                            setIsPromptOpen(false);
+                                                        }
+                                                    }
+                                                }}
+                                                placeholder="e.g., Build a premium real estate website for Jaryd Paquette with a cinematic hero section..."
+                                                className="w-full h-40 bg-slate-50 border-2 border-slate-100 rounded-2xl p-6 text-slate-900 font-medium focus:border-purple-500 focus:bg-white outline-none resize-none placeholder:text-slate-400 text-lg"
+                                                autoFocus
+                                            />
+
+                                            <div className="flex items-center justify-between mt-8">
+                                                <div className="flex items-center gap-3 text-[10px] text-slate-400 font-bold uppercase tracking-widest">
+                                                    <span className="px-2 py-1 bg-slate-100 rounded-md">⌘I</span>
+                                                    <span>Toggle</span>
+                                                    <span className="px-2 py-1 bg-slate-100 rounded-md">ESC</span>
+                                                    <span>Close</span>
+                                                </div>
+
+                                                <button
+                                                    onClick={() => {
+                                                        runTest();
+                                                        setIsPromptOpen(false);
+                                                    }}
+                                                    disabled={isTesting || !testInput.trim()}
+                                                    className={`px-10 py-4 rounded-2xl font-black text-xs uppercase tracking-[0.2em] transition-all flex items-center gap-3 ${isTesting || !testInput.trim()
+                                                        ? 'bg-slate-100 text-slate-400 cursor-not-allowed'
+                                                        : 'bg-gradient-to-r from-purple-600 to-indigo-600 text-white hover:shadow-[0_0_30px_rgba(147,51,234,0.3)]'
+                                                        }`}
+                                                >
+                                                    {isTesting ? (
+                                                        <>
+                                                            <div className="w-4 h-4 border-2 border-white/30 border-t-white rounded-full animate-spin" />
+                                                            Synthesizing...
+                                                        </>
+                                                    ) : (
+                                                        <>
+                                                            <Sparkles size={16} />
+                                                            Generate
+                                                        </>
+                                                    )}
+                                                </button>
+                                            </div>
+                                        </div>
+                                    </motion.div>
+                                </motion.div>
+                            )}
+                        </AnimatePresence>
                     </div>
                 );
             default:
@@ -664,46 +708,75 @@ const AgentStudioView: React.FC<AgentStudioViewProps> = ({ agents, setAgents, on
     };
 
     return (
-        <div className="flex h-full bg-slate-50 text-slate-900 overflow-hidden font-display">
+        <div className="flex h-full bg-slate-50 text-slate-900 overflow-hidden font-display relative">
             {/* Sidebar List */}
-            <div className="w-80 border-r border-slate-100 bg-white flex flex-col overflow-x-hidden">
-                <div className="p-8 border-b border-slate-50 bg-slate-50/20">
+            <motion.div
+                animate={{ width: isAgentSidebarCollapsed ? 80 : 320 }}
+                transition={{ type: "spring", damping: 25, stiffness: 200 }}
+                className="border-r border-slate-100 bg-white flex flex-col overflow-x-hidden relative"
+            >
+                <div className={`p-8 border-b border-slate-50 bg-slate-50/20 ${isAgentSidebarCollapsed ? 'px-4' : ''}`}>
                     <div className="flex justify-between items-center mb-8">
-                        <div className="flex items-center gap-2">
-                            <div className="w-2 h-4 bg-purple-600 rounded-full" />
-                            <h2 className="text-[10px] font-black text-slate-400 uppercase tracking-[0.2em]">Deployment Index</h2>
-                        </div>
+                        {!isAgentSidebarCollapsed && (
+                            <div className="flex items-center gap-2">
+                                <div className="w-2 h-4 bg-purple-600 rounded-full" />
+                                <h2 className="text-[10px] font-black text-slate-400 uppercase tracking-[0.2em]">Deployment Index</h2>
+                            </div>
+                        )}
                         <button onClick={handleNew} className="p-3 bg-white border border-slate-100 rounded-2xl text-purple-600 hover:bg-purple-50 hover:border-purple-100 hover:shadow-lg transition-all hover:scale-105 active:scale-95 shadow-sm">
                             <Plus size={20} />
                         </button>
                     </div>
-                    <h1 className="text-3xl font-black text-slate-900 tracking-tighter leading-none mb-1">Operative OS</h1>
-                    <p className="text-[10px] text-slate-400 font-bold uppercase tracking-widest">Active Intelligence Nodes</p>
+                    {!isAgentSidebarCollapsed && (
+                        <>
+                            <h1 className="text-3xl font-black text-slate-900 tracking-tighter leading-none mb-1">Operative OS</h1>
+                            <p className="text-[10px] text-slate-400 font-bold uppercase tracking-widest">Active Intelligence Nodes</p>
+                        </>
+                    )}
                 </div>
+
+                {/* Collapse Button */}
+                <button
+                    onClick={() => setIsAgentSidebarCollapsed(!isAgentSidebarCollapsed)}
+                    className="absolute -right-3.5 top-24 w-7 h-7 bg-white border border-slate-200 rounded-full flex items-center justify-center shadow-md hover:shadow-lg hover:border-purple-300 transition-all z-50 group"
+                >
+                    <ChevronRight className={`w-4 h-4 text-slate-400 group-hover:text-purple-600 transition-transform ${isAgentSidebarCollapsed ? '' : 'rotate-180'}`} />
+                </button>
+
                 <div className="flex-1 overflow-y-auto custom-scrollbar p-4 space-y-2">
                     {agents.map(agent => (
                         <button
                             key={agent.id}
                             onClick={() => handleSelect(agent)}
-                            className={`w-full p-5 rounded-[2rem] cursor-pointer transition-all text-left flex items-center gap-4 group ${selectedAgentId === agent.id
+                            className={`w-full ${isAgentSidebarCollapsed ? 'p-3' : 'p-5'} rounded-[2rem] cursor-pointer transition-all text-left flex items-center ${isAgentSidebarCollapsed ? 'justify-center' : 'gap-4'} group relative ${selectedAgentId === agent.id
                                 ? 'bg-purple-50 border border-purple-100 shadow-xl shadow-purple-100/50'
                                 : 'bg-white border border-transparent hover:bg-slate-50'
                                 }`}
                         >
-                            <div className={`w-12 h-12 rounded-2xl flex items-center justify-center font-black text-lg transition-all ${selectedAgentId === agent.id ? 'bg-purple-600 text-white shadow-lg' : 'bg-slate-100 text-slate-400 group-hover:bg-purple-100 group-hover:text-purple-600'}`}>
+                            <div className={`${isAgentSidebarCollapsed ? 'w-12 h-12' : 'w-12 h-12'} rounded-2xl flex items-center justify-center font-black text-lg transition-all ${selectedAgentId === agent.id ? 'bg-purple-600 text-white shadow-lg' : 'bg-slate-100 text-slate-400 group-hover:bg-purple-100 group-hover:text-purple-600'}`}>
                                 {agent.name.charAt(0)}
                             </div>
-                            <div className="flex-1 min-w-0">
-                                <p className={`font-black truncate text-sm tracking-tight ${selectedAgentId === agent.id ? 'text-slate-900' : 'text-slate-600'}`}>{agent.name}</p>
-                                <p className={`text-[9px] uppercase font-black tracking-widest mt-0.5 ${selectedAgentId === agent.id ? 'text-purple-600' : 'text-slate-400'}`}>
-                                    CLASS: {agent.role}
-                                </p>
-                            </div>
-                            {selectedAgentId === agent.id && <ChevronRight size={14} className="text-purple-400" />}
+                            {!isAgentSidebarCollapsed && (
+                                <div className="flex-1 min-w-0">
+                                    <p className={`font-black truncate text-sm tracking-tight ${selectedAgentId === agent.id ? 'text-slate-900' : 'text-slate-600'}`}>{agent.name}</p>
+                                    <p className={`text-[9px] uppercase font-black tracking-widest mt-0.5 ${selectedAgentId === agent.id ? 'text-purple-600' : 'text-slate-400'}`}>
+                                        CLASS: {agent.role}
+                                    </p>
+                                </div>
+                            )}
+                            {selectedAgentId === agent.id && !isAgentSidebarCollapsed && <ChevronRight size={14} className="text-purple-400" />}
+
+                            {/* Tooltip for collapsed mode */}
+                            {isAgentSidebarCollapsed && (
+                                <div className="absolute left-[110%] bg-white border border-slate-200 text-slate-900 text-xs font-black px-4 py-2 rounded-xl opacity-0 pointer-events-none group-hover:opacity-100 transition-all transform group-hover:translate-x-1 whitespace-nowrap z-50 shadow-2xl">
+                                    <div>{agent.name}</div>
+                                    <div className="text-[9px] text-purple-600 uppercase tracking-widest">CLASS: {agent.role}</div>
+                                </div>
+                            )}
                         </button>
                     ))}
                 </div>
-            </div>
+            </motion.div>
 
             {/* Engineering Console */}
             <div className="flex-1 flex flex-col overflow-hidden bg-slate-50/30 backdrop-blur-sm">

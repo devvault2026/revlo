@@ -1,55 +1,57 @@
 
-import { GoogleGenAI, Type } from "@google/genai";
+import { GoogleGenAI } from "@google/genai";
 import { Lead, Competitor, AgentProfile } from "../types";
 
 const getAiClient = (apiKey: string) => {
+    // This specific SDK version (1.38.0) requires the object wrapper
     return new GoogleGenAI({ apiKey });
 };
 
 // --- USAGE TRACKING ---
 import { SystemUsage } from "../types";
 
-let globalUsage: SystemUsage = {
-    totalApiCalls: 0,
-    totalTokens: 0,
-    promptTokens: 0,
-    completionTokens: 0,
-    callsByModel: {}
-};
+export interface IncrementalUsage {
+    model: string;
+    calls: number;
+    totalTokens: number;
+    promptTokens: number;
+    completionTokens: number;
+}
 
-type UsageListener = (usage: SystemUsage) => void;
+type UsageListener = (usage: IncrementalUsage) => void;
 const listeners: UsageListener[] = [];
 
 export const onUsageUpdate = (listener: UsageListener) => {
     listeners.push(listener);
-    listener(globalUsage);
     return () => {
         const index = listeners.indexOf(listener);
         if (index > -1) listeners.splice(index, 1);
     };
 };
 
-const trackUsage = (model: string, usage?: any) => {
-    globalUsage.totalApiCalls++;
-    globalUsage.callsByModel[model] = (globalUsage.callsByModel[model] || 0) + 1;
+const trackUsage = (model: string, usageMetadata?: any) => {
+    const incremental: IncrementalUsage = {
+        model,
+        calls: 1,
+        totalTokens: 0,
+        promptTokens: 0,
+        completionTokens: 0
+    };
 
-    if (usage) {
-        const prompt = usage.promptTokenCount || 0;
-        const completion = usage.candidatesTokenCount || 0;
-        const total = usage.totalTokenCount || prompt + completion;
-
-        globalUsage.promptTokens += prompt;
-        globalUsage.completionTokens += completion;
-        globalUsage.totalTokens += total;
+    if (usageMetadata) {
+        incremental.promptTokens = usageMetadata.promptTokenCount || 0;
+        incremental.completionTokens = usageMetadata.candidatesTokenCount || 0;
+        incremental.totalTokens = usageMetadata.totalTokenCount || (incremental.promptTokens + incremental.completionTokens);
     }
 
-    listeners.forEach(l => l({ ...globalUsage }));
+    listeners.forEach(l => l(incremental));
+    return incremental;
 };
 
 // --- AGENT COMPILER ---
 
 export const compileAgentInstruction = (agent: AgentProfile): string => {
-    if (!agent.mandate) return `You are ${agent.name}, a ${agent.role}.`; // Fallback for old agents
+    if (!agent.mandate) return `You are ${agent.name}, a ${agent.role}.`;
 
     return `
     IDENTITY PROTOCOL:
@@ -89,35 +91,26 @@ export const compileAgentInstruction = (agent: AgentProfile): string => {
 
 export const scoutLeads = async (apiKey: string, niche: string, location: string, limit: number = 5, scanMode: 'niche' | 'zone' = 'niche'): Promise<Partial<Lead>[]> => {
     const ai = getAiClient(apiKey);
-    let prompt = '';
 
+    let prompt = '';
     if (scanMode === 'zone') {
-        prompt = `List ${limit} distinct local businesses located in the Zip Code/Area: "${location}".
-      Goal: Create a diverse directory of local businesses across different categories (e.g., Retail, Professional Services, Dining, Auto Repair, Medical).
-      Instructions:
-      1. Identify valid local businesses.
-      2. Use Google Search to find public business emails.
-      Return ONLY a JSON array (no markdown) where each item has: name, type (industry), address, rating, userRatingCount, website (or null), phone, email.`;
+        prompt = `List ${limit} distinct local businesses located in the Zip Code/Area: "${location}". 
+        Return ONLY a JSON array where each item has: name, type, address, rating, userRatingCount, website, phone, email.`;
     } else {
         prompt = `Find ${limit} local ${niche} businesses in ${location}. 
-      Instructions:
-      1. Identify businesses.
-      2. Use Google Search to find public contact emails.
-      3. Prioritize businesses with poor digital presence.
-      Return ONLY a JSON array (no markdown) where each item has: name, type (industry), address, rating, userRatingCount, website (or null), phone, email.`;
+        Return ONLY a JSON array where each item has: name, type, address, rating, userRatingCount, website, phone, email.`;
     }
 
     try {
         const response = await ai.models.generateContent({
             model: "gemini-2.5-pro",
             contents: prompt,
-            config: { tools: [{ googleMaps: {} }, { googleSearch: {} }] }
+            config: { tools: [{ googleMaps: {} }, { googleSearch: {} } as any] }
         });
 
         trackUsage("gemini-2.5-pro", response.usageMetadata);
 
         let text = response.text || "[]";
-        if (text.trim().toLowerCase().startsWith("i cannot") || text.trim().toLowerCase().startsWith("i'm unable")) return [];
         text = text.replace(/```json/g, '').replace(/```/g, '').trim();
 
         const data = JSON.parse(text);
@@ -140,13 +133,12 @@ export const enrichLead = async (apiKey: string, query: string): Promise<Partial
     const prompt = `Research business: "${query}". Find official name, industry type, address, website, email, phone, rating. Return raw JSON.`;
     try {
         const response = await ai.models.generateContent({
-            model: "gemini-2.5-pro",
+            model: "gemini-1.5-pro",
             contents: prompt,
-            config: { tools: [{ googleMaps: {} }, { googleSearch: {} }] }
+            config: { tools: [{ googleMaps: {} }, { googleSearch: {} } as any] }
         });
-        trackUsage("gemini-2.5-pro", response.usageMetadata);
+        trackUsage("gemini-1.5-pro", response.usageMetadata);
         let text = response.text || "null";
-        if (text.trim().toLowerCase().startsWith("i cannot")) return null;
         text = text.replace(/```json/g, '').replace(/```/g, '').trim();
         if (text === "null" || text === "{}") return null;
         const data = JSON.parse(text);
@@ -159,17 +151,15 @@ export const enrichLead = async (apiKey: string, query: string): Promise<Partial
 
 export const scoreLead = async (apiKey: string, lead: Lead): Promise<{ score: number, psychology: string }> => {
     const ai = getAiClient(apiKey);
-    const prompt = `Act as a Behavioral Psychologist. Analyze lead: ${lead.name} (${lead.type}). Rating: ${lead.rating}. Website: ${lead.website}.
-    Task: Search reviews and owner replies. Analyze digital gap.
-    Return JSON: { score: number(0-100), psychology: "string summary" }`;
+    const prompt = `Act as a Behavioral Psychologist. Analyze lead: ${lead.name}. Search reviews and owner replies. Return JSON: { score: number(0-100), psychology: "string summary" }`;
 
     try {
         const response = await ai.models.generateContent({
-            model: "gemini-2.5-pro",
+            model: "gemini-1.5-pro",
             contents: prompt,
-            config: { tools: [{ googleSearch: {} }] }
+            config: { tools: [{ googleSearch: {} } as any] }
         });
-        trackUsage("gemini-2.5-pro", response.usageMetadata);
+        trackUsage("gemini-1.5-pro", response.usageMetadata);
         let text = response.text || "{}";
         text = text.replace(/```json/g, '').replace(/```/g, '').trim();
         const data = JSON.parse(text);
@@ -181,14 +171,14 @@ export const scoreLead = async (apiKey: string, lead: Lead): Promise<{ score: nu
 
 export const generateDossier = async (apiKey: string, lead: Lead): Promise<Partial<Lead>> => {
     const ai = getAiClient(apiKey);
-    const prompt = `Analyze business: "${lead.name}" at "${lead.address}". Find owner name/email. Summarize core business. Identify 3 digital pain points. Estimate revenue loss. Return JSON: {ownerName, ownerEmail, businessCore, revenueEstimate, painPoints[]}`;
+    const prompt = `Analyze business: "${lead.name}" at "${lead.address}". Return JSON: {ownerName, ownerEmail, businessCore, revenueEstimate, painPoints[]}`;
     try {
         const response = await ai.models.generateContent({
-            model: "gemini-3-flash-preview",
+            model: "gemini-1.5-flash",
             contents: prompt,
-            config: { tools: [{ googleSearch: {} }] }
+            config: { tools: [{ googleSearch: {} } as any] }
         });
-        trackUsage("gemini-3-flash-preview", response.usageMetadata);
+        trackUsage("gemini-1.5-flash", response.usageMetadata);
         let text = response.text || "{}";
         text = text.replace(/```json/g, '').replace(/```/g, '').trim();
         return JSON.parse(text);
@@ -200,11 +190,11 @@ export const analyzeCompetitors = async (apiKey: string, niche: string, location
     const prompt = `Identify 3 top competitors for ${niche} in ${location}. Return JSON array: {name, website, strengths[], weaknesses[], whyWinning}`;
     try {
         const response = await ai.models.generateContent({
-            model: "gemini-3-flash-preview",
+            model: "gemini-1.5-flash",
             contents: prompt,
-            config: { tools: [{ googleSearch: {} }] }
+            config: { tools: [{ googleSearch: {} } as any] }
         });
-        trackUsage("gemini-3-flash-preview", response.usageMetadata);
+        trackUsage("gemini-1.5-flash", response.usageMetadata);
         let text = response.text || "[]";
         text = text.replace(/```json/g, '').replace(/```/g, '').trim();
         return JSON.parse(text);
@@ -215,17 +205,14 @@ export const createPRD = async (apiKey: string, lead: Lead, competitors: Competi
     const ai = getAiClient(apiKey);
     const systemInstruction = agent ? compileAgentInstruction(agent) : "Act as a Senior Product Manager.";
 
-    const prompt = `Create a PRD for "${lead.name}".
-    Goal: Beat these competitors: ${competitors.map(c => c.name).join(', ')}.
-    Context: ${lead.businessCore}
-    Output Format: Markdown.`;
+    const prompt = `Create a PRD for "${lead.name}". Beat: ${competitors.map(c => c.name).join(', ')}. Context: ${lead.businessCore}. Output: Markdown.`;
 
     const response = await ai.models.generateContent({
-        model: "gemini-3-flash-preview",
+        model: "gemini-1.5-flash",
         contents: prompt,
         config: { systemInstruction }
     });
-    trackUsage("gemini-3-flash-preview", response.usageMetadata);
+    trackUsage("gemini-1.5-flash", response.usageMetadata);
     return response.text || "";
 };
 
@@ -233,64 +220,33 @@ export const refinePRD = async (apiKey: string, currentPrd: string, instruction:
     const ai = getAiClient(apiKey);
     const systemInstruction = agent ? compileAgentInstruction(agent) : "Act as a Senior Product Lead.";
 
-    const prompt = `TASK: Refine the following Product Requirements Document (PRD) based on this objective: "${instruction}".
-    
-    RULES:
-    1. Maintain the existing high-quality markdown structure.
-    2. Incorporate Mermaid graphs (using \`\`\`mermaid\`\`\` blocks) for any complex flows, architecture, or timelines requested.
-    3. Ensure the tone remains tactical and premium.
-    
-    CURRENT PRD:
-    ${currentPrd}
-    
-    RETURN THE FULL REFINED MARKDOWN CONTENT.`;
+    const prompt = `TASK: Refine PRD based on: "${instruction}". CURRENT PRD: ${currentPrd}. RETURN FULL REFINED MARKDOWN.`;
 
     const response = await ai.models.generateContent({
-        model: "gemini-3-flash-preview",
+        model: "gemini-1.5-flash",
         contents: prompt,
         config: { systemInstruction }
     });
-    trackUsage("gemini-3-flash-preview", response.usageMetadata);
-
+    trackUsage("gemini-1.5-flash", response.usageMetadata);
     return response.text || currentPrd;
 };
-
-// --- MULTI-PAGE BUILDER & EDITING ---
 
 export const generateWebsiteCode = async (apiKey: string, lead: Lead, prd: string, agent?: AgentProfile): Promise<{ [key: string]: string }> => {
     const ai = getAiClient(apiKey);
     const systemInstruction = agent ? compileAgentInstruction(agent) : "Act as an Award-Winning Developer.";
 
-    // Nudge for 5-7 pages if it's a high-tier agent
-    const pageRequirement = agent?.mandate.objective.includes('5-7 page') ? 'a GUARANTEED 5-7 page award-winning architecture' : 'a multi-page website';
-    const requiredSections = agent?.outputContract.requiredSections.join(', ') || 'Hero, Services, Contact';
-
-    const prompt = `Based on the PRD for ${lead.name}, generate ${pageRequirement}.
-    
-    REQUIRED COMPONENTS/SECTIONS TO INTEGRATE:
-    ${requiredSections}
-
-    TECH STACK: Tailwind CSS (CDN), FontAwesome (CDN), Google Fonts.
-    
-    DELIVERY PROTOCOL:
-    1. Return ONLY valid JSON where keys are filenames and values are the full HTML strings.
-    2. Ensure content is value-rich, professional, and reflects a $25,000 market value.
-    3. Include 5-7 distinct files (e.g. index.html, services.html, portfolio.html, about.html, news.html, contact.html) if requested.
-    4. Maintain absolute design consistency across all files.
-
-    Example Output Format: { "index.html": "<!DOCTYPE html>...", "services.html": "..." }
-    Do NOT use markdown. Return the raw JSON object.`;
+    const prompt = `Generate a multi-page website based on PRD. Return ONLY valid JSON where keys are filenames and values are full HTML strings.`;
 
     try {
         const response = await ai.models.generateContent({
-            model: "gemini-3-flash-preview",
+            model: "gemini-1.5-flash",
             contents: prompt,
             config: {
                 responseMimeType: "application/json",
                 systemInstruction
             }
         });
-        trackUsage("gemini-3-flash-preview", response.usageMetadata);
+        trackUsage("gemini-1.5-flash", response.usageMetadata);
         return JSON.parse(response.text || "{}");
     } catch (e) {
         console.error("Site Gen Failed", e);
@@ -302,24 +258,14 @@ export const editWebsiteElement = async (apiKey: string, currentHtml: string, in
     const ai = getAiClient(apiKey);
     const systemInstruction = agent ? compileAgentInstruction(agent) : "Act as a Senior Developer.";
 
-    const prompt = `TASK: Edit the following HTML code based strictly on this instruction: "${instruction}".
-    
-    RULES:
-    1. Do NOT regenerate the whole page if not needed, but return the FULL valid HTML string with the changes applied.
-    2. Maintain all existing scripts and CDNs.
-    
-    CURRENT HTML:
-    ${currentHtml.substring(0, 20000)}... 
-    
-    RETURN ONLY RAW HTML string.`;
+    const prompt = `Edit HTML based on: "${instruction}". CURRENT HTML: ${currentHtml.substring(0, 20000)}. RETURN ONLY RAW HTML.`;
 
     const response = await ai.models.generateContent({
-        model: "gemini-3-flash-preview",
+        model: "gemini-1.5-flash",
         contents: prompt,
         config: { systemInstruction }
     });
-    trackUsage("gemini-3-flash-preview", response.usageMetadata);
-
+    trackUsage("gemini-1.5-flash", response.usageMetadata);
     let text = response.text || currentHtml;
     text = text.replace(/```html/g, '').replace(/```/g, '');
     return text;
@@ -329,20 +275,17 @@ export const generateOutreach = async (apiKey: string, lead: Lead, agent?: Agent
     const ai = getAiClient(apiKey);
     const systemInstruction = agent ? compileAgentInstruction(agent) : "Act as a Sales Expert.";
 
-    const prompt = `Write a cold email and SMS for ${lead.name}.
-    Context: We built a custom site (worth $25k) for $750.
-    Return JSON: { emailSubject, emailBody, smsBody }`;
+    const prompt = `Write cold email and SMS for ${lead.name}. Context: $25k site for $750. Return JSON: { emailSubject, emailBody, smsBody }`;
 
     const response = await ai.models.generateContent({
-        model: "gemini-3-flash-preview",
+        model: "gemini-1.5-flash",
         contents: prompt,
         config: {
             responseMimeType: "application/json",
             systemInstruction
         }
     });
-    trackUsage("gemini-3-flash-preview", response.usageMetadata);
-
+    trackUsage("gemini-1.5-flash", response.usageMetadata);
     return JSON.parse(response.text || "{}");
 }
 
@@ -350,51 +293,47 @@ export const streamTestAgent = async (apiKey: string, agent: AgentProfile, testI
     const ai = getAiClient(apiKey);
     const systemInstruction = compileAgentInstruction(agent);
 
+    const enhancedPrompt = `${testInput}\n\nOUTPUT RAW HTML ONLY starting with <!DOCTYPE html>. NO MARKDOWN. NO FENCES. NO EXPLANATIONS.`;
+
     try {
         const result = await ai.models.generateContentStream({
-            model: "gemini-3-flash-preview",
-            contents: testInput,
+            model: "gemini-1.5-flash",
+            contents: enhancedPrompt,
             config: { systemInstruction }
         });
 
         let fullText = "";
         for await (const chunk of result) {
-            const text = chunk.text || "";
+            let text = chunk.text || "";
+            if (fullText.length === 0) {
+                text = text.replace(/^```html\s*/i, '').replace(/^```\s*/i, '');
+            }
+            text = text.replace(/```$/g, '');
             fullText += text;
             onChunk(text);
         }
-        // Metadata usually available at end of stream result in some SDKs, 
-        // but for now we track as one call. Tokens are harder in stream without responseMetadata.
-        trackUsage("gemini-3-flash-preview");
-        return fullText;
+        trackUsage("gemini-1.5-flash");
+        return fullText.trim();
     } catch (e) {
         console.error("Streaming failed", e);
         throw e;
     }
 }
 
-// --- VAULT RESEARCH ---
-
 export const conductResearch = async (apiKey: string, query: string): Promise<{ title: string, content: string }> => {
     const ai = getAiClient(apiKey);
-    const prompt = `Research Topic: "${query}"
-    
-    Instructions:
-    1. Search Google for the latest information, statistics, and trends related to this topic.
-    2. Synthesize a comprehensive research report in Markdown format.
-    3. Include a Title, Executive Summary, Key Findings, Strategic Opportunities, and References.
-    
-    The output should be high-quality, professional, and dense with information suitable for an agency strategy vault.`;
+    const prompt = `Research Topic: "${query}". Synthesize a Markdown report based on current web data.`;
 
-    const response = await ai.models.generateContent({
-        model: "gemini-3-pro-preview",
-        contents: prompt,
-        config: { tools: [{ googleSearch: {} }] }
-    });
-    trackUsage("gemini-3-pro-preview", response.usageMetadata);
-
-    return {
-        title: query.charAt(0).toUpperCase() + query.slice(1),
-        content: response.text || "# Research Failed\nCould not generate content."
-    };
+    try {
+        const response = await ai.models.generateContent({
+            model: "gemini-1.5-pro",
+            contents: prompt,
+            config: { tools: [{ googleSearch: {} } as any] }
+        });
+        trackUsage("gemini-1.5-pro", response.usageMetadata);
+        return {
+            title: query.charAt(0).toUpperCase() + query.slice(1),
+            content: response.text || "# Research Failed"
+        };
+    } catch (e) { return { title: query, content: "Research failed." }; }
 };

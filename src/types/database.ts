@@ -9,6 +9,68 @@ export type Json =
 export type Database = {
     public: {
         Tables: {
+            agents: {
+                Row: {
+                    behavior: Json | null
+                    capabilities: Json | null
+                    chaining: Json | null
+                    created_at: string
+                    id: string
+                    mandate: Json | null
+                    memory_type: string | null
+                    name: string
+                    output_contract: Json | null
+                    responsibilities: Json | null
+                    role: string | null
+                    stats: Json | null
+                    updated_at: string
+                    user_id: string | null
+                    version: number | null
+                }
+                Insert: {
+                    behavior?: Json | null
+                    capabilities?: Json | null
+                    chaining?: Json | null
+                    created_at?: string
+                    id?: string
+                    mandate?: Json | null
+                    memory_type?: string | null
+                    name: string
+                    output_contract?: Json | null
+                    responsibilities?: Json | null
+                    role?: string | null
+                    stats?: Json | null
+                    updated_at?: string
+                    user_id?: string | null
+                    version?: number | null
+                }
+                Update: {
+                    behavior?: Json | null
+                    capabilities?: Json | null
+                    chaining?: Json | null
+                    created_at?: string
+                    id?: string
+                    mandate?: Json | null
+                    memory_type?: string | null
+                    name?: string
+                    output_contract?: Json | null
+                    responsibilities?: Json | null
+                    role?: string | null
+                    stats?: Json | null
+                    updated_at?: string
+                    user_id?: string | null
+                    version?: number | null
+                }
+                Relationships: [
+                    {
+                        foreignKeyName: "agents_user_id_fkey"
+                        columns: ["user_id"]
+                        isOneToOne: false
+                        referencedRelation: "users"
+                        referencedColumns: ["id"]
+                    }
+                ]
+            }
             leads: {
                 Row: {
                     address: string | null
@@ -31,16 +93,16 @@ export type Database = {
                     owner_email: string | null
                     owner_name: string | null
                     pain_points: string[] | null
-                    phone: string | null
                     prd: string | null
                     propensity_score: number | null
                     psychology_profile: string | null
                     rating: number | null
-                    revenue_estimate: string | null
                     site_structure: Json | null
                     status: string | null
                     tags: string[] | null
+                    phone: string | null
                     type: string | null
+                    updated_at: string
                     user_id: string | null
                     user_rating_count: number | null
                     website: string | null
@@ -66,16 +128,16 @@ export type Database = {
                     owner_email?: string | null
                     owner_name?: string | null
                     pain_points?: string[] | null
-                    phone?: string | null
                     prd?: string | null
                     propensity_score?: number | null
                     psychology_profile?: string | null
                     rating?: number | null
-                    revenue_estimate?: string | null
                     site_structure?: Json | null
                     status?: string | null
                     tags?: string[] | null
+                    phone?: string | null
                     type?: string | null
+                    updated_at?: string
                     user_id?: string | null
                     user_rating_count?: number | null
                     website?: string | null
@@ -101,16 +163,16 @@ export type Database = {
                     owner_email?: string | null
                     owner_name?: string | null
                     pain_points?: string[] | null
-                    phone?: string | null
                     prd?: string | null
                     propensity_score?: number | null
                     psychology_profile?: string | null
                     rating?: number | null
-                    revenue_estimate?: string | null
                     site_structure?: Json | null
                     status?: string | null
                     tags?: string[] | null
+                    phone?: string | null
                     type?: string | null
+                    updated_at?: string
                     user_id?: string | null
                     user_rating_count?: number | null
                     website?: string | null
@@ -174,6 +236,7 @@ export type Database = {
                 Row: {
                     created_at: string
                     id: string
+                    logo_url: string | null
                     name: string
                     owner_id: string | null
                     slug: string | null
@@ -182,6 +245,7 @@ export type Database = {
                 Insert: {
                     created_at?: string
                     id?: string
+                    logo_url?: string | null
                     name: string
                     owner_id?: string | null
                     slug?: string | null
@@ -190,6 +254,7 @@ export type Database = {
                 Update: {
                     created_at?: string
                     id?: string
+                    logo_url?: string | null
                     name?: string
                     owner_id?: string | null
                     slug?: string | null
@@ -249,6 +314,47 @@ export type Database = {
                     {
                         foreignKeyName: "profiles_id_fkey"
                         columns: ["id"]
+                        isOneToOne: true
+                        referencedRelation: "users"
+                        referencedColumns: ["id"]
+                    }
+                ]
+            }
+            settings: {
+                Row: {
+                    api_key: string | null
+                    location: string | null
+                    niche: string | null
+                    outreach_config: Json | null
+                    scraping_batch_size: number | null
+                    updated_at: string
+                    user_id: string
+                    vapi_config: Json | null
+                }
+                Insert: {
+                    api_key?: string | null
+                    location?: string | null
+                    niche?: string | null
+                    outreach_config?: Json | null
+                    scraping_batch_size?: number | null
+                    updated_at?: string
+                    user_id: string
+                    vapi_config?: Json | null
+                }
+                Update: {
+                    api_key?: string | null
+                    location?: string | null
+                    niche?: string | null
+                    outreach_config?: Json | null
+                    scraping_batch_size?: number | null
+                    updated_at?: string
+                    user_id?: string
+                    vapi_config?: Json | null
+                }
+                Relationships: [
+                    {
+                        foreignKeyName: "settings_user_id_fkey"
+                        columns: ["user_id"]
                         isOneToOne: true
                         referencedRelation: "users"
                         referencedColumns: ["id"]

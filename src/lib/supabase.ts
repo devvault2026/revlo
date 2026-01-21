@@ -137,3 +137,54 @@ export const deleteVaultDocument = async (id: string) => {
         .eq('id', id);
     if (error) throw error;
 };
+// --- AGENTS HELPERS ---
+
+export const getAgents = async (userId: string) => {
+    const { data, error } = await supabase
+        .from('agents')
+        .select('*')
+        .eq('user_id', userId)
+        .order('created_at', { ascending: true });
+    if (error) throw error;
+    return data;
+};
+
+export const upsertAgent = async (agent: any) => {
+    const { data, error } = await supabase
+        .from('agents')
+        .upsert(agent)
+        .select()
+        .single();
+    if (error) throw error;
+    return data;
+};
+
+export const deleteAgent = async (id: string) => {
+    const { error } = await supabase
+        .from('agents')
+        .delete()
+        .eq('id', id);
+    if (error) throw error;
+};
+
+// --- SETTINGS HELPERS ---
+
+export const getSettings = async (userId: string) => {
+    const { data, error } = await supabase
+        .from('settings')
+        .select('*')
+        .eq('user_id', userId)
+        .single();
+    if (error && error.code !== 'PGRST116') throw error; // PGRST116 is No rows found
+    return data;
+};
+
+export const upsertSettings = async (settings: any) => {
+    const { data, error } = await supabase
+        .from('settings')
+        .upsert(settings)
+        .select()
+        .single();
+    if (error) throw error;
+    return data;
+};

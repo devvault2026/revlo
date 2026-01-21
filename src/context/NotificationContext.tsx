@@ -24,9 +24,10 @@ export const NotificationProvider: React.FC<{ children: React.ReactNode }> = ({ 
         if (!user) return;
         try {
             const data = await getNotifications(user.id);
-            setNotifications(data);
-        } catch (error) {
-            console.error('Error fetching notifications:', error);
+            setNotifications(data || []);
+        } catch (error: any) {
+            if (error?.name === 'AbortError') return;
+            console.error('SYSTEM: Notification fetch failed:', error?.message || error);
         } finally {
             setLoading(false);
         }
