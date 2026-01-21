@@ -27,6 +27,24 @@ export type VaultDoc = Database['public']['Tables']['vault_documents']['Row'];
 
 // --- AUTH HELPERS ---
 
+export const signUp = async (email: string, password: string, metadata?: any) => {
+    const { data, error } = await supabase.auth.signUp({
+        email,
+        password,
+        options: {
+            data: metadata
+        }
+    });
+    if (error) throw error;
+    return data;
+};
+
+export const signIn = async (email: string, password: string) => {
+    const { data, error } = await supabase.auth.signInWithPassword({ email, password });
+    if (error) throw error;
+    return data;
+};
+
 export const getCurrentUser = async () => {
     const { data: { user } } = await supabase.auth.getUser();
     return user;

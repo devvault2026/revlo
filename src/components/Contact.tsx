@@ -2,7 +2,7 @@ import React, { useState } from 'react';
 import { motion } from 'framer-motion';
 import { useForm } from 'react-hook-form';
 import { CheckCircle2, Loader2, ArrowRight } from 'lucide-react';
-import { insertLead } from '../lib/supabase';
+import { upsertLead } from '../lib/supabase';
 
 interface FormData {
     name: string;
@@ -22,14 +22,14 @@ const Contact: React.FC = () => {
 
         try {
             // Insert lead into Supabase
-            await insertLead({
+            await upsertLead({
                 name: data.name,
                 email: data.email,
-                company: data.company,
-                revenue_range: data.revenue,
-                message: data.message,
-                source: 'website',
-            });
+                business_core: data.company,
+                revenue_estimate: data.revenue,
+                notes: data.message,
+                type: 'inbound',
+            } as any);
 
             setIsSuccess(true);
             reset();

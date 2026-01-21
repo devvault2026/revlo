@@ -3,11 +3,13 @@ import { Link, useLocation } from 'react-router-dom';
 import { motion } from 'framer-motion';
 import { Menu, X } from 'lucide-react';
 import { useAppStore } from '../store/appStore';
+import { useAuth } from '../context/AuthContext';
 
 const Navigation: React.FC = () => {
     const [isScrolled, setIsScrolled] = useState(false);
     const { isMenuOpen, toggleMenu, closeMenu } = useAppStore();
     const location = useLocation();
+    const { user } = useAuth();
 
     useEffect(() => {
         const handleScroll = () => {
@@ -304,39 +306,41 @@ const Navigation: React.FC = () => {
                                 }
                             }
                         `}</style>
-                        <Link to="/revlo-os">
-                            <button type="button" className="electric-button">
-                                <span className="fold"></span>
 
-                                <div className="points_wrapper">
-                                    <i className="point"></i>
-                                    <i className="point"></i>
-                                    <i className="point"></i>
-                                    <i className="point"></i>
-                                    <i className="point"></i>
-                                    <i className="point"></i>
-                                    <i className="point"></i>
-                                    <i className="point"></i>
-                                    <i className="point"></i>
-                                    <i className="point"></i>
-                                </div>
+                        <Link
+                            to={user ? "/revlo-os" : "/login"}
+                            className="electric-button"
+                        >
+                            <span className="fold"></span>
 
-                                <span className="inner">
-                                    <svg
-                                        className="icon"
-                                        fill="none"
-                                        stroke="currentColor"
-                                        viewBox="0 0 24 24"
-                                        xmlns="http://www.w3.org/2000/svg"
-                                        strokeLinecap="round"
-                                        strokeLinejoin="round"
-                                        strokeWidth="2.5"
-                                    >
-                                        <polyline points="13.18 1.37 13.18 9.64 21.45 9.64 10.82 22.63 10.82 14.36 2.55 14.36 13.18 1.37" />
-                                    </svg>
-                                    REVLO OS
-                                </span>
-                            </button>
+                            <div className="points_wrapper">
+                                <i className="point"></i>
+                                <i className="point"></i>
+                                <i className="point"></i>
+                                <i className="point"></i>
+                                <i className="point"></i>
+                                <i className="point"></i>
+                                <i className="point"></i>
+                                <i className="point"></i>
+                                <i className="point"></i>
+                                <i className="point"></i>
+                            </div>
+
+                            <span className="inner">
+                                <svg
+                                    className="icon"
+                                    fill="none"
+                                    stroke="currentColor"
+                                    viewBox="0 0 24 24"
+                                    xmlns="http://www.w3.org/2000/svg"
+                                    strokeLinecap="round"
+                                    strokeLinejoin="round"
+                                    strokeWidth="2.5"
+                                >
+                                    <polyline points="13.18 1.37 13.18 9.64 21.45 9.64 10.82 22.63 10.82 14.36 2.55 14.36 13.18 1.37" />
+                                </svg>
+                                {user ? 'REVLO OS' : 'LOGIN'}
+                            </span>
                         </Link>
 
                         {/* CTA Button */}

@@ -1,17 +1,24 @@
-import React, { useState } from 'react';
+import React, { useState, useEffect } from 'react';
 import { Link, useNavigate } from 'react-router-dom';
 import { useForm } from 'react-hook-form';
 import { ArrowRight, Loader2, AlertCircle } from 'lucide-react';
 import AuthLayout from '../components/AuthLayout';
 import { signUp } from '../lib/supabase';
-import { useAppStore } from '../store/appStore';
+import { useAuth } from '../context/AuthContext';
 
 const RegisterPage: React.FC = () => {
     const { register, handleSubmit, formState: { errors } } = useForm();
     const [isLoading, setIsLoading] = useState(false);
     const [authError, setAuthError] = useState<string | null>(null);
     const navigate = useNavigate();
-    const setUser = useAppStore((state) => state.setUser);
+    const { user } = useAuth();
+
+    // Redirect when user state is confirmed
+    useEffect(() => {
+        if (user) {
+            navigate('/revlo-os', { replace: true });
+        }
+    }, [user, navigate]);
 
     const onSubmit = async (data: any) => {
         setIsLoading(true);
@@ -24,20 +31,17 @@ const RegisterPage: React.FC = () => {
             });
 
             if (result.user) {
-                setUser(result.user);
-                // Optional: You might want to redirect to an onboarding flow or directly to dashboard
-                // For now, let's go to admin
-                navigate('/admin');
+                // No manual navigation here; useEffect will handle it when AuthContext updates
             } else if (result.session === null && !result.user && !authError) {
                 // Sometimes supabase requires email verification, so user might not be logged in immediately
                 // Check if session is established.
                 setAuthError("Please check your email to verify your account.");
+                setIsLoading(false); // Stop loading if we need to show error/message
             }
 
         } catch (error: any) {
             console.error('Registration error:', error);
             setAuthError(error.message || 'Failed to create account. Please try again.');
-        } finally {
             setIsLoading(false);
         }
     };

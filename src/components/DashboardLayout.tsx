@@ -11,7 +11,8 @@ import {
     Menu,
     X
 } from 'lucide-react';
-import { Link, useLocation } from 'react-router-dom';
+import { Link, useLocation, useNavigate } from 'react-router-dom';
+import { useAuth } from '../context/AuthContext';
 
 interface DashboardLayoutProps {
     children: React.ReactNode;
@@ -20,6 +21,17 @@ interface DashboardLayoutProps {
 const DashboardLayout: React.FC<DashboardLayoutProps> = ({ children }) => {
     const [isSidebarOpen, setIsSidebarOpen] = React.useState(true);
     const location = useLocation();
+    const navigate = useNavigate();
+    const { user, profile, signOut } = useAuth();
+
+    const handleSignOut = async () => {
+        try {
+            await signOut();
+            navigate('/login');
+        } catch (error) {
+            console.error('Logout failed', error);
+        }
+    };
 
     const menuItems = [
         { icon: <LayoutDashboard className="w-5 h-5" />, label: 'Dashboard', path: '/admin' },
@@ -58,8 +70,8 @@ const DashboardLayout: React.FC<DashboardLayoutProps> = ({ children }) => {
                                     key={index}
                                     to={item.path}
                                     className={`flex items-center gap-3 px-4 py-3 rounded-xl transition-all group ${isActive
-                                            ? 'bg-gradient-rainbow text-white shadow-lg'
-                                            : 'text-slate-600 hover:bg-slate-100'
+                                        ? 'bg-gradient-rainbow text-white shadow-lg'
+                                        : 'text-slate-600 hover:bg-slate-100'
                                         }`}
                                 >
                                     <span className={isActive ? 'text-white' : 'text-slate-400 group-hover:text-slate-600'}>
@@ -76,14 +88,17 @@ const DashboardLayout: React.FC<DashboardLayoutProps> = ({ children }) => {
                     <div className="p-4 border-t border-slate-200">
                         <div className="flex items-center gap-3 px-4 py-3 rounded-xl bg-slate-50">
                             <div className="w-10 h-10 bg-gradient-purple rounded-full flex items-center justify-center text-white font-bold">
-                                A
+                                {profile?.full_name?.charAt(0) || user?.email?.charAt(0) || 'A'}
                             </div>
-                            <div className="flex-1">
-                                <p className="text-sm font-semibold">Admin User</p>
-                                <p className="text-xs text-slate-500">admin@revlo.agency</p>
+                            <div className="flex-1 min-w-0">
+                                <p className="text-sm font-semibold truncate">{profile?.full_name || 'Admin User'}</p>
+                                <p className="text-xs text-slate-500 truncate">{user?.email || 'admin@revlo.agency'}</p>
                             </div>
                         </div>
-                        <button className="w-full mt-3 flex items-center gap-2 px-4 py-2 text-sm text-slate-600 hover:text-red-600 transition-colors">
+                        <button
+                            onClick={handleSignOut}
+                            className="w-full mt-3 flex items-center gap-2 px-4 py-2 text-sm text-slate-600 hover:text-red-600 transition-colors"
+                        >
                             <LogOut className="w-4 h-4" />
                             <span>Logout</span>
                         </button>

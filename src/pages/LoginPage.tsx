@@ -1,33 +1,40 @@
-import React, { useState } from 'react';
+import React, { useState, useEffect } from 'react';
 import { Link, useNavigate } from 'react-router-dom';
 import { useForm } from 'react-hook-form';
 import { ArrowRight, Loader2, AlertCircle } from 'lucide-react';
 import AuthLayout from '../components/AuthLayout';
 import { signIn } from '../lib/supabase';
-import { useAppStore } from '../store/appStore';
+import { useAuth } from '../context/AuthContext';
 
 const LoginPage: React.FC = () => {
     const { register, handleSubmit, formState: { errors } } = useForm();
     const [isLoading, setIsLoading] = useState(false);
     const [authError, setAuthError] = useState<string | null>(null);
     const navigate = useNavigate();
-    const setUser = useAppStore((state) => state.setUser);
+    // We rely on AuthContext for state, not useAppStore manual setting to ensure synchronization
+    const { user } = useAuth(); // Import useAuth from context
+
+    // Redirect when user state is confirmed
+    useEffect(() => {
+        if (user) {
+            navigate('/revlo-os', { replace: true });
+        }
+    }, [user, navigate]);
 
     const onSubmit = async (data: any) => {
         setIsLoading(true);
         setAuthError(null);
         try {
             const result = await signIn(data.email, data.password);
-            if (result.user) {
-                setUser(result.user);
-                navigate('/admin');
-            }
+            if (!result.user) throw new Error("Login failed - no user returned");
+            // No manual navigation here; useEffect will handle it when AuthContext updates
         } catch (error: any) {
             console.error('Login error:', error);
+            window.alert(`Login Failed: ${error.message || 'Unknown error'}`);
             setAuthError(error.message || 'Failed to sign in. Please check your credentials.');
-        } finally {
-            setIsLoading(false);
+            setIsLoading(false); // Stop loading only on error
         }
+        // If success, we keep loading state true until redirect happens or component unmounts
     };
 
     return (
