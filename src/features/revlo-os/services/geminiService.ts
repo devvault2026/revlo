@@ -1,6 +1,6 @@
 
 import { GoogleGenerativeAI } from "@google/generative-ai";
-import { Lead, Competitor, AgentProfile } from "../types";
+import { Lead, Competitor, AgentProfile, LeadStatus } from "../types";
 
 const getGenAI = (apiKey: string) => {
     return new GoogleGenerativeAI(apiKey);
@@ -122,7 +122,7 @@ export const scoutLeads = async (apiKey: string, niche: string, location: string
 
             if (!Array.isArray(data)) return [];
 
-            return data.map((item: any) => ({
+            return data.map((item: any): Partial<Lead> => ({
                 id: crypto.randomUUID(),
                 name: item.name || "Unknown Business",
                 type: item.type || niche,
@@ -132,7 +132,7 @@ export const scoutLeads = async (apiKey: string, niche: string, location: string
                 website: item.website || "",
                 phone: item.phone || "",
                 email: item.email || "",
-                status: 'SCOUTED',
+                status: LeadStatus.SCOUTED as LeadStatus,
                 createdAt: new Date().toISOString()
             }));
         } catch (parseErr) {
@@ -352,7 +352,8 @@ export const streamTestAgent = async (apiKey: string, agent: AgentProfile, testI
         }
         trackUsage("gemini-3-flash-preview");
         return fullText.trim();
-    } catch (e) {
+    } catch (e: any) {
+        if (e?.message?.includes("signal is aborted") || e?.name === 'AbortError') return ""; // Return empty string on abort
         console.error("Streaming failed", e);
         throw e;
     }
@@ -384,7 +385,8 @@ export const validateApiKey = async (apiKey: string): Promise<boolean> => {
         const model = genAI.getGenerativeModel({ model: "gemini-2.0-flash" });
         const result = await model.generateContent("Connection test. Respond only with 'OK'.");
         return !!result.response.text();
-    } catch (e) {
+    } catch (e: any) {
+        if (e?.message?.includes("signal is aborted") || e?.name === 'AbortError') return false; // Return false on abort
         console.error("API Validation failed:", e);
         return false;
     }

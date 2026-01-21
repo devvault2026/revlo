@@ -22,7 +22,7 @@ export const AuthProvider: React.FC<{ children: React.ReactNode }> = ({ children
             const data = await getProfile(userId);
             setProfile(data);
         } catch (error: any) {
-            if (error?.name === 'AbortError') return;
+            if (error?.message?.includes("signal is aborted") || error?.name === 'AbortError') return;
             // Only log actual errors, not 'no rows found' which is expected for new users
             if (error?.code !== 'PGRST116') {
                 console.error('CRITICAL: Profile fetch failed:', error?.message || error);
@@ -66,6 +66,7 @@ export const AuthProvider: React.FC<{ children: React.ReactNode }> = ({ children
                     }
                 }
             } catch (error: any) {
+                if (error?.message?.includes("signal is aborted") || error?.name === 'AbortError') return;
                 console.error('AUTH_GATE: Failed to initialize session:', error?.message || error);
             } finally {
                 clearTimeout(timeoutId);
@@ -83,7 +84,12 @@ export const AuthProvider: React.FC<{ children: React.ReactNode }> = ({ children
             setUser(currentUser);
 
             if (currentUser) {
-                await fetchProfile(currentUser.id);
+                try {
+                    await fetchProfile(currentUser.id);
+                } catch (error: any) {
+                    if (error?.message?.includes("signal is aborted") || error?.name === 'AbortError') return;
+                    console.error('AUTH_GATE: Profile fetch failed:', error);
+                }
             } else {
                 setProfile(null);
             }
