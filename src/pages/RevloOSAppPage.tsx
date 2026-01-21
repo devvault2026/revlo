@@ -15,9 +15,13 @@ import CommandPalette from '../features/revlo-os/components/CommandPalette';
 import * as GeminiService from '../features/revlo-os/services/geminiService';
 import * as EmailService from '../features/revlo-os/services/emailService';
 import RevloOSLayout, { View } from '../features/revlo-os/RevloOSLayout';
+import { supabase, upsertLead, getLeads, getVaultDocuments, upsertVaultDocument, deleteVaultDocument } from '../lib/supabase';
+import { useAuth } from '../context/AuthContext';
+import { useNotifications } from '../context/NotificationContext';
+import { useToast } from '../features/revlo-os/context/ToastContext';
 
 const DEFAULT_SETTINGS: SettingsType = {
-    apiKey: '', // NOTE: process.env is not directly accessible in browser the same way, but let's leave it empty for now or rely on user settings
+    apiKey: '',
     scrapingBatchSize: 5,
     niche: 'Plumbers',
     location: 'Austin, TX',
@@ -25,128 +29,177 @@ const DEFAULT_SETTINGS: SettingsType = {
     vapi: { privateApiKey: '', publicApiKey: '', phoneNumberId: '' }
 };
 
-import { ToastProvider, useToast } from '../features/revlo-os/context/ToastContext';
-
 const RevloOSAppPageContent: React.FC = () => {
-    const [currentView, setCurrentView] = useState<View>('engine'); // Default to Engine if desired, or 'dashboard'
+    const { user, profile, refreshProfile } = useAuth();
+    const { notifications, unreadCount } = useNotifications();
     const { showToast } = useToast();
+    const [currentView, setCurrentView] = useState<View>('dashboard');
+
+    // Remote State (Supabase)
+    const [remoteLeads, setRemoteLeads] = useState<Lead[]>([]);
+    const [sessions, setSessions] = useState<EngineSession[]>([
+        { id: 'default', name: 'Main Pipeline', createdAt: new Date().toISOString(), leads: [] }
+    ]);
+    const [currentSessionId, setCurrentSessionId] = useState<string>('default');
+
+    // Usage Tracking
     const [usage, setUsage] = useState<SystemUsage>({
-        totalApiCalls: 0,
-        totalTokens: 0,
+        totalApiCalls: profile?.api_calls_made || 0,
+        totalTokens: Number(profile?.tokens_consumed || 0),
         promptTokens: 0,
         completionTokens: 0,
         callsByModel: {}
     });
 
+    // 1. Initial Data Load
     useEffect(() => {
-        return GeminiService.onUsageUpdate(setUsage);
-    }, []);
+        if (!user) return;
 
+        const loadContent = async () => {
+            try {
+                const data = await getLeads();
+                // Map DB leads to UI Lead types if necessary
+                const mappedLeads = (data || []).map(l => ({
+                    ...l,
+                    createdAt: l.created_at,
+                    status: l.status as LeadStatus,
+                    messages: (l.messages as any) || [],
+                    competitors: (l.competitors as any) || []
+                })) as unknown as Lead[];
 
-    // Play notification sound on mount
+                setRemoteLeads(mappedLeads);
+                // For simplicity in this OS version, we put all leads in the default session 
+                // but real-world would have sessions table.
+                setSessions([{ id: 'default', name: 'Main Pipeline', createdAt: new Date().toISOString(), leads: mappedLeads }]);
+            } catch (err) {
+                console.error('Failed to sync with Supabase:', err);
+            }
+        };
+
+        loadContent();
+
+        // 2. Real-time Subscription to Leads
+        const channel = supabase
+            .channel('public:leads')
+            .on('postgres_changes', { event: '*', schema: 'public', table: 'leads' }, (payload) => {
+                if (payload.eventType === 'INSERT') {
+                    const newLead = payload.new as Lead;
+                    setRemoteLeads(prev => [newLead, ...prev]);
+                } else if (payload.eventType === 'UPDATE') {
+                    const updatedLead = payload.new as Lead;
+                    setRemoteLeads(prev => prev.map(l => l.id === updatedLead.id ? updatedLead : l));
+                }
+            })
+            .subscribe();
+
+        return () => { supabase.removeChannel(channel); };
+    }, [user]);
+
+    // Update usage state when profile changes
     useEffect(() => {
-        const notificationAudio = new Audio('https://res.cloudinary.com/dolij7wjr/video/upload/v1768969521/new-message-alert-430414_on46qr.mp3');
-        notificationAudio.volume = 0.4;
-        notificationAudio.play().catch(e => console.log('Audio autoplay blocked:', e));
-    }, []);
-
-    const [settings, setSettings] = useState<SettingsType>(() => {
-        const saved = localStorage.getItem('revamp_settings');
-        return saved ? JSON.parse(saved) : DEFAULT_SETTINGS;
-    });
-
-    const [sessions, setSessions] = useState<EngineSession[]>(() => {
-        const saved = localStorage.getItem('revamp_sessions');
-        return saved ? JSON.parse(saved) : [{ id: 'default', name: 'General Session', createdAt: new Date().toISOString(), leads: [] }];
-    });
-
-    const [agents, setAgents] = useState<AgentProfile[]>(() => {
-        const saved = localStorage.getItem('revamp_agents');
-        return saved ? JSON.parse(saved) : [];
-    });
-
-    const [vaultDocs, setVaultDocs] = useState<VaultDocument[]>(() => {
-        const saved = localStorage.getItem('revamp_vault');
-        return saved ? JSON.parse(saved) : [];
-    });
-
-    const [currentSessionId, setCurrentSessionId] = useState<string>(sessions[0].id);
-
-    useEffect(() => { localStorage.setItem('revamp_settings', JSON.stringify(settings)); }, [settings]);
-    useEffect(() => { localStorage.setItem('revamp_sessions', JSON.stringify(sessions)); }, [sessions]);
-    useEffect(() => { localStorage.setItem('revamp_agents', JSON.stringify(agents)); }, [agents]);
-    useEffect(() => { localStorage.setItem('revamp_vault', JSON.stringify(vaultDocs)); }, [vaultDocs]);
-
-    const allLeads = useMemo(() => sessions.flatMap(s => s.leads), [sessions]);
-
-    // Command Palette Handler
-    const handleCommand = async (type: 'scout' | 'research' | 'nav', payload: any) => {
-        if (type === 'nav') {
-            setCurrentView(payload);
-        } else if (type === 'scout') {
-            setCurrentView('engine');
-            if (!settings.apiKey) {
-                showToast('AI API Key Required to initiate scout', 'warning');
-                return;
-            }
-            try {
-                showToast(`Scouting ${payload.limit} leads for ${payload.niche}...`, 'info');
-                const newLeads = await GeminiService.scoutLeads(settings.apiKey, payload.niche, payload.location, payload.limit, 'niche');
-                // Add to current session
-                const validLeads = newLeads as Lead[];
-                setSessions(prev => prev.map(s => s.id === currentSessionId ? { ...s, leads: [...s.leads, ...validLeads] } : s));
-                showToast(`Successfully recruited ${validLeads.length} new prospects`, 'success');
-            } catch (e) {
-                console.error(e);
-                showToast('Lead discovery protocol failed', 'error');
-            }
-        } else if (type === 'research') {
-            if (!settings.apiKey) {
-                showToast('AI API Key Required for research', 'warning');
-                return;
-            }
-            try {
-                showToast(`Conducting deep research on ${payload.topic}...`, 'info');
-                const result = await GeminiService.conductResearch(settings.apiKey, payload.topic);
-                const newDoc: VaultDocument = {
-                    id: crypto.randomUUID(),
-                    title: result.title,
-                    type: 'research',
-                    content: result.content,
-                    tags: ['ai-research'],
-                    createdAt: new Date().toISOString()
-                };
-                setVaultDocs(prev => [newDoc, ...prev]);
-                setCurrentView('vault');
-                showToast(`Intelligence report on ${result.title} archived in Vault`, 'success');
-            } catch (e) {
-                showToast('Research simulation error', 'error');
-            }
+        if (profile) {
+            setUsage(prev => ({
+                ...prev,
+                totalApiCalls: profile.api_calls_made || 0,
+                totalTokens: Number(profile.tokens_consumed || 0)
+            }));
         }
-    };
+    }, [profile]);
 
-    // Helper State handlers
+    // Sync usage back to Supabase (debounced ideally, but here direct after Gemini completions)
+    useEffect(() => {
+        const unsub = GeminiService.onUsageUpdate(async (newUsage) => {
+            setUsage(prev => ({
+                ...prev,
+                ...newUsage,
+                totalApiCalls: (profile?.api_calls_made || 0) + newUsage.totalApiCalls,
+                totalTokens: Number(profile?.tokens_consumed || 0) + newUsage.totalTokens
+            }));
+
+            // Persist to Supabase Profile
+            if (user) {
+                await supabase.from('profiles').update({
+                    api_calls_made: (profile?.api_calls_made || 0) + newUsage.totalApiCalls,
+                    tokens_consumed: Number(profile?.tokens_consumed || 0) + newUsage.totalTokens
+                }).eq('id', user.id);
+                refreshProfile();
+            }
+        });
+        return unsub;
+    }, [user, profile]);
+
+    const [settings, setSettings] = useState<SettingsType>(DEFAULT_SETTINGS);
+    const [agents, setAgents] = useState<AgentProfile[]>([]);
+    const [vaultDocs, setVaultDocs] = useState<VaultDocument[]>([]);
+
+    const allLeads = useMemo(() => remoteLeads, [remoteLeads]);
+
+    // --- ACTIONS ---
+
     const handleCreateSession = (name: string) => {
         const newSession = { id: crypto.randomUUID(), name, createdAt: new Date().toISOString(), leads: [] };
         setSessions(prev => [...prev, newSession]);
         setCurrentSessionId(newSession.id);
         showToast(`Operation ${name} initialized`, 'success');
     };
+
     const handleDeleteSession = (id: string) => {
         if (sessions.length <= 1) return;
-        const newSessions = sessions.filter(s => s.id !== id);
-        setSessions(newSessions);
-        if (currentSessionId === id) setCurrentSessionId(newSessions[0].id);
+        setSessions(prev => prev.filter(s => s.id !== id));
+        if (currentSessionId === id) setCurrentSessionId(sessions[0].id);
         showToast('Operation archived', 'info');
     };
-    const handleUpdateLead = (updatedLead: Lead) => {
-        setSessions(prev => prev.map(s => ({ ...s, leads: s.leads.map(l => l.id === updatedLead.id ? updatedLead : l) })));
+
+    const handleUpdateVaultDoc = async (doc: VaultDocument) => {
+        try {
+            await upsertVaultDocument({
+                ...doc,
+                created_at: doc.createdAt,
+                user_id: user?.id,
+                organization_id: profile?.organization_id
+            } as any);
+            // Refresh list (or update locally which we'll do via refresh or manual update state)
+            const vaultData = await getVaultDocuments();
+            setVaultDocs((vaultData || []).map(d => ({ ...d, createdAt: d.created_at, type: d.type as any, tags: d.tags || [] })) as any);
+            showToast('Strategic asset archived', 'success');
+        } catch (err) {
+            showToast('Vault sync failed', 'error');
+        }
     };
-    const handleMoveLead = (leadId: string, newStatus: LeadStatus) => {
-        setSessions(prev => prev.map(s => ({ ...s, leads: s.leads.map(l => l.id === leadId ? { ...l, status: newStatus } : l) })));
+
+    const handleDeleteVaultDoc = async (id: string) => {
+        try {
+            await deleteVaultDocument(id);
+            setVaultDocs(prev => prev.filter(d => d.id !== id));
+            showToast('Dossier purged', 'info');
+        } catch (err) {
+            showToast('Purge failed', 'error');
+        }
     };
+
+    const handleUpdateLead = async (updatedLead: Lead) => {
+        try {
+            await upsertLead({
+                ...updatedLead,
+                created_at: updatedLead.createdAt,
+                user_id: user?.id,
+                organization_id: profile?.organization_id
+            } as any);
+            showToast('Lead intelligence synced', 'success');
+        } catch (err) {
+            showToast('Sync failed', 'error');
+        }
+    };
+
+    const handleMoveLead = async (leadId: string, newStatus: LeadStatus) => {
+        const lead = remoteLeads.find(l => l.id === leadId);
+        if (lead) {
+            await handleUpdateLead({ ...lead, status: newStatus });
+        }
+    };
+
     const handleSendMessage = async (leadId: string, content: string) => {
-        const lead = allLeads.find(l => l.id === leadId);
+        const lead = remoteLeads.find(l => l.id === leadId);
         if (lead && lead.email) {
             showToast(`Transmitting message to ${lead.email}...`, 'info');
             const result = await EmailService.sendEmail({
@@ -154,17 +207,19 @@ const RevloOSAppPageContent: React.FC = () => {
                 subject: `Update from Revlo OS: ${lead.name}`,
                 text: content
             });
+
             if (result.success) {
                 showToast('Email transmitted via SendGrid', 'success');
+                const newMessage: any = { id: crypto.randomUUID(), sender: 'user', content, timestamp: new Date().toISOString(), isRead: true };
+                await handleUpdateLead({
+                    ...lead,
+                    status: LeadStatus.CONTACTED,
+                    messages: [...(lead.messages || []), newMessage]
+                });
             } else {
                 showToast(`Transmission failed: ${result.error}`, 'error');
             }
         }
-
-        setSessions(prev => prev.map(s => ({
-            ...s,
-            leads: s.leads.map(l => l.id === leadId ? { ...l, status: LeadStatus.CONTACTED, messages: [...(l.messages || []), { id: crypto.randomUUID(), sender: 'user', content, timestamp: new Date().toISOString(), isRead: true }] } : l)
-        })));
     };
 
     const handleSendOutreach = async (lead: Lead) => {
@@ -182,11 +237,13 @@ const RevloOSAppPageContent: React.FC = () => {
 
         if (result.success) {
             showToast('Outreach sequence initiated via SendGrid', 'success');
-            handleMoveLead(lead.id, LeadStatus.CONTACTED);
+            await handleMoveLead(lead.id, LeadStatus.CONTACTED);
         } else {
             showToast(`Campaign deployment failed: ${result.error}`, 'error');
         }
     };
+
+    // --- RENDER ---
 
     const currentSession = sessions.find(s => s.id === currentSessionId) || sessions[0];
 
@@ -198,20 +255,32 @@ const RevloOSAppPageContent: React.FC = () => {
                     <LeadEngineView
                         settings={settings} sessions={sessions} currentSessionId={currentSessionId}
                         onSwitchSession={setCurrentSessionId} onCreateSession={handleCreateSession} onDeleteSession={handleDeleteSession}
-                        leads={currentSession.leads}
-                        setLeads={(update) => setSessions(prev => prev.map(s => s.id === currentSessionId ? { ...s, leads: typeof update === 'function' ? update(s.leads) : update } : s))}
+                        leads={allLeads}
+                        onUpdateLead={handleUpdateLead}
                         agents={agents}
                         onSendOutreach={handleSendOutreach}
                     />
                 )}
-                {currentView === 'agents' && <AgentStudioView agents={agents} setAgents={setAgents} />}
                 {currentView === 'crm' && <CRMView leads={allLeads} />}
                 {currentView === 'pipeline' && <PipelineView leads={allLeads} onMoveLead={handleMoveLead} />}
                 {currentView === 'inbox' && <InboxView leads={allLeads} onSendMessage={handleSendMessage} />}
                 {currentView === 'phone' && <PhoneView leads={allLeads} agents={agents} vapiConfig={settings.vapi} updateLead={handleUpdateLead} />}
-                {currentView === 'vault' && <VaultView documents={vaultDocs} setDocuments={setVaultDocs} />}
+                {currentView === 'vault' && <VaultView documents={vaultDocs} onUpdate={handleUpdateVaultDoc} onDelete={handleDeleteVaultDoc} />}
                 {currentView === 'docs' && <DocsView />}
                 {currentView === 'settings' && <SettingsView settings={settings} onUpdate={setSettings} />}
+
+                {/* SUBSCRIPTION OVERLAY / GATE */}
+                {profile?.subscription_tier === 'free' && usage.totalApiCalls > 50 && (
+                    <div className="fixed inset-0 z-[100] bg-slate-950/80 backdrop-blur-md flex items-center justify-center p-6">
+                        <div className="bg-white rounded-3xl p-10 max-w-lg text-center shadow-2xl">
+                            <h2 className="text-3xl font-black text-slate-900 mb-4">Neural Limit Reached</h2>
+                            <p className="text-slate-500 mb-8 font-medium italic">You've exhausted your free orchestration units. Upgrade to <b>PRO</b> to unlock unlimited lead generation and automated builds.</p>
+                            <button className="w-full h-14 bg-purple-600 hover:bg-purple-700 text-white font-bold rounded-2xl shadow-lg transition-all transform hover:scale-105">
+                                Upgrade to Pro — $97/mo
+                            </button>
+                        </div>
+                    </div>
+                )}
             </RevloOSLayout>
         </div>
     );
@@ -219,9 +288,7 @@ const RevloOSAppPageContent: React.FC = () => {
 
 const RevloOSAppPage: React.FC = () => {
     return (
-        <ToastProvider>
-            <RevloOSAppPageContent />
-        </ToastProvider>
+        <RevloOSAppPageContent />
     );
 };
 

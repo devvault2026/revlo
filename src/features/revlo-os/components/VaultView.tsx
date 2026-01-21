@@ -4,10 +4,11 @@ import { FileText, Search, Plus, Trash2, Edit, Save, Download, Tag, Book, Maximi
 
 interface VaultViewProps {
     documents: VaultDocument[];
-    setDocuments: React.Dispatch<React.SetStateAction<VaultDocument[]>>;
+    onUpdate: (doc: VaultDocument) => Promise<void>;
+    onDelete: (id: string) => Promise<void>;
 }
 
-const VaultView: React.FC<VaultViewProps> = ({ documents, setDocuments }) => {
+const VaultView: React.FC<VaultViewProps> = ({ documents, onUpdate, onDelete }) => {
     const [isSidebarCollapsed, setIsSidebarCollapsed] = useState(false);
     const [selectedDocId, setSelectedDocId] = useState<string | null>(documents.length > 0 ? documents[0].id : null);
     const [searchQuery, setSearchQuery] = useState('');
@@ -20,7 +21,7 @@ const VaultView: React.FC<VaultViewProps> = ({ documents, setDocuments }) => {
         d.content.toLowerCase().includes(searchQuery.toLowerCase())
     );
 
-    const handleCreate = () => {
+    const handleCreate = async () => {
         const newDoc: VaultDocument = {
             id: crypto.randomUUID(),
             title: 'Untitled Intel',
@@ -29,24 +30,24 @@ const VaultView: React.FC<VaultViewProps> = ({ documents, setDocuments }) => {
             tags: ['draft'],
             createdAt: new Date().toISOString()
         };
-        setDocuments(prev => [newDoc, ...prev]);
+        await onUpdate(newDoc);
         setSelectedDocId(newDoc.id);
         setIsEditing(true);
     };
 
-    const handleDelete = (id: string) => {
-        setDocuments(prev => prev.filter(d => d.id !== id));
+    const handleDelete = async (id: string) => {
+        await onDelete(id);
         if (selectedDocId === id) setSelectedDocId(null);
     };
 
-    const handleUpdateContent = (val: string) => {
-        if (!selectedDocId) return;
-        setDocuments(prev => prev.map(d => d.id === selectedDocId ? { ...d, content: val } : d));
+    const handleUpdateContent = async (val: string) => {
+        if (!selectedDocId || !activeDoc) return;
+        await onUpdate({ ...activeDoc, content: val });
     };
 
-    const handleUpdateTitle = (val: string) => {
-        if (!selectedDocId) return;
-        setDocuments(prev => prev.map(d => d.id === selectedDocId ? { ...d, title: val } : d));
+    const handleUpdateTitle = async (val: string) => {
+        if (!selectedDocId || !activeDoc) return;
+        await onUpdate({ ...activeDoc, title: val });
     };
 
     return (

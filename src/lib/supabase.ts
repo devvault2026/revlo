@@ -1,4 +1,5 @@
 import { createClient } from '@supabase/supabase-js';
+import { Database } from '../types/database';
 
 const supabaseUrl = import.meta.env.VITE_SUPABASE_URL;
 const supabaseAnonKey = import.meta.env.VITE_SUPABASE_ANON_KEY;
@@ -7,7 +8,7 @@ if (!supabaseUrl || !supabaseAnonKey) {
     console.warn('Supabase credentials not found. Please set VITE_SUPABASE_URL and VITE_SUPABASE_ANON_KEY in .env.local');
 }
 
-export const supabase = createClient(
+export const supabase = createClient<Database>(
     supabaseUrl || '',
     supabaseAnonKey || '',
     {
@@ -18,98 +19,103 @@ export const supabase = createClient(
     }
 );
 
-// Database Tables Type Definitions
-export interface Lead {
-    id: string;
-    created_at: string;
-    name: string;
-    email: string;
-    company?: string;
-    phone?: string;
-    revenue_range?: string;
-    message?: string;
-    status: 'new' | 'contacted' | 'qualified' | 'converted';
-    source: 'website' | 'chatbot' | 'referral' | 'other';
-}
+// --- TYPE EXPORTS ---
+export type Profile = Database['public']['Tables']['profiles']['Row'];
+export type OSLead = Database['public']['Tables']['leads']['Row'];
+export type Notification = Database['public']['Tables']['notifications']['Row'];
+export type VaultDoc = Database['public']['Tables']['vault_documents']['Row'];
 
-export interface TeamMember {
-    id: string;
-    name: string;
-    role: string;
-    bio: string;
-    expertise: string[];
-    avatar_url?: string;
-}
-
-export interface Service {
-    id: string;
-    title: string;
-    description: string;
-    features: string[];
-    icon: string;
-    category: string;
-}
-
-// Helper Functions
-export const insertLead = async (lead: Omit<Lead, 'id' | 'created_at' | 'status'>) => {
-    const { data, error } = await supabase
-        .from('leads')
-        .insert([{ ...lead, status: 'new' }])
-        .select()
-        .single();
-
-    if (error) throw error;
-    return data;
-};
-
-export const getTeamMembers = async () => {
-    const { data, error } = await supabase
-        .from('team_members')
-        .select('*')
-        .order('created_at', { ascending: true });
-
-    if (error) throw error;
-    return data as TeamMember[];
-};
-
-export const getServices = async () => {
-    const { data, error } = await supabase
-        .from('services')
-        .select('*')
-        .order('created_at', { ascending: true });
-
-    if (error) throw error;
-    return data as Service[];
-};
-
-// Auth Helper Functions
-export const signUp = async (email: string, password: string, metadata: any = {}) => {
-    const { data, error } = await supabase.auth.signUp({
-        email,
-        password,
-        options: {
-            data: metadata,
-        },
-    });
-    if (error) throw error;
-    return data;
-};
-
-export const signIn = async (email: string, password: string) => {
-    const { data, error } = await supabase.auth.signInWithPassword({
-        email,
-        password,
-    });
-    if (error) throw error;
-    return data;
-};
-
-export const signOut = async () => {
-    const { error } = await supabase.auth.signOut();
-    if (error) throw error;
-};
+// --- AUTH HELPERS ---
 
 export const getCurrentUser = async () => {
     const { data: { user } } = await supabase.auth.getUser();
     return user;
+};
+
+export const getProfile = async (userId: string) => {
+    const { data, error } = await supabase
+        .from('profiles')
+        .select('*')
+        .eq('id', userId)
+        .single();
+    if (error) throw error;
+    return data;
+};
+
+// --- DATA HELPERS ---
+
+export const getLeads = async () => {
+    const { data, error } = await supabase
+        .from('leads')
+        .select('*')
+        .order('created_at', { ascending: false });
+    if (error) throw error;
+    return data;
+};
+
+export const upsertLead = async (lead: Database['public']['Tables']['leads']['Insert']) => {
+    const { data, error } = await supabase
+        .from('leads')
+        .upsert(lead)
+        .select()
+        .single();
+    if (error) throw error;
+    return data;
+};
+
+export const getNotifications = async (userId: string) => {
+    const { data, error } = await supabase
+        .from('notifications')
+        .select('*')
+        .eq('user_id', userId)
+        .order('created_at', { ascending: false });
+    if (error) throw error;
+    return data;
+};
+
+export const markNotificationAsRead = async (id: string) => {
+    const { error } = await supabase
+        .from('notifications')
+        .update({ is_read: true })
+        .eq('id', id);
+    if (error) throw error;
+};
+
+export const sendNotification = async (notif: Database['public']['Tables']['notifications']['Insert']) => {
+    const { data, error } = await supabase
+        .from('notifications')
+        .insert(notif)
+        .select()
+        .single();
+    if (error) throw error;
+    return data;
+};
+
+// --- VAULT HELPERS ---
+
+export const getVaultDocuments = async () => {
+    const { data, error } = await supabase
+        .from('vault_documents')
+        .select('*')
+        .order('created_at', { ascending: false });
+    if (error) throw error;
+    return data;
+};
+
+export const upsertVaultDocument = async (doc: Database['public']['Tables']['vault_documents']['Insert']) => {
+    const { data, error } = await supabase
+        .from('vault_documents')
+        .upsert(doc)
+        .select()
+        .single();
+    if (error) throw error;
+    return data;
+};
+
+export const deleteVaultDocument = async (id: string) => {
+    const { error } = await supabase
+        .from('vault_documents')
+        .delete()
+        .eq('id', id);
+    if (error) throw error;
 };

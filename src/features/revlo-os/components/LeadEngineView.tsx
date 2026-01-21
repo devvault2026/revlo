@@ -20,13 +20,13 @@ interface LeadEngineViewProps {
     onCreateSession: (name: string) => void;
     onDeleteSession: (id: string) => void;
     leads: Lead[];
-    setLeads: React.Dispatch<React.SetStateAction<Lead[]>>;
+    onUpdateLead: (lead: Lead) => Promise<void>;
     agents: AgentProfile[];
     onSendOutreach: (lead: Lead) => void;
 }
 
 const LeadEngineView: React.FC<LeadEngineViewProps> = ({
-    settings, sessions, currentSessionId, onSwitchSession, onCreateSession, onDeleteSession, leads, setLeads, agents, onSendOutreach
+    settings, sessions, currentSessionId, onSwitchSession, onCreateSession, onDeleteSession, leads, onUpdateLead, agents, onSendOutreach
 }) => {
     const { showToast } = useToast();
 
@@ -95,7 +95,7 @@ const LeadEngineView: React.FC<LeadEngineViewProps> = ({
                 competitors,
                 status: LeadStatus.DOSSIER_READY
             };
-            setLeads(prev => prev.map(l => l.id === currentLeadState.id ? currentLeadState : l));
+            await onUpdateLead(currentLeadState);
 
             // 2. STRATEGY (Using Agent)
             setLoadingStep(`[AUTO] ${activeAgent?.name || 'Agent'} is Strategizing...`);
@@ -103,7 +103,7 @@ const LeadEngineView: React.FC<LeadEngineViewProps> = ({
             const prd = await GeminiService.createPRD(settings.apiKey, currentLeadState, competitors, activeAgent);
 
             currentLeadState = { ...currentLeadState, prd, status: LeadStatus.STRATEGY_READY };
-            setLeads(prev => prev.map(l => l.id === currentLeadState.id ? currentLeadState : l));
+            await onUpdateLead(currentLeadState);
 
             // 3. BUILD (Multi-Page)
             setLoadingStep(`[AUTO] ${activeAgent?.name || 'Agent'} is Coding Site...`);
@@ -122,7 +122,7 @@ const LeadEngineView: React.FC<LeadEngineViewProps> = ({
                 dealValue: 750
             };
 
-            setLeads(prev => prev.map(l => l.id === currentLeadState.id ? currentLeadState : l));
+            await onUpdateLead(currentLeadState);
             await new Promise(r => setTimeout(r, 1000));
             showToast(`Asset package compiled for ${currentLeadState.name}`, "success");
 
@@ -143,7 +143,9 @@ const LeadEngineView: React.FC<LeadEngineViewProps> = ({
         try {
             const found = await GeminiService.scoutLeads(settings.apiKey, niche, location, batchSize, scanMode);
             const newLeads = found as Lead[];
-            setLeads(prev => [...prev, ...newLeads]);
+            for (const nL of newLeads) {
+                await onUpdateLead(nL);
+            }
 
             if (newLeads.length > 0) {
                 showToast(`Scanned zone successfully. Found ${newLeads.length} prospects.`, "success");
@@ -173,7 +175,7 @@ const LeadEngineView: React.FC<LeadEngineViewProps> = ({
                 psychologyProfile: scoreData.psychology,
                 status: LeadStatus.DOSSIER_READY
             };
-            setLeads(prev => prev.map(l => l.id === updatedLead.id ? updatedLead : l));
+            await onUpdateLead(updatedLead);
             await triggerChain('On Deep Dive Completion');
         } catch (e) { console.error(e); } finally { setLoading(false); }
     };
@@ -184,7 +186,7 @@ const LeadEngineView: React.FC<LeadEngineViewProps> = ({
         try {
             const prd = await GeminiService.createPRD(settings.apiKey, selectedLead, selectedLead.competitors || [], activeAgent);
             const updatedLead = { ...selectedLead, prd, status: LeadStatus.STRATEGY_READY };
-            setLeads(prev => prev.map(l => l.id === updatedLead.id ? updatedLead : l));
+            await onUpdateLead(updatedLead);
             setActiveTab('strategy');
             await triggerChain('On PRD Completion');
         } catch (e) { console.error(e); } finally { setLoading(false); }
@@ -208,7 +210,7 @@ const LeadEngineView: React.FC<LeadEngineViewProps> = ({
                 status: LeadStatus.OUTREACH_READY,
                 dealValue: 750
             };
-            setLeads(prev => prev.map(l => l.id === updatedLead.id ? updatedLead : l));
+            await onUpdateLead(updatedLead);
             setActiveTab('preview');
             await triggerChain('On Asset Compilation');
         } catch (e) { console.error(e); } finally { setLoading(false); }
@@ -393,8 +395,8 @@ const LeadEngineView: React.FC<LeadEngineViewProps> = ({
                                     content={selectedLead.prd || "# Strategy Required\n\nInitialize the generation protocol to create a Product Requirements Document."}
                                     apiKey={settings.apiKey}
                                     agents={agents}
-                                    onSave={(newContent) => {
-                                        setLeads(prev => prev.map(l => l.id === selectedLeadId ? { ...l, prd: newContent } : l));
+                                    onSave={async (newContent) => {
+                                        await onUpdateLead({ ...selectedLead, prd: newContent });
                                         showToast("Intelligence Protocol Persisted", "success");
                                     }}
                                 />
