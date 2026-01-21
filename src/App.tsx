@@ -90,7 +90,15 @@ function App() {
                                             <Footer />
                                         </>
                                     } />
+                                    <Route path="/offers/esdr" element={
+                                        <>
+                                            <Navigation />
+                                            <EsdrOfferPage />
+                                            <Footer />
+                                        </>
+                                    } />
                                     <Route path="/offer/esdr/payment" element={<EsdrPaymentPage />} />
+                                    <Route path="/offers/esdr/payment" element={<EsdrPaymentPage />} />
 
                                     {/* Auth Routes */}
                                     <Route path="/login" element={<LoginPage />} />

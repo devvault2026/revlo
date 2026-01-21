@@ -92,17 +92,18 @@ export const scoutLeads = async (apiKey: string, niche: string, location: string
     const genAI = getGenAI(apiKey);
     const model = genAI.getGenerativeModel({
         model: "gemini-2.0-flash",
-        tools: [{ googleSearch: {} }] as any
+        tools: [{ googleSearch: {} }] as any,
+        generationConfig: {
+            responseMimeType: "application/json"
+        }
     });
 
-    let prompt = '';
-    if (scanMode === 'zone') {
-        prompt = `List ${limit} distinct local businesses located in the Zip Code/Area: "${location}". 
-        Return ONLY a JSON array where each item has: name, type, address, rating, userRatingCount, website, phone, email.`;
-    } else {
-        prompt = `Find ${limit} local ${niche} businesses in ${location}. 
-        Return ONLY a JSON array where each item has: name, type, address, rating, userRatingCount, website, phone, email.`;
-    }
+    let prompt = `ROLE: Local Business Data Scraper.
+    TASK: Find ${limit} ${scanMode === 'zone' ? 'businesses' : niche + ' businesses'} in "${location}".
+    OUTPUT: A valid JSON array of objects.
+    SCHEMA: { name: string, type: string, address: string, rating: number, userRatingCount: number, website: string, phone: string, email: string }
+    
+    IMPORTANT: If you cannot find data, return an empty array []. Do NOT explain why. Do NOT say "I am sorry".`;
 
     try {
         const result = await model.generateContent(prompt);
@@ -111,18 +112,35 @@ export const scoutLeads = async (apiKey: string, niche: string, location: string
         trackUsage("gemini-2.0-flash", response.usageMetadata);
 
         let text = response.text() || "[]";
-        text = text.replace(/```json/g, '').replace(/```/g, '').trim();
 
-        const data = JSON.parse(text);
-        if (!Array.isArray(data)) return [];
+        // Robust Extraction
+        try {
+            // Remove markdown blocks if present
+            const jsonMatch = text.match(/\[[\s\S]*\]/);
+            const cleanText = jsonMatch ? jsonMatch[0] : text;
+            const data = JSON.parse(cleanText);
 
-        return data.map((item: any) => ({
-            ...item,
-            id: crypto.randomUUID(),
-            status: 'SCOUTED',
-            createdAt: new Date().toISOString()
-        }));
-    } catch (e) {
+            if (!Array.isArray(data)) return [];
+
+            return data.map((item: any) => ({
+                id: crypto.randomUUID(),
+                name: item.name || "Unknown Business",
+                type: item.type || niche,
+                address: item.address || location,
+                rating: item.rating || 0,
+                userRatingCount: item.userRatingCount || 0,
+                website: item.website || "",
+                phone: item.phone || "",
+                email: item.email || "",
+                status: 'SCOUTED',
+                createdAt: new Date().toISOString()
+            }));
+        } catch (parseErr) {
+            console.warn("SYSTEM: AI Output Parse Failure. Raw text was:", text.substring(0, 100));
+            return [];
+        }
+    } catch (e: any) {
+        if (e?.message?.includes("signal is aborted") || e?.name === 'AbortError') return [];
         console.error("Scout error:", e);
         return [];
     }
