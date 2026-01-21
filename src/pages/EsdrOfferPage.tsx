@@ -15,6 +15,7 @@ import {
 } from 'lucide-react';
 
 import { useNavigate } from 'react-router-dom';
+import TestimonialSection from '../features/revlo-os/components/TestimonialSection';
 
 const EsdrOfferPage = () => {
     const navigate = useNavigate();
@@ -424,6 +425,9 @@ const EsdrOfferPage = () => {
                     </div>
                 </div>
             </section>
+
+            {/* Testimonials Section */}
+            <TestimonialSection />
 
             {/* Final CTA */}
             <section className="py-20 bg-white border-t border-slate-100">

@@ -91,8 +91,8 @@ export const compileAgentInstruction = (agent: AgentProfile): string => {
 export const scoutLeads = async (apiKey: string, niche: string, location: string, limit: number = 5, scanMode: 'niche' | 'zone' = 'niche'): Promise<Partial<Lead>[]> => {
     const genAI = getGenAI(apiKey);
     const model = genAI.getGenerativeModel({
-        model: "gemini-2.5-flash",
-        tools: [{ googleSearch: {} }]
+        model: "gemini-2.0-flash",
+        tools: [{ googleSearch: {} }] as any
     });
 
     let prompt = '';
@@ -108,7 +108,7 @@ export const scoutLeads = async (apiKey: string, niche: string, location: string
         const result = await model.generateContent(prompt);
         const response = result.response;
 
-        trackUsage("gemini-2.5-flash", response.usageMetadata);
+        trackUsage("gemini-2.0-flash", response.usageMetadata);
 
         let text = response.text() || "[]";
         text = text.replace(/```json/g, '').replace(/```/g, '').trim();
@@ -131,8 +131,8 @@ export const scoutLeads = async (apiKey: string, niche: string, location: string
 export const enrichLead = async (apiKey: string, query: string): Promise<Partial<Lead> | null> => {
     const genAI = getGenAI(apiKey);
     const model = genAI.getGenerativeModel({
-        model: "gemini-2.5-flash",
-        tools: [{ googleSearch: {} }]
+        model: "gemini-2.0-flash",
+        tools: [{ googleSearch: {} }] as any
     });
 
     const prompt = `Research business: "${query}". Find official name, industry type, address, website, email, phone, rating. Return raw JSON.`;
@@ -140,7 +140,7 @@ export const enrichLead = async (apiKey: string, query: string): Promise<Partial
         const result = await model.generateContent(prompt);
         const response = result.response;
 
-        trackUsage("gemini-2.5-flash", response.usageMetadata);
+        trackUsage("gemini-2.0-flash", response.usageMetadata);
         let text = response.text() || "null";
         text = text.replace(/```json/g, '').replace(/```/g, '').trim();
         if (text === "null" || text === "{}") return null;
@@ -155,8 +155,8 @@ export const enrichLead = async (apiKey: string, query: string): Promise<Partial
 export const scoreLead = async (apiKey: string, lead: Lead): Promise<{ score: number, psychology: string }> => {
     const genAI = getGenAI(apiKey);
     const model = genAI.getGenerativeModel({
-        model: "gemini-2.5-flash",
-        tools: [{ googleSearch: {} }]
+        model: "gemini-2.0-flash",
+        tools: [{ googleSearch: {} }] as any
     });
 
     const prompt = `Act as a Behavioral Psychologist. Analyze lead: ${lead.name}. Search reviews and owner replies. Return JSON: { score: number(0-100), psychology: "string summary" }`;
@@ -164,7 +164,7 @@ export const scoreLead = async (apiKey: string, lead: Lead): Promise<{ score: nu
     try {
         const result = await model.generateContent(prompt);
         const response = result.response;
-        trackUsage("gemini-2.5-flash", response.usageMetadata);
+        trackUsage("gemini-2.0-flash", response.usageMetadata);
         let text = response.text() || "{}";
         text = text.replace(/```json/g, '').replace(/```/g, '').trim();
         const data = JSON.parse(text);
@@ -177,15 +177,15 @@ export const scoreLead = async (apiKey: string, lead: Lead): Promise<{ score: nu
 export const generateDossier = async (apiKey: string, lead: Lead): Promise<Partial<Lead>> => {
     const genAI = getGenAI(apiKey);
     const model = genAI.getGenerativeModel({
-        model: "gemini-2.5-flash",
-        tools: [{ googleSearch: {} }]
+        model: "gemini-2.0-flash",
+        tools: [{ googleSearch: {} }] as any
     });
 
     const prompt = `Analyze business: "${lead.name}" at "${lead.address}". Return JSON: {ownerName, ownerEmail, businessCore, revenueEstimate, painPoints[]}`;
     try {
         const result = await model.generateContent(prompt);
         const response = result.response;
-        trackUsage("gemini-2.5-flash", response.usageMetadata);
+        trackUsage("gemini-2.0-flash", response.usageMetadata);
         let text = response.text() || "{}";
         text = text.replace(/```json/g, '').replace(/```/g, '').trim();
         return JSON.parse(text);
@@ -195,15 +195,15 @@ export const generateDossier = async (apiKey: string, lead: Lead): Promise<Parti
 export const analyzeCompetitors = async (apiKey: string, niche: string, location: string): Promise<Competitor[]> => {
     const genAI = getGenAI(apiKey);
     const model = genAI.getGenerativeModel({
-        model: "gemini-2.5-flash",
-        tools: [{ googleSearch: {} }]
+        model: "gemini-2.0-flash",
+        tools: [{ googleSearch: {} }] as any
     });
 
     const prompt = `Identify 3 top competitors for ${niche} in ${location}. Return JSON array: {name, website, strengths[], weaknesses[], whyWinning}`;
     try {
         const result = await model.generateContent(prompt);
         const response = result.response;
-        trackUsage("gemini-2.5-flash", response.usageMetadata);
+        trackUsage("gemini-2.0-flash", response.usageMetadata);
         let text = response.text() || "[]";
         text = text.replace(/```json/g, '').replace(/```/g, '').trim();
         return JSON.parse(text);
@@ -343,8 +343,8 @@ export const streamTestAgent = async (apiKey: string, agent: AgentProfile, testI
 export const conductResearch = async (apiKey: string, query: string): Promise<{ title: string, content: string }> => {
     const genAI = getGenAI(apiKey);
     const model = genAI.getGenerativeModel({
-        model: "gemini-3-flash-preview",
-        tools: [{ googleSearch: {} }]
+        model: "gemini-2.0-flash",
+        tools: [{ googleSearch: {} }] as any
     });
 
     const prompt = `Research Topic: "${query}". Synthesize a Markdown report based on current web data.`;
@@ -363,7 +363,7 @@ export const conductResearch = async (apiKey: string, query: string): Promise<{ 
 export const validateApiKey = async (apiKey: string): Promise<boolean> => {
     try {
         const genAI = getGenAI(apiKey);
-        const model = genAI.getGenerativeModel({ model: "gemini-2.5-flash" });
+        const model = genAI.getGenerativeModel({ model: "gemini-2.0-flash" });
         const result = await model.generateContent("Connection test. Respond only with 'OK'.");
         return !!result.response.text();
     } catch (e) {
