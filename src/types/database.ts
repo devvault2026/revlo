@@ -270,6 +270,57 @@ export type Database = {
                     }
                 ]
             }
+            payments: {
+                Row: {
+                    id: string
+                    client_name: string
+                    amount: number
+                    status: string
+                    reference_id: string | null
+                    created_at: string
+                    updated_at: string
+                }
+                Insert: {
+                    id?: string
+                    client_name: string
+                    amount: number
+                    status?: string
+                    reference_id?: string | null
+                    created_at?: string
+                    updated_at?: string
+                }
+                Update: {
+                    id?: string
+                    client_name?: string
+                    amount?: number
+                    status?: string
+                    reference_id?: string | null
+                    created_at?: string
+                    updated_at?: string
+                }
+                Relationships: []
+            }
+            admin_access: {
+                Row: {
+                    id: string
+                    username: string
+                    pin_code: string
+                    created_at: string
+                }
+                Insert: {
+                    id?: string
+                    username: string
+                    pin_code: string
+                    created_at?: string
+                }
+                Update: {
+                    id?: string
+                    username?: string
+                    pin_code?: string
+                    created_at?: string
+                }
+                Relationships: []
+            }
             profiles: {
                 Row: {
                     api_calls_made: number | null

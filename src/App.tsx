@@ -23,6 +23,9 @@ import NotFoundPage from './pages/NotFoundPage';
 import AdminPage from './pages/AdminPage';
 import LeadsPage from './pages/LeadsPage';
 import DashboardPage from './pages/DashboardPage';
+import EsdrOfferPage from './pages/EsdrOfferPage';
+import EsdrPaymentPage from './pages/EsdrPaymentPage';
+import AdminPaymentsPage from './pages/AdminPaymentsPage';
 
 // Components
 import Navigation from './components/Navigation';
@@ -80,11 +83,22 @@ function App() {
                                             <Footer />
                                         </>
                                     } />
+                                    <Route path="/offer/esdr" element={
+                                        <>
+                                            <Navigation />
+                                            <EsdrOfferPage />
+                                            <Footer />
+                                        </>
+                                    } />
+                                    <Route path="/offer/esdr/payment" element={<EsdrPaymentPage />} />
 
                                     {/* Auth Routes */}
                                     <Route path="/login" element={<LoginPage />} />
                                     <Route path="/register" element={<RegisterPage />} />
                                     <Route path="/forgot-password" element={<ForgotPasswordPage />} />
+
+                                    {/* Payments Admin (Custom Auth) */}
+                                    <Route path="/admin/payments" element={<AdminPaymentsPage />} />
 
                                     {/* Admin Routes (Protected) */}
                                     <Route path="/admin" element={

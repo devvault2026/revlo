@@ -1,0 +1,66 @@
+Emmanuelle x Eric & Jaryd - Discussions on how we can help your business.
+Tue, Jan 20, 2026
+
+Summary:
+
+The discussion focused on how Jaryd and Eric could assist Emmanuelle in developing her business, ESDR, which has expanded from a brokerage to include real estate investments such as an Airbnb and commercial storage units. Emmanuelle expressed her goal of creating a comprehensive website that showcases her properties and facilitates user interaction. Jaryd contributed ideas for a user-friendly design, including a knowledge base for easy information access and a chatbot to engage users and capture leads. Emmanuelle emphasized the need for simplicity in the website's design to avoid feeling overwhelmed by her ideas.
+
+Modern marketing techniques were also a key topic, with Emmanuelle exploring the use of QR codes on rental signs and Jaryd suggesting tap-to-pay business cards for networking. They discussed the potential of leveraging community groups for marketing and the importance of referrals in the rental business. Jaryd introduced an automation tool for generating and posting content on social media, targeting specific local areas to enhance visibility. Eric highlighted the significance of a branded website in establishing trust with renters, noting that a professional online presence can attract better clients.
+
+Emmanuelle provided updates on her rental properties, which are still under construction, and discussed pricing strategies for filling the units quickly. Jaryd confirmed the website development cost of $2,500, which would include resources to attract quality tenants and optimization for search engines. They explored the implementation of an application form on the website, considering user-friendly options for submission. The conversation concluded with an agreement on the importance of gradually building their online presence and adapting to client feedback, with Emmanuelle eager to meet in person once progress is made.
+
+
+Chapters & Topics:
+
+Background Introductions and Project Overview
+Jaryd Paquette introduced himself as a developer with extensive experience in marketing and e-commerce, highlighting his past projects and achievements. Emmanuelle expressed her excitement about collaborating with Jaryd to grow her business ideas. Eric prompted Emmanuelle to elaborate on her plans, indicating that they would ask her questions to better understand her vision.
+
+ESDR Business Development and Website Ideas
+Emmanuelle outlined her business, ESDR, which has transitioned from a brokerage to real estate investments, including an Airbnb and plans for commercial storage. She envisions a website that organizes various properties and services under the ESDR group, with user-friendly features such as a chat box for inquiries. Jaryd suggested implementing a knowledge base to streamline information access for users.
+* Development of a website for ESDR Group.
+
+Innovative Marketing Strategies and Networking Opportunities
+Emmanuelle is considering innovative marketing strategies, such as QR codes for rental signs, to make it easier for potential clients to access her information. Jaryd introduced the idea of tap-to-pay business cards for events, which can directly link to a website without manual entry. He also mentioned a potential connection in the multifamily industry that could benefit Emmanuelle's business.
+
+Chatbot and Website Development Strategies
+Jaryd Paquette outlined plans for creating a comprehensive website that condenses complex information into an accessible format. He demonstrated a search feature that allows users to find specific documents easily and introduced a chatbot designed to engage visitors, capture leads, and facilitate follow-up communication via SMS or email.
+* Implementation of a chatbot for tenant inquiries.
+
+Chatbot Integration for Enhanced Customer Engagement
+Emmanuelle discussed her desire to interact directly with clients rather than relying solely on website information. Jaryd explained how AI can assist by answering repetitive questions and allowing Emmanuelle to take over chats when necessary. Eric added that quick responses are crucial in the industry, noting that timely engagement can significantly increase the chances of securing clients.
+* Importance of quick response times in the rental market.
+
+Rental Strategies and Marketing Approaches
+Emmanuelle shared her challenges in promoting rental properties on platforms like Marketplace, while Jaryd presented a solution involving automation for social media posts to increase brand presence. Eric emphasized the importance of having a professional website to build trust with potential renters and streamline the pre-screening process.
+* Marketing strategies for rental properties.
+* Building trust with potential tenants through professional branding.
+
+Strategies for Filling Rental Units
+Emmanuelle shared that her rental units are still under construction, with appliances expected soon, and she has created a pamphlet to promote them. Eric highlighted the need to fill the units quickly, and Jaryd proposed various pricing strategies, including discounts for early sign-ups. Emmanuelle requested a detailed email outlining the options and pricing for website development.
+
+Application Form Development Discussion
+Emmanuelle proposed the idea of having a fillable application form on the website, which could be submitted by email or directly online. Jaryd explained his work on a resume-building tool for Indeed, highlighting its user-friendly interface that allows individuals to create resumes easily. He suggested that a similar interactive format could be used for the application form, converting user input into a readable PDF.
+
+Collaboration on Business Infrastructure and Marketing
+Emmanuelle expressed interest in connecting her clients with insurance options through a more efficient system. Jaryd outlined a plan to develop a month-to-month strategy for building their online presence and infrastructure, ensuring adaptability as they learn more about client needs. Emmanuelle was enthusiastic about the potential for collaboration and moving forward with the project.
+
+
+Action Items:
+
+* Jaryd Paquette will create a chatbot for Emmanuelle's website that will handle common inquiries and allow for direct communication with potential tenants.
+* Jaryd Paquette will provide a draft of a marketing strategy that includes social media automation for Emmanuelle's rental properties.
+* Jaryd Paquette will compile a detailed proposal outlining two options for website development and pricing for Emmanuelle by the end of tomorrow.
+* Eric de Niverville will assist in setting up a Google profile for Emmanuelle's business to enhance online visibility.
+* Jaryd Paquette will develop a system for potential tenants to fill out applications online, which will be converted into a readable format for Emmanuelle.
+
+
+Key Questions:
+
+* How many places do you have now for rent if we're just looking at the rental space?
+* How can Emmanuelle ensure that her rental properties are filled quickly?
+* Can you send me an email or even like a chat with those two options and a price range?
+
+
+Notepad:
+
+* No notes
