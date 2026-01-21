@@ -291,7 +291,7 @@ const DashboardView: React.FC<DashboardViewProps> = ({ leads, usage }) => {
                 </div>
 
                 <div className="flex flex-col items-center justify-center text-center -skew-x-12 group-hover:skew-x-0 transition-transform">
-                  <h1 className="text-xl font-black text-slate-100 mb-4 tracking-tighter drop-shadow-xl uppercase">Gemini 1.5 Flash</h1>
+                  <h1 className="text-xl font-black text-slate-100 mb-4 tracking-tighter drop-shadow-xl uppercase">Gemini 2.5 & 3.0</h1>
 
                   <div className="opacity-0 group-hover:opacity-100 transition-opacity duration-300 space-y-4 w-full">
                     <p className="text-[10px] font-bold text-slate-300 uppercase leading-relaxed tracking-wider px-4">

@@ -593,12 +593,12 @@ const DocsView: React.FC = () => {
                                         <tr className="hover:bg-slate-50/50 transition-colors">
                                             <td className="p-6 font-bold text-slate-900">Deep Analysis (Dossier)</td>
                                             <td className="p-6">~$0.05</td>
-                                            <td className="p-6">Gemini 3.0 Flash</td>
+                                            <td className="p-6">Gemini 3.0 Flash Preview</td>
                                         </tr>
                                         <tr className="hover:bg-slate-50/50 transition-colors">
                                             <td className="p-6 font-bold text-slate-900">Web Build (3-Page)</td>
                                             <td className="p-6">~$0.15</td>
-                                            <td className="p-6 text-purple-600 font-black">Gemini 3.5 Pro</td>
+                                            <td className="p-6 text-purple-600 font-black">Gemini 3.0 Flash Preview</td>
                                         </tr>
                                         <tr className="hover:bg-slate-50/50 transition-colors">
                                             <td className="p-6 font-bold text-slate-900">Voice Call (1 Min)</td>

@@ -105,7 +105,7 @@ const RevloOSAppPageContent: React.FC = () => {
                 const settingsData = await getSettings(user.id);
                 if (settingsData) {
                     setSettings({
-                        apiKey: settingsData.api_key || '',
+                        apiKey: settingsData.api_key || import.meta.env.VITE_GEMINI_API_KEY || '',
                         scrapingBatchSize: settingsData.scraping_batch_size || 5,
                         niche: settingsData.niche || 'Plumbers',
                         location: settingsData.location || 'Austin, TX',
@@ -339,6 +339,7 @@ const RevloOSAppPageContent: React.FC = () => {
                 clearTimeout(timeout);
                 timeout = setTimeout(async () => {
                     try {
+                        console.log("SYSTEM: Synchronizing parameters with Supabase...");
                         await upsertSettings({
                             user_id: userId,
                             api_key: newSettings.apiKey,
@@ -354,11 +355,31 @@ const RevloOSAppPageContent: React.FC = () => {
                         if (err?.name === 'AbortError') return;
                         console.error("Settings sync failed:", err);
                     }
-                }, 1000);
+                }, 500); // Faster feedback loop
             };
         },
         [showToast]
     );
+
+    const handleSaveSettingsExplicitly = async () => {
+        if (user) {
+            try {
+                await upsertSettings({
+                    user_id: user.id,
+                    api_key: settings.apiKey,
+                    scraping_batch_size: settings.scrapingBatchSize,
+                    niche: settings.niche,
+                    location: settings.location,
+                    vapi_config: settings.vapi,
+                    outreach_config: settings.outreach,
+                    updated_at: new Date().toISOString()
+                });
+                showToast("Parameters committed to core", "success");
+            } catch (err) {
+                showToast("Commit failure", "error");
+            }
+        }
+    };
 
     const handleUpdateSettings = (newSettings: SettingsType) => {
         setSettings(newSettings);
@@ -392,7 +413,7 @@ const RevloOSAppPageContent: React.FC = () => {
                 {currentView === 'phone' && <PhoneView leads={allLeads} agents={agents} vapiConfig={settings.vapi} updateLead={handleUpdateLead} />}
                 {currentView === 'vault' && <VaultView documents={vaultDocs} onUpdate={handleUpdateVaultDoc} onDelete={handleDeleteVaultDoc} />}
                 {currentView === 'docs' && <DocsView />}
-                {currentView === 'settings' && <SettingsView settings={settings} onUpdate={handleUpdateSettings} />}
+                {currentView === 'settings' && <SettingsView settings={settings} onUpdate={handleUpdateSettings} onSaveExplicitly={handleSaveSettingsExplicitly} />}
 
                 {/* SUBSCRIPTION OVERLAY / GATE */}
                 {profile?.subscription_tier === 'free' && usage.totalApiCalls > 50 && (

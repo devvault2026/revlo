@@ -12,9 +12,12 @@ import { supabase } from '../../../lib/supabase';
 import { motion, AnimatePresence } from 'framer-motion';
 
 // --- Types ---
+import { validateApiKey } from '../services/geminiService';
+
 interface SettingsViewProps {
     settings: SettingsType;
     onUpdate: (s: SettingsType) => void;
+    onSaveExplicitly?: () => Promise<void>;
 }
 
 type Tab = 'overview' | 'communications' | 'organization' | 'neural';
@@ -68,9 +71,10 @@ const IdentityCard: React.FC<{
 
 // --- Main View ---
 
-const SettingsView: React.FC<SettingsViewProps> = ({ settings, onUpdate }) => {
+const SettingsView: React.FC<SettingsViewProps> = ({ settings, onUpdate, onSaveExplicitly }) => {
     const { showToast } = useToast();
     const { user, profile, signOut, refreshProfile } = useAuth();
+    console.log("DEBUG: SettingsView rendered with settings:", settings);
 
     // UI State
     const [activeTab, setActiveTab] = useState<Tab>('overview');
@@ -79,6 +83,8 @@ const SettingsView: React.FC<SettingsViewProps> = ({ settings, onUpdate }) => {
     // Profile State
     const [fullName, setFullName] = useState(profile?.full_name || '');
     const [avatarUrl, setAvatarUrl] = useState(profile?.avatar_url || '');
+    const [isTestingKey, setIsTestingKey] = useState(false);
+    const [keyStatus, setKeyStatus] = useState<'idle' | 'valid' | 'invalid'>('idle');
 
     // Sync local state with profile updates
     useEffect(() => {
@@ -122,18 +128,50 @@ const SettingsView: React.FC<SettingsViewProps> = ({ settings, onUpdate }) => {
         if (!user) return;
         setUpdating(true);
         try {
+            console.log("SYSTEM: Syncing profile...", { fullName, avatarUrl });
             const { error } = await supabase
                 .from('profiles')
-                .update({ full_name: fullName, avatar_url: avatarUrl })
+                .update({
+                    full_name: fullName,
+                    avatar_url: avatarUrl,
+                    updated_at: new Date().toISOString()
+                })
                 .eq('id', user.id);
 
             if (error) throw error;
             await refreshProfile();
-            showToast("Identity profile updated", "success");
-        } catch (err) {
-            showToast("Failed to update profile", "error");
+            showToast("Identity parameters synchronized with core", "success");
+        } catch (err: any) {
+            console.error("Profile sync error:", err);
+            showToast(`Profile sync failed: ${err.message || 'Unknown error'}`, "error");
         } finally {
             setUpdating(false);
+        }
+    };
+
+    const handleTestKey = async () => {
+        if (!settings.apiKey) {
+            showToast("Enter an API key to initialize validation", "warning");
+            return;
+        }
+        setIsTestingKey(true);
+        setKeyStatus('idle');
+        try {
+            const isValid = await validateApiKey(settings.apiKey);
+            if (isValid) {
+                setKeyStatus('valid');
+                showToast("Neural bridge established: Gemini Pro is active", "success");
+                // Explicitly trigger a save if valid
+                if (onSaveExplicitly) await onSaveExplicitly();
+            } else {
+                setKeyStatus('invalid');
+                showToast("Neural link failed: Unauthorized or invalid key", "error");
+            }
+        } catch (err) {
+            setKeyStatus('invalid');
+            showToast("Connection protocol failure", "error");
+        } finally {
+            setIsTestingKey(false);
         }
     };
 
@@ -496,20 +534,40 @@ const SettingsView: React.FC<SettingsViewProps> = ({ settings, onUpdate }) => {
                             <div className="bg-white rounded-[32px] border border-slate-200 p-8 shadow-sm space-y-8">
                                 <h3 className="font-bold text-lg flex items-center gap-2">
                                     <Brain size={20} className="text-purple-600" />
-                                    Gemini Pro Protocol
+                                    Gemini 2.5 & 3.0 Neural Stack
                                 </h3>
                                 <div className="space-y-3">
-                                    <label className="text-xs font-bold text-slate-500 uppercase tracking-widest ml-1">API Key</label>
-                                    <div className="relative">
-                                        <Terminal className="absolute left-5 top-1/2 -translate-y-1/2 text-slate-300" size={18} />
-                                        <input
-                                            type="password"
-                                            value={settings.apiKey}
-                                            onChange={(e) => onUpdate({ ...settings, apiKey: e.target.value })}
-                                            className="w-full bg-slate-50 border border-slate-200 rounded-[2rem] pl-12 pr-6 py-4 text-sm font-bold text-slate-900 focus:border-purple-500 focus:bg-white focus:outline-none transition-all font-mono"
-                                            placeholder="sk-..."
-                                        />
+                                    <div className="flex justify-between items-center ml-1">
+                                        <label className="text-xs font-bold text-slate-500 uppercase tracking-widest">API Key</label>
+                                        {keyStatus === 'valid' && <span className="text-[10px] font-black text-green-500 uppercase tracking-widest flex items-center gap-1"><CheckCircle2 size={10} /> Active</span>}
+                                        {keyStatus === 'invalid' && <span className="text-[10px] font-black text-red-500 uppercase tracking-widest flex items-center gap-1"><AlertTriangle size={10} /> Link Severed</span>}
                                     </div>
+                                    <div className="flex gap-3">
+                                        <div className="relative flex-1">
+                                            <Terminal className="absolute left-5 top-1/2 -translate-y-1/2 text-slate-300" size={18} />
+                                            <input
+                                                type="password"
+                                                value={settings.apiKey}
+                                                onChange={(e) => {
+                                                    onUpdate({ ...settings, apiKey: e.target.value });
+                                                    setKeyStatus('idle');
+                                                }}
+                                                className="w-full bg-slate-50 border border-slate-200 rounded-[2rem] pl-12 pr-6 py-4 text-sm font-bold text-slate-900 focus:border-purple-500 focus:bg-white focus:outline-none transition-all font-mono"
+                                                placeholder="sk-..."
+                                            />
+                                        </div>
+                                        <button
+                                            onClick={handleTestKey}
+                                            disabled={isTestingKey}
+                                            className="px-6 rounded-[2rem] bg-purple-600 text-white font-black uppercase tracking-widest text-[10px] hover:bg-purple-700 transition-all disabled:opacity-50 flex items-center gap-2"
+                                        >
+                                            {isTestingKey ? <Loader2 size={14} className="animate-spin" /> : <Wifi size={14} />}
+                                            {isTestingKey ? 'Verifying...' : 'Test & Save'}
+                                        </button>
+                                    </div>
+                                    <p className="text-[10px] text-slate-400 mt-2 font-medium ml-4 uppercase tracking-widest">
+                                        Handshake protocol: Gemini-2.5-Flash & 3.0-Preview • Encrypted Storage
+                                    </p>
                                 </div>
                             </div>
 

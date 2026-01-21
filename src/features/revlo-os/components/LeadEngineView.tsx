@@ -2,7 +2,7 @@ import React, { useState, useEffect, useRef } from 'react';
 import {
     Search, Crosshair, Target, Brain, Code, Send, CheckCircle2,
     Loader2, Users, FileText, Mail, MapPin,
-    Plus, Play, Zap, Settings2, Radar, Bot, Layers, BarChart2, Maximize2, Minimize2
+    Plus, Play, Zap, Settings2, Radar, Bot, Layers, BarChart2, Maximize2, Minimize2, AlertTriangle
 } from 'lucide-react';
 import LeadCard from './LeadCard';
 import WebsiteBuilderView from './WebsiteBuilderView';
@@ -337,6 +337,14 @@ const LeadEngineView: React.FC<LeadEngineViewProps> = ({
 
                 {selectedLead ? (
                     <>
+                        {/* API Key Warning Banner */}
+                        {!settings.apiKey && (
+                            <div className="bg-amber-50 border-b border-amber-200 p-2 flex items-center justify-center gap-3">
+                                <AlertTriangle size={14} className="text-amber-600" />
+                                <span className="text-[10px] font-black uppercase tracking-widest text-amber-800">Neural Configuration Required: Bridge Gemini 2.5 Flash in Settings to enable Engine operations</span>
+                            </div>
+                        )}
+
                         {/* Header Actions */}
                         <div className="h-14 border-b border-slate-200 flex items-center justify-between px-6 bg-white shadow-sm z-10">
                             <div className="flex items-center">

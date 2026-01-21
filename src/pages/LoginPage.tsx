@@ -90,7 +90,7 @@ const LoginPage: React.FC = () => {
                 <div className="space-y-1.5">
                     <div className="flex justify-between items-center ml-1">
                         <label className="text-[10px] font-black text-slate-400 uppercase tracking-widest">Security Phrase</label>
-                        <Link to="/forgot-password" size="sm" className="text-[9px] font-black text-purple-600 hover:text-purple-700 uppercase tracking-widest transition-colors">
+                        <Link to="/forgot-password" className="text-[9px] font-black text-purple-600 hover:text-purple-700 uppercase tracking-widest transition-colors">
                             Lost?
                         </Link>
                     </div>
