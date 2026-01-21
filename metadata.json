@@ -1,0 +1,7 @@
+{
+  "name": "RevampAI - Enterprise Lead Modernization",
+  "description": "A top-tier agentic workflow application that scouts local leads via Google Maps, analyzes their digital presence, generates modernization strategies, builds demo sites, and automates outreach.",
+  "requestFramePermissions": [
+    "geolocation"
+  ]
+}
