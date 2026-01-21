@@ -6,6 +6,46 @@ const getAiClient = (apiKey: string) => {
     return new GoogleGenAI({ apiKey });
 };
 
+// --- USAGE TRACKING ---
+import { SystemUsage } from "../types";
+
+let globalUsage: SystemUsage = {
+    totalApiCalls: 0,
+    totalTokens: 0,
+    promptTokens: 0,
+    completionTokens: 0,
+    callsByModel: {}
+};
+
+type UsageListener = (usage: SystemUsage) => void;
+const listeners: UsageListener[] = [];
+
+export const onUsageUpdate = (listener: UsageListener) => {
+    listeners.push(listener);
+    listener(globalUsage);
+    return () => {
+        const index = listeners.indexOf(listener);
+        if (index > -1) listeners.splice(index, 1);
+    };
+};
+
+const trackUsage = (model: string, usage?: any) => {
+    globalUsage.totalApiCalls++;
+    globalUsage.callsByModel[model] = (globalUsage.callsByModel[model] || 0) + 1;
+
+    if (usage) {
+        const prompt = usage.promptTokenCount || 0;
+        const completion = usage.candidatesTokenCount || 0;
+        const total = usage.totalTokenCount || prompt + completion;
+
+        globalUsage.promptTokens += prompt;
+        globalUsage.completionTokens += completion;
+        globalUsage.totalTokens += total;
+    }
+
+    listeners.forEach(l => l({ ...globalUsage }));
+};
+
 // --- AGENT COMPILER ---
 
 export const compileAgentInstruction = (agent: AgentProfile): string => {
@@ -69,10 +109,12 @@ export const scoutLeads = async (apiKey: string, niche: string, location: string
 
     try {
         const response = await ai.models.generateContent({
-            model: "gemini-2.5-flash",
+            model: "gemini-2.5-pro",
             contents: prompt,
             config: { tools: [{ googleMaps: {} }, { googleSearch: {} }] }
         });
+
+        trackUsage("gemini-2.5-pro", response.usageMetadata);
 
         let text = response.text || "[]";
         if (text.trim().toLowerCase().startsWith("i cannot") || text.trim().toLowerCase().startsWith("i'm unable")) return [];
@@ -98,10 +140,11 @@ export const enrichLead = async (apiKey: string, query: string): Promise<Partial
     const prompt = `Research business: "${query}". Find official name, industry type, address, website, email, phone, rating. Return raw JSON.`;
     try {
         const response = await ai.models.generateContent({
-            model: "gemini-2.5-flash",
+            model: "gemini-2.5-pro",
             contents: prompt,
             config: { tools: [{ googleMaps: {} }, { googleSearch: {} }] }
         });
+        trackUsage("gemini-2.5-pro", response.usageMetadata);
         let text = response.text || "null";
         if (text.trim().toLowerCase().startsWith("i cannot")) return null;
         text = text.replace(/```json/g, '').replace(/```/g, '').trim();
@@ -122,10 +165,11 @@ export const scoreLead = async (apiKey: string, lead: Lead): Promise<{ score: nu
 
     try {
         const response = await ai.models.generateContent({
-            model: "gemini-2.5-flash",
+            model: "gemini-2.5-pro",
             contents: prompt,
             config: { tools: [{ googleSearch: {} }] }
         });
+        trackUsage("gemini-2.5-pro", response.usageMetadata);
         let text = response.text || "{}";
         text = text.replace(/```json/g, '').replace(/```/g, '').trim();
         const data = JSON.parse(text);
@@ -144,6 +188,7 @@ export const generateDossier = async (apiKey: string, lead: Lead): Promise<Parti
             contents: prompt,
             config: { tools: [{ googleSearch: {} }] }
         });
+        trackUsage("gemini-3-flash-preview", response.usageMetadata);
         let text = response.text || "{}";
         text = text.replace(/```json/g, '').replace(/```/g, '').trim();
         return JSON.parse(text);
@@ -159,6 +204,7 @@ export const analyzeCompetitors = async (apiKey: string, niche: string, location
             contents: prompt,
             config: { tools: [{ googleSearch: {} }] }
         });
+        trackUsage("gemini-3-flash-preview", response.usageMetadata);
         let text = response.text || "[]";
         text = text.replace(/```json/g, '').replace(/```/g, '').trim();
         return JSON.parse(text);
@@ -179,6 +225,7 @@ export const createPRD = async (apiKey: string, lead: Lead, competitors: Competi
         contents: prompt,
         config: { systemInstruction }
     });
+    trackUsage("gemini-3-flash-preview", response.usageMetadata);
     return response.text || "";
 };
 
@@ -203,6 +250,7 @@ export const refinePRD = async (apiKey: string, currentPrd: string, instruction:
         contents: prompt,
         config: { systemInstruction }
     });
+    trackUsage("gemini-3-flash-preview", response.usageMetadata);
 
     return response.text || currentPrd;
 };
@@ -242,6 +290,7 @@ export const generateWebsiteCode = async (apiKey: string, lead: Lead, prd: strin
                 systemInstruction
             }
         });
+        trackUsage("gemini-3-flash-preview", response.usageMetadata);
         return JSON.parse(response.text || "{}");
     } catch (e) {
         console.error("Site Gen Failed", e);
@@ -269,6 +318,7 @@ export const editWebsiteElement = async (apiKey: string, currentHtml: string, in
         contents: prompt,
         config: { systemInstruction }
     });
+    trackUsage("gemini-3-flash-preview", response.usageMetadata);
 
     let text = response.text || currentHtml;
     text = text.replace(/```html/g, '').replace(/```/g, '');
@@ -291,21 +341,36 @@ export const generateOutreach = async (apiKey: string, lead: Lead, agent?: Agent
             systemInstruction
         }
     });
+    trackUsage("gemini-3-flash-preview", response.usageMetadata);
 
     return JSON.parse(response.text || "{}");
 }
 
-export const testAgent = async (apiKey: string, agent: AgentProfile, testInput: string): Promise<string> => {
+export const streamTestAgent = async (apiKey: string, agent: AgentProfile, testInput: string, onChunk: (chunk: string) => void): Promise<string> => {
     const ai = getAiClient(apiKey);
     const systemInstruction = compileAgentInstruction(agent);
 
-    const response = await ai.models.generateContent({
-        model: "gemini-3-flash-preview",
-        contents: testInput,
-        config: { systemInstruction }
-    });
+    try {
+        const result = await ai.models.generateContentStream({
+            model: "gemini-3-flash-preview",
+            contents: testInput,
+            config: { systemInstruction }
+        });
 
-    return response.text || "No output generated.";
+        let fullText = "";
+        for await (const chunk of result) {
+            const text = chunk.text || "";
+            fullText += text;
+            onChunk(text);
+        }
+        // Metadata usually available at end of stream result in some SDKs, 
+        // but for now we track as one call. Tokens are harder in stream without responseMetadata.
+        trackUsage("gemini-3-flash-preview");
+        return fullText;
+    } catch (e) {
+        console.error("Streaming failed", e);
+        throw e;
+    }
 }
 
 // --- VAULT RESEARCH ---
@@ -326,6 +391,7 @@ export const conductResearch = async (apiKey: string, query: string): Promise<{ 
         contents: prompt,
         config: { tools: [{ googleSearch: {} }] }
     });
+    trackUsage("gemini-3-pro-preview", response.usageMetadata);
 
     return {
         title: query.charAt(0).toUpperCase() + query.slice(1),

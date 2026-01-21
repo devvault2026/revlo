@@ -168,3 +168,10 @@ export interface VaultDocument {
   createdAt: string;
   sourceUrl?: string;
 }
+export interface SystemUsage {
+  totalApiCalls: number;
+  totalTokens: number;
+  promptTokens: number;
+  completionTokens: number;
+  callsByModel: { [model: string]: number };
+}

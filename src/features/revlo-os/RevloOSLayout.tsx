@@ -14,7 +14,8 @@ import {
     LogOut,
     ChevronRight,
     Menu,
-    X
+    X,
+    Bell
 } from 'lucide-react';
 import { useLocation } from 'react-router-dom';
 import CommandPalette from './components/CommandPalette';
@@ -214,7 +215,12 @@ const RevloOSLayout: React.FC<RevloOSLayoutProps> = ({ children, currentView, se
                         </div>
                     )}
 
-                    <div className="flex items-center gap-4 ml-auto">
+                    <div className="flex items-center gap-5 ml-auto">
+                        <button className="relative p-2.5 text-slate-400 hover:text-purple-600 hover:bg-purple-50 rounded-xl transition-all active:scale-90 group">
+                            <Bell className="w-5 h-5" />
+                            <span className="absolute top-2.5 right-2.5 w-2 h-2 bg-purple-600 border-2 border-white rounded-full animate-pulse shadow-sm shadow-purple-200" />
+                        </button>
+
                         <div className="flex items-center gap-2 px-4 py-2 bg-gradient-to-r from-purple-50 to-blue-50 border border-purple-200 rounded-full shadow-sm">
                             <div className="w-2 h-2 bg-green-500 rounded-full animate-pulse" />
                             <span className="text-[10px] font-black text-purple-700 uppercase tracking-widest">System Active</span>
@@ -254,7 +260,7 @@ const RevloOSLayout: React.FC<RevloOSLayoutProps> = ({ children, currentView, se
                             </div>
 
                             {/* App Content */}
-                            <div className="flex-1 relative overflow-hidden">
+                            <div className="flex-1 relative overflow-y-auto custom-scrollbar">
                                 {children}
                             </div>
                         </motion.div>

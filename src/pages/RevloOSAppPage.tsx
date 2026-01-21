@@ -1,6 +1,6 @@
 
 import React, { useState, useEffect, useMemo } from 'react';
-import { Lead, LeadStatus, Settings as SettingsType, EngineSession, AgentProfile, VaultDocument } from '../features/revlo-os/types';
+import { Lead, LeadStatus, Settings as SettingsType, EngineSession, AgentProfile, VaultDocument, SystemUsage } from '../features/revlo-os/types';
 import LeadEngineView from '../features/revlo-os/components/LeadEngineView';
 import DashboardView from '../features/revlo-os/components/DashboardView';
 import PipelineView from '../features/revlo-os/components/PipelineView';
@@ -13,6 +13,7 @@ import DocsView from '../features/revlo-os/components/DocsView';
 import VaultView from '../features/revlo-os/components/VaultView';
 import CommandPalette from '../features/revlo-os/components/CommandPalette';
 import * as GeminiService from '../features/revlo-os/services/geminiService';
+import * as EmailService from '../features/revlo-os/services/emailService';
 import RevloOSLayout, { View } from '../features/revlo-os/RevloOSLayout';
 
 const DEFAULT_SETTINGS: SettingsType = {
@@ -29,6 +30,25 @@ import { ToastProvider, useToast } from '../features/revlo-os/context/ToastConte
 const RevloOSAppPageContent: React.FC = () => {
     const [currentView, setCurrentView] = useState<View>('engine'); // Default to Engine if desired, or 'dashboard'
     const { showToast } = useToast();
+    const [usage, setUsage] = useState<SystemUsage>({
+        totalApiCalls: 0,
+        totalTokens: 0,
+        promptTokens: 0,
+        completionTokens: 0,
+        callsByModel: {}
+    });
+
+    useEffect(() => {
+        return GeminiService.onUsageUpdate(setUsage);
+    }, []);
+
+
+    // Play notification sound on mount
+    useEffect(() => {
+        const notificationAudio = new Audio('https://res.cloudinary.com/dolij7wjr/video/upload/v1768969521/new-message-alert-430414_on46qr.mp3');
+        notificationAudio.volume = 0.4;
+        notificationAudio.play().catch(e => console.log('Audio autoplay blocked:', e));
+    }, []);
 
     const [settings, setSettings] = useState<SettingsType>(() => {
         const saved = localStorage.getItem('revamp_settings');
@@ -125,12 +145,47 @@ const RevloOSAppPageContent: React.FC = () => {
     const handleMoveLead = (leadId: string, newStatus: LeadStatus) => {
         setSessions(prev => prev.map(s => ({ ...s, leads: s.leads.map(l => l.id === leadId ? { ...l, status: newStatus } : l) })));
     };
-    const handleSendMessage = (leadId: string, content: string) => {
+    const handleSendMessage = async (leadId: string, content: string) => {
+        const lead = allLeads.find(l => l.id === leadId);
+        if (lead && lead.email) {
+            showToast(`Transmitting message to ${lead.email}...`, 'info');
+            const result = await EmailService.sendEmail({
+                to: lead.email,
+                subject: `Update from Revlo OS: ${lead.name}`,
+                text: content
+            });
+            if (result.success) {
+                showToast('Email transmitted via SendGrid', 'success');
+            } else {
+                showToast(`Transmission failed: ${result.error}`, 'error');
+            }
+        }
+
         setSessions(prev => prev.map(s => ({
             ...s,
-            leads: s.leads.map(l => l.id === leadId ? { ...l, status: LeadStatus.CONTACTED, messages: [...(l.messages || []), { id: crypto.randomUUID(), sender: 'user', content, timestamp: 'Now', isRead: true }] } : l)
+            leads: s.leads.map(l => l.id === leadId ? { ...l, status: LeadStatus.CONTACTED, messages: [...(l.messages || []), { id: crypto.randomUUID(), sender: 'user', content, timestamp: new Date().toISOString(), isRead: true }] } : l)
         })));
-        showToast('Message transmitted', 'success');
+    };
+
+    const handleSendOutreach = async (lead: Lead) => {
+        if (!lead.email || !lead.outreachEmailBody) {
+            showToast('Missing lead email or outreach content', 'warning');
+            return;
+        }
+
+        showToast(`Deploying automated campaign node to ${lead.email}...`, 'info');
+        const result = await EmailService.sendEmail({
+            to: lead.email,
+            subject: lead.outreachEmailSubject || 'Custom Digital Asset Ready',
+            text: lead.outreachEmailBody
+        });
+
+        if (result.success) {
+            showToast('Outreach sequence initiated via SendGrid', 'success');
+            handleMoveLead(lead.id, LeadStatus.CONTACTED);
+        } else {
+            showToast(`Campaign deployment failed: ${result.error}`, 'error');
+        }
     };
 
     const currentSession = sessions.find(s => s.id === currentSessionId) || sessions[0];
@@ -138,7 +193,7 @@ const RevloOSAppPageContent: React.FC = () => {
     return (
         <div className="bg-slate-50 min-h-screen">
             <RevloOSLayout currentView={currentView} setCurrentView={setCurrentView}>
-                {currentView === 'dashboard' && <DashboardView leads={allLeads} />}
+                {currentView === 'dashboard' && <DashboardView leads={allLeads} usage={usage} />}
                 {currentView === 'engine' && (
                     <LeadEngineView
                         settings={settings} sessions={sessions} currentSessionId={currentSessionId}
@@ -146,6 +201,7 @@ const RevloOSAppPageContent: React.FC = () => {
                         leads={currentSession.leads}
                         setLeads={(update) => setSessions(prev => prev.map(s => s.id === currentSessionId ? { ...s, leads: typeof update === 'function' ? update(s.leads) : update } : s))}
                         agents={agents}
+                        onSendOutreach={handleSendOutreach}
                     />
                 )}
                 {currentView === 'agents' && <AgentStudioView agents={agents} setAgents={setAgents} />}

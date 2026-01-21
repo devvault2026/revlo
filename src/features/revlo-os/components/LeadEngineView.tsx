@@ -22,10 +22,11 @@ interface LeadEngineViewProps {
     leads: Lead[];
     setLeads: React.Dispatch<React.SetStateAction<Lead[]>>;
     agents: AgentProfile[];
+    onSendOutreach: (lead: Lead) => void;
 }
 
 const LeadEngineView: React.FC<LeadEngineViewProps> = ({
-    settings, sessions, currentSessionId, onSwitchSession, onCreateSession, onDeleteSession, leads, setLeads, agents
+    settings, sessions, currentSessionId, onSwitchSession, onCreateSession, onDeleteSession, leads, setLeads, agents, onSendOutreach
 }) => {
     const { showToast } = useToast();
 
@@ -214,8 +215,9 @@ const LeadEngineView: React.FC<LeadEngineViewProps> = ({
     };
 
     const handleSendOutreach = () => {
+        if (!selectedLead) return;
+        onSendOutreach(selectedLead);
         setOutreachSent(true);
-        showToast("Campaign deployed successfully. Transmitting to leads...", "success");
     };
 
     return (

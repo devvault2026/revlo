@@ -3,7 +3,8 @@ import { AgentProfile, AgentResponsibility } from '../types';
 import {
     Bot, Save, Trash2, Plus, Brain, Sparkles, Briefcase,
     Shield, Terminal, Sliders, FileJson, Play, RefreshCw, Layers,
-    Code, Monitor, ChevronRight, X, MapPin, Target, Loader2
+    Code, Monitor, ChevronRight, X, MapPin, Target, Loader2,
+    CheckCircle2
 } from 'lucide-react';
 import { motion } from 'framer-motion';
 import * as GeminiService from '../services/geminiService';
@@ -222,6 +223,7 @@ const AgentStudioView: React.FC<AgentStudioViewProps> = ({ agents, setAgents }) 
     const runTest = async () => {
         if (!formData || !testInput.trim()) return;
         setIsTesting(true);
+        setTestOutput('');
         const settings = JSON.parse(localStorage.getItem('revamp_settings') || '{}');
         const key = settings.apiKey;
         if (!key) {
@@ -230,11 +232,13 @@ const AgentStudioView: React.FC<AgentStudioViewProps> = ({ agents, setAgents }) 
             return;
         }
         try {
-            const result = await GeminiService.testAgent(key, formData, testInput);
-            setTestOutput(result);
-            if (result.trim().startsWith('<') && formData.role === 'designer') setViewMode('preview');
+            await GeminiService.streamTestAgent(key, formData, testInput, (chunk) => {
+                setTestOutput(prev => prev + chunk);
+            });
+            showToast("Simulated Synthesis Complete", "success");
         } catch (e) {
             setTestOutput(`System Error during synthesis: ${e}`);
+            showToast("Synthesis Disruption", "error");
         } finally {
             setIsTesting(false);
         }
@@ -468,49 +472,180 @@ const AgentStudioView: React.FC<AgentStudioViewProps> = ({ agents, setAgents }) 
                     </div>
                 );
             case 'lab':
-                const isHtml = testOutput.trim().startsWith('<!DOCTYPE') || testOutput.trim().startsWith('<html') || testOutput.trim().startsWith('<div');
+                const isPossibleHtml = testOutput.trim().includes('<html') || testOutput.trim().includes('<!DOCTYPE') || testOutput.trim().includes('<div') || testOutput.toLowerCase().includes('tailwindcss');
+
                 return (
-                    <div className="flex flex-col h-[700px] animate-in fade-in slide-in-from-bottom-2">
-                        <div className="flex justify-between items-center mb-6">
+                    <div className="flex flex-col h-[750px] animate-in fade-in slide-in-from-bottom-4 duration-700">
+                        {/* Lab Header */}
+                        <div className="flex justify-between items-end mb-8">
                             <div>
-                                <h3 className="text-sm font-black text-slate-900 uppercase tracking-widest">Neural Simulation</h3>
-                                <p className="text-[10px] text-slate-400 font-bold uppercase tracking-widest mt-1">Real-time Operative Logic Debugging</p>
+                                <div className="flex items-center gap-2 mb-2">
+                                    <div className="w-2 h-4 bg-purple-600 rounded-full animate-pulse" />
+                                    <h2 className="text-[10px] font-black text-slate-400 uppercase tracking-[0.2em]">Neural Simulation Studio</h2>
+                                </div>
+                                <h3 className="text-3xl font-black text-slate-900 tracking-tight leading-none">Intelligence Sandbox</h3>
                             </div>
-                            <div className="flex bg-slate-100 rounded-2xl p-1.5 border border-slate-100">
-                                <button onClick={() => setViewMode('preview')} disabled={!isHtml} className={`px-6 py-2.5 text-[10px] font-black uppercase tracking-widest rounded-xl transition-all ${viewMode === 'preview' ? 'bg-white text-slate-900 shadow-sm' : 'text-slate-400 disabled:opacity-30'}`}><Monitor size={14} className="inline mr-2" /> Render</button>
-                                <button onClick={() => setViewMode('code')} className={`px-6 py-2.5 text-[10px] font-black uppercase tracking-widest rounded-xl transition-all ${viewMode === 'code' ? 'bg-white text-slate-900 shadow-sm' : 'text-slate-400'}`}><Code size={14} className="inline mr-2" /> Source</button>
+
+                            <div className="flex bg-slate-100/50 backdrop-blur-md rounded-[1.25rem] p-1.5 border border-slate-200/50 shadow-inner">
+                                <button
+                                    onClick={() => setViewMode('preview')}
+                                    className={`px-8 py-3 text-[10px] font-black uppercase tracking-widest rounded-xl transition-all flex items-center gap-2 ${viewMode === 'preview' ? 'bg-white text-purple-600 shadow-md scale-[1.02]' : 'text-slate-400 hover:text-slate-600'}`}
+                                >
+                                    <Monitor size={14} /> Live Render
+                                </button>
+                                <button
+                                    onClick={() => setViewMode('code')}
+                                    className={`px-8 py-3 text-[10px] font-black uppercase tracking-widest rounded-xl transition-all flex items-center gap-2 ${viewMode === 'code' ? 'bg-white text-slate-900 shadow-md scale-[1.02]' : 'text-slate-400 hover:text-slate-600'}`}
+                                >
+                                    <Terminal size={14} /> Neural Code
+                                </button>
                             </div>
                         </div>
-                        <div className="flex-1 bg-white border border-slate-100 rounded-[2rem] overflow-hidden relative shadow-2xl shadow-slate-200/50 mb-8 saturate-150">
-                            {isTesting && (
-                                <div className="absolute inset-0 bg-white/70 backdrop-blur-md z-20 flex flex-col items-center justify-center">
-                                    <div className="relative">
-                                        <RefreshCw className="animate-spin text-purple-600" size={64} />
-                                        <div className="absolute inset-0 flex items-center justify-center">
-                                            <div className="w-4 h-4 bg-purple-400 rounded-full animate-pulse" />
+
+                        {/* Professional Split Layout */}
+                        <div className="flex-1 flex gap-8 overflow-hidden">
+                            {/* Controller Panel */}
+                            <div className="w-[420px] flex flex-col gap-6 shrink-0">
+                                <div className="flex-1 bg-white border border-slate-100 rounded-[2.5rem] p-8 shadow-xl shadow-slate-200/40 flex flex-col relative overflow-hidden group">
+                                    <div className="absolute top-0 right-0 p-6 opacity-[0.03] group-hover:opacity-[0.07] transition-opacity">
+                                        <Bot size={120} />
+                                    </div>
+
+                                    <div className="flex-1 flex flex-col">
+                                        <div className="flex justify-between items-center mb-6">
+                                            <label className="text-[10px] font-black text-slate-400 uppercase tracking-widest">Objective Input</label>
+                                            <div className="flex gap-1.5">
+                                                <div className="w-1.5 h-1.5 bg-red-400 rounded-full" />
+                                                <div className="w-1.5 h-1.5 bg-yellow-400 rounded-full" />
+                                                <div className="w-1.5 h-1.5 bg-green-400 rounded-full" />
+                                            </div>
                                         </div>
+                                        <textarea
+                                            value={testInput}
+                                            onChange={e => setTestInput(e.target.value)}
+                                            placeholder="Deploy a neural objective... (e.g. Architect a $25k Real Estate Site for Jaryd Paquette)"
+                                            className="flex-1 w-full bg-slate-50 border-2 border-slate-100 rounded-3xl p-6 text-sm font-bold text-slate-800 focus:bg-white focus:border-purple-500 focus:outline-none transition-all resize-none shadow-inner placeholder:text-slate-300"
+                                        />
                                     </div>
-                                    <span className="text-[11px] font-black uppercase tracking-[0.5em] mt-8 text-purple-900 animate-pulse">Synthesizing Signal</span>
+
+                                    <button
+                                        onClick={runTest}
+                                        disabled={isTesting || !testInput.trim()}
+                                        className={`mt-6 h-20 rounded-3xl flex items-center justify-center gap-4 transition-all relative overflow-hidden group/btn ${isTesting || !testInput.trim() ? 'bg-slate-50 text-slate-300 pointer-events-none' : 'bg-purple-600 text-white hover:bg-purple-700 shadow-2xl shadow-purple-200 active:scale-95'}`}
+                                    >
+                                        {isTesting && (
+                                            <motion.div
+                                                initial={{ width: 0 }}
+                                                animate={{ width: '100%' }}
+                                                transition={{ duration: 15, ease: "linear" }}
+                                                className="absolute inset-0 bg-purple-500"
+                                            />
+                                        )}
+                                        <div className="relative z-10 flex items-center gap-3">
+                                            {isTesting ? (
+                                                <>
+                                                    <RefreshCw className="animate-spin" size={20} />
+                                                    <span className="text-xs font-black uppercase tracking-[0.3em]">Synthesizing...</span>
+                                                </>
+                                            ) : (
+                                                <>
+                                                    <Play size={20} fill="currentColor" />
+                                                    <span className="text-xs font-black uppercase tracking-[0.3em]">Initialize Neural Build</span>
+                                                </>
+                                            )}
+                                        </div>
+                                    </button>
                                 </div>
-                            )}
-                            {testOutput ? (
-                                viewMode === 'preview' && isHtml ? (
-                                    <iframe srcDoc={testOutput} className="w-full h-full" sandbox="allow-scripts allow-same-origin" />
-                                ) : (
-                                    <pre className="p-10 text-xs font-mono text-slate-800 whitespace-pre-wrap leading-relaxed">{testOutput}</pre>
-                                )
-                            ) : (
-                                <div className="h-full flex flex-col items-center justify-center text-slate-200">
-                                    <div className="w-24 h-24 bg-slate-50 rounded-[2.5rem] flex items-center justify-center mb-8 border border-slate-50 shadow-inner">
-                                        <Terminal size={40} className="opacity-20" />
+
+                                {/* Status Card */}
+                                <div className="bg-slate-900 rounded-[2rem] p-6 shadow-2xl flex items-center gap-5 border border-slate-800">
+                                    <div className={`w-12 h-12 rounded-2xl flex items-center justify-center transition-all duration-500 ${isTesting ? 'bg-purple-500 animate-pulse' : 'bg-slate-800'}`}>
+                                        <Target className={isTesting ? 'text-white' : 'text-slate-600'} size={24} />
                                     </div>
-                                    <p className="text-[10px] font-black uppercase tracking-[0.4em] opacity-40">Awaiting Neural Injection</p>
+                                    <div className="flex-1">
+                                        <p className="text-[9px] font-black text-slate-500 uppercase tracking-widest mb-1">Operative Status</p>
+                                        <p className="text-xs font-bold text-white uppercase tracking-wider">
+                                            {isTesting ? 'Signal Transmission Active' : testOutput ? 'Synthesis Complete' : 'Awaiting Injection'}
+                                        </p>
+                                    </div>
+                                    {isTesting && (
+                                        <div className="flex gap-1">
+                                            {[1, 2, 3].map(i => (
+                                                <motion.div
+                                                    key={i}
+                                                    animate={{ height: [8, 16, 8] }}
+                                                    transition={{ duration: 0.6, repeat: Infinity, delay: i * 0.2 }}
+                                                    className="w-1 bg-purple-500 rounded-full"
+                                                />
+                                            ))}
+                                        </div>
+                                    )}
                                 </div>
-                            )}
-                        </div>
-                        <div className="bg-white p-4 rounded-[2.5rem] border border-slate-100 flex gap-4 shadow-[0_30px_60px_-15px_rgba(0,0,0,0.1)] transition-all focus-within:shadow-purple-200/50">
-                            <input value={testInput} onChange={e => setTestInput(e.target.value)} onKeyDown={e => e.key === 'Enter' && runTest()} placeholder="Inject high-tier test prompt..." className="flex-1 bg-transparent border-none focus:outline-none px-6 text-sm font-black tracking-tight" />
-                            <button onClick={runTest} disabled={isTesting || !testInput.trim()} className="bg-purple-600 text-white p-5 rounded-3xl hover:bg-purple-700 hover:scale-105 active:scale-95 transition-all shadow-xl shadow-purple-200 disabled:opacity-50"><Play size={24} fill="currentColor" /></button>
+                            </div>
+
+                            {/* Dynamic Workspace */}
+                            <div className="flex-1 bg-white border border-slate-100 rounded-[3rem] shadow-2xl shadow-slate-200/50 relative overflow-hidden flex flex-col">
+                                <div className="h-14 bg-slate-50/50 border-b border-slate-100 flex items-center px-8 justify-between">
+                                    <div className="flex items-center gap-2">
+                                        <div className="w-2.5 h-2.5 rounded-full bg-slate-200" />
+                                        <span className="text-[10px] font-black text-slate-400 uppercase tracking-[0.2em]">{viewMode === 'preview' ? 'Viewport' : 'Terminal Output'}</span>
+                                    </div>
+                                    {testOutput && isPossibleHtml && viewMode === 'code' && (
+                                        <div className="flex items-center gap-2 px-3 py-1 bg-green-50 text-green-600 rounded-lg border border-green-100 animate-in fade-in zoom-in">
+                                            <CheckCircle2 size={12} />
+                                            <span className="text-[9px] font-black uppercase tracking-widest">Valid Code Pattern Detected</span>
+                                        </div>
+                                    )}
+                                </div>
+
+                                <div className="flex-1 relative overflow-hidden">
+                                    {testOutput ? (
+                                        viewMode === 'preview' ? (
+                                            <div className="w-full h-full relative">
+                                                <iframe
+                                                    srcDoc={testOutput}
+                                                    className="w-full h-full border-none"
+                                                    sandbox="allow-scripts allow-forms allow-same-origin"
+                                                />
+                                                {isTesting && (
+                                                    <div className="absolute top-6 right-6 flex items-center gap-3 bg-white/90 backdrop-blur-md px-5 py-3 rounded-2xl shadow-xl border border-purple-100 animate-in slide-in-from-right-4">
+                                                        <div className="relative">
+                                                            <div className="w-4 h-4 border-2 border-purple-200 border-t-purple-600 rounded-full animate-spin" />
+                                                        </div>
+                                                        <span className="text-[10px] font-black text-purple-900 uppercase tracking-widest">Streaming Intelligence...</span>
+                                                    </div>
+                                                )}
+                                            </div>
+                                        ) : (
+                                            <div className="w-full h-full bg-[#0F172A] p-0 overflow-hidden flex flex-col">
+                                                <div className="bg-slate-800/50 h-10 flex items-center px-6 gap-2 shrink-0">
+                                                    <Terminal size={12} className="text-slate-500" />
+                                                    <span className="text-[9px] font-bold text-slate-500 uppercase tracking-widest">root@revlo-os:~/neural-stream</span>
+                                                </div>
+                                                <pre className="flex-1 p-8 text-[13px] font-mono text-blue-300 overflow-y-auto custom-scrollbar leading-relaxed">
+                                                    <code className="block">
+                                                        {testOutput}
+                                                        {isTesting && <span className="inline-block w-2.5 h-5 bg-purple-500 ml-1 animate-pulse align-middle" />}
+                                                    </code>
+                                                </pre>
+                                            </div>
+                                        )
+                                    ) : (
+                                        <div className="h-full flex flex-col items-center justify-center text-slate-200 transition-all">
+                                            <div className="relative">
+                                                <div className="absolute inset-0 bg-purple-500/10 blur-[60px] rounded-full animate-pulse" />
+                                                <div className="w-32 h-32 bg-slate-50 rounded-[3rem] flex items-center justify-center border border-slate-50 shadow-inner relative z-10">
+                                                    <Terminal size={56} className="opacity-10" />
+                                                </div>
+                                            </div>
+                                            <div className="mt-10 text-center relative z-10">
+                                                <p className="text-[10px] font-black uppercase tracking-[0.5em] text-slate-300">Workspace Empty</p>
+                                                <p className="text-[9px] font-bold text-slate-400 mt-2 uppercase tracking-widest">Awaiting Signal Injection...</p>
+                                            </div>
+                                        </div>
+                                    )}
+                                </div>
+                            </div>
                         </div>
                     </div>
                 );

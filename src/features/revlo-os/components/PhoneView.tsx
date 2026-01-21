@@ -1,6 +1,6 @@
 import React, { useState, useEffect } from 'react';
 import { Lead, AgentProfile, VapiConfig, LeadStatus, CallLog } from '../types';
-import { Phone, PhoneForwarded, PhoneMissed, Mic, Volume2, User, Activity, Globe, Play, Square, Settings } from 'lucide-react';
+import { Phone, PhoneForwarded, PhoneMissed, Mic, Volume2, VolumeX, User, Activity, Globe, Play, Square, Settings } from 'lucide-react';
 import * as VapiService from '../services/vapiService';
 import { useToast } from '../context/ToastContext';
 
@@ -18,8 +18,9 @@ const PhoneView: React.FC<PhoneViewProps> = ({ leads, agents, vapiConfig, update
     const [selectedLeadId, setSelectedLeadId] = useState<string | null>(null);
     const [selectedAgentId, setSelectedAgentId] = useState<string>(agents[0]?.id || '');
     const [activeCallId, setActiveCallId] = useState<string | null>(null);
-    const [callStatus, setCallStatus] = useState<string>('idle'); // idle, dialing, connected, ended
+    const [callStatus, setCallStatus] = useState<string>('idle'); //idle, dialing, connected, ended
     const [callDuration, setCallDuration] = useState(0);
+    const [isMuted, setIsMuted] = useState(false);
 
     const selectedLead = validLeads.find(l => l.id === selectedLeadId);
     const selectedAgent = agents.find(a => a.id === selectedAgentId);
@@ -201,8 +202,15 @@ const PhoneView: React.FC<PhoneViewProps> = ({ leads, agents, vapiConfig, update
                             {callStatus === 'idle' && <span className="text-slate-400 font-black uppercase tracking-[0.15em] text-[10px]">Neural Bridge Optimized</span>}
                         </div>
 
-                        {/* Controls */}
-                        <div className="flex space-x-6">
+                        {/* Call Controls */}
+                        <div className="flex gap-4">
+                            <button
+                                onClick={() => setIsMuted(!isMuted)}
+                                className={`w-14 h-14 rounded-full flex items-center justify-center shadow-md transition-all hover:scale-110 active:scale-95 ${isMuted ? 'bg-slate-200 text-slate-500' : 'bg-purple-50 text-purple-600 hover:bg-purple-100'}`}
+                            >
+                                {isMuted ? <VolumeX size={22} /> : <Volume2 size={22} />}
+                            </button>
+
                             {callStatus === 'idle' || callStatus === 'ended' ? (
                                 <button
                                     onClick={handleCall}

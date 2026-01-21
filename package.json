@@ -10,6 +10,7 @@
   },
   "dependencies": {
     "@google/genai": "^1.38.0",
+    "@sendgrid/mail": "^8.1.6",
     "@supabase/supabase-js": "^2.39.0",
     "@vapi-ai/web": "^2.5.2",
     "framer-motion": "^11.0.0",
