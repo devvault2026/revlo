@@ -80,6 +80,14 @@ const SettingsView: React.FC<SettingsViewProps> = ({ settings, onUpdate }) => {
     const [fullName, setFullName] = useState(profile?.full_name || '');
     const [avatarUrl, setAvatarUrl] = useState(profile?.avatar_url || '');
 
+    // Sync local state with profile updates
+    useEffect(() => {
+        if (profile) {
+            setFullName(profile.full_name || '');
+            setAvatarUrl(profile.avatar_url || '');
+        }
+    }, [profile]);
+
     // Provisioning State
     const [identities, setIdentities] = useState<ProvisionedIdentity[]>([]);
     const [isProvisioningEmail, setIsProvisioningEmail] = useState(false);
@@ -218,12 +226,6 @@ const SettingsView: React.FC<SettingsViewProps> = ({ settings, onUpdate }) => {
                 </div>
 
                 <div className="mt-auto">
-                    <button
-                        onClick={() => signOut()}
-                        className="w-full flex items-center gap-3 px-4 py-3 bg-red-50 text-red-600 rounded-xl font-bold text-sm hover:bg-red-100 transition-all"
-                    >
-                        <LogOut size={18} /> Sign Out
-                    </button>
                 </div>
             </div>
 

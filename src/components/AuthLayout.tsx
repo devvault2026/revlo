@@ -1,4 +1,4 @@
-import React from 'react';
+// No changes
 import { motion } from 'framer-motion';
 import { Link } from 'react-router-dom';
 import { CheckCircle2, Star } from 'lucide-react';

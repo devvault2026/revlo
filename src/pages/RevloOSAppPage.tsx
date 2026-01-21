@@ -261,6 +261,7 @@ const RevloOSAppPageContent: React.FC = () => {
                         onSendOutreach={handleSendOutreach}
                     />
                 )}
+                {currentView === 'agents' && <AgentStudioView agents={agents} onUpdateAgents={setAgents} />}
                 {currentView === 'crm' && <CRMView leads={allLeads} />}
                 {currentView === 'pipeline' && <PipelineView leads={allLeads} onMoveLead={handleMoveLead} />}
                 {currentView === 'inbox' && <InboxView leads={allLeads} onSendMessage={handleSendMessage} />}

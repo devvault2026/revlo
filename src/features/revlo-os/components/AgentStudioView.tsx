@@ -12,7 +12,8 @@ import { useToast } from '../context/ToastContext';
 
 interface AgentStudioViewProps {
     agents: AgentProfile[];
-    setAgents: React.Dispatch<React.SetStateAction<AgentProfile[]>>;
+    setAgents?: React.Dispatch<React.SetStateAction<AgentProfile[]>>;
+    onUpdateAgents?: React.Dispatch<React.SetStateAction<AgentProfile[]>>;
 }
 
 const DEFAULT_AGENTS: AgentProfile[] = [
@@ -168,7 +169,15 @@ const DEFAULT_AGENTS: AgentProfile[] = [
     }
 ];
 
-const AgentStudioView: React.FC<AgentStudioViewProps> = ({ agents, setAgents }) => {
+const AgentStudioView: React.FC<AgentStudioViewProps> = ({ agents, setAgents, onUpdateAgents }) => {
+    const handleUpdateAgents = (newAgents: React.SetStateAction<AgentProfile[]>) => {
+        if (onUpdateAgents) {
+            onUpdateAgents(newAgents);
+        } else if (setAgents) {
+            setAgents(newAgents);
+        }
+    };
+
     const [selectedAgentId, setSelectedAgentId] = useState<string | null>(null);
     const [activeTab, setActiveTab] = useState<'identity' | 'protocol' | 'orchestration' | 'lab'>('identity');
     const [formData, setFormData] = useState<AgentProfile | null>(null);
@@ -179,7 +188,7 @@ const AgentStudioView: React.FC<AgentStudioViewProps> = ({ agents, setAgents }) 
     const { showToast } = useToast();
 
     useEffect(() => {
-        if (agents.length === 0) setAgents(DEFAULT_AGENTS);
+        if (agents.length === 0) handleUpdateAgents(DEFAULT_AGENTS);
     }, []);
 
     const handleSelect = (agent: AgentProfile) => {
@@ -204,18 +213,18 @@ const AgentStudioView: React.FC<AgentStudioViewProps> = ({ agents, setAgents }) 
             memoryType: 'ephemeral',
             stats: { projectsCompleted: 0, avgSatisfaction: 5.0 }
         };
-        setAgents([...agents, newAgent]);
+        handleUpdateAgents([...agents, newAgent]);
         handleSelect(newAgent);
     };
 
     const handleSave = () => {
         if (!formData) return;
-        setAgents(prev => prev.map(a => a.id === formData.id ? formData : a));
+        handleUpdateAgents(prev => prev.map(a => a.id === formData.id ? formData : a));
         showToast("Intelligence node successfully merged and compiled.", "success");
     };
 
     const handleDelete = (id: string) => {
-        setAgents(prev => prev.filter(a => a.id !== id));
+        handleUpdateAgents(prev => prev.filter(a => a.id !== id));
         setSelectedAgentId(null);
         setFormData(null);
     };

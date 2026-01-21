@@ -30,6 +30,14 @@ export const AuthProvider: React.FC<{ children: React.ReactNode }> = ({ children
         let mounted = true;
 
         const initAuth = async () => {
+            // Safety timeout to prevent infinite loading
+            const timeoutId = setTimeout(() => {
+                if (mounted && loading) {
+                    console.warn("Auth initialization timed out, forcing load completion.");
+                    setLoading(false);
+                }
+            }, 3000);
+
             try {
                 const { data: { session } } = await supabase.auth.getSession();
                 if (mounted) {
@@ -41,6 +49,7 @@ export const AuthProvider: React.FC<{ children: React.ReactNode }> = ({ children
             } catch (error) {
                 console.error('Auth initialization error:', error);
             } finally {
+                clearTimeout(timeoutId);
                 if (mounted) setLoading(false);
             }
         };

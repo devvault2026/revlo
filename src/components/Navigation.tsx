@@ -28,7 +28,7 @@ const Navigation: React.FC = () => {
         { name: 'Home', path: '/' },
         { name: 'Services', path: '/services' },
         { name: 'Team', path: '/team' },
-        { name: 'Revlo OS', path: '/revlo-os' },
+        user ? { name: 'Revlo OS', path: '/revlo-os' } : { name: 'Login', path: '/login' },
         { name: 'Results', path: '/results' },
     ];
 

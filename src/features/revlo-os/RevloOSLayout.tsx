@@ -14,11 +14,11 @@ import {
     LogOut,
     ChevronRight,
     Menu,
-    X,
     Bell
 } from 'lucide-react';
-import { useLocation } from 'react-router-dom';
+import { useNavigate } from 'react-router-dom';
 import CommandPalette from './components/CommandPalette';
+import { useAuth } from '../../context/AuthContext';
 
 export type View = 'dashboard' | 'engine' | 'agents' | 'crm' | 'pipeline' | 'inbox' | 'phone' | 'vault' | 'docs' | 'settings';
 
@@ -32,6 +32,19 @@ const RevloOSLayout: React.FC<RevloOSLayoutProps> = ({ children, currentView, se
     const [isSidebarOpen, setIsSidebarOpen] = React.useState(false);
     const [isSidebarCollapsed, setIsSidebarCollapsed] = React.useState(false);
     const [isCommandPaletteOpen, setIsCommandPaletteOpen] = React.useState(false);
+
+    // Auth Hook
+    const { user, profile, signOut } = useAuth();
+    const navigate = useNavigate();
+
+    const handleSignOut = async () => {
+        try {
+            await signOut();
+            navigate('/login');
+        } catch (error) {
+            console.error("Sign out failed", error);
+        }
+    };
 
     React.useEffect(() => {
         const handleKeyDown = (e: KeyboardEvent) => {
@@ -72,6 +85,7 @@ const RevloOSLayout: React.FC<RevloOSLayoutProps> = ({ children, currentView, se
             {/* Ambient Background Glows */}
             <div className="fixed top-0 right-0 w-[500px] h-[500px] bg-purple-100/30 rounded-full blur-[120px] -translate-y-1/2 translate-x-1/2 pointer-events-none" />
             <div className="fixed bottom-0 left-0 w-[500px] h-[500px] bg-blue-100/20 rounded-full blur-[120px] translate-y-1/2 -translate-x-1/2 pointer-events-none" />
+
             {/* Mobile Overlay */}
             {isSidebarOpen && (
                 <div
@@ -180,17 +194,20 @@ const RevloOSLayout: React.FC<RevloOSLayoutProps> = ({ children, currentView, se
                     <div className={`border-t border-slate-100 transition-all duration-300 ${isSidebarCollapsed ? 'p-3' : 'p-6'}`}>
                         <div className={`flex items-center transition-all bg-slate-50 border border-slate-100 rounded-2xl ${isSidebarCollapsed ? 'justify-center p-2' : 'gap-3 p-4'}`}>
                             <div className="w-10 h-10 bg-gradient-purple rounded-xl flex items-center justify-center text-white font-black shadow-lg shadow-purple-100 flex-shrink-0">
-                                A
+                                {profile?.full_name?.charAt(0) || user?.email?.charAt(0) || 'A'}
                             </div>
                             {!isSidebarCollapsed && (
                                 <div className="flex-1 min-w-0">
-                                    <p className="text-sm font-black text-slate-900 truncate">Admin User</p>
-                                    <p className="text-[11px] font-bold text-slate-400 truncate tracking-tight">admin@revlo.agency</p>
+                                    <p className="text-sm font-black text-slate-900 truncate">{profile?.full_name || 'Admin User'}</p>
+                                    <p className="text-[11px] font-bold text-slate-400 truncate tracking-tight">{user?.email}</p>
                                 </div>
                             )}
                         </div>
 
-                        <button className={`w-full mt-3 flex items-center transition-colors group ${isSidebarCollapsed ? 'justify-center py-3' : 'gap-3 px-4 py-2'}`}>
+                        <button
+                            onClick={handleSignOut}
+                            className={`w-full mt-3 flex items-center transition-colors group ${isSidebarCollapsed ? 'justify-center py-3' : 'gap-3 px-4 py-2'}`}
+                        >
                             <LogOut className="w-4 h-4 text-slate-400 group-hover:text-red-500 transition-colors" />
                             {!isSidebarCollapsed && <span className="text-xs font-black text-slate-600 group-hover:text-red-600 uppercase tracking-widest">Sign Out</span>}
                         </button>
