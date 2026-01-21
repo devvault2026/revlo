@@ -193,8 +193,8 @@ const Hero: React.FC = () => {
                         {/* Floating Card: Live Leads (Bottom Right) */}
                         <motion.div
                             initial={{ opacity: 0, x: 20 }}
-                            animate={{ opacity: 1, x: 0, y: [0, -8, 0] }}
-                            transition={{ delay: 1.4, duration: 4.5, repeat: Infinity, ease: "easeInOut" }}
+                            animate={{ opacity: 1, x: 0 }}
+                            transition={{ delay: 1.4, duration: 0.6 }}
                             className="absolute bottom-24 -right-12 z-30 bg-slate-900/95 backdrop-blur-md shadow-2xl rounded-2xl p-4 border border-slate-800"
                         >
                             <div className="flex items-center gap-3 mb-1">
@@ -207,10 +207,10 @@ const Hero: React.FC = () => {
 
                         {/* iPhone 16 Pro Frame */}
                         <motion.div
-                            initial={{ rotateY: -20, rotateX: 15, rotateZ: -12 }}
+                            initial={{ rotateY: -25, rotateX: -10, rotateZ: 8 }}
                             animate={{
-                                rotateY: [-20, -15, -20],
-                                rotateX: [15, 10, 15],
+                                rotateY: [-25, -20, -25],
+                                rotateX: [-10, -5, -10],
                                 y: [0, -20, 0]
                             }}
                             transition={{
@@ -231,53 +231,66 @@ const Hero: React.FC = () => {
                                     {/* Status Bar */}
                                     <div className="absolute top-0 left-0 right-0 h-12 bg-gradient-to-b from-white/50 to-transparent backdrop-blur-sm flex items-center justify-between px-8 text-xs font-semibold text-slate-700 z-20">
                                         <span>9:41</span>
-                                        <span>100%</span>
+                                        <div className="flex items-center gap-2">
+                                            <motion.div
+                                                animate={{ scale: [1, 1.15, 1] }}
+                                                transition={{ duration: 2, repeat: Infinity }}
+                                                className="w-8 h-8 bg-gradient-to-br from-red-500 to-red-600 rounded-full flex items-center justify-center text-white font-black text-[10px] shadow-lg"
+                                            >
+                                                99+
+                                            </motion.div>
+                                            <span>100%</span>
+                                        </div>
                                     </div>
 
                                     {/* Animated Notifications */}
-                                    <div className="absolute inset-0 pt-14 px-3 space-y-3 overflow-hidden">
-                                        {/* Gradient overlay to fade bottom */}
-                                        <div className="absolute bottom-0 left-0 right-0 h-20 bg-gradient-to-t from-white/90 to-transparent z-10" />
+                                    <div className="absolute inset-0 pt-14 px-3 overflow-hidden">
+                                        {/* Gradient overlays */}
+                                        <div className="absolute top-14 left-0 right-0 h-12 bg-gradient-to-b from-white to-transparent z-10 pointer-events-none" />
+                                        <div className="absolute bottom-0 left-0 right-0 h-20 bg-gradient-to-t from-white/90 to-transparent z-10 pointer-events-none" />
 
-                                        {Array.from({ length: 20 }).map((_, index) => {
-                                            const types = [
-                                                { name: 'John Doe', msg: 'Ready to proceed!', color: 'from-green-400 to-green-600', initials: 'JD' },
-                                                { name: 'Sarah Miller', msg: 'Sent the signed contract.', color: 'from-purple-400 to-purple-600', initials: 'SM' },
-                                                { name: 'Mike Chen', msg: 'Payment received: $5,000', color: 'from-blue-400 to-blue-600', initials: 'MC' },
-                                                { name: 'Emma Davis', msg: 'New Lead: TechCorp', color: 'from-red-400 to-red-600', initials: 'ED' },
-                                                { name: 'Alex Lee', msg: 'Call scheduled for tomorrow.', color: 'from-indigo-400 to-indigo-600', initials: 'AL' }
-                                            ];
-                                            const item = types[index % types.length];
-                                            return (
-                                                <motion.div
-                                                    key={index}
-                                                    initial={{ y: -50, opacity: 0, scale: 0.9 }}
-                                                    animate={{ y: 0, opacity: 1, scale: 1 }}
-                                                    transition={{
-                                                        delay: index * 0.8,
-                                                        type: 'spring',
-                                                        stiffness: 300,
-                                                        damping: 20
-                                                    }}
-                                                    className="relative bg-white/95 backdrop-blur-xl rounded-2xl p-3 shadow-lg border border-slate-200"
-                                                >
-                                                    <div className="flex items-start gap-3">
-                                                        <div className={`w-10 h-10 bg-gradient-to-br ${item.color} rounded-full flex items-center justify-center text-white font-bold text-sm shadow-sm`}>
-                                                            {item.initials}
-                                                        </div>
-                                                        <div className="flex-1 min-w-0">
-                                                            <div className="flex items-center justify-between mb-1">
-                                                                <span className="font-bold text-sm text-slate-900">{item.name}</span>
-                                                                <span className="text-xs text-slate-500">now</span>
+                                        {/* Scrolling notification feed */}
+                                        <motion.div
+                                            animate={{ y: [0, -1600] }}
+                                            transition={{ duration: 20, repeat: Infinity, ease: "linear" }}
+                                            className="space-y-3"
+                                        >
+
+                                            {Array.from({ length: 30 }).map((_, index) => {
+                                                const types = [
+                                                    { name: 'John Doe', msg: 'Ready to proceed!', color: 'from-green-400 to-green-600', initials: 'JD' },
+                                                    { name: 'Sarah Miller', msg: 'Sent the signed contract.', color: 'from-purple-400 to-purple-600', initials: 'SM' },
+                                                    { name: 'Mike Chen', msg: 'Payment received: $5,000', color: 'from-blue-400 to-blue-600', initials: 'MC' },
+                                                    { name: 'Emma Davis', msg: 'New Lead: TechCorp', color: 'from-red-400 to-red-600', initials: 'ED' },
+                                                    { name: 'Alex Lee', msg: 'Call scheduled!', color: 'from-indigo-400 to-indigo-600', initials: 'AL' },
+                                                    { name: 'Lisa Wang', msg: 'Interested in premium tier!', color: 'from-pink-400 to-pink-600', initials: 'LW' },
+                                                    { name: 'Tom Brady', msg: 'Demo booked for Friday', color: 'from-cyan-400 to-cyan-600', initials: 'TB' },
+                                                    { name: 'Nina Patel', msg: 'Proposal approved!', color: 'from-orange-400 to-orange-600', initials: 'NP' }
+                                                ];
+                                                const item = types[index % types.length];
+                                                return (
+                                                    <div
+                                                        key={index}
+                                                        className="bg-white/95 backdrop-blur-xl rounded-2xl p-3 shadow-lg border border-slate-200"
+                                                    >
+                                                        <div className="flex items-start gap-3">
+                                                            <div className={`w-10 h-10 bg-gradient-to-br ${item.color} rounded-full flex items-center justify-center text-white font-bold text-sm shadow-sm flex-shrink-0`}>
+                                                                {item.initials}
                                                             </div>
-                                                            <p className="text-xs text-slate-600 line-clamp-1">
-                                                                {item.msg}
-                                                            </p>
+                                                            <div className="flex-1 min-w-0">
+                                                                <div className="flex items-center justify-between mb-1">
+                                                                    <span className="font-bold text-sm text-slate-900">{item.name}</span>
+                                                                    <span className="text-xs text-slate-500">now</span>
+                                                                </div>
+                                                                <p className="text-xs text-slate-600 line-clamp-1">
+                                                                    {item.msg}
+                                                                </p>
+                                                            </div>
                                                         </div>
                                                     </div>
-                                                </motion.div>
-                                            );
-                                        })}
+                                                );
+                                            })}
+                                        </motion.div>
                                     </div>
                                 </div>
 
@@ -286,15 +299,6 @@ const Hero: React.FC = () => {
                                 <div className="absolute right-0 top-44 w-1 h-12 bg-slate-700 rounded-l" />
                                 <div className="absolute left-0 top-32 w-1 h-8 bg-slate-700 rounded-r" />
                             </div>
-                        </motion.div>
-
-                        {/* Floating notification badges */}
-                        <motion.div
-                            animate={{ scale: [1, 1.2, 1], opacity: [0.5, 1, 0.5] }}
-                            transition={{ duration: 2, repeat: Infinity }}
-                            className="absolute -top-4 -right-4 w-16 h-16 bg-gradient-to-br from-red-500 to-red-600 rounded-full flex items-center justify-center text-white font-black text-xl shadow-xl"
-                        >
-                            99+
                         </motion.div>
                     </motion.div>
                 </div>

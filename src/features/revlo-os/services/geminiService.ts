@@ -3,19 +3,26 @@ import { GoogleGenAI, Type } from "@google/genai";
 import { Lead, Competitor, AgentProfile } from "../types";
 
 const getAiClient = (apiKey: string) => {
-  return new GoogleGenAI({ apiKey });
+    return new GoogleGenAI({ apiKey });
 };
 
 // --- AGENT COMPILER ---
 
 export const compileAgentInstruction = (agent: AgentProfile): string => {
-  if (!agent.mandate) return `You are ${agent.name}, a ${agent.role}.`; // Fallback for old agents
+    if (!agent.mandate) return `You are ${agent.name}, a ${agent.role}.`; // Fallback for old agents
 
-  return `
+    return `
     IDENTITY PROTOCOL:
     Designation: ${agent.name}
-    Role: ${agent.role}
+    Role Class: ${agent.role.toUpperCase()}
     Authority Level: ${agent.mandate.authority.toUpperCase()}
+    Neural Persistence: ${agent.memoryType.toUpperCase()}
+
+    CAPABILITY MATRIX (Enabled Tools & Skills):
+    ${agent.capabilities.length > 0 ? agent.capabilities.map(c => `- ${c}`).join('\n') : '- Standard LLM Intelligence ONLY'}
+
+    ORCHESTRATION CHAIN (Downstream Operatives):
+    ${agent.chaining.length > 0 ? agent.chaining.map(l => `- Trigger: "${l.trigger}" -> Deploy: ${l.nextAgentId}`).join('\n') : '- End-of-Line Operative (No further chaining)'}
 
     PRIMARY MANDATE:
     "${agent.mandate.objective}"
@@ -41,49 +48,49 @@ export const compileAgentInstruction = (agent: AgentProfile): string => {
 // --- SCOUTING & ENRICHMENT ---
 
 export const scoutLeads = async (apiKey: string, niche: string, location: string, limit: number = 5, scanMode: 'niche' | 'zone' = 'niche'): Promise<Partial<Lead>[]> => {
-  const ai = getAiClient(apiKey);
-  let prompt = '';
+    const ai = getAiClient(apiKey);
+    let prompt = '';
 
-  if (scanMode === 'zone') {
-      prompt = `List ${limit} distinct local businesses located in the Zip Code/Area: "${location}".
+    if (scanMode === 'zone') {
+        prompt = `List ${limit} distinct local businesses located in the Zip Code/Area: "${location}".
       Goal: Create a diverse directory of local businesses across different categories (e.g., Retail, Professional Services, Dining, Auto Repair, Medical).
       Instructions:
       1. Identify valid local businesses.
       2. Use Google Search to find public business emails.
       Return ONLY a JSON array (no markdown) where each item has: name, type (industry), address, rating, userRatingCount, website (or null), phone, email.`;
-  } else {
-      prompt = `Find ${limit} local ${niche} businesses in ${location}. 
+    } else {
+        prompt = `Find ${limit} local ${niche} businesses in ${location}. 
       Instructions:
       1. Identify businesses.
       2. Use Google Search to find public contact emails.
       3. Prioritize businesses with poor digital presence.
       Return ONLY a JSON array (no markdown) where each item has: name, type (industry), address, rating, userRatingCount, website (or null), phone, email.`;
-  }
+    }
 
-  try {
-    const response = await ai.models.generateContent({
-      model: "gemini-2.5-flash", 
-      contents: prompt,
-      config: { tools: [{ googleMaps: {} }, { googleSearch: {} }] }
-    });
-    
-    let text = response.text || "[]";
-    if (text.trim().toLowerCase().startsWith("i cannot") || text.trim().toLowerCase().startsWith("i'm unable")) return [];
-    text = text.replace(/```json/g, '').replace(/```/g, '').trim();
-    
-    const data = JSON.parse(text);
-    if (!Array.isArray(data)) return [];
+    try {
+        const response = await ai.models.generateContent({
+            model: "gemini-2.5-flash",
+            contents: prompt,
+            config: { tools: [{ googleMaps: {} }, { googleSearch: {} }] }
+        });
 
-    return data.map((item: any) => ({
-        ...item,
-        id: crypto.randomUUID(),
-        status: 'SCOUTED',
-        createdAt: new Date().toISOString()
-    }));
-  } catch (e) {
-    console.error("Scout error:", e);
-    return [];
-  }
+        let text = response.text || "[]";
+        if (text.trim().toLowerCase().startsWith("i cannot") || text.trim().toLowerCase().startsWith("i'm unable")) return [];
+        text = text.replace(/```json/g, '').replace(/```/g, '').trim();
+
+        const data = JSON.parse(text);
+        if (!Array.isArray(data)) return [];
+
+        return data.map((item: any) => ({
+            ...item,
+            id: crypto.randomUUID(),
+            status: 'SCOUTED',
+            createdAt: new Date().toISOString()
+        }));
+    } catch (e) {
+        console.error("Scout error:", e);
+        return [];
+    }
 };
 
 export const enrichLead = async (apiKey: string, query: string): Promise<Partial<Lead> | null> => {
@@ -91,7 +98,7 @@ export const enrichLead = async (apiKey: string, query: string): Promise<Partial
     const prompt = `Research business: "${query}". Find official name, industry type, address, website, email, phone, rating. Return raw JSON.`;
     try {
         const response = await ai.models.generateContent({
-            model: "gemini-2.5-flash", 
+            model: "gemini-2.5-flash",
             contents: prompt,
             config: { tools: [{ googleMaps: {} }, { googleSearch: {} }] }
         });
@@ -129,50 +136,75 @@ export const scoreLead = async (apiKey: string, lead: Lead): Promise<{ score: nu
 };
 
 export const generateDossier = async (apiKey: string, lead: Lead): Promise<Partial<Lead>> => {
-  const ai = getAiClient(apiKey);
-  const prompt = `Analyze business: "${lead.name}" at "${lead.address}". Find owner name/email. Summarize core business. Identify 3 digital pain points. Estimate revenue loss. Return JSON: {ownerName, ownerEmail, businessCore, revenueEstimate, painPoints[]}`;
-  try {
-      const response = await ai.models.generateContent({
-        model: "gemini-3-flash-preview", 
-        contents: prompt,
-        config: { tools: [{ googleSearch: {} }] }
-      });
-      let text = response.text || "{}";
-      text = text.replace(/```json/g, '').replace(/```/g, '').trim();
-      return JSON.parse(text);
-  } catch (e) { return {}; }
+    const ai = getAiClient(apiKey);
+    const prompt = `Analyze business: "${lead.name}" at "${lead.address}". Find owner name/email. Summarize core business. Identify 3 digital pain points. Estimate revenue loss. Return JSON: {ownerName, ownerEmail, businessCore, revenueEstimate, painPoints[]}`;
+    try {
+        const response = await ai.models.generateContent({
+            model: "gemini-3-flash-preview",
+            contents: prompt,
+            config: { tools: [{ googleSearch: {} }] }
+        });
+        let text = response.text || "{}";
+        text = text.replace(/```json/g, '').replace(/```/g, '').trim();
+        return JSON.parse(text);
+    } catch (e) { return {}; }
 };
 
 export const analyzeCompetitors = async (apiKey: string, niche: string, location: string): Promise<Competitor[]> => {
-  const ai = getAiClient(apiKey);
-  const prompt = `Identify 3 top competitors for ${niche} in ${location}. Return JSON array: {name, website, strengths[], weaknesses[], whyWinning}`;
-  try {
-      const response = await ai.models.generateContent({
-        model: "gemini-3-flash-preview",
-        contents: prompt,
-        config: { tools: [{ googleSearch: {} }] }
-      });
-      let text = response.text || "[]";
-      text = text.replace(/```json/g, '').replace(/```/g, '').trim();
-      return JSON.parse(text);
-  } catch (e) { return []; }
+    const ai = getAiClient(apiKey);
+    const prompt = `Identify 3 top competitors for ${niche} in ${location}. Return JSON array: {name, website, strengths[], weaknesses[], whyWinning}`;
+    try {
+        const response = await ai.models.generateContent({
+            model: "gemini-3-flash-preview",
+            contents: prompt,
+            config: { tools: [{ googleSearch: {} }] }
+        });
+        let text = response.text || "[]";
+        text = text.replace(/```json/g, '').replace(/```/g, '').trim();
+        return JSON.parse(text);
+    } catch (e) { return []; }
 };
 
 export const createPRD = async (apiKey: string, lead: Lead, competitors: Competitor[], agent?: AgentProfile): Promise<string> => {
     const ai = getAiClient(apiKey);
     const systemInstruction = agent ? compileAgentInstruction(agent) : "Act as a Senior Product Manager.";
-    
+
     const prompt = `Create a PRD for "${lead.name}".
-    Goal: Beat these competitors: ${competitors.map(c=>c.name).join(', ')}.
+    Goal: Beat these competitors: ${competitors.map(c => c.name).join(', ')}.
     Context: ${lead.businessCore}
     Output Format: Markdown.`;
 
-    const response = await ai.models.generateContent({ 
-        model: "gemini-3-flash-preview", 
+    const response = await ai.models.generateContent({
+        model: "gemini-3-flash-preview",
         contents: prompt,
         config: { systemInstruction }
     });
     return response.text || "";
+};
+
+export const refinePRD = async (apiKey: string, currentPrd: string, instruction: string, agent?: AgentProfile): Promise<string> => {
+    const ai = getAiClient(apiKey);
+    const systemInstruction = agent ? compileAgentInstruction(agent) : "Act as a Senior Product Lead.";
+
+    const prompt = `TASK: Refine the following Product Requirements Document (PRD) based on this objective: "${instruction}".
+    
+    RULES:
+    1. Maintain the existing high-quality markdown structure.
+    2. Incorporate Mermaid graphs (using \`\`\`mermaid\`\`\` blocks) for any complex flows, architecture, or timelines requested.
+    3. Ensure the tone remains tactical and premium.
+    
+    CURRENT PRD:
+    ${currentPrd}
+    
+    RETURN THE FULL REFINED MARKDOWN CONTENT.`;
+
+    const response = await ai.models.generateContent({
+        model: "gemini-3-flash-preview",
+        contents: prompt,
+        config: { systemInstruction }
+    });
+
+    return response.text || currentPrd;
 };
 
 // --- MULTI-PAGE BUILDER & EDITING ---
@@ -181,24 +213,31 @@ export const generateWebsiteCode = async (apiKey: string, lead: Lead, prd: strin
     const ai = getAiClient(apiKey);
     const systemInstruction = agent ? compileAgentInstruction(agent) : "Act as an Award-Winning Developer.";
 
-    const prompt = `Based on the PRD for ${lead.name}, generate a MULTI-PAGE website.
-    
-    PAGES REQUIRED:
-    1. index.html (Home - High conversion, Hero, Services Grid, Reviews)
-    2. services.html (Detailed breakdown of services)
-    3. contact.html (Form, Map, Address)
+    // Nudge for 5-7 pages if it's a high-tier agent
+    const pageRequirement = agent?.mandate.objective.includes('5-7 page') ? 'a GUARANTEED 5-7 page award-winning architecture' : 'a multi-page website';
+    const requiredSections = agent?.outputContract.requiredSections.join(', ') || 'Hero, Services, Contact';
 
-    TECH STACK: Tailwind CSS (CDN), FontAwesome (CDN).
+    const prompt = `Based on the PRD for ${lead.name}, generate ${pageRequirement}.
     
-    Return ONLY valid JSON where keys are filenames and values are the full HTML strings.
-    Example: { "index.html": "<!DOCTYPE html>...", "services.html": "..." }
-    Do NOT use markdown.`;
+    REQUIRED COMPONENTS/SECTIONS TO INTEGRATE:
+    ${requiredSections}
+
+    TECH STACK: Tailwind CSS (CDN), FontAwesome (CDN), Google Fonts.
+    
+    DELIVERY PROTOCOL:
+    1. Return ONLY valid JSON where keys are filenames and values are the full HTML strings.
+    2. Ensure content is value-rich, professional, and reflects a $25,000 market value.
+    3. Include 5-7 distinct files (e.g. index.html, services.html, portfolio.html, about.html, news.html, contact.html) if requested.
+    4. Maintain absolute design consistency across all files.
+
+    Example Output Format: { "index.html": "<!DOCTYPE html>...", "services.html": "..." }
+    Do NOT use markdown. Return the raw JSON object.`;
 
     try {
         const response = await ai.models.generateContent({
             model: "gemini-3-flash-preview",
             contents: prompt,
-            config: { 
+            config: {
                 responseMimeType: "application/json",
                 systemInstruction
             }
@@ -213,7 +252,7 @@ export const generateWebsiteCode = async (apiKey: string, lead: Lead, prd: strin
 export const editWebsiteElement = async (apiKey: string, currentHtml: string, instruction: string, agent?: AgentProfile): Promise<string> => {
     const ai = getAiClient(apiKey);
     const systemInstruction = agent ? compileAgentInstruction(agent) : "Act as a Senior Developer.";
-    
+
     const prompt = `TASK: Edit the following HTML code based strictly on this instruction: "${instruction}".
     
     RULES:
@@ -230,16 +269,16 @@ export const editWebsiteElement = async (apiKey: string, currentHtml: string, in
         contents: prompt,
         config: { systemInstruction }
     });
-    
+
     let text = response.text || currentHtml;
     text = text.replace(/```html/g, '').replace(/```/g, '');
     return text;
 };
 
-export const generateOutreach = async (apiKey: string, lead: Lead, agent?: AgentProfile): Promise<{emailSubject: string, emailBody: string, smsBody: string}> => {
+export const generateOutreach = async (apiKey: string, lead: Lead, agent?: AgentProfile): Promise<{ emailSubject: string, emailBody: string, smsBody: string }> => {
     const ai = getAiClient(apiKey);
     const systemInstruction = agent ? compileAgentInstruction(agent) : "Act as a Sales Expert.";
-    
+
     const prompt = `Write a cold email and SMS for ${lead.name}.
     Context: We built a custom site (worth $25k) for $750.
     Return JSON: { emailSubject, emailBody, smsBody }`;
@@ -247,7 +286,7 @@ export const generateOutreach = async (apiKey: string, lead: Lead, agent?: Agent
     const response = await ai.models.generateContent({
         model: "gemini-3-flash-preview",
         contents: prompt,
-        config: { 
+        config: {
             responseMimeType: "application/json",
             systemInstruction
         }
@@ -265,7 +304,7 @@ export const testAgent = async (apiKey: string, agent: AgentProfile, testInput: 
         contents: testInput,
         config: { systemInstruction }
     });
-    
+
     return response.text || "No output generated.";
 }
 

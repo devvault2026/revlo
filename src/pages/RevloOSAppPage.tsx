@@ -24,9 +24,11 @@ const DEFAULT_SETTINGS: SettingsType = {
     vapi: { privateApiKey: '', publicApiKey: '', phoneNumberId: '' }
 };
 
-const RevloOSAppPage: React.FC = () => {
+import { ToastProvider, useToast } from '../features/revlo-os/context/ToastContext';
+
+const RevloOSAppPageContent: React.FC = () => {
     const [currentView, setCurrentView] = useState<View>('engine'); // Default to Engine if desired, or 'dashboard'
-    const [isCommandOpen, setIsCommandOpen] = useState(false);
+    const { showToast } = useToast();
 
     const [settings, setSettings] = useState<SettingsType>(() => {
         const saved = localStorage.getItem('revamp_settings');
@@ -55,18 +57,6 @@ const RevloOSAppPage: React.FC = () => {
     useEffect(() => { localStorage.setItem('revamp_agents', JSON.stringify(agents)); }, [agents]);
     useEffect(() => { localStorage.setItem('revamp_vault', JSON.stringify(vaultDocs)); }, [vaultDocs]);
 
-    // Global Hotkey for Command Palette
-    useEffect(() => {
-        const down = (e: KeyboardEvent) => {
-            if (e.key === 'k' && (e.metaKey || e.ctrlKey)) {
-                e.preventDefault();
-                setIsCommandOpen((open) => !open);
-            }
-        };
-        document.addEventListener('keydown', down);
-        return () => document.removeEventListener('keydown', down);
-    }, []);
-
     const allLeads = useMemo(() => sessions.flatMap(s => s.leads), [sessions]);
 
     // Command Palette Handler
@@ -75,26 +65,43 @@ const RevloOSAppPage: React.FC = () => {
             setCurrentView(payload);
         } else if (type === 'scout') {
             setCurrentView('engine');
-            if (!settings.apiKey) { alert('API Key Required'); return; }
+            if (!settings.apiKey) {
+                showToast('AI API Key Required to initiate scout', 'warning');
+                return;
+            }
             try {
+                showToast(`Scouting ${payload.limit} leads for ${payload.niche}...`, 'info');
                 const newLeads = await GeminiService.scoutLeads(settings.apiKey, payload.niche, payload.location, payload.limit, 'niche');
                 // Add to current session
                 const validLeads = newLeads as Lead[];
                 setSessions(prev => prev.map(s => s.id === currentSessionId ? { ...s, leads: [...s.leads, ...validLeads] } : s));
-            } catch (e) { console.error(e); alert('Scout Failed'); }
+                showToast(`Successfully recruited ${validLeads.length} new prospects`, 'success');
+            } catch (e) {
+                console.error(e);
+                showToast('Lead discovery protocol failed', 'error');
+            }
         } else if (type === 'research') {
-            if (!settings.apiKey) { alert('API Key Required'); return; }
-            const result = await GeminiService.conductResearch(settings.apiKey, payload.topic);
-            const newDoc: VaultDocument = {
-                id: crypto.randomUUID(),
-                title: result.title,
-                type: 'research',
-                content: result.content,
-                tags: ['ai-research'],
-                createdAt: new Date().toISOString()
-            };
-            setVaultDocs(prev => [newDoc, ...prev]);
-            setCurrentView('vault');
+            if (!settings.apiKey) {
+                showToast('AI API Key Required for research', 'warning');
+                return;
+            }
+            try {
+                showToast(`Conducting deep research on ${payload.topic}...`, 'info');
+                const result = await GeminiService.conductResearch(settings.apiKey, payload.topic);
+                const newDoc: VaultDocument = {
+                    id: crypto.randomUUID(),
+                    title: result.title,
+                    type: 'research',
+                    content: result.content,
+                    tags: ['ai-research'],
+                    createdAt: new Date().toISOString()
+                };
+                setVaultDocs(prev => [newDoc, ...prev]);
+                setCurrentView('vault');
+                showToast(`Intelligence report on ${result.title} archived in Vault`, 'success');
+            } catch (e) {
+                showToast('Research simulation error', 'error');
+            }
         }
     };
 
@@ -103,12 +110,14 @@ const RevloOSAppPage: React.FC = () => {
         const newSession = { id: crypto.randomUUID(), name, createdAt: new Date().toISOString(), leads: [] };
         setSessions(prev => [...prev, newSession]);
         setCurrentSessionId(newSession.id);
+        showToast(`Operation ${name} initialized`, 'success');
     };
     const handleDeleteSession = (id: string) => {
         if (sessions.length <= 1) return;
         const newSessions = sessions.filter(s => s.id !== id);
         setSessions(newSessions);
         if (currentSessionId === id) setCurrentSessionId(newSessions[0].id);
+        showToast('Operation archived', 'info');
     };
     const handleUpdateLead = (updatedLead: Lead) => {
         setSessions(prev => prev.map(s => ({ ...s, leads: s.leads.map(l => l.id === updatedLead.id ? updatedLead : l) })));
@@ -121,14 +130,13 @@ const RevloOSAppPage: React.FC = () => {
             ...s,
             leads: s.leads.map(l => l.id === leadId ? { ...l, status: LeadStatus.CONTACTED, messages: [...(l.messages || []), { id: crypto.randomUUID(), sender: 'user', content, timestamp: 'Now', isRead: true }] } : l)
         })));
+        showToast('Message transmitted', 'success');
     };
 
     const currentSession = sessions.find(s => s.id === currentSessionId) || sessions[0];
 
     return (
         <div className="bg-slate-50 min-h-screen">
-            <CommandPalette isOpen={isCommandOpen} onClose={() => setIsCommandOpen(false)} onCommand={handleCommand} />
-
             <RevloOSLayout currentView={currentView} setCurrentView={setCurrentView}>
                 {currentView === 'dashboard' && <DashboardView leads={allLeads} />}
                 {currentView === 'engine' && (
@@ -150,6 +158,14 @@ const RevloOSAppPage: React.FC = () => {
                 {currentView === 'settings' && <SettingsView settings={settings} onUpdate={setSettings} />}
             </RevloOSLayout>
         </div>
+    );
+};
+
+const RevloOSAppPage: React.FC = () => {
+    return (
+        <ToastProvider>
+            <RevloOSAppPageContent />
+        </ToastProvider>
     );
 };
 

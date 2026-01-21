@@ -8,7 +8,7 @@ export enum LeadStatus {
   OUTREACH_READY = 'OUTREACH_READY',
   CONTACTED = 'CONTACTED',
   CALLED = 'CALLED',
-  REPLIED = 'REPLIED', 
+  REPLIED = 'REPLIED',
   CLOSED_WON = 'CLOSED_WON',
   CLOSED_LOST = 'CLOSED_LOST'
 }
@@ -72,10 +72,10 @@ export interface AgentBehavior {
 }
 
 export interface AgentVoiceConfig {
-    voiceId: string;
-    stability: number;
-    similarityBoost: number;
-    provider: '11labs' | 'playht' | 'deepgram';
+  voiceId: string;
+  stability: number;
+  similarityBoost: number;
+  provider: '11labs' | 'playht' | 'deepgram';
 }
 
 export interface AgentProfile {
@@ -88,6 +88,12 @@ export interface AgentProfile {
   outputContract: AgentOutputContract;
   behavior: AgentBehavior;
   voiceConfig?: AgentVoiceConfig;
+  capabilities: string[];
+  chaining: {
+    nextAgentId: string;
+    trigger: string;
+  }[];
+  memoryType: 'ephemeral' | 'persistent';
   stats: {
     projectsCompleted: number;
     avgSatisfaction: number;
@@ -115,7 +121,7 @@ export interface Lead {
   propensityScore?: number;
   psychologyProfile?: string;
   competitors?: Competitor[];
-  prd?: string; 
+  prd?: string;
   siteStructure?: { [filename: string]: string };
   generatedSiteCode?: string;
   outreachEmailSubject?: string;
@@ -136,13 +142,13 @@ export interface Message {
 }
 
 export interface CallLog {
-    id: string;
-    vapiCallId: string;
-    status: 'queued' | 'ringing' | 'in-progress' | 'completed' | 'failed' | 'no-answer';
-    durationSeconds: number;
-    summary?: string;
-    timestamp: string;
-    recordingUrl?: string;
+  id: string;
+  vapiCallId: string;
+  status: 'queued' | 'ringing' | 'in-progress' | 'completed' | 'failed' | 'no-answer';
+  durationSeconds: number;
+  summary?: string;
+  timestamp: string;
+  recordingUrl?: string;
 }
 
 export interface Competitor {

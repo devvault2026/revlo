@@ -1,4 +1,3 @@
-
 import React, { useState, useEffect, useRef } from 'react';
 import {
     Search, Crosshair, Target, Brain, Code, Send, CheckCircle2,
@@ -7,8 +6,11 @@ import {
 } from 'lucide-react';
 import LeadCard from './LeadCard';
 import WebsiteBuilderView from './WebsiteBuilderView';
+import StrategyEditor from './StrategyEditor';
 import { Lead, LeadStatus, Settings, EngineSession, AgentProfile } from '../types';
 import * as GeminiService from '../services/geminiService';
+import { useToast } from '../context/ToastContext';
+import NeuralLoader from './NeuralLoader';
 
 interface LeadEngineViewProps {
     settings: Settings;
@@ -25,6 +27,7 @@ interface LeadEngineViewProps {
 const LeadEngineView: React.FC<LeadEngineViewProps> = ({
     settings, sessions, currentSessionId, onSwitchSession, onCreateSession, onDeleteSession, leads, setLeads, agents
 }) => {
+    const { showToast } = useToast();
 
     const [ingestMode, setIngestMode] = useState<'auto' | 'enrich' | 'manual'>('auto');
     const [niche, setNiche] = useState(settings.niche);
@@ -46,7 +49,28 @@ const LeadEngineView: React.FC<LeadEngineViewProps> = ({
     const [outreachSent, setOutreachSent] = useState(false);
 
     const selectedLead = leads.find(l => l.id === selectedLeadId);
-    const activeAgent = agents.find(a => a.id === selectedAgentId);
+    const activeAgent = agents.find(a => a.id === selectedAgentId) || agents[0];
+
+    const triggerChain = async (trigger: string) => {
+        if (!activeAgent) return;
+        const chain = activeAgent.chaining?.find(c => c.trigger === trigger);
+        if (chain && chain.nextAgentId) {
+            const nextAgent = agents.find(a => a.id === chain.nextAgentId);
+            if (nextAgent) {
+                setSelectedAgentId(nextAgent.id);
+                showToast(`Neural Handshake: ${nextAgent.name} responding...`, "success");
+
+                // Allow state to settle before next execution
+                await new Promise(r => setTimeout(r, 800));
+
+                if (trigger === 'On Deep Dive Completion') {
+                    handleGenerateStrategy();
+                } else if (trigger === 'On PRD Completion') {
+                    handleBuildSite();
+                }
+            }
+        }
+    };
 
     const runFullPipelineOnLead = async (lead: Lead) => {
         setSelectedLeadId(lead.id);
@@ -99,12 +123,19 @@ const LeadEngineView: React.FC<LeadEngineViewProps> = ({
 
             setLeads(prev => prev.map(l => l.id === currentLeadState.id ? currentLeadState : l));
             await new Promise(r => setTimeout(r, 1000));
+            showToast(`Asset package compiled for ${currentLeadState.name}`, "success");
 
-        } catch (e) { console.error(e); }
+        } catch (e) {
+            console.error(e);
+            showToast("Pipeline execution error", "error");
+        }
     };
 
     const handleAutoScout = async () => {
-        if (!settings.apiKey) return alert("Configure API Key first.");
+        if (!settings.apiKey) {
+            showToast("Configure AI API Key in Settings first.", "warning");
+            return;
+        }
         setLoading(true);
         setLoadingStep(scanMode === 'zone' ? `Scanning Zone ${location}...` : `Scouting ${niche} in ${location}...`);
 
@@ -114,13 +145,16 @@ const LeadEngineView: React.FC<LeadEngineViewProps> = ({
             setLeads(prev => [...prev, ...newLeads]);
 
             if (newLeads.length > 0) {
+                showToast(`Scanned zone successfully. Found ${newLeads.length} prospects.`, "success");
                 setSelectedLeadId(newLeads[0].id);
                 if (autoPipeline) {
                     setLoadingStep("Initializing Auto-Pipeline...");
                     for (const lead of newLeads) { await runFullPipelineOnLead(lead); }
                 }
             }
-        } catch (e) { alert("Failed to scout."); } finally { setLoading(false); setLoadingStep(''); }
+        } catch (e) {
+            showToast("Engine scan failed.", "error");
+        } finally { setLoading(false); setLoadingStep(''); }
     };
 
     const handleDeepDive = async () => {
@@ -139,6 +173,7 @@ const LeadEngineView: React.FC<LeadEngineViewProps> = ({
                 status: LeadStatus.DOSSIER_READY
             };
             setLeads(prev => prev.map(l => l.id === updatedLead.id ? updatedLead : l));
+            await triggerChain('On Deep Dive Completion');
         } catch (e) { console.error(e); } finally { setLoading(false); }
     };
 
@@ -150,6 +185,7 @@ const LeadEngineView: React.FC<LeadEngineViewProps> = ({
             const updatedLead = { ...selectedLead, prd, status: LeadStatus.STRATEGY_READY };
             setLeads(prev => prev.map(l => l.id === updatedLead.id ? updatedLead : l));
             setActiveTab('strategy');
+            await triggerChain('On PRD Completion');
         } catch (e) { console.error(e); } finally { setLoading(false); }
     };
 
@@ -173,33 +209,50 @@ const LeadEngineView: React.FC<LeadEngineViewProps> = ({
             };
             setLeads(prev => prev.map(l => l.id === updatedLead.id ? updatedLead : l));
             setActiveTab('preview');
+            await triggerChain('On Asset Compilation');
         } catch (e) { console.error(e); } finally { setLoading(false); }
     };
 
-    const handleSendOutreach = () => { setOutreachSent(true); alert("Sent!"); };
+    const handleSendOutreach = () => {
+        setOutreachSent(true);
+        showToast("Campaign deployed successfully. Transmitting to leads...", "success");
+    };
 
     return (
-        <div className="flex h-full overflow-hidden relative bg-slate-50">
+        <div className="flex h-full bg-white text-slate-700 overflow-hidden">
             {/* Resizable Sidebar */}
-            <div className={`transition-all duration-300 border-r border-slate-200 bg-white flex flex-col ${isSidebarCollapsed ? 'w-12' : 'w-96'}`}>
+            <div className={`transition-all duration-300 border-r border-slate-200 bg-white flex flex-col h-full ${isSidebarCollapsed ? 'w-20' : 'w-96'}`}>
 
                 {/* Sidebar Header */}
-                <div className="p-3 border-b border-slate-200 bg-slate-50 flex justify-between items-center">
-                    {!isSidebarCollapsed && (
-                        <div className="flex items-center space-x-2">
-                            <span className="text-xs font-bold text-slate-500 uppercase">Session:</span>
-                            <select
-                                value={currentSessionId}
-                                onChange={(e) => onSwitchSession(e.target.value)}
-                                className="bg-transparent text-slate-900 text-xs font-bold focus:outline-none"
-                            >
-                                {sessions.map(s => <option key={s.id} value={s.id}>{s.name}</option>)}
-                            </select>
+                <div className={`border-b border-slate-100 bg-slate-50/30 transition-all duration-300 relative ${isSidebarCollapsed ? 'h-24 flex items-center justify-center p-0' : 'p-8'}`}>
+                    {!isSidebarCollapsed ? (
+                        <div className="animate-in fade-in duration-500">
+                            <div className="flex justify-between items-center mb-6">
+                                <div className="flex items-center gap-2">
+                                    <div className="w-2 h-4 bg-purple-600 rounded-full" />
+                                    <h2 className="text-[10px] font-black text-slate-400 uppercase tracking-[0.2em]">Deployment Index</h2>
+                                </div>
+                                <button onClick={() => setIsSidebarCollapsed(!isSidebarCollapsed)} className="p-2 text-slate-400 hover:text-slate-900 transition-colors">
+                                    <Minimize2 size={16} />
+                                </button>
+                            </div>
+                            <h1 className="text-2xl font-black text-slate-900 tracking-tight leading-none mb-1">Intelligence OS</h1>
+                            <div className="flex items-center gap-2">
+                                <span className="text-[10px] text-slate-400 font-bold uppercase tracking-widest">Session:</span>
+                                <select
+                                    value={currentSessionId}
+                                    onChange={(e) => onSwitchSession(e.target.value)}
+                                    className="bg-transparent text-slate-900 text-[10px] font-black uppercase tracking-widest focus:outline-none cursor-pointer hover:text-purple-600 transition-colors"
+                                >
+                                    {sessions.map(s => <option key={s.id} value={s.id}>{s.name}</option>)}
+                                </select>
+                            </div>
                         </div>
+                    ) : (
+                        <button onClick={() => setIsSidebarCollapsed(!isSidebarCollapsed)} className="w-10 h-10 flex items-center justify-center bg-white border border-slate-200 rounded-xl text-slate-400 hover:text-purple-600 hover:border-purple-200 transition-all shadow-sm">
+                            <Maximize2 size={18} />
+                        </button>
                     )}
-                    <button onClick={() => setIsSidebarCollapsed(!isSidebarCollapsed)} className="text-slate-400 hover:text-slate-600">
-                        {isSidebarCollapsed ? <Maximize2 size={14} /> : <Minimize2 size={14} />}
-                    </button>
                 </div>
 
                 {!isSidebarCollapsed && (
@@ -261,9 +314,12 @@ const LeadEngineView: React.FC<LeadEngineViewProps> = ({
             {/* Main Workspace */}
             <div className="flex-1 flex flex-col bg-slate-50 relative">
                 {loading && (
-                    <div className="absolute inset-0 z-50 bg-white/90 backdrop-blur-sm flex flex-col items-center justify-center">
-                        <Loader2 className="w-12 h-12 text-purple-600 animate-spin mb-4" />
-                        <h3 className="text-xl font-medium text-slate-900">{loadingStep}</h3>
+                    <div className="absolute inset-0 z-50 bg-white/20 backdrop-blur-xl flex flex-col items-center justify-center transition-all duration-500">
+                        <NeuralLoader />
+                        <div className="mt-12 text-center animate-pulse">
+                            <h3 className="text-sm font-black text-slate-900 uppercase tracking-[0.3em] mb-2">Neural Ingestion Active</h3>
+                            <p className="text-[10px] font-bold text-purple-600 uppercase tracking-widest bg-purple-50 px-4 py-1.5 rounded-full border border-purple-100 shadow-sm">{loadingStep}</p>
+                        </div>
                     </div>
                 )}
 
@@ -331,11 +387,15 @@ const LeadEngineView: React.FC<LeadEngineViewProps> = ({
                             )}
 
                             {activeTab === 'strategy' && (
-                                <div className="p-8 overflow-y-auto h-full">
-                                    <div className="max-w-4xl mx-auto bg-white border border-slate-200 p-8 rounded-xl text-sm text-slate-700 whitespace-pre-wrap font-sans shadow-lg leading-relaxed">
-                                        {selectedLead.prd || "Strategy required."}
-                                    </div>
-                                </div>
+                                <StrategyEditor
+                                    content={selectedLead.prd || "# Strategy Required\n\nInitialize the generation protocol to create a Product Requirements Document."}
+                                    apiKey={settings.apiKey}
+                                    agents={agents}
+                                    onSave={(newContent) => {
+                                        setLeads(prev => prev.map(l => l.id === selectedLeadId ? { ...l, prd: newContent } : l));
+                                        showToast("Intelligence Protocol Persisted", "success");
+                                    }}
+                                />
                             )}
 
                             {activeTab === 'preview' && (
@@ -381,12 +441,18 @@ const LeadEngineView: React.FC<LeadEngineViewProps> = ({
                         </div>
                     </>
                 ) : (
-                    <div className="flex-1 flex flex-col items-center justify-center text-slate-400">
-                        <div className="w-24 h-24 bg-white rounded-full shadow-lg flex items-center justify-center mb-6">
-                            <Target size={48} className="text-purple-200" />
+                    <div className="flex-1 flex flex-col items-center justify-center p-12 text-center">
+                        <div className="w-24 h-24 bg-white rounded-full flex items-center justify-center mb-10 border border-slate-100 shadow-2xl">
+                            <Target size={40} className="text-purple-300 animate-pulse" />
                         </div>
-                        <p className="text-xl font-bold text-slate-900">Engine Idle</p>
-                        <p className="text-slate-500 mt-2">Select a target or press <span className="text-slate-700 font-bold bg-slate-200 px-2 py-0.5 rounded border border-slate-300">Ctrl+K</span> to quick scout.</p>
+                        <h2 className="text-xl font-black text-slate-900 uppercase tracking-[0.3em] leading-none mb-4">Engine Inactive</h2>
+                        <p className="max-w-xs mx-auto text-slate-400 font-bold text-sm leading-relaxed uppercase tracking-widest opacity-60">
+                            Select a primary target or press
+                            <span className="text-purple-600 font-black bg-purple-50 px-2.5 py-1 rounded-lg border border-purple-100 mx-1.5 shadow-sm inline-flex items-center gap-1">
+                                ⌘ K
+                            </span>
+                            to initialize research protocols.
+                        </p>
                     </div>
                 )}
             </div>
