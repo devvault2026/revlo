@@ -15,7 +15,12 @@ import {
     Code,
     Users,
     MessageSquare,
+<<<<<<< HEAD
     Calendar
+=======
+    Calendar,
+    IntegrationInstructions
+>>>>>>> 9265eb8a94d6cdfddbfe95b1b1d592e27e2b2fc6
 } from 'lucide-react';
 import { Link } from 'react-router-dom';
 

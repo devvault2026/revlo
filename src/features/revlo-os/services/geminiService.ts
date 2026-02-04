@@ -225,6 +225,7 @@ export const enrichLeadData = async (apiKey: string, lead: Partial<Lead>): Promi
     } catch (e) { return lead; }
 };
 
+<<<<<<< HEAD
 export const analyzeCompetitors = async (apiKey: string, niche: string, location: string): Promise<Competitor[]> => {
     const genAI = getGenAI(apiKey);
     const model = genAI.getGenerativeModel({ model: "gemini-1.5-flash" });
@@ -275,10 +276,22 @@ export const scoreLead = async (apiKey: string, lead: Lead): Promise<{ score: nu
         const jsonMatch = text.match(/\{[\s\S]*\}/);
         return jsonMatch ? JSON.parse(jsonMatch[0]) : { score: 50, psychology: "Standard business owner profile." };
     } catch (e) { return { score: 50, psychology: "Analysis pending." }; }
+=======
+export const analyzeCompetitors = async (apiKey: string, domain: string): Promise<Competitor[]> => {
+    const genAI = getGenAI(apiKey);
+    const model = genAI.getGenerativeModel({ model: "gemini-1.5-flash" });
+    try {
+        const result = await model.generateContent(`Competitors for ${domain}. Return JSON array.`);
+        const text = result.response.text();
+        const jsonMatch = text.match(/\[[\s\S]*\]/);
+        return jsonMatch ? JSON.parse(jsonMatch[0]) : [];
+    } catch (e) { return []; }
+>>>>>>> 9265eb8a94d6cdfddbfe95b1b1d592e27e2b2fc6
 };
 
-export const createPRD = async (apiKey: string, lead: Lead, competitors: Competitor[], agent?: AgentProfile): Promise<string> => {
+export const generateCode = async (apiKey: string, prompt: string, language: string = 'typescript'): Promise<string> => {
     const genAI = getGenAI(apiKey);
+<<<<<<< HEAD
     const model = genAI.getGenerativeModel({ model: "gemini-2.0-flash" });
     try {
         const system = agent ? compileAgentInstruction(agent) : "You are a professional business strategist.";
@@ -343,11 +356,31 @@ export const scoutLeadsStreaming = async (
     scanMode: string,
     onLead: (lead: Partial<Lead>) => void
 ): Promise<Partial<Lead>[]> => {
+=======
+    const model = genAI.getGenerativeModel({ model: "gemini-1.5-flash" });
+    try {
+        const result = await model.generateContent(`Code: ${prompt}. Return raw code only.`);
+        return result.response.text();
+    } catch (e) { return "// Code generation failed."; }
+};
+
+export const refineContent = async (apiKey: string, content: string, tone: string): Promise<string> => {
+    const genAI = getGenAI(apiKey);
+    const model = genAI.getGenerativeModel({ model: "gemini-1.5-flash" });
+    try {
+        const result = await model.generateContent(`Rewrite (${tone}): ${content}`);
+        return result.response.text();
+    } catch (e) { return content; }
+};
+
+export const marketResearch = async (apiKey: string, query: string): Promise<{ title: string; content: string }> => {
+>>>>>>> 9265eb8a94d6cdfddbfe95b1b1d592e27e2b2fc6
     const genAI = getGenAI(apiKey);
     const model = genAI.getGenerativeModel({
-        model: "gemini-2.0-flash",
+        model: "gemini-1.5-flash",
         tools: [{ googleSearch: {} }] as any
     });
+<<<<<<< HEAD
 
     try {
         const prompt = `Search for ${limit} ${niche} businesses in ${location}. 
@@ -453,6 +486,9 @@ export const marketResearch = async (apiKey: string, query: string): Promise<{ t
         tools: [{ googleSearch: {} }] as any
     });
     try {
+=======
+    try {
+>>>>>>> 9265eb8a94d6cdfddbfe95b1b1d592e27e2b2fc6
         const result = await model.generateContent(`Research: ${query}`);
         return { title: query, content: result.response.text() };
     } catch (e) { return { title: query, content: "Research failed." }; }
