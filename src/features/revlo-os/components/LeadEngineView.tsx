@@ -158,11 +158,7 @@ const LeadEngineView: React.FC<LeadEngineViewProps> = ({
                 location,
                 batchSize,
                 scanMode,
-<<<<<<< HEAD
                 async (lead: Partial<Lead>) => {
-=======
-                async (lead) => {
->>>>>>> 9265eb8a94d6cdfddbfe95b1b1d592e27e2b2fc6
                     // INSTANT CALLBACK - Lead appears immediately!
                     foundCount++;
                     setLoadingStep(`Found ${foundCount} prospect${foundCount > 1 ? 's' : ''}... Scanning for more...`);
