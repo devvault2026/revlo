@@ -20,6 +20,7 @@ const TeamPage: React.FC = () => {
             ],
             gradient: 'from-purple-500 to-purple-400',
             initial: 'J',
+            image: '/619228587_1473924384299979_5558935500619533353_n.jpg',
             id: 'LEAD-001'
         },
         {
@@ -37,6 +38,7 @@ const TeamPage: React.FC = () => {
             ],
             gradient: 'from-red-500 to-red-400',
             initial: 'E',
+            image: '/515437137_761690583348698_3741883148247296552_n (1).jpg',
             id: 'LEAD-002'
         },
         {
@@ -54,6 +56,7 @@ const TeamPage: React.FC = () => {
             ],
             gradient: 'from-blue-500 to-blue-400',
             initial: 'N',
+            image: '/594075087_122104441749139887_4262439585304172783_n.jpg',
             id: 'LEAD-003'
         },
     ];
@@ -112,9 +115,13 @@ const TeamPage: React.FC = () => {
                                         <div className="absolute -inset-4 bg-gradient-to-br from-white/10 to-transparent blur-2xl opacity-50" />
                                         <div className={`w-48 h-48 mx-auto lg:mx-0 bg-white/5 backdrop-blur-3xl rounded-3xl border border-white/10 flex items-center justify-center text-white text-6xl font-black italic relative overflow-hidden group`}>
                                             <div className="absolute inset-0 bg-gradient-to-t from-black/60 to-transparent" />
-                                            <span className="relative z-10 group-hover:scale-110 transition-transform duration-500">
-                                                {member.initial}
-                                            </span>
+                                            {member.image ? (
+                                                <img src={member.image} alt={member.name} className="w-full h-full object-cover relative z-10" />
+                                            ) : (
+                                                <span className="relative z-10 group-hover:scale-110 transition-transform duration-500">
+                                                    {member.initial}
+                                                </span>
+                                            )}
                                             {/* Glow effect */}
                                             <div className="absolute top-0 left-0 w-full h-1 bg-gradient-to-r from-transparent via-purple-500 to-transparent opacity-50" />
                                         </div>

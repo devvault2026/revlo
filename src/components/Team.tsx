@@ -11,6 +11,7 @@ const Team: React.FC = () => {
             expertise: ['Growth Strategy', 'Market Analysis', 'Brand Positioning'],
             color: 'text-purple-400',
             initial: 'JS',
+            image: '/619228587_1473924384299979_5558935500619533353_n.jpg',
         },
         {
             name: 'Eric',
@@ -19,6 +20,7 @@ const Team: React.FC = () => {
             expertise: ['Partner Relations', 'Operations', 'Systems Design'],
             color: 'text-red-400',
             initial: 'EO',
+            image: '/515437137_761690583348698_3741883148247296552_n (1).jpg',
         },
         {
             name: 'Noufal',
@@ -27,6 +29,7 @@ const Team: React.FC = () => {
             expertise: ['Lead Generation', 'Digital Marketing', 'Market Expansion'],
             color: 'text-blue-400',
             initial: 'NM',
+            image: '/594075087_122104441749139887_4262439585304172783_n.jpg',
         },
     ];
 
@@ -74,11 +77,15 @@ const Team: React.FC = () => {
                                 </div>
 
                                 {/* Avatar Circle */}
-                                <div className={`w-24 h-24 mb-8 bg-black/40 rounded-3xl flex items-center justify-center border border-white/5 group-hover:scale-105 transition-transform duration-500 relative`}>
+                                <div className={`w-24 h-24 mb-8 bg-black/40 rounded-3xl flex items-center justify-center border border-white/5 group-hover:scale-105 transition-all duration-500 relative overflow-hidden`}>
                                     <div className={`absolute inset-0 rounded-3xl blur-[20px] opacity-20 bg-current ${member.color}`} />
-                                    <span className={`text-4xl font-black italic relative z-10 ${member.color}`}>
-                                        {member.name.charAt(0)}
-                                    </span>
+                                    {member.image ? (
+                                        <img src={member.image} alt={member.name} className="w-full h-full object-cover relative z-10" />
+                                    ) : (
+                                        <span className={`text-4xl font-black italic relative z-10 ${member.color}`}>
+                                            {member.name.charAt(0)}
+                                        </span>
+                                    )}
                                 </div>
 
                                 {/* Name & Role */}
