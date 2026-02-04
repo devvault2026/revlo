@@ -31,6 +31,7 @@ import AdminPaymentsPage from './pages/AdminPaymentsPage';
 import Navigation from './components/Navigation';
 import Footer from './components/Footer';
 import ProtectedRoute from './components/ProtectedRoute';
+import PartnerAgent from './components/PartnerAgent';
 
 
 function App() {
@@ -39,7 +40,7 @@ function App() {
             <ToastProvider>
                 <NotificationProvider>
                     <Router>
-                        <div className="min-h-screen flex flex-col bg-white">
+                        <div className="min-h-screen flex flex-col bg-[#020408]">
                             <AnimatePresence mode="wait">
                                 <Routes>
                                     {/* Public Routes with Navigation & Footer */}
@@ -146,6 +147,7 @@ function App() {
                                     <Route path="*" element={<NotFoundPage />} />
                                 </Routes>
                             </AnimatePresence>
+                            <PartnerAgent />
                         </div>
                     </Router>
                 </NotificationProvider>

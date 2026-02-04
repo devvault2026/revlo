@@ -28,7 +28,7 @@ const Navigation: React.FC = () => {
         { name: 'Home', path: '/' },
         { name: 'Services', path: '/services' },
         { name: 'Team', path: '/team' },
-        user ? { name: 'Revlo OS', path: '/revlo-os' } : { name: 'Login', path: '/login' },
+        user ? { name: 'Partner Portal', path: '/revlo-os' } : { name: 'Login', path: '/login' },
         { name: 'Results', path: '/results' },
     ];
 
@@ -37,20 +37,20 @@ const Navigation: React.FC = () => {
             initial={{ y: -100 }}
             animate={{ y: 0 }}
             className={`fixed top-0 left-0 right-0 z-50 transition-all duration-300 ${isScrolled
-                ? 'bg-white/95 backdrop-blur-xl shadow-lg border-b border-slate-200'
-                : 'bg-white/80 backdrop-blur-md'
+                ? 'bg-[#020408]/80 backdrop-blur-2xl border-b border-white/5'
+                : 'bg-transparent'
                 }`}
         >
             <div className="max-w-7xl mx-auto px-6 lg:px-8">
                 <div className="flex items-center justify-between h-20">
                     {/* Logo */}
                     <Link to="/" className="flex items-center gap-0 group">
-                        <img src="/logo.png" alt="Revlo" className="w-20 h-20 object-contain" />
+                        <img src="/logo.png" alt="Revlo" className="w-20 h-20 object-contain brightness-0 invert" />
                         <div className="flex items-center gap-2 -ml-3">
-                            <span className="text-2xl font-black font-display gradient-text">
+                            <span className="text-2xl font-black font-display text-white italic tracking-tighter">
                                 REVLO
                             </span>
-                            <span className="text-xs font-bold text-slate-400 uppercase tracking-wider">
+                            <span className="text-[8px] font-black text-slate-500 uppercase tracking-[0.3em]">
                                 AGENCY
                             </span>
                         </div>
@@ -67,9 +67,9 @@ const Navigation: React.FC = () => {
                             >
                                 <Link
                                     to={link.path}
-                                    className={`relative font-medium text-sm transition-colors group ${location.pathname === link.path
-                                        ? 'text-purple-600'
-                                        : 'text-slate-600 hover:text-slate-900'
+                                    className={`relative font-black text-[10px] uppercase tracking-[0.2em] transition-colors group ${location.pathname === link.path
+                                        ? 'text-white'
+                                        : 'text-slate-500 hover:text-white'
                                         }`}
                                 >
                                     {link.name}
@@ -326,7 +326,7 @@ const Navigation: React.FC = () => {
                                 <i className="point"></i>
                             </div>
 
-                            <span className="inner">
+                            <span className="inner uppercase tracking-widest text-[10px] font-black italic">
                                 <svg
                                     className="icon"
                                     fill="none"
@@ -339,14 +339,14 @@ const Navigation: React.FC = () => {
                                 >
                                     <polyline points="13.18 1.37 13.18 9.64 21.45 9.64 10.82 22.63 10.82 14.36 2.55 14.36 13.18 1.37" />
                                 </svg>
-                                {user ? 'REVLO OS' : 'LOGIN'}
+                                {user ? 'PARTNER PORTAL' : 'LOGIN'}
                             </span>
                         </Link>
 
                         {/* CTA Button */}
                         <Link to="/contact">
                             <motion.button
-                                className="flex items-center gap-2 px-6 py-3 bg-gradient-rainbow text-white font-semibold rounded-xl shadow-lg hover:shadow-xl hover:-translate-y-0.5 transition-all duration-300"
+                                className="flex items-center gap-2 px-8 py-3 bg-white text-black text-[10px] font-black uppercase tracking-widest rounded-xl shadow-lg hover:shadow-xl hover:-translate-y-0.5 transition-all duration-300 italic"
                                 initial={{ opacity: 0, scale: 0.9 }}
                                 animate={{ opacity: 1, scale: 1 }}
                                 whileHover={{ scale: 1.05 }}
@@ -360,7 +360,7 @@ const Navigation: React.FC = () => {
                     {/* Mobile Menu Button */}
                     <button
                         onClick={toggleMenu}
-                        className="md:hidden p-2 text-slate-600 hover:text-slate-900 transition-colors"
+                        className="md:hidden p-2 text-slate-400 hover:text-white transition-colors"
                     >
                         {isMenuOpen ? <X size={24} /> : <Menu size={24} />}
                     </button>
@@ -374,23 +374,23 @@ const Navigation: React.FC = () => {
                         initial={{ opacity: 0, height: 0 }}
                         animate={{ opacity: 1, height: 'auto' }}
                         exit={{ opacity: 0, height: 0 }}
-                        className="md:hidden bg-white border-t border-slate-200"
+                        className="md:hidden bg-[#020408] border-t border-white/5"
                     >
                         <div className="px-6 py-4 space-y-3">
                             {navLinks.map((link) => (
                                 <Link
                                     key={link.path}
                                     to={link.path}
-                                    className={`block w-full text-left px-4 py-3 rounded-lg font-medium transition-all ${location.pathname === link.path
-                                        ? 'bg-purple-50 text-purple-700'
-                                        : 'text-slate-600 hover:text-slate-900 hover:bg-slate-50'
+                                    className={`block w-full text-left px-4 py-3 rounded-lg font-black uppercase tracking-widest text-[10px] transition-all ${location.pathname === link.path
+                                        ? 'bg-white/5 text-white'
+                                        : 'text-slate-500 hover:text-white'
                                         }`}
                                 >
                                     {link.name}
                                 </Link>
                             ))}
                             <Link to="/contact" className="block">
-                                <button className="w-full px-4 py-3 bg-gradient-rainbow text-white font-semibold rounded-lg shadow-lg">
+                                <button className="w-full px-4 py-3 bg-white text-black font-black uppercase tracking-widest text-[10px] italic rounded-lg shadow-lg">
                                     Book a Call
                                 </button>
                             </Link>

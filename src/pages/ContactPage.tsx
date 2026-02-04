@@ -8,26 +8,33 @@ const ContactPage: React.FC = () => {
             initial={{ opacity: 0 }}
             animate={{ opacity: 1 }}
             exit={{ opacity: 0 }}
-            className="min-h-screen bg-white pt-32 pb-20"
+            className="min-h-screen bg-[#020408] pt-32 pb-20 relative overflow-hidden"
         >
-            <div className="max-w-4xl mx-auto px-6 lg:px-8 mb-12 text-center">
-                <div className="inline-block px-4 py-2 bg-gradient-to-r from-purple-100 to-blue-100 border border-purple-200 rounded-full mb-6">
-                    <span className="text-sm font-bold text-purple-700 uppercase tracking-wide">
-                        Let's Talk
+            {/* Background elements */}
+            <div className="absolute top-0 left-0 w-full h-full bg-grid-white opacity-5 pointer-events-none" />
+            <div className="absolute top-[10%] left-[5%] w-[40%] h-[40%] bg-purple-600/10 blur-[120px] rounded-full animate-pulse" />
+            <div className="absolute bottom-[10%] right-[5%] w-[40%] h-[40%] bg-blue-600/10 blur-[120px] rounded-full animate-pulse" />
+
+            <div className="max-w-4xl mx-auto px-6 lg:px-8 mb-12 text-center relative z-10">
+                <div className="inline-block px-4 py-2 glass rounded-full mb-8">
+                    <span className="text-[10px] font-black text-purple-400 uppercase tracking-[0.4em]">
+                        Let&apos;s Connect
                     </span>
                 </div>
 
-                <h1 className="text-5xl lg:text-6xl font-black font-display mb-6">
-                    Ready to <span className="gradient-text">Scale Your Brand?</span>
+                <h1 className="text-6xl lg:text-8xl font-black font-display mb-10 tracking-tighter italic text-white leading-tight uppercase">
+                    SCALE YOUR <span className="gradient-text-alt block lg:inline">VISION.</span>
                 </h1>
 
-                <p className="text-xl text-slate-600 leading-relaxed">
-                    Stop dreaming about 7-figure ARR. Let's make it your reality. Fill out the form below
-                    and we'll be in touch within 24 hours to schedule your free strategy session.
+                <p className="text-xl text-slate-400 leading-relaxed font-medium">
+                    Stop theorizing and start scaling. Our team is ready to partner with you to automate
+                    your operations and multiply your revenue. Access your strategy session today.
                 </p>
             </div>
 
-            <Contact />
+            <div className="relative z-10">
+                <Contact />
+            </div>
         </motion.div>
     );
 };

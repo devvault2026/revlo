@@ -1,168 +1,180 @@
 import React from 'react';
 import { motion } from 'framer-motion';
-import { Star, Linkedin, Mail, ArrowRight } from 'lucide-react';
+import { Star, Linkedin, Mail, ArrowRight, UserCheck } from 'lucide-react';
 import { Link } from 'react-router-dom';
 
 const TeamPage: React.FC = () => {
     const teamMembers = [
         {
-            name: 'Jaryd',
-            role: 'Brand Identity & Growth Hacker',
-            title: 'Co-Founder & Chief Growth Officer',
-            bio: 'Master of guerrilla growth hacking, brand positioning, and strategic media buying. Jaryd turns unknown brands into household names through unconventional tactics and precision targeting. His ad campaigns consistently deliver 5-10X ROAS.',
-            extendedBio: `With over 15 years in the trenches of digital marketing, Jaryd has pioneered growth strategies for startups and Fortune 500 companies alike. His guerrilla marketing campaigns have generated millions in revenue while operating on shoestring budgets. Jaryd's superpower is seeing opportunities where others see obstacles—turning constraints into competitive advantages.
-
-When he's not crafting viral campaigns, Jaryd is obsessed with A/B testing, behavioral psychology, and finding the next untapped channel before it becomes saturated. He believes the best marketing doesn't feel like marketing at all.`,
-            expertise: ['Brand Identity', 'Growth Hacking', 'Media Buying', 'AI Integration', 'Conversion Optimization', 'Viral Marketing'],
+            name: 'JARYD',
+            role: 'Strategy & Growth Lead',
+            title: 'CO-FOUNDER // CHIEF GROWTH OFFICER',
+            bio: 'Master of strategic branding, market positioning, and direct-response media buying. Jaryd turns unknown brands into market leaders through high-impact strategy.',
+            extendedBio: `With over 15 years of experience in the digital marketing landscape, Jaryd has pioneered growth strategies for both startups and established businesses. His focus is on high-level market positioning and buildling sustainable growth engines that stand out in crowded markets. Jaryd believes that a strong brand foundation is the most valuable asset any modern business can own.`,
+            expertise: ['MARKET POSITIONING', 'GROWTH STRATEGY', 'MEDIA BUYING', 'AI INTEGRATION', 'CONVERSION OPTIMIZATION', 'VIRAL STRATEGY'],
             achievements: [
-                'Scaled 20+ brands from 0 to 7-figures',
-                '5-10X ROAS across all campaigns',
-                'Generated $50M+ in client revenue',
-                'Built viral campaigns with 100M+ impressions',
+                'Scaled 20+ brands to 7-figure revenue',
+                'Consistent 5-10X ROI for partners',
+                'Generated $50M+ in partner revenue',
+                'Built global audience networks',
             ],
             gradient: 'from-purple-500 to-purple-400',
             initial: 'J',
+            id: 'LEAD-001'
         },
         {
-            name: 'Eric',
-            role: 'Head of Sales & Public Appearance',
-            title: 'Co-Founder & Chief Revenue Officer',
-            bio: 'The face of operations and the architect of airtight sales systems. Eric ensures every client interaction is documented, analyzed, and optimized. He feeds the team with rich VOC data and comprehensive profiles that guarantee no opportunity is missed.',
-            extendedBio: `Eric's philosophy is simple: sales is a science, not an art. With a background in enterprise SaaS and consultative selling, he's built repeatable systems that consistently convert prospects into raving fans. His meticulous approach to documentation and client intelligence has become the secret weapon behind Revlo's success.
-
-Eric's Voice of Customer framework captures nuances that most sales teams miss—enabling hyper-personalized outreach that resonates. His mantra: "Every conversation is data. Every objection is an opportunity. Every client is a case study."`,
-            expertise: ['Sales Strategy', 'Client Relations', 'Documentation', 'VOC Analysis', 'Enterprise Sales', 'Negotiation'],
+            name: 'ERIC',
+            role: 'Operations & Partner Lead',
+            title: 'CO-FOUNDER // CHIEF REVENUE OFFICER',
+            bio: 'The architect of airtight sales operations and partner success. Eric ensures every customer interaction is managed with precision and every partner is supported.',
+            extendedBio: `Eric's philosophy is centered on operational excellence and partnership. With a background in business development and consultative sales, he's built repeatable systems that consistently turn leads into long-term partners. His meticulous approach to partner relations and system design ensures that no opportunity is ever missed and every business scales smoothly.`,
+            expertise: ['SALES SYSTEMS', 'PARTNER SUCCESS', 'OPERATIONS DESIGN', 'CUSTOMER INSIGHTS', 'BUSINESS DEVELOPMENT', 'STRATEGIC NEGOTIATION'],
             achievements: [
-                'Closed $100M+ in total contract value',
-                '85% close rate on qualified leads',
-                'Built sales systems for 50+ companies',
+                'Managed $100M+ in contract value',
+                '85% Close Rate Efficiency',
+                'Built 50+ scaling frameworks',
                 'Trained 200+ sales professionals',
             ],
             gradient: 'from-red-500 to-red-400',
             initial: 'E',
+            id: 'LEAD-002'
         },
         {
-            name: 'Noufal',
-            role: 'Lead Generation Specialist',
-            title: 'Co-Founder & Chief Strategy Officer',
-            bio: 'The lead generation mastermind who knows every strategic channel inside and out. Noufal manipulates omnichannel touchpoints to create perfect outcomes, filling pipelines with qualified, ready-to-convert prospects at scale.',
-            extendedBio: `Noufal is a data-driven strategist obsessed with pipeline efficiency. His omnichannel approach isn't about being everywhere—it's about being in the right place at the right time with the right message. Through advanced data enrichment and competitor analysis, he identifies and activates leads before they even know they need you.
-
-His secret? Treating lead generation like reconnaissance. Every data point tells a story. Every channel has a rhythm. Every prospect leaves digital breadcrumbs. Noufal's systems follow those breadcrumbs to deliver leads that close.`,
-            expertise: ['Lead Generation', 'Channel Strategy', 'Data Enrichment', 'Outreach Automation', 'ABM', 'Analytics'],
+            name: 'NOUFAL',
+            role: 'Acquisition & Marketing Lead',
+            title: 'CO-FOUNDER // CHIEF STRATEGY OFFICER',
+            bio: 'The customer acquisition specialist who knows every digital channel inside and out. Noufal manages the systems that bring high-quality leads directly to your business.',
+            extendedBio: `Noufal is a data-driven marketing strategist obsessed with acquisition efficiency. His multi-channel approach isn't just about traffic—it's about finding the right customers at the right moment. Through advanced data analysis and market research, he identifies and activates acquisition channels that deliver high-intent leads consistently and predictably.`,
+            expertise: ['CUSTOMER ACQUISITION', 'MULTI-CHANNEL MARKETING', 'DATA ANALYSIS', 'MARKET RESEARCH', 'DIGITAL STRATEGY', 'PERFORMANCE TRACKING'],
             achievements: [
                 'Generated 500K+ qualified leads',
-                'Built pipelines worth $500M+',
-                'Achieved 40% conversion rates',
-                'Mastered 15+ outreach channels',
+                'Built $500M+ in pipeline value',
+                '40% Average Conversion Lift',
+                'Expertise in 15+ marketing channels',
             ],
             gradient: 'from-blue-500 to-blue-400',
             initial: 'N',
+            id: 'LEAD-003'
         },
     ];
-
-    const gradientColors = {
-        'from-purple-500 to-purple-400': 'bg-purple-600',
-        'from-red-500 to-red-400': 'bg-red-600',
-        'from-blue-500 to-blue-400': 'bg-blue-600',
-    };
 
     return (
         <motion.div
             initial={{ opacity: 0 }}
             animate={{ opacity: 1 }}
             exit={{ opacity: 0 }}
-            className="min-h-screen bg-white pt-32 pb-20"
+            className="min-h-screen bg-[#020408] pt-40 pb-20 relative overflow-hidden"
         >
-            <div className="max-w-7xl mx-auto px-6 lg:px-8">
+            {/* Background complexity */}
+            <div className="absolute top-0 left-0 w-full h-full bg-grid-white opacity-5 pointer-events-none" />
+            <div className="absolute top-[-10%] right-[-10%] w-[60%] h-[60%] bg-purple-900/20 blur-[150px] rounded-full" />
+            <div className="absolute bottom-[-10%] left-[-10%] w-[60%] h-[60%] bg-blue-900/20 blur-[150px] rounded-full" />
+
+            <div className="max-w-7xl mx-auto px-6 lg:px-8 relative z-10">
                 {/* Header */}
                 <motion.div
                     initial={{ opacity: 0, y: 30 }}
                     animate={{ opacity: 1, y: 0 }}
-                    transition={{ duration: 0.6 }}
-                    className="text-center max-w-4xl mx-auto mb-20"
+                    transition={{ duration: 0.8 }}
+                    className="text-center max-w-4xl mx-auto mb-32"
                 >
-                    <div className="inline-block px-4 py-2 bg-gradient-to-r from-purple-100 to-blue-100 border border-purple-200 rounded-full mb-6">
-                        <span className="text-sm font-bold text-purple-700 uppercase tracking-wide">
-                            The Dream Team
+                    <div className="inline-block px-4 py-2 glass rounded-full mb-8">
+                        <span className="text-[10px] font-black text-purple-400 uppercase tracking-[0.4em]">
+                            The Founders
                         </span>
                     </div>
 
-                    <h1 className="text-5xl lg:text-6xl font-black font-display mb-6">
-                        Meet The <span className="gradient-text-alt">Perfect System</span>
+                    <h1 className="text-6xl lg:text-8xl font-black font-display mb-10 tracking-tighter italic text-white leading-tight">
+                        YOUR GROWTH <span className="gradient-text-alt">PARTNERS.</span>
                     </h1>
 
-                    <p className="text-xl text-slate-600 leading-relaxed">
-                        40+ years combined experience across all marketing lanes, industries, and tactics.
-                        Each member is a specialist in their domain, working in perfect harmony to scale your business.
+                    <p className="text-xl text-slate-400 leading-relaxed font-medium">
+                        40+ years of combined experience across every major industry. Each founder is a specialist
+                        dedicated to the success of our partners. We don&apos;t just work for you—we work with you.
                     </p>
                 </motion.div>
 
                 {/* Team Members */}
-                <div className="space-y-20">
+                <div className="space-y-40">
                     {teamMembers.map((member, index) => (
                         <motion.div
                             key={index}
-                            initial={{ opacity: 0, y: 30 }}
+                            initial={{ opacity: 0, y: 50 }}
                             whileInView={{ opacity: 1, y: 0 }}
-                            transition={{ duration: 0.6, delay: index * 0.1 }}
+                            transition={{ duration: 0.8 }}
                             viewport={{ once: true }}
-                            className="bg-slate-50 rounded-3xl p-8 lg:p-12 border-2 border-slate-200 hover:shadow-2xl transition-all duration-300"
+                            className="relative"
                         >
-                            <div className="grid lg:grid-cols-3 gap-12">
-                                {/* Left Column - Profile */}
+                            <div className="grid lg:grid-cols-3 gap-20 items-center">
+                                {/* Left Column - Lead Profile */}
                                 <div className="text-center lg:text-left">
-                                    <div className={`w-32 h-32 mx-auto lg:mx-0 mb-6 bg-gradient-to-br ${member.gradient} rounded-full flex items-center justify-center text-white text-5xl font-black shadow-lg`}>
-                                        {member.initial}
+                                    <div className="relative inline-block mb-8 text-center lg:text-left">
+                                        <div className="absolute -inset-4 bg-gradient-to-br from-white/10 to-transparent blur-2xl opacity-50" />
+                                        <div className={`w-48 h-48 mx-auto lg:mx-0 bg-white/5 backdrop-blur-3xl rounded-3xl border border-white/10 flex items-center justify-center text-white text-6xl font-black italic relative overflow-hidden group`}>
+                                            <div className="absolute inset-0 bg-gradient-to-t from-black/60 to-transparent" />
+                                            <span className="relative z-10 group-hover:scale-110 transition-transform duration-500">
+                                                {member.initial}
+                                            </span>
+                                            {/* Glow effect */}
+                                            <div className="absolute top-0 left-0 w-full h-1 bg-gradient-to-r from-transparent via-purple-500 to-transparent opacity-50" />
+                                        </div>
                                     </div>
 
-                                    <h2 className="text-3xl font-black font-display mb-2">
-                                        {member.name}
-                                    </h2>
-                                    <p className="text-lg text-slate-600 font-semibold mb-1">
-                                        {member.role}
-                                    </p>
-                                    <p className="text-sm text-slate-500 mb-6">
-                                        {member.title}
-                                    </p>
+                                    <div className="space-y-2 mb-8">
+                                        <div className="text-[10px] font-black text-slate-600 uppercase tracking-[0.4em] mb-2">{member.id}</div>
+                                        <h2 className="text-5xl font-black font-display italic text-white tracking-tighter uppercase">
+                                            {member.name}
+                                        </h2>
+                                        <p className="text-xl text-purple-400 font-black italic tracking-tight uppercase">
+                                            {member.role}
+                                        </p>
+                                        <p className="text-[10px] text-slate-500 font-black uppercase tracking-[0.2em]">
+                                            {member.title}
+                                        </p>
+                                    </div>
 
                                     {/* Expertise Tags */}
-                                    <div className="flex flex-wrap gap-2 justify-center lg:justify-start mb-6">
+                                    <div className="flex flex-wrap gap-2 justify-center lg:justify-start mb-10">
                                         {member.expertise.map((skill, skillIndex) => (
                                             <span
                                                 key={skillIndex}
-                                                className={`px-3 py-1.5 text-xs font-semibold text-white ${gradientColors[member.gradient as keyof typeof gradientColors]} rounded-lg`}
+                                                className="px-3 py-1.5 text-[8px] font-black text-white bg-white/5 border border-white/10 rounded-lg uppercase tracking-widest hover:bg-white/10 transition-colors"
                                             >
                                                 {skill}
                                             </span>
                                         ))}
                                     </div>
 
-                                    {/* Contact Buttons */}
-                                    <div className="flex gap-3 justify-center lg:justify-start">
-                                        <button className="p-3 bg-white border-2 border-slate-200 rounded-xl hover:border-slate-300 transition-all">
-                                            <Linkedin className="w-5 h-5 text-slate-600" />
+                                    {/* Social Node Links */}
+                                    <div className="flex gap-4 justify-center lg:justify-start">
+                                        <button className="w-12 h-12 glass rounded-2xl flex items-center justify-center border border-white/10 hover:border-white/30 transition-all text-slate-400 hover:text-white">
+                                            <Linkedin className="w-5 h-5" />
                                         </button>
-                                        <button className="p-3 bg-white border-2 border-slate-200 rounded-xl hover:border-slate-300 transition-all">
-                                            <Mail className="w-5 h-5 text-slate-600" />
+                                        <button className="w-12 h-12 glass rounded-2xl flex items-center justify-center border border-white/10 hover:border-white/30 transition-all text-slate-400 hover:text-white">
+                                            <Mail className="w-5 h-5" />
                                         </button>
                                     </div>
                                 </div>
 
-                                {/* Middle Column - Bio */}
-                                <div className="lg:col-span-2 space-y-6">
-                                    <p className="text-lg text-slate-700 leading-relaxed whitespace-pre-line">
-                                        {member.extendedBio}
-                                    </p>
+                                {/* Right 2 Columns - Info */}
+                                <div className="lg:col-span-2">
+                                    <div className="bg-white/5 backdrop-blur-3xl rounded-[48px] p-8 lg:p-12 border border-white/5 relative overflow-hidden group">
+                                        <div className="absolute top-0 right-0 p-8">
+                                            <div className="text-[10px] font-black text-slate-700 uppercase tracking-[0.4em]">PARTNERSHIP FOCUS</div>
+                                        </div>
 
-                                    {/* Achievements */}
-                                    <div>
-                                        <h3 className="font-bold text-lg mb-4">Key Achievements:</h3>
-                                        <div className="grid md:grid-cols-2 gap-4">
+                                        <p className="text-xl text-slate-400 leading-relaxed font-medium mb-12 italic">
+                                            &quot;{member.extendedBio}&quot;
+                                        </p>
+
+                                        {/* Achievements Grid */}
+                                        <div className="grid md:grid-cols-2 gap-6">
                                             {member.achievements.map((achievement, i) => (
-                                                <div key={i} className="flex items-start gap-3 bg-white rounded-xl p-4 border border-slate-200">
-                                                    <Star className="w-5 h-5 text-yellow-500 mt-0.5 flex-shrink-0" />
-                                                    <span className="text-slate-700">{achievement}</span>
+                                                <div key={i} className="flex items-center gap-6 p-6 glass rounded-2xl border border-white/5 group-hover:border-white/10 transition-all">
+                                                    <div className="w-10 h-10 rounded-xl bg-purple-500/10 flex items-center justify-center">
+                                                        <UserCheck className="w-4 h-4 text-purple-400" />
+                                                    </div>
+                                                    <span className="text-white text-xs font-black uppercase tracking-widest leading-loose">{achievement}</span>
                                                 </div>
                                             ))}
                                         </div>
@@ -173,44 +185,39 @@ His secret? Treating lead generation like reconnaissance. Every data point tells
                     ))}
                 </div>
 
-                {/* Team Philosophy */}
+                {/* Bottom Synergy Block */}
                 <motion.div
-                    initial={{ opacity: 0, y: 30 }}
-                    whileInView={{ opacity: 1, y: 0 }}
-                    transition={{ duration: 0.6 }}
+                    initial={{ opacity: 0, scale: 0.95 }}
+                    whileInView={{ opacity: 1, scale: 1 }}
                     viewport={{ once: true }}
-                    className="mt-20 bg-gradient-to-r from-purple-50 to-blue-50 border-2 border-purple-200 rounded-3xl p-12"
+                    className="mt-40 relative group"
                 >
-                    <div className="text-center max-w-4xl mx-auto">
-                        <div className="inline-flex p-4 bg-gradient-rainbow rounded-full text-white shadow-lg mb-6">
-                            <Star className="w-8 h-8" />
+                    <div className="absolute inset-0 bg-gradient-to-r from-purple-500/20 to-blue-500/20 blur-[100px] opacity-30" />
+
+                    <div className="bg-white/5 backdrop-blur-3xl border border-white/5 rounded-[64px] p-16 lg:p-24 text-center relative overflow-hidden">
+                        <div className="absolute top-0 left-0 w-full h-full bg-grid-white opacity-5" />
+
+                        <div className="relative z-10 max-w-4xl mx-auto">
+                            <h2 className="text-5xl lg:text-7xl font-black font-display mb-10 tracking-tighter italic text-white leading-tight">
+                                THE ELITE <span className="gradient-text-alt">TEAM.</span>
+                            </h2>
+
+                            <p className="text-xl text-slate-400 leading-relaxed mb-12 font-medium">
+                                Jaryd&apos;s branding strategies lead into Eric&apos;s operational execution, fueled by Noufal&apos;s acquisition systems.
+                                We are a cohesive team built to scale your business as if it were our own.
+                            </p>
+
+                            <Link to="/contact">
+                                <motion.button
+                                    whileHover={{ scale: 1.05 }}
+                                    whileTap={{ scale: 0.95 }}
+                                    className="px-12 py-6 bg-white text-black text-[12px] font-black uppercase tracking-[0.4em] rounded-2xl hover:bg-slate-200 transition-all duration-300 flex items-center gap-4 mx-auto italic"
+                                >
+                                    BOOK A STRATEGY CALL
+                                    <ArrowRight className="w-5 h-5" />
+                                </motion.button>
+                            </Link>
                         </div>
-
-                        <h2 className="text-4xl font-black font-display mb-6">
-                            Combined, We're the Perfect System
-                        </h2>
-
-                        <p className="text-lg text-slate-700 leading-relaxed mb-8">
-                            Our synergy isn't accidental—it's engineered. Jaryd's growth hacking feeds Eric's sales
-                            intelligence, which informs Noufal's targeting strategy, creating a self-reinforcing cycle
-                            of exponential growth. Add our proprietary Revlo OS to the mix, and you have an unstoppable
-                            force that consistently scales businesses well above 7-figure ARR.
-                        </p>
-
-                        <p className="text-xl font-bold text-slate-900 mb-8">
-                            And that's not a pipe dream—it's our track record.
-                        </p>
-
-                        <Link to="/contact">
-                            <motion.button
-                                whileHover={{ scale: 1.05, y: -2 }}
-                                whileTap={{ scale: 0.95 }}
-                                className="px-8 py-4 bg-gradient-rainbow text-white font-bold rounded-xl shadow-xl hover:shadow-2xl transition-all duration-300 inline-flex items-center gap-2"
-                            >
-                                Work With Our Team
-                                <ArrowRight className="w-5 h-5" />
-                            </motion.button>
-                        </Link>
                     </div>
                 </motion.div>
             </div>

@@ -35,27 +35,27 @@ const LoginPage: React.FC = () => {
 
     return (
         <AuthLayout
-            title="Accelerate Growth"
-            subtitle="Access the world's most advanced AI growth protocol and scale with REVLO OS."
+            title="Scale Your Potential"
+            subtitle="Access our partner portal to manage your growth strategy and track real-time sales intelligence."
             testimonial={{
-                text: "Revlo OS actually delivers. Our outreach efficiency quadrupled in months.",
+                text: "The Revlo Partner Portal gives us total transparency. Our revenue has never been more predictable.",
                 author: "Marcus Chen",
                 role: "CRO at SaaS Flow"
             }}
             features={[
-                "AI Lead Sourcing",
-                "Neural Content",
-                "Real-time Pipeline",
-                "Guardian Security"
+                "Managed Growth",
+                "Brand Authority",
+                "Sales Intelligence",
+                "Data Privacy"
             ]}
         >
             <div className="mb-8">
                 <div className="flex items-center gap-2 mb-2">
                     <ShieldCheck className="w-4 h-4 text-purple-600" />
-                    <span className="text-[9px] font-black text-purple-600 uppercase tracking-[0.2em]">Secure Portal</span>
+                    <span className="text-[9px] font-black text-purple-600 uppercase tracking-[0.2em]">Partner Portal</span>
                 </div>
                 <h2 className="text-3xl font-black text-slate-900 tracking-tight mb-2">Welcome Back</h2>
-                <p className="text-sm text-slate-500 font-medium">Initialize your session to continue.</p>
+                <p className="text-sm text-slate-500 font-medium">Enter the partner portal to continue.</p>
             </div>
 
             {authError && (
@@ -74,7 +74,7 @@ const LoginPage: React.FC = () => {
 
             <form onSubmit={handleSubmit(onSubmit)} className="space-y-4">
                 <div className="space-y-1.5">
-                    <label className="text-[10px] font-black text-slate-400 uppercase tracking-widest ml-1">Email Identifier</label>
+                    <label className="text-[10px] font-black text-slate-400 uppercase tracking-widest ml-1">Email Address</label>
                     <div className="relative group">
                         <Mail className="absolute left-4 top-1/2 -translate-y-1/2 w-4 h-4 text-slate-300 group-focus-within:text-purple-500 transition-colors" />
                         <input
@@ -89,9 +89,9 @@ const LoginPage: React.FC = () => {
 
                 <div className="space-y-1.5">
                     <div className="flex justify-between items-center ml-1">
-                        <label className="text-[10px] font-black text-slate-400 uppercase tracking-widest">Security Phrase</label>
+                        <label className="text-[10px] font-black text-slate-400 uppercase tracking-widest">Password</label>
                         <Link to="/forgot-password" className="text-[9px] font-black text-purple-600 hover:text-purple-700 uppercase tracking-widest transition-colors">
-                            Lost?
+                            Forgot?
                         </Link>
                     </div>
                     <div className="relative group">
@@ -115,7 +115,7 @@ const LoginPage: React.FC = () => {
                         <Loader2 className="w-4 h-4 animate-spin" />
                     ) : (
                         <>
-                            Initialize OS
+                            Enter Portal
                             <ArrowRight className="w-3.5 h-3.5 group-hover:translate-x-1 transition-transform" />
                         </>
                     )}

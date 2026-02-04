@@ -6,100 +6,100 @@ const Team: React.FC = () => {
     const teamMembers = [
         {
             name: 'Jaryd',
-            role: 'Brand Identity & Growth Hacker',
-            bio: 'Master of guerrilla growth hacking, brand positioning, and strategic media buying. Jaryd turns unknown brands into household names through unconventional tactics and precision targeting. His ad campaigns consistently deliver 5-10X ROAS.',
-            expertise: ['Brand Identity', 'Growth Hacking', 'Media Buying', 'AI Integration'],
-            gradient: 'from-purple-500 to-purple-400',
-            initial: 'J',
+            role: 'Strategy & Growth Lead',
+            bio: 'A master of building sustainable growth engines. Jaryd focuses on high-level strategy and market positioning to ensure your business stands out and scales rapidly.',
+            expertise: ['Growth Strategy', 'Market Analysis', 'Brand Positioning'],
+            color: 'text-purple-400',
+            initial: 'JS',
         },
         {
             name: 'Eric',
-            role: 'Head of Sales & Public Appearance',
-            bio: 'The face of operations and the architect of airtight sales systems. Eric ensures every client interaction is documented, analyzed, and optimized. He feeds the team with rich VOC data and comprehensive profiles that guarantee no opportunity is missed.',
-            expertise: ['Sales Strategy', 'Client Relations', 'Documentation', 'VOC Analysis'],
-            gradient: 'from-red-500 to-red-400',
-            initial: 'E',
+            role: 'Operations & Partner Lead',
+            bio: 'Dedicated to ensuring your operations run like clockwork. Eric manages the systems and communication protocols that keep our partnership efficient and results-oriented.',
+            expertise: ['Partner Relations', 'Operations', 'Systems Design'],
+            color: 'text-red-400',
+            initial: 'EO',
         },
         {
             name: 'Noufal',
-            role: 'Lead Generation Specialist',
-            bio: 'The lead generation mastermind who knows every strategic channel inside and out. Noufal manipulates omnichannel touchpoints to create perfect outcomes, filling pipelines with qualified, ready-to-convert prospects at scale.',
-            expertise: ['Lead Generation', 'Channel Strategy', 'Data Enrichment', 'Outreach Automation'],
-            gradient: 'from-blue-500 to-blue-400',
-            initial: 'N',
+            role: 'Acquisition & Marketing Lead',
+            bio: 'The lead generation specialist. Noufal manages the customer acquisition channels that bring high-quality leads directly to your business every single day.',
+            expertise: ['Lead Generation', 'Digital Marketing', 'Market Expansion'],
+            color: 'text-blue-400',
+            initial: 'NM',
         },
     ];
 
-    const gradientColors = {
-        'from-purple-500 to-purple-400': 'bg-purple-600',
-        'from-red-500 to-red-400': 'bg-red-600',
-        'from-blue-500 to-blue-400': 'bg-blue-600',
-    };
-
     return (
-        <section id="team" className="py-24 bg-white">
-            <div className="max-w-7xl mx-auto px-6 lg:px-8">
+        <section id="team" className="py-32 bg-[#020408] relative">
+            <div className="max-w-7xl mx-auto px-6 lg:px-8 relative z-10">
                 {/* Section Header */}
                 <motion.div
                     initial={{ opacity: 0, y: 30 }}
                     whileInView={{ opacity: 1, y: 0 }}
-                    transition={{ duration: 0.6 }}
                     viewport={{ once: true }}
-                    className="text-center max-w-3xl mx-auto mb-16"
+                    className="text-center max-w-3xl mx-auto mb-20"
                 >
-                    <div className="inline-block px-4 py-2 bg-gradient-to-r from-purple-100 to-blue-100 border border-purple-200 rounded-full mb-6">
-                        <span className="text-sm font-bold text-purple-700 uppercase tracking-wide">
-                            The Dream Team
+                    <div className="inline-block px-4 py-2 glass rounded-full mb-8">
+                        <span className="text-[10px] font-black text-purple-400 uppercase tracking-[0.4em]">
+                            Our Core Team
                         </span>
                     </div>
 
-                    <h2 className="text-4xl lg:text-5xl font-black font-display mb-6">
-                        Meet The <span className="gradient-text-alt">Perfect System</span>
+                    <h2 className="text-5xl lg:text-7xl font-black font-display mb-8 tracking-tighter italic text-white leading-none">
+                        YOUR GROWTH <span className="gradient-text-alt">PARTNERS.</span>
                     </h2>
 
-                    <p className="text-xl text-slate-600 leading-relaxed">
-                        40+ years combined experience across all marketing lanes, industries, and tactics.
-                        Each member is a specialist in their domain, working in perfect harmony.
+                    <p className="text-xl text-slate-400 leading-relaxed font-medium">
+                        40+ years of combined experience in business development. We are not just service providers;
+                        we are an extension of your own team dedicated to your success.
                     </p>
                 </motion.div>
 
                 {/* Team Grid */}
-                <div className="grid md:grid-cols-2 lg:grid-cols-3 gap-8 mb-16">
+                <div className="grid md:grid-cols-2 lg:grid-cols-3 gap-8">
                     {teamMembers.map((member, index) => (
                         <motion.div
                             key={index}
-                            initial={{ opacity: 0, y: 30 }}
-                            whileInView={{ opacity: 1, y: 0 }}
+                            initial={{ opacity: 0, scale: 0.9 }}
+                            whileInView={{ opacity: 1, scale: 1 }}
                             transition={{ duration: 0.5, delay: index * 0.1 }}
                             viewport={{ once: true }}
-                            whileHover={{ y: -8 }}
                             className="group"
                         >
-                            <div className="h-full bg-white rounded-2xl p-8 border border-slate-200 hover:shadow-2xl transition-all duration-300">
-                                {/* Avatar */}
-                                <div className={`w-24 h-24 mx-auto mb-6 bg-gradient-to-br ${member.gradient} rounded-full flex items-center justify-center text-white text-4xl font-black shadow-lg`}>
-                                    {member.initial}
+                            <div className="h-full bg-white/5 backdrop-blur-3xl rounded-[32px] p-8 border border-white/5 hover:border-white/10 transition-all duration-500 relative overflow-hidden">
+                                {/* Operator Badge */}
+                                <div className="absolute top-6 right-6 text-[10px] font-black text-slate-600 group-hover:text-slate-400 transition-colors uppercase tracking-widest">
+                                    {member.initial} / TEAM
+                                </div>
+
+                                {/* Avatar Circle */}
+                                <div className={`w-24 h-24 mb-8 bg-black/40 rounded-3xl flex items-center justify-center border border-white/5 group-hover:scale-105 transition-transform duration-500 relative`}>
+                                    <div className={`absolute inset-0 rounded-3xl blur-[20px] opacity-20 bg-current ${member.color}`} />
+                                    <span className={`text-4xl font-black italic relative z-10 ${member.color}`}>
+                                        {member.name.charAt(0)}
+                                    </span>
                                 </div>
 
                                 {/* Name & Role */}
-                                <h3 className="text-2xl font-bold text-center mb-2">
+                                <h3 className="text-2xl font-black mb-1 text-white italic tracking-tight">
                                     {member.name}
                                 </h3>
-                                <p className="text-slate-600 text-center font-semibold mb-4">
+                                <div className={`text-[10px] font-black uppercase tracking-[0.2em] mb-6 ${member.color}`}>
                                     {member.role}
-                                </p>
+                                </div>
 
                                 {/* Bio */}
-                                <p className="text-slate-600 leading-relaxed mb-6">
+                                <p className="text-slate-500 text-sm font-medium leading-relaxed mb-8 h-20 overflow-hidden">
                                     {member.bio}
                                 </p>
 
                                 {/* Expertise Tags */}
-                                <div className="flex flex-wrap gap-2">
+                                <div className="flex flex-wrap gap-2 pt-6 border-t border-white/5">
                                     {member.expertise.map((skill, skillIndex) => (
                                         <span
                                             key={skillIndex}
-                                            className={`px-3 py-1.5 text-xs font-semibold text-white ${gradientColors[member.gradient as keyof typeof gradientColors]} rounded-lg`}
+                                            className="px-3 py-1 text-[8px] font-black text-slate-400 border border-white/5 rounded-full uppercase tracking-tighter"
                                         >
                                             {skill}
                                         </span>
@@ -110,33 +110,32 @@ const Team: React.FC = () => {
                     ))}
                 </div>
 
-                {/* Philosophy Statement */}
+                {/* High-Level Philosophy */}
                 <motion.div
-                    initial={{ opacity: 0, y: 30 }}
+                    initial={{ opacity: 0, y: 40 }}
                     whileInView={{ opacity: 1, y: 0 }}
-                    transition={{ duration: 0.6 }}
+                    transition={{ duration: 0.8 }}
                     viewport={{ once: true }}
-                    className="bg-gradient-to-r from-purple-50 to-blue-50 border-2 border-purple-200 rounded-2xl p-12 text-center"
+                    className="mt-20 p-12 glass rounded-[48px] border border-white/10 text-center relative overflow-hidden"
                 >
-                    <div className="inline-flex p-4 bg-gradient-rainbow rounded-full text-white shadow-lg mb-6">
-                        <Star className="w-8 h-8" />
+                    <div className="absolute inset-0 bg-gradient-to-r from-purple-500/5 via-blue-500/5 to-red-500/5 animate-pulse" />
+
+                    <div className="relative z-10">
+                        <h3 className="text-3xl lg:text-5xl font-black font-display mb-8 text-white italic tracking-tighter">
+                            THE <span className="gradient-text">POWER OF THREE.</span>
+                        </h3>
+                        <p className="text-xl text-slate-400 leading-relaxed max-w-4xl mx-auto font-medium">
+                            Our collective expertise ensures that every aspect of your growth is covered.
+                            From the initial strategy and branding to the daily operations and lead acquisition,
+                            we work in sync to turn your business into a market leader. This isn&apos;t just
+                            consulting. This is a dedicated partnership built for scale.
+                        </p>
                     </div>
-
-                    <h3 className="text-3xl font-black font-display mb-6">
-                        Combined, We're the Perfect System
-                    </h3>
-
-                    <p className="text-lg text-slate-700 leading-relaxed max-w-4xl mx-auto">
-                        Our synergy isn't accidental—it's engineered. Jaryd's growth hacking feeds Eric's sales
-                        intelligence, which informs Noufal's targeting strategy, creating a self-reinforcing cycle
-                        of exponential growth. Add our proprietary Revlo OS to the mix, and you have an unstoppable
-                        force that consistently scales businesses well above 7-figure ARR. And that's not a pipe
-                        dream—it's our track record.
-                    </p>
                 </motion.div>
             </div>
         </section>
     );
 };
+
 
 export default Team;

@@ -1,44 +1,44 @@
 import React from 'react';
 import { motion } from 'framer-motion';
-import { Search, Database, BarChart3, FileText, MessageSquare, Zap, Calendar } from 'lucide-react';
+import { Search, Database, BarChart3, FileText, MessageSquare, Zap, Target, Activity, Share2, ShieldCheck, TrendingUp, Handshake } from 'lucide-react';
 
 const RevloOS: React.FC = () => {
     const features = [
         {
-            icon: <Search className="w-7 h-7" />,
-            title: 'Intelligent Sourcing',
-            description: 'AI-powered lead discovery across multiple channels. Revlo OS identifies your ideal prospects before your competitors even know they exist.',
-            gradient: 'from-purple-500 to-purple-400',
+            icon: <Search className="w-6 h-6" />,
+            title: 'Strategic Discovery',
+            description: 'AI-powered sourcing engines that scan multiple market layers to identify high-intent prospects before they enter the public market.',
+            color: 'text-purple-400',
         },
         {
-            icon: <Database className="w-7 h-7" />,
-            title: 'Data Enrichment',
-            description: 'Transform basic contact info into comprehensive profiles. Every lead comes with behavioral data, intent signals, and actionable insights.',
-            gradient: 'from-red-500 to-red-400',
+            icon: <Activity className="w-6 h-6" />,
+            title: 'Market Intelligence',
+            description: 'Proprietary data enrichment that transforms surface-level signals into comprehensive, high-resolution business profiles.',
+            color: 'text-blue-400',
         },
         {
-            icon: <BarChart3 className="w-7 h-7" />,
-            title: 'Competitor Analysis',
-            description: 'Cross-reference your prospects with competitor data. Know exactly what\'s working in your market and position yourself strategically.',
-            gradient: 'from-blue-500 to-blue-400',
+            icon: <Target className="w-6 h-6" />,
+            title: 'Competitive Analysis',
+            description: 'Continuous market benchmarking to ensure your brand positioning remains the undisputed leader in your category.',
+            color: 'text-red-400',
         },
         {
-            icon: <FileText className="w-7 h-7" />,
-            title: 'Asset Creation',
-            description: 'Automatically generate personalized outreach assets, email sequences, and content tailored to each prospect\'s pain points and interests.',
-            gradient: 'from-purple-500 to-purple-400',
+            icon: <Share2 className="w-6 h-6" />,
+            title: 'Creative Production',
+            description: 'Dynamic generation of multi-channel outreach assets, personalized at the core for maximum conversion and engagement.',
+            color: 'text-purple-400',
         },
         {
-            icon: <MessageSquare className="w-7 h-7" />,
-            title: 'Agent Nurturing',
-            description: 'AI agents handle inbound and outbound communication. Smart follow-ups, objection handling, and meeting scheduling—all automated.',
-            gradient: 'from-red-500 to-red-400',
+            icon: <Handshake className="w-6 h-6" />,
+            title: 'Sales Automation',
+            description: 'Managed AI systems handling the entire qualification loop, from initial touch to finalized appointment scheduling.',
+            color: 'text-blue-400',
         },
         {
-            icon: <Zap className="w-7 h-7" />,
-            title: 'Omnichannel Outreach',
-            description: 'Coordinate email, SMS, LinkedIn, and more from one platform. Revlo OS ensures consistent messaging and perfect timing across all touchpoints.',
-            gradient: 'from-blue-500 to-blue-400',
+            icon: <TrendingUp className="w-6 h-6" />,
+            title: 'Omnichannel Growth',
+            description: 'Coordinated execution across email, social, and mobile channels with real-time feedback and performance optimization.',
+            color: 'text-red-400',
         },
     ];
 
@@ -50,92 +50,99 @@ const RevloOS: React.FC = () => {
     };
 
     return (
-        <section id="revlo-os" className="py-24 bg-slate-50">
-            <div className="max-w-7xl mx-auto px-6 lg:px-8">
+        <section id="revlo-os" className="py-32 bg-[#020408] relative overflow-hidden">
+            {/* Background elements */}
+            <div className="absolute top-0 right-0 w-[500px] h-[500px] bg-purple-600/5 rounded-full blur-[120px] -mr-64 -mt-64" />
+            <div className="absolute bottom-0 left-0 w-[500px] h-[500px] bg-blue-600/5 rounded-full blur-[120px] -ml-64 -mb-64" />
+
+            <div className="max-w-7xl mx-auto px-6 lg:px-8 relative z-10">
                 {/* Section Header */}
                 <motion.div
                     initial={{ opacity: 0, y: 30 }}
                     whileInView={{ opacity: 1, y: 0 }}
-                    transition={{ duration: 0.6 }}
                     viewport={{ once: true }}
-                    className="text-center max-w-3xl mx-auto mb-16"
+                    className="text-center max-w-4xl mx-auto mb-20"
                 >
-                    <div className="inline-block px-4 py-2 bg-gradient-to-r from-purple-100 to-blue-100 border border-purple-200 rounded-full mb-6">
-                        <span className="text-sm font-bold text-purple-700 uppercase tracking-wide">
-                            Proprietary Technology
+                    <div className="inline-block px-4 py-2 glass rounded-full mb-8">
+                        <span className="text-[10px] font-black text-purple-400 uppercase tracking-[0.4em]">
+                            Our Growth Architecture
                         </span>
                     </div>
 
-                    <h2 className="text-4xl lg:text-5xl font-black font-display mb-6">
-                        Introducing <span className="gradient-text">Revlo OS</span>
+                    <h2 className="text-5xl lg:text-8xl font-black font-display mb-8 tracking-tighter italic text-white leading-none uppercase">
+                        REVLO <span className="gradient-text-alt underline decoration-purple-500/30">PORTAL.</span>
                     </h2>
 
-                    <p className="text-xl text-slate-600 leading-relaxed">
-                        The engine behind agencies. Our in-house AI-powered operating system that sources,
-                        enriches, analyzes, and automates your entire growth stack.
+                    <p className="text-xl text-slate-400 leading-relaxed font-medium">
+                        The underlying system for high-performance agency results. An integrated
+                        intelligence platform that manages your entire growth cycle while you focus on vision.
                     </p>
                 </motion.div>
 
                 {/* Features Grid */}
-                <div className="grid md:grid-cols-2 lg:grid-cols-3 gap-8 mb-16">
+                <div className="grid md:grid-cols-2 lg:grid-cols-3 gap-6 mb-20">
                     {features.map((feature, index) => (
                         <motion.div
                             key={index}
-                            initial={{ opacity: 0, y: 30 }}
+                            initial={{ opacity: 0, y: 20 }}
                             whileInView={{ opacity: 1, y: 0 }}
                             transition={{ duration: 0.5, delay: index * 0.1 }}
                             viewport={{ once: true }}
-                            whileHover={{ y: -4 }}
                             className="group"
                         >
-                            <div className="h-full bg-white rounded-2xl p-8 border border-slate-200 hover:shadow-xl transition-all duration-300">
-                                <div className={`inline-flex p-3.5 bg-gradient-to-br ${feature.gradient} rounded-xl text-white shadow-lg mb-6`}>
+                            <div className="h-full bg-white/5 backdrop-blur-3xl rounded-[32px] p-8 border border-white/5 hover:border-white/10 transition-all duration-300 relative overflow-hidden flex flex-col items-center lg:items-start">
+                                <div className={`w-14 h-14 glass rounded-2xl flex items-center justify-center mb-8 border border-white/5 group-hover:scale-110 transition-transform duration-500 shadow-xl ${feature.color}`}>
                                     {feature.icon}
                                 </div>
 
-                                <h3 className="text-xl font-bold mb-4">
+                                <h3 className="text-xl font-black mb-4 italic text-white tracking-tight uppercase">
                                     {feature.title}
                                 </h3>
 
-                                <p className="text-slate-600 leading-relaxed">
-                                    {feature.description}
+                                <p className="text-slate-400 text-sm font-medium leading-relaxed group-hover:text-slate-300 transition-colors text-center lg:text-left italic">
+                                    &quot;{feature.description}&quot;
                                 </p>
                             </div>
                         </motion.div>
                     ))}
                 </div>
 
-                {/* CTA Banner */}
+                {/* Integration Banner */}
                 <motion.div
-                    initial={{ opacity: 0, y: 30 }}
-                    whileInView={{ opacity: 1, y: 0 }}
-                    transition={{ duration: 0.6 }}
+                    initial={{ opacity: 0, scale: 0.95 }}
+                    whileInView={{ opacity: 1, scale: 1 }}
+                    transition={{ duration: 0.8 }}
                     viewport={{ once: true }}
-                    className="bg-gradient-to-r from-purple-50 to-blue-50 border-2 border-purple-200 rounded-2xl p-12 flex flex-col md:flex-row items-center justify-between gap-8"
+                    className="relative p-12 lg:p-20 bg-white/5 backdrop-blur-3xl rounded-[48px] border border-white/10 overflow-hidden group shadow-2xl"
                 >
-                    <div className="flex-1">
-                        <h3 className="text-3xl font-black font-display mb-4">
-                            Ready to See Revlo OS in Action?
-                        </h3>
-                        <p className="text-lg text-slate-700 leading-relaxed">
-                            Schedule a personalized demo and discover how our proprietary technology can
-                            transform your agency's operations.
-                        </p>
-                    </div>
+                    <div className="absolute inset-0 bg-gradient-to-r from-purple-600/10 via-blue-600/10 to-red-600/10 opacity-0 group-hover:opacity-100 transition-opacity duration-1000" />
 
-                    <motion.button
-                        onClick={scrollToContact}
-                        className="group px-8 py-4 bg-gradient-rainbow text-white font-bold rounded-xl shadow-xl hover:shadow-2xl transition-all duration-300 flex items-center gap-2 whitespace-nowrap"
-                        whileHover={{ scale: 1.05, y: -2 }}
-                        whileTap={{ scale: 0.95 }}
-                    >
-                        Schedule Demo
-                        <Calendar className="w-5 h-5" />
-                    </motion.button>
+                    <div className="relative z-10 flex flex-col lg:flex-row items-center justify-between gap-12">
+                        <div className="max-w-2xl text-center lg:text-left">
+                            <h3 className="text-3xl lg:text-6xl font-black font-display mb-6 italic text-white tracking-tighter uppercase leading-none">
+                                JOIN THE <span className="gradient-text-alt">PORTAL.</span>
+                            </h3>
+                            <p className="text-xl text-slate-400 font-medium leading-relaxed">
+                                Experience the power of dedicated growth systems. Schedule a mapping session
+                                to see how our portal can automate your predictable growth engine.
+                            </p>
+                        </div>
+
+                        <motion.button
+                            onClick={scrollToContact}
+                            className="group px-12 py-6 bg-white text-black font-black uppercase tracking-widest text-[11px] rounded-2xl hover:bg-slate-200 transition-all duration-300 flex items-center gap-4 shadow-[0_0_30px_rgba(255,255,255,0.1)] hover:shadow-[0_0_50px_rgba(255,255,255,0.2)] italic"
+                            whileHover={{ scale: 1.05, y: -2 }}
+                            whileTap={{ scale: 0.95 }}
+                        >
+                            PARTNER NOW
+                            <Zap className="w-4 h-4 fill-current" />
+                        </motion.button>
+                    </div>
                 </motion.div>
             </div>
         </section>
     );
 };
+
 
 export default RevloOS;

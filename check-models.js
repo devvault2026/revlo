@@ -1,47 +1,46 @@
 
-import { GoogleGenAI } from "@google/genai";
+import { GoogleGenerativeAI } from "@google/generative-ai";
 
-const apiKey = "AIzaSyB9iR7xFcCOn-8PpJ6zggeYB8O00ASEY0sN"; // Key from .env.local (modified slightly to be safe if logging, but here using internal script)
-// Wait, I should use the exact key from the file:
 const exactKey = "AIzaSyB9iR7xFcCOn-8PpJ6zggeYB8O00ASEY0sN";
-
-const ai = new GoogleGenAI({ apiKey: exactKey });
+const genAI = new GoogleGenerativeAI(exactKey);
 
 async function listModels() {
     try {
         console.log("Listing models...");
-        const response = await ai.models.list();
-        console.log("Models found:", response.models?.length);
-        if (response.models) {
-            response.models.slice(0, 20).forEach(m => console.log(m.name, m.displayName));
-        }
+        // The listModels method is on the genAI instance in some versions, or requires a different approach.
+        // Actually, the current SDK doesn't always support listModels easily without specific auth.
+        // Let's just try generating with known model names.
     } catch (e) {
         console.error("Error listing models:", e);
     }
 }
 
-async function testGeneration() {
+async function testGeneration(modelName) {
     try {
-        console.log("Testing gemini-2.5-flash...");
-        const response = await ai.models.generateContent({
-            model: "gemini-2.5-flash",
-            contents: "Hello, are you there?",
-        });
-        console.log("Response text:", response.text);
+        console.log(`Testing ${modelName}...`);
+        const model = genAI.getGenerativeModel({ model: modelName });
+        const result = await model.generateContent("Say 'Hello World'");
+        const text = result.response.text();
+        console.log(`[${modelName}] Success: ${text}`);
+        return true;
     } catch (e) {
-        console.error("Error with gemini-2.5-flash:", e.message);
-    }
-
-    try {
-        console.log("Testing gemini-2.0-flash...");
-        const response = await ai.models.generateContent({
-            model: "gemini-2.0-flash",
-            contents: "Hello, are you there?",
-        });
-        console.log("Response text:", response.text);
-    } catch (e) {
-        console.error("Error with gemini-2.0-flash:", e.message);
+        console.error(`[${modelName}] Failed:`, e.message);
+        return false;
     }
 }
 
-listModels().then(() => testGeneration());
+async function runTests() {
+    const modelsToTest = [
+        "gemini-1.5-flash",
+        "gemini-1.5-pro",
+        "gemini-2.0-flash-exp",
+        "gemini-2.0-flash",
+        "gemini-2.0-pro-exp-02-05"
+    ];
+
+    for (const m of modelsToTest) {
+        await testGeneration(m);
+    }
+}
+
+runTests();

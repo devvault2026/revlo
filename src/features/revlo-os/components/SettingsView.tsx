@@ -534,7 +534,7 @@ const SettingsView: React.FC<SettingsViewProps> = ({ settings, onUpdate, onSaveE
                             <div className="bg-white rounded-[32px] border border-slate-200 p-8 shadow-sm space-y-8">
                                 <h3 className="font-bold text-lg flex items-center gap-2">
                                     <Brain size={20} className="text-purple-600" />
-                                    Gemini 2.5 & 3.0 Neural Stack
+                                    Gemini 2.0 Flash Neural Stack
                                 </h3>
                                 <div className="space-y-3">
                                     <div className="flex justify-between items-center ml-1">
@@ -566,7 +566,7 @@ const SettingsView: React.FC<SettingsViewProps> = ({ settings, onUpdate, onSaveE
                                         </button>
                                     </div>
                                     <p className="text-[10px] text-slate-400 mt-2 font-medium ml-4 uppercase tracking-widest">
-                                        Handshake protocol: Gemini-2.5-Flash & 3.0-Preview • Encrypted Storage
+                                        Handshake protocol: Gemini-2.0-Flash Optimized • Encrypted Storage
                                     </p>
                                 </div>
                             </div>

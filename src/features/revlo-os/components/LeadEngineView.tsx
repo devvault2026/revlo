@@ -148,23 +148,53 @@ const LeadEngineView: React.FC<LeadEngineViewProps> = ({
         setLoadingStep(scanMode === 'zone' ? `Scanning Zone ${location}...` : `Scouting ${niche} in ${location}...`);
 
         try {
-            const found = await GeminiService.scoutLeads(settings.apiKey, niche, location, batchSize, scanMode);
-            const newLeads = found as Lead[];
-            for (const nL of newLeads) {
-                await onUpdateLead(nL);
-            }
+            let foundCount = 0;
+            let firstLeadId: string | null = null;
 
-            if (newLeads.length > 0) {
-                showToast(`Scanned zone successfully. Found ${newLeads.length} prospects.`, "success");
-                setSelectedLeadId(newLeads[0].id);
+            // Use streaming for instant results
+            const allLeads = await GeminiService.scoutLeadsStreaming(
+                settings.apiKey,
+                niche,
+                location,
+                batchSize,
+                scanMode,
+                async (lead) => {
+                    // INSTANT CALLBACK - Lead appears immediately!
+                    foundCount++;
+                    setLoadingStep(`Found ${foundCount} prospect${foundCount > 1 ? 's' : ''}... Scanning for more...`);
+
+                    const newLead = lead as Lead;
+                    await onUpdateLead(newLead);
+
+                    // Select first lead found
+                    if (!firstLeadId) {
+                        firstLeadId = newLead.id;
+                        setSelectedLeadId(newLead.id);
+                    }
+
+                    showToast(`🎯 Found: ${lead.name}`, "success");
+                }
+            );
+
+            if (allLeads.length > 0) {
+                showToast(`Scan complete. Captured ${allLeads.length} prospects.`, "success");
+
                 if (autoPipeline) {
                     setLoadingStep("Initializing Auto-Pipeline...");
-                    for (const lead of newLeads) { await runFullPipelineOnLead(lead); }
+                    for (const lead of allLeads) {
+                        await runFullPipelineOnLead(lead as Lead);
+                    }
                 }
+            } else {
+                showToast("No prospects found. Try different parameters.", "warning");
             }
         } catch (e) {
             showToast("Engine scan failed.", "error");
-        } finally { setLoading(false); setLoadingStep(''); }
+            console.error("Scout error:", e);
+        } finally {
+            setLoading(false);
+            setLoadingStep('');
+        }
     };
 
     const handleDeepDive = async () => {
@@ -341,7 +371,7 @@ const LeadEngineView: React.FC<LeadEngineViewProps> = ({
                         {!settings.apiKey && (
                             <div className="bg-amber-50 border-b border-amber-200 p-2 flex items-center justify-center gap-3">
                                 <AlertTriangle size={14} className="text-amber-600" />
-                                <span className="text-[10px] font-black uppercase tracking-widest text-amber-800">Neural Configuration Required: Bridge Gemini 2.5 Flash in Settings to enable Engine operations</span>
+                                <span className="text-[10px] font-black uppercase tracking-widest text-amber-800">Neural Configuration Required: Bridge Gemini 2.0 Flash in Settings to enable Engine operations</span>
                             </div>
                         )}
 
@@ -375,6 +405,15 @@ const LeadEngineView: React.FC<LeadEngineViewProps> = ({
                                         {agents.map(a => <option key={a.id} value={a.id}>{a.name}</option>)}
                                     </select>
                                 </div>
+                                <div className="w-px h-6 bg-slate-200" />
+                                <button
+                                    onClick={() => runFullPipelineOnLead(selectedLead)}
+                                    className="flex items-center gap-1.5 px-3 py-1.5 bg-gradient-to-r from-purple-600 to-blue-600 hover:from-purple-700 hover:to-blue-700 text-white text-[10px] font-black uppercase tracking-tighter rounded-lg shadow-lg transition-all transform hover:scale-105"
+                                    title="Automate Entire Cycle"
+                                >
+                                    <Zap size={14} className="fill-current" />
+                                    <span>Execute Full Cycle</span>
+                                </button>
                                 <div className="w-px h-6 bg-slate-200" />
                                 {selectedLead.status === LeadStatus.SCOUTED && (
                                     <button onClick={handleDeepDive} className="p-2 text-slate-500 hover:text-purple-600 hover:bg-purple-50 rounded-lg transition-colors" title="Deep Dive Analysis"><BarChart2 size={18} /></button>

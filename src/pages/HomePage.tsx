@@ -1,10 +1,13 @@
 import React from 'react';
 import { motion } from 'framer-motion';
 import Hero from '../components/Hero';
+import PromoVideo from '../components/PromoVideo';
+import Results from '../components/Results';
+import Manifesto from '../components/Manifesto';
+import Process from '../components/Process';
+import RevloOS from '../components/RevloOS';
 import Services from '../components/Services';
 import Team from '../components/Team';
-import RevloOS from '../components/RevloOS';
-import Results from '../components/Results';
 import Contact from '../components/Contact';
 
 const HomePage: React.FC = () => {
@@ -16,10 +19,13 @@ const HomePage: React.FC = () => {
             transition={{ duration: 0.5 }}
         >
             <Hero />
+            <PromoVideo />
+            <Results />
+            <Manifesto />
+            <Process />
+            <RevloOS />
             <Services />
             <Team />
-            <RevloOS />
-            <Results />
             <Contact />
         </motion.main>
     );
