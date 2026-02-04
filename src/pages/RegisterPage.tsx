@@ -42,16 +42,16 @@ const RegisterPage: React.FC = () => {
 
     return (
         <AuthLayout
-            title="Join the Elite"
-            subtitle="Secure your position within the ecosystem and unlock autonomous scaling."
+            title="Partner for Growth"
+            subtitle="Gain access to our partner portal and managed growth systems designed to scale your business."
             features={[
-                "AI Ingestion Nodes",
-                "Omni-channel Reach",
-                "Intelligence Streams",
-                "Exclusive Access"
+                "Managed Growth",
+                "Market Expansion",
+                "Sales Intelligence",
+                "Direct Support"
             ]}
             testimonial={{
-                text: "Scaling to $1M ARR used to take years. We're seeing it in months.",
+                text: "Partnering with Revlo was the best decision for our scale. Transparent, effective, and results-driven.",
                 author: "Sarah Jenkins",
                 role: "CEO at Pulse"
             }}
@@ -59,10 +59,10 @@ const RegisterPage: React.FC = () => {
             <div className="mb-6">
                 <div className="flex items-center gap-2 mb-2">
                     <ShieldPlus className="w-4 h-4 text-purple-600" />
-                    <span className="text-[9px] font-black text-purple-600 uppercase tracking-[0.2em]">Deployment Protocol</span>
+                    <span className="text-[9px] font-black text-purple-600 uppercase tracking-[0.2em]">Partner Registration</span>
                 </div>
-                <h2 className="text-3xl font-black text-slate-900 tracking-tight mb-1">Request Access</h2>
-                <p className="text-sm text-slate-500 font-medium leading-tight">Initialize your profile within the network.</p>
+                <h2 className="text-3xl font-black text-slate-900 tracking-tight mb-1">Create Profile</h2>
+                <p className="text-sm text-slate-500 font-medium leading-tight">Join our partner network today.</p>
             </div>
 
             {authError && (
@@ -108,7 +108,7 @@ const RegisterPage: React.FC = () => {
                 </div>
 
                 <div className="space-y-1">
-                    <label className="text-[9px] font-black text-slate-400 uppercase tracking-widest ml-1">Mail Terminal</label>
+                    <label className="text-[9px] font-black text-slate-400 uppercase tracking-widest ml-1">Email Address</label>
                     <div className="relative group">
                         <Mail className="absolute left-4 top-1/2 -translate-y-1/2 w-4 h-4 text-slate-300 group-focus-within:text-purple-500 transition-colors" />
                         <input
@@ -121,7 +121,7 @@ const RegisterPage: React.FC = () => {
                 </div>
 
                 <div className="space-y-1">
-                    <label className="text-[9px] font-black text-slate-400 uppercase tracking-widest ml-1">Phrase</label>
+                    <label className="text-[9px] font-black text-slate-400 uppercase tracking-widest ml-1">Password</label>
                     <div className="relative group">
                         <Lock className="absolute left-4 top-1/2 -translate-y-1/2 w-4 h-4 text-slate-300 group-focus-within:text-purple-500 transition-colors" />
                         <input
@@ -142,7 +142,7 @@ const RegisterPage: React.FC = () => {
                         <Loader2 className="w-4 h-4 animate-spin" />
                     ) : (
                         <>
-                            Deploy Profile
+                            Create Account
                             <ArrowRight className="w-3.5 h-3.5 group-hover:translate-x-1 transition-transform" />
                         </>
                     )}

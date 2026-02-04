@@ -4,60 +4,59 @@ import { motion } from 'framer-motion';
 const Results: React.FC = () => {
     const results = [
         {
-            number: '7+',
-            label: 'Figure ARR Scaling',
-            description: 'Consistent track record of taking businesses from low revenue to 7-figure annual recurring revenue and beyond.',
-            gradient: 'text-purple-600',
+            number: '347%',
+            label: 'Average Growth',
+            description: 'The standard revenue increase our partners experience within the first 6 months of our collaboration.',
+            color: 'text-purple-400',
         },
         {
             number: '40+',
-            label: 'Years Combined Experience',
-            description: 'Decades of expertise across all marketing channels, industries, and growth tactics working for you.',
-            gradient: 'text-red-600',
+            label: 'Hours Saved / Wk',
+            description: 'We handle the repetitive grind of lead management and sales, giving you your time back to lead.',
+            color: 'text-blue-400',
         },
         {
-            number: '24/7',
-            label: 'AI Automation',
-            description: 'Enterprise-grade AI systems that never sleep, continuously optimizing and scaling your operations.',
-            gradient: 'text-blue-600',
+            number: 'Instant',
+            label: 'Response Speed',
+            description: 'Our AI agents engage every single lead in seconds, ensuring no opportunity ever goes cold.',
+            color: 'text-red-400',
         },
         {
-            number: '100%',
-            label: 'In-House Team',
-            description: 'No outsourcing. No contractors. Full-stack expertise under one roof, dedicated to your success.',
-            gradient: 'text-purple-600',
+            number: 'Infinite',
+            label: 'Scalability',
+            description: 'Your growth is no longer limited by your headcount. We provide the leverage to scale to the moon.',
+            color: 'text-purple-400',
         },
     ];
 
     return (
-        <section id="results" className="py-24 bg-white">
-            <div className="max-w-7xl mx-auto px-6 lg:px-8">
+        <section id="results" className="py-32 bg-[#020408] relative">
+            <div className="max-w-7xl mx-auto px-6 lg:px-8 relative z-10">
                 {/* Section Header */}
                 <motion.div
                     initial={{ opacity: 0, y: 30 }}
                     whileInView={{ opacity: 1, y: 0 }}
-                    transition={{ duration: 0.6 }}
                     viewport={{ once: true }}
-                    className="text-center max-w-3xl mx-auto mb-16"
+                    className="text-center max-w-3xl mx-auto mb-20"
                 >
-                    <div className="inline-block px-4 py-2 bg-gradient-to-r from-purple-100 to-blue-100 border border-purple-200 rounded-full mb-6">
-                        <span className="text-sm font-bold text-purple-700 uppercase tracking-wide">
-                            Proven Track Record
+                    <div className="inline-block px-4 py-2 glass rounded-full mb-8">
+                        <span className="text-[10px] font-black text-purple-400 uppercase tracking-[0.4em]">
+                            Performance Metrics
                         </span>
                     </div>
 
-                    <h2 className="text-4xl lg:text-5xl font-black font-display mb-6">
-                        Scale to <span className="gradient-text-alt">7-Figure ARR</span>
+                    <h2 className="text-5xl lg:text-7xl font-black font-display mb-8 tracking-tighter italic">
+                        TOTAL <span className="gradient-text-alt">DOMINANCE.</span>
                     </h2>
 
-                    <p className="text-xl text-slate-600 leading-relaxed">
-                        Not a pipe dream. Our systematic approach consistently delivers results that
-                        transform businesses and create lasting market dominance.
+                    <p className="text-xl text-slate-400 leading-relaxed font-medium">
+                        Our systematic approach delivers results that aren't just incremental—they
+                        are transformational. We build market leaders.
                     </p>
                 </motion.div>
 
                 {/* Results Grid */}
-                <div className="grid md:grid-cols-2 lg:grid-cols-4 gap-8">
+                <div className="grid md:grid-cols-2 lg:grid-cols-4 gap-6">
                     {results.map((result, index) => (
                         <motion.div
                             key={index}
@@ -65,26 +64,28 @@ const Results: React.FC = () => {
                             whileInView={{ opacity: 1, y: 0 }}
                             transition={{ duration: 0.5, delay: index * 0.1 }}
                             viewport={{ once: true }}
-                            whileHover={{ y: -4 }}
+                            className="group"
                         >
-                            <div className="bg-white rounded-2xl p-8 border border-slate-200 hover:shadow-xl transition-all duration-300 text-center">
+                            <div className="h-full bg-white/5 backdrop-blur-3xl rounded-[32px] p-10 border border-white/5 hover:border-white/10 transition-all duration-300 relative overflow-hidden">
                                 <motion.div
                                     initial={{ scale: 0.5, opacity: 0 }}
                                     whileInView={{ scale: 1, opacity: 1 }}
                                     transition={{ duration: 0.5, delay: index * 0.1 + 0.2 }}
                                     viewport={{ once: true }}
-                                    className={`text-6xl font-black font-display mb-4 ${result.gradient}`}
+                                    className={`text-6xl lg:text-7xl font-black font-display mb-6 tracking-tighter italic ${result.color}`}
                                 >
                                     {result.number}
                                 </motion.div>
 
-                                <h3 className="text-lg font-bold mb-4">
+                                <h3 className="text-lg font-black mb-4 uppercase tracking-widest text-white italic">
                                     {result.label}
                                 </h3>
 
-                                <p className="text-slate-600 leading-relaxed">
+                                <p className="text-slate-500 text-sm font-medium leading-relaxed group-hover:text-slate-300 transition-colors">
                                     {result.description}
                                 </p>
+
+                                <div className="absolute bottom-0 left-0 w-full h-1 bg-gradient-to-r from-transparent via-current to-transparent opacity-0 group-hover:opacity-20 transition-opacity" />
                             </div>
                         </motion.div>
                     ))}
@@ -93,5 +94,6 @@ const Results: React.FC = () => {
         </section>
     );
 };
+
 
 export default Results;

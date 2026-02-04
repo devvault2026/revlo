@@ -1,154 +1,158 @@
 import React from 'react';
 import { motion } from 'framer-motion';
-import { Layers, TrendingUp, Cpu, Users, Briefcase, DollarSign, ArrowRight, CheckCircle2 } from 'lucide-react';
+import {
+    Layers,
+    TrendingUp,
+    Cpu,
+    ArrowRight,
+    CheckCircle2,
+    Star,
+    Shield,
+    Zap,
+    Search,
+    Monitor,
+    Activity,
+    Code,
+    Users,
+    MessageSquare,
+    Calendar
+} from 'lucide-react';
 import { Link } from 'react-router-dom';
 
 const ServicesPage: React.FC = () => {
     const services = [
         {
             icon: <Layers className="w-8 h-8" />,
-            title: 'Brand Identity & Growth Hacking',
-            shortDesc: 'Guerrilla growth tactics that explode your brand\'s visibility.',
-            description: 'We don\'t just build brands—we engineer viral movements. Our guerrilla growth hacking approach combines unconventional marketing tactics with strategic positioning to create explosive brand awareness. From viral campaigns to community-driven growth, we position your brand where it matters most.',
+            title: 'Digital Foundation & Brand Strategy',
+            shortDesc: 'Establish authority and command attention in your market.',
+            description: 'We don\'t just design websites; we build conversion engines. Our foundation phase ensures your business is positioned as the obvious choice, with a premium identity that builds instant trust and authority.',
+            process: [
+                {
+                    step: '01. COMPETITIVE AUDIT',
+                    desc: 'We analyze your market landscape to identify gaps and define your "Category of One" positioning.'
+                },
+                {
+                    step: '02. BRAND ARCHITECTURE',
+                    desc: 'Development of visual identity, voice, and messaging that resonates with high-value clients.'
+                },
+                {
+                    step: '03. CONVERSION UI/UX',
+                    desc: 'Engineering a high-performance digital asset built for speed, SEO, and user psychological triggers.'
+                },
+                {
+                    step: '04. ECOSYSTEM LAUNCH',
+                    desc: 'Final deployment with full conversion tracking and search engine indexing for immediate visibility.'
+                }
+            ],
             features: [
                 'Brand Strategy & Positioning',
-                'Guerrilla Marketing Campaigns',
-                'Viral Content Creation',
-                'Community Building',
-                'Brand Voice Development',
-                'Competitive Differentiation',
-                'Social Media Strategy',
-                'Influencer Partnerships',
+                'High-Conversion Website Design',
+                'Premium UI/UX Infrastructure',
+                'Search Engine Optimization',
+                'Market Competitor Analysis',
+                'Social Architecture Design',
+                'Content Strategy Roadmap',
+                'Conversion Tracking Setup'
             ],
-            gradient: 'from-purple-500 to-purple-400',
-            shadow: 'shadow-purple',
+            price: 'Starting at $2,500',
+            duration: 'One-Time Setup',
+            color: 'text-purple-400',
+            bg: 'bg-purple-500/10',
             benefits: [
-                'Stand out in crowded markets',
-                'Create memorable brand experiences',
-                'Build passionate communities',
-                'Generate organic word-of-mouth growth',
+                'Instant Market Authority',
+                'Higher Conversion Rates',
+                'Clear Competitive Edge',
+                'Airtight Brand Consistency',
             ],
         },
         {
             icon: <TrendingUp className="w-8 h-8" />,
-            title: 'Ads & Media Buying',
-            shortDesc: 'Strategic ad campaigns that maximize ROI across all channels.',
-            description: 'Every dollar matters. Our performance-driven media buying approach combines deep platform expertise with continuous optimization to deliver exceptional returns. We don\'t just run ads—we engineer acquisition systems that scale profitably.',
-            features: [
-                'Multi-Channel Ad Campaigns',
-                'Performance Optimization',
-                'Advanced Audience Targeting',
-                'Creative Testing & Iteration',
-                'Conversion Rate Optimization',
-                'Attribution Modeling',
-                'Budget Management',
-                'Real-time Analytics',
+            title: 'Managed Growth & Acquisition Systems',
+            shortDesc: 'Scale your revenue with predictable, high-quality lead flow.',
+            description: 'We manage your entire customer acquisition journey. By leveraging data-driven insights and elite media buying tactics, we bring high-intent customers directly to your business.',
+            process: [
+                {
+                    step: '01. AUDIENCE SYNTHESIS',
+                    desc: 'Pinpointing your ideal customers using advanced demographic and psychographic data points.'
+                },
+                {
+                    step: '02. CREATIVE STRATEGY',
+                    desc: 'Producing high-impact creative assets designed to stop the scroll and drive action.'
+                },
+                {
+                    step: '03. CHANNEL DEPLOYMENT',
+                    desc: 'Omnichannel ad distribution across Meta, Google, and LinkedIn with precision targeting.'
+                },
+                {
+                    step: '04. ROI OPTIMIZATION',
+                    desc: 'Daily monitoring and scaling of winners to maximize your return on ad spend.'
+                }
             ],
-            gradient: 'from-red-500 to-red-400',
-            shadow: 'shadow-red',
+            features: [
+                'Omni-Channel Ad Management',
+                'Viral Content Syndication',
+                'Lead Generation Systems',
+                'Performance ROI Monitoring',
+                'Creative Asset Production',
+                'A/B Testing & Optimization',
+                'Market Expansion Tactics',
+                'Real-Time Lead Dashboard'
+            ],
+            price: 'Starting at $1,750/mo',
+            duration: 'Monthly Partnership',
+            color: 'text-red-400',
+            bg: 'bg-red-500/10',
             benefits: [
-                '5-10X ROAS consistently',
-                'Rapid scaling without quality loss',
-                'Data-driven creative decisions',
-                'Predictable customer acquisition costs',
+                'Predictable Revenue Growth',
+                'Lower Acquisition Costs',
+                'High-Intent Lead Flow',
+                'Scale Beyond Local Markets',
             ],
         },
         {
             icon: <Cpu className="w-8 h-8" />,
-            title: 'AI Infrastructure & Automation',
-            shortDesc: 'Enterprise-grade AI systems that work 24/7 for your business.',
-            description: 'Welcome to the future of business operations. Our custom AI infrastructure works in perfect symbiosis with your team, automating complex workflows, personalizing customer interactions, and scaling your operations without adding headcount.',
+            title: 'Autonomous Operations & Sales Automation',
+            shortDesc: 'The ultimate leverage for your business operations.',
+            description: 'The final stage of scale. We deploy and manage custom AI agents that handle your sales follow-ups, customer support, and appointment setting—working for you 24/7.',
+            process: [
+                {
+                    step: '01. SYSTEMS AUDIT',
+                    desc: 'Mapping your current manual bottlenecks and identifying opportunities for AI leverage.'
+                },
+                {
+                    step: '02. AGENT TRAINING',
+                    desc: 'Ingesting your business knowledge into custom AI models for sales and support roles.'
+                },
+                {
+                    step: '03. CRM INTEGRATION',
+                    desc: 'Connecting our AI agents directly into your sales pipeline for seamless data flow.'
+                },
+                {
+                    step: '04. LIVE DEPLOYMENT',
+                    desc: 'Activating 24/7 autonomous agents to manage lead nurture and scheduling.'
+                }
+            ],
             features: [
-                'Custom AI Agent Development',
-                'Automated Lead Nurturing',
-                'Multi-Channel Outreach',
-                'Intelligent CRM Integration',
-                'Predictive Analytics',
-                'Personalization Engine',
-                'Workflow Automation',
-                'Performance Monitoring',
+                'AI Sales & Closing Agents',
+                'Automated Appointment Booking',
+                'SMS & Email Nurture Flow',
+                'Database Reactivation',
+                'Workflow Efficiency Audit',
+                'CRM Custom Integration',
+                '24/7 Customer Support AI',
+                'Predictable Sales Velocity'
             ],
-            gradient: 'from-blue-500 to-blue-400',
-            shadow: 'shadow-blue',
+            price: 'Starting at $3,000/mo',
+            duration: 'Monthly Partnership',
+            color: 'text-blue-400',
+            bg: 'bg-blue-500/10',
             benefits: [
-                'Never miss a follow-up',
-                'Personalized at scale',
-                'Reduce operational costs by 60%',
-                'Increase conversion rates by 3X',
+                'Infinite Operational Leverage',
+                'No Extra Headcount Needed',
+                'Zero Lead Abandonment',
+                '24/7 Sales Persistence',
             ],
-        },
-        {
-            icon: <Users className="w-8 h-8" />,
-            title: 'Strategic Lead Generation',
-            shortDesc: 'Fill your pipeline with qualified, ready-to-convert prospects.',
-            description: 'We know the channels. We know the tactics. Our omnichannel lead generation system fills your pipeline with prospects who are already primed to convert. Through strategic channel manipulation and advanced targeting, we deliver quality over quantity.',
-            features: [
-                'Omnichannel Outreach',
-                'Advanced Data Enrichment',
-                'Competitor Analysis',
-                'Precision Targeting',
-                'Lead Scoring',
-                'Intent Signal Detection',
-                'Multi-Touch Campaigns',
-                'Pipeline Analytics',
-            ],
-            gradient: 'from-purple-500 to-purple-400',
-            shadow: 'shadow-purple',
-            benefits: [
-                '10K+ qualified leads per month',
-                '40% higher conversion rates',
-                'Reduced sales cycle time',
-                'Predictable revenue pipeline',
-            ],
-        },
-        {
-            icon: <Briefcase className="w-8 h-8" />,
-            title: 'Sales Infrastructure',
-            shortDesc: 'Airtight systems with comprehensive documentation and intelligence.',
-            description: 'Sales shouldn\'t be an art—it should be a science. We build systematic, data-rich sales infrastructures that ensure nothing falls through the cracks. Every interaction is documented, analyzed, and optimized for maximum conversion.',
-            features: [
-                'Sales Process Optimization',
-                'Client Voice of Customer Analysis',
-                'Comprehensive Documentation',
-                'Performance Analytics',
-                'Sales Enablement',
-                'Objection Handling Framework',
-                'Deal Pipeline Management',
-                'Revenue Forecasting',
-            ],
-            gradient: 'from-red-500 to-red-400',
-            shadow: 'shadow-red',
-            benefits: [
-                'Increase close rates by 50%',
-                'Reduce sales cycle by 30%',
-                'Eliminate lost opportunities',
-                'Scale team performance',
-            ],
-        },
-        {
-            icon: <DollarSign className="w-8 h-8" />,
-            title: 'Revenue Optimization',
-            shortDesc: 'Maximize every revenue stream with data-driven strategies.',
-            description: 'Revenue optimization isn\'t about working harder—it\'s about working smarter. We analyze every touchpoint in your customer journey to identify and eliminate friction, optimize pricing, and maximize lifetime value.',
-            features: [
-                'Conversion Rate Optimization',
-                'Funnel Analysis & Refinement',
-                'Pricing Strategy',
-                'Lifetime Value Maximization',
-                'Upsell & Cross-sell Systems',
-                'Retention Optimization',
-                'Revenue Attribution',
-                'Growth Modeling',
-            ],
-            gradient: 'from-blue-500 to-blue-400',
-            shadow: 'shadow-blue',
-            benefits: [
-                'Increase revenue per customer by 3X',
-                'Improve retention by 40%',
-                'Optimize pricing for maximum profit',
-                'Predictable revenue growth',
-            ],
-        },
+        }
     ];
 
     return (
@@ -156,90 +160,138 @@ const ServicesPage: React.FC = () => {
             initial={{ opacity: 0 }}
             animate={{ opacity: 1 }}
             exit={{ opacity: 0 }}
-            className="min-h-screen bg-white pt-32 pb-20"
+            className="min-h-screen bg-[#020408] pt-40 pb-20 relative overflow-hidden"
         >
-            <div className="max-w-7xl mx-auto px-6 lg:px-8">
+            {/* Background elements */}
+            <div className="absolute top-0 left-0 w-full h-full bg-grid-white opacity-[0.03] pointer-events-none" />
+            <div className="absolute top-[10%] left-[5%] w-[40%] h-[40%] bg-purple-600/10 blur-[120px] rounded-full animate-pulse" />
+            <div className="absolute bottom-[10%] right-[30%] w-[40%] h-[40%] bg-blue-600/10 blur-[120px] rounded-full animate-pulse" />
+
+            <div className="max-w-7xl mx-auto px-6 lg:px-8 relative z-10">
                 {/* Header */}
                 <motion.div
                     initial={{ opacity: 0, y: 30 }}
                     animate={{ opacity: 1, y: 0 }}
-                    transition={{ duration: 0.6 }}
-                    className="text-center max-w-4xl mx-auto mb-20"
+                    transition={{ duration: 0.8 }}
+                    className="text-center max-w-4xl mx-auto mb-32"
                 >
-                    <div className="inline-block px-4 py-2 bg-gradient-to-r from-purple-100 to-blue-100 border border-purple-200 rounded-full mb-6">
-                        <span className="text-sm font-bold text-purple-700 uppercase tracking-wide">
-                            Our Services
+                    <div className="inline-block px-4 py-2 glass rounded-full mb-8">
+                        <span className="text-[10px] font-black text-purple-400 uppercase tracking-[0.4em]">
+                            Our Specializations
                         </span>
                     </div>
 
-                    <h1 className="text-5xl lg:text-6xl font-black font-display mb-6">
-                        End-to-End <span className="gradient-text">Brand Takeover</span>
+                    <h1 className="text-6xl lg:text-9xl font-black font-display mb-10 tracking-tighter italic text-white leading-none uppercase">
+                        OUR <span className="gradient-text-alt block lg:inline">SERVICES.</span>
                     </h1>
 
-                    <p className="text-xl text-slate-600 leading-relaxed mb-8">
-                        We literally take your low-revenue producing assets and scale them behind the scenes
-                        to the numbers you imagined in a perfect world. No fluff, no excuses—just results.
+                    <p className="text-xl text-slate-400 leading-relaxed mb-12 font-medium max-w-2xl mx-auto">
+                        We don&apos;t just provide tools; we deliver end-to-end results. From establishing your brand&apos;s
+                        authority to automating your entire sales machine, we are your growth department.
                     </p>
 
                     <Link to="/contact">
                         <motion.button
-                            whileHover={{ scale: 1.05, y: -2 }}
+                            whileHover={{ scale: 1.05 }}
                             whileTap={{ scale: 0.95 }}
-                            className="px-8 py-4 bg-gradient-rainbow text-white font-bold rounded-xl shadow-xl hover:shadow-2xl transition-all duration-300 inline-flex items-center gap-2"
+                            className="px-12 py-6 bg-white text-black font-black uppercase tracking-widest text-sm rounded-2xl shadow-2xl hover:bg-slate-200 transition-all duration-300 flex items-center gap-3 mx-auto"
                         >
-                            Get Started Today
+                            PARTNER WITH US
                             <ArrowRight className="w-5 h-5" />
                         </motion.button>
                     </Link>
                 </motion.div>
 
-                {/* Services Grid */}
-                <div className="space-y-16">
+                {/* Services/E2E Grid */}
+                <div className="space-y-32">
                     {services.map((service, index) => (
                         <motion.div
                             key={index}
-                            initial={{ opacity: 0, y: 30 }}
+                            initial={{ opacity: 0, y: 50 }}
                             whileInView={{ opacity: 1, y: 0 }}
-                            transition={{ duration: 0.6, delay: index * 0.1 }}
+                            transition={{ duration: 0.8 }}
                             viewport={{ once: true }}
-                            className={`bg-slate-50 rounded-3xl p-8 lg:p-12 border-2 border-slate-200 hover:border-transparent hover:${service.shadow} transition-all duration-300`}
+                            className="relative"
                         >
-                            <div className="grid lg:grid-cols-2 gap-12">
-                                {/* Left Column */}
-                                <div>
-                                    <div className={`inline-flex p-4 bg-gradient-to-br ${service.gradient} rounded-xl text-white shadow-lg mb-6`}>
-                                        {service.icon}
+                            <div className="grid lg:grid-cols-2 gap-20 items-stretch">
+                                {/* Left Column - Service Overview */}
+                                <div className="space-y-12">
+                                    <div className="space-y-6 text-center lg:text-left">
+                                        <div className={`w-20 h-20 glass rounded-3xl flex items-center justify-center border border-white/5 mx-auto lg:ml-0 ${service.color}`}>
+                                            {service.icon}
+                                        </div>
+                                        <h2 className="text-4xl lg:text-5xl font-black text-white italic uppercase tracking-tighter leading-tight">
+                                            {service.title}
+                                        </h2>
+                                        <p className="text-xl text-slate-400 font-medium leading-relaxed">
+                                            {service.description}
+                                        </p>
                                     </div>
 
-                                    <h2 className="text-3xl font-black font-display mb-4">
-                                        {service.title}
-                                    </h2>
-
-                                    <p className="text-lg text-slate-600 leading-relaxed mb-8">
-                                        {service.description}
-                                    </p>
-
-                                    <div className="space-y-4">
-                                        <h3 className="font-bold text-lg">Key Benefits:</h3>
-                                        {service.benefits.map((benefit, i) => (
-                                            <div key={i} className="flex items-start gap-3">
-                                                <CheckCircle2 className="w-5 h-5 text-green-600 mt-0.5 flex-shrink-0" />
-                                                <span className="text-slate-700">{benefit}</span>
+                                    {/* Pricing & Benefits */}
+                                    <div className="grid sm:grid-cols-2 gap-6">
+                                        <div className="p-8 bg-white/5 backdrop-blur-3xl rounded-[32px] border border-white/5">
+                                            <div className={`text-3xl font-black mb-1 ${service.color}`}>{service.price}</div>
+                                            <div className="text-[10px] uppercase font-black tracking-[0.2em] text-slate-500">{service.duration}</div>
+                                        </div>
+                                        <div className="p-8 bg-white/5 backdrop-blur-3xl rounded-[32px] border border-white/5">
+                                            <div className="space-y-2">
+                                                {service.benefits.map((benefit, i) => (
+                                                    <div key={i} className="flex items-center gap-3 text-[10px] font-black text-white uppercase tracking-widest">
+                                                        <CheckCircle2 className={`w-3 h-3 ${service.color}`} />
+                                                        {benefit}
+                                                    </div>
+                                                ))}
                                             </div>
-                                        ))}
+                                        </div>
+                                    </div>
+
+                                    {/* Feature List */}
+                                    <div className="bg-white/5 backdrop-blur-3xl rounded-[32px] p-8 border border-white/5">
+                                        <h3 className="text-[10px] font-black uppercase tracking-[0.4em] text-slate-500 mb-6">Service Deliverables</h3>
+                                        <div className="grid sm:grid-cols-2 gap-4">
+                                            {service.features.map((feature, i) => (
+                                                <div key={i} className="flex items-center gap-3 text-[9px] font-black text-slate-300 uppercase tracking-widest">
+                                                    <div className={`w-1 h-1 rounded-full ${service.color.replace('text', 'bg')}`} />
+                                                    {feature}
+                                                </div>
+                                            ))}
+                                        </div>
                                     </div>
                                 </div>
 
-                                {/* Right Column */}
-                                <div>
-                                    <h3 className="font-bold text-lg mb-6">What's Included:</h3>
-                                    <div className="grid grid-cols-2 gap-4">
-                                        {service.features.map((feature, i) => (
-                                            <div key={i} className="flex items-start gap-2">
-                                                <span className="text-purple-600 font-bold mt-1">✓</span>
-                                                <span className="text-slate-600 text-sm">{feature}</span>
+                                {/* Right Column - E2E Roadmap */}
+                                <div className="bg-white/5 backdrop-blur-3xl rounded-[48px] p-8 lg:p-16 border border-white/5 relative flex flex-col justify-center overflow-hidden">
+                                    <div className="absolute top-0 right-0 p-8">
+                                        <span className="text-[10px] font-black text-slate-700 uppercase tracking-[0.4em]">E2E ROADMAP</span>
+                                    </div>
+
+                                    <div className="space-y-12 relative">
+                                        {/* Roadmap Line */}
+                                        <div className="absolute left-6 top-4 bottom-4 w-px bg-white/10" />
+
+                                        {service.process.map((p, i) => (
+                                            <div key={i} className="relative pl-16 group">
+                                                {/* Dot */}
+                                                <div className={`absolute left-[21px] top-1 w-2.5 h-2.5 rounded-full border-2 border-[#020408] group-hover:scale-150 transition-transform duration-300 ${service.color.replace('text', 'bg')}`} />
+
+                                                <h4 className={`text-sm font-black italic mb-2 tracking-widest ${service.color}`}>{p.step}</h4>
+                                                <p className="text-slate-400 text-sm font-medium leading-relaxed italic">
+                                                    &quot;{p.desc}&quot;
+                                                </p>
                                             </div>
                                         ))}
+
+                                        <Link to="/contact">
+                                            <motion.button
+                                                whileHover={{ scale: 1.05 }}
+                                                whileTap={{ scale: 0.95 }}
+                                                className="mt-8 ml-11 px-8 py-4 bg-white text-black text-[10px] font-black uppercase tracking-widest rounded-xl hover:bg-slate-200 transition-all italic flex items-center gap-3"
+                                            >
+                                                Start Phase 01
+                                                <ArrowRight className="w-4 h-4" />
+                                            </motion.button>
+                                        </Link>
                                     </div>
                                 </div>
                             </div>
@@ -247,31 +299,35 @@ const ServicesPage: React.FC = () => {
                     ))}
                 </div>
 
-                {/* CTA Section */}
+                {/* Final CTA */}
                 <motion.div
-                    initial={{ opacity: 0, y: 30 }}
-                    whileInView={{ opacity: 1, y: 0 }}
-                    transition={{ duration: 0.6 }}
+                    initial={{ opacity: 0, scale: 0.95 }}
+                    whileInView={{ opacity: 1, scale: 1 }}
                     viewport={{ once: true }}
-                    className="mt-20 bg-gradient-to-r from-purple-50 to-blue-50 border-2 border-purple-200 rounded-3xl p-12 text-center"
+                    className="mt-40 relative group"
                 >
-                    <h2 className="text-4xl font-black font-display mb-6">
-                        Ready to Scale Your Brand?
-                    </h2>
-                    <p className="text-xl text-slate-700 mb-8 max-w-2xl mx-auto">
-                        Let's discuss which services will deliver the biggest impact for your business.
-                        Book a free strategy call today.
-                    </p>
-                    <Link to="/contact">
-                        <motion.button
-                            whileHover={{ scale: 1.05, y: -2 }}
-                            whileTap={{ scale: 0.95 }}
-                            className="px-8 py-4 bg-gradient-rainbow text-white font-bold rounded-xl shadow-xl hover:shadow-2xl transition-all duration-300 inline-flex items-center gap-2"
-                        >
-                            Schedule Free Strategy Call
-                            <ArrowRight className="w-5 h-5" />
-                        </motion.button>
-                    </Link>
+                    <div className="absolute inset-0 bg-gradient-to-r from-purple-500/10 via-red-500/10 to-blue-500/10 blur-[100px] opacity-30" />
+                    <div className="bg-white/5 backdrop-blur-3xl border border-white/10 rounded-[64px] p-16 lg:p-24 text-center relative overflow-hidden">
+                        <div className="max-w-3xl mx-auto space-y-10">
+                            <h2 className="text-4xl lg:text-7xl font-black italic text-white uppercase leading-tight tracking-tighter">
+                                CHOOSE YOUR <span className="gradient-text-alt">LEVERAGE.</span>
+                            </h2>
+                            <p className="text-xl text-slate-400 font-medium leading-relaxed">
+                                Whether you need a stronger foundation or a fully autonomous sales machine,
+                                we are ready to partner with you. Let&apos;s build your legacy together.
+                            </p>
+                            <Link to="/contact">
+                                <motion.button
+                                    whileHover={{ scale: 1.05 }}
+                                    whileTap={{ scale: 0.95 }}
+                                    className="px-12 py-6 bg-white text-black text-[12px] font-black uppercase tracking-[0.4em] rounded-2xl hover:bg-slate-200 transition-all duration-300 italic flex items-center gap-4 mx-auto"
+                                >
+                                    BOOK A STRATEGY CALL
+                                    <ArrowRight className="w-5 h-5" />
+                                </motion.button>
+                            </Link>
+                        </div>
+                    </div>
                 </motion.div>
             </div>
         </motion.div>

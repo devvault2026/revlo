@@ -6,108 +6,57 @@ const Services: React.FC = () => {
     const services = [
         {
             icon: <Layers className="w-8 h-8" />,
-            title: 'Brand Identity & Growth Hacking',
-            description: 'Guerrilla growth tactics that explode your brand\'s visibility. Strategic positioning, viral campaigns, and unconventional marketing that gets you noticed.',
-            features: [
-                'Brand Strategy & Positioning',
-                'Guerrilla Marketing Campaigns',
-                'Viral Content Creation',
-                'Community Building',
-            ],
-            gradient: 'from-purple-500 to-purple-400',
-            shadow: 'shadow-purple',
+            title: 'I: DIGITAL FOUNDATION',
+            description: 'We build high-performance digital identities that command attention. From conversion-focused websites to comprehensive brand systems, we ensure your business is perceived as a market leader.',
+            features: ['BRAND STRATEGY', 'HIGH-CONVERSION HUBS', 'MARKET POSITIONING', 'PREMIUM UI/UX'],
+            color: 'text-purple-400',
+            glow: 'group-hover:shadow-[0_0_50px_rgba(139,92,246,0.3)]',
         },
         {
             icon: <TrendingUp className="w-8 h-8" />,
-            title: 'Ads & Media Buying',
-            description: 'Strategic ad campaigns across all channels. We optimize every dollar to deliver maximum ROI and scale your acquisition exponentially.',
-            features: [
-                'Multi-Channel Ad Campaigns',
-                'Performance Optimization',
-                'Advanced Audience Targeting',
-                'Creative Testing & Iteration',
-            ],
-            gradient: 'from-red-500 to-red-400',
-            shadow: 'shadow-red',
+            title: 'II: MANAGED GROWTH',
+            description: 'We don&apos;t just run ads; we manage your entire customer journey. Our team uses AI-driven insights to find your ideal customers and bring them to your door with unmatched consistency.',
+            features: ['OMNI-CHANNEL ADS', 'CONTENT STRATEGY', 'LEAD GENERATION', 'MARKET EXPANSION'],
+            color: 'text-blue-400',
+            glow: 'group-hover:shadow-[0_0_50px_rgba(59,130,246,0.3)]',
         },
         {
             icon: <Cpu className="w-8 h-8" />,
-            title: 'AI Infrastructure & Automation',
-            description: 'Enterprise-grade AI systems working in perfect symbiosis. Automated outreach, nurturing, and conversion systems that never sleep.',
-            features: [
-                'Custom AI Agent Development',
-                'Automated Lead Nurturing',
-                'Multi-Channel Outreach',
-                'Intelligent CRM Integration',
-            ],
-            gradient: 'from-blue-500 to-blue-400',
-            shadow: 'shadow-blue',
-        },
-        {
-            icon: <Users className="w-8 h-8" />,
-            title: 'Strategic Lead Generation',
-            description: 'Targeted multi-channel campaigns that fill your pipeline with qualified leads. We know the strategic channels to manipulate for perfect outcomes.',
-            features: [
-                'Omnichannel Outreach',
-                'Advanced Data Enrichment',
-                'Competitor Analysis',
-                'Precision Targeting',
-            ],
-            gradient: 'from-purple-500 to-purple-400',
-            shadow: 'shadow-purple',
-        },
-        {
-            icon: <Briefcase className="w-8 h-8" />,
-            title: 'Sales Infrastructure',
-            description: 'Airtight sales systems with comprehensive documentation, client VOCs, and data-rich profiles that ensure nothing is left out.',
-            features: [
-                'Sales Process Optimization',
-                'Client Voice of Customer Analysis',
-                'Comprehensive Documentation',
-                'Performance Analytics',
-            ],
-            gradient: 'from-red-500 to-red-400',
-            shadow: 'shadow-red',
-        },
-        {
-            icon: <DollarSign className="w-8 h-8" />,
-            title: 'Revenue Optimization',
-            description: 'Data-driven strategies to maximize every revenue stream. We optimize funnels, pricing, upsells, and lifetime value for exponential growth.',
-            features: [
-                'Conversion Rate Optimization',
-                'Funnel Analysis & Refinement',
-                'Pricing Strategy',
-                'Lifetime Value Maximization',
-            ],
-            gradient: 'from-blue-500 to-blue-400',
-            shadow: 'shadow-blue',
-        },
+            title: 'III: AI OPERATIONS',
+            description: 'The ultimate leverage for your business. We deploy and manage AI systems that handle your sales follow-up, customer support, and appointment setting, 24 hours a day.',
+            features: ['AI SALES AGENTS', 'WORKFLOW EFFICIENCY', 'MANAGED SYSTEMS', 'DATABASE REWIND'],
+            color: 'text-red-400',
+            glow: 'group-hover:shadow-[0_0_50px_rgba(239,68,68,0.3)]',
+        }
     ];
 
     return (
-        <section id="services" className="py-24 bg-slate-50">
-            <div className="max-w-7xl mx-auto px-6 lg:px-8">
+        <section id="services" className="py-32 bg-[#020408] relative overflow-hidden">
+            <div className="max-w-7xl mx-auto px-6 lg:px-8 relative z-10">
                 {/* Section Header */}
                 <motion.div
                     initial={{ opacity: 0, y: 30 }}
                     whileInView={{ opacity: 1, y: 0 }}
-                    transition={{ duration: 0.6 }}
                     viewport={{ once: true }}
-                    className="text-center max-w-3xl mx-auto mb-16"
+                    className="text-center max-w-3xl mx-auto mb-20"
                 >
-                    <div className="inline-block px-4 py-2 bg-gradient-to-r from-purple-100 to-blue-100 border border-purple-200 rounded-full mb-6">
-                        <span className="text-sm font-bold text-purple-700 uppercase tracking-wide">
-                            What We Do
+                    <motion.div
+                        initial={{ opacity: 0, scale: 0.9 }}
+                        whileInView={{ opacity: 1, scale: 1 }}
+                        className="inline-block px-4 py-2 glass rounded-full mb-8"
+                    >
+                        <span className="text-[10px] font-black text-purple-400 uppercase tracking-[0.4em]">
+                            Intelligence Matrix
                         </span>
-                    </div>
+                    </motion.div>
 
-                    <h2 className="text-4xl lg:text-5xl font-black font-display mb-6">
-                        End-to-End <span className="gradient-text">Brand Takeover</span>
+                    <h2 className="text-5xl lg:text-7xl font-black font-display mb-8 tracking-tighter italic text-white uppercase">
+                        CORE <span className="gradient-text">CAPABILITIES.</span>
                     </h2>
 
-                    <p className="text-xl text-slate-600 leading-relaxed">
-                        We literally take your low-revenue producing assets and scale them behind the scenes
-                        to the numbers you imagined in a perfect world.
+                    <p className="text-xl text-slate-400 leading-relaxed font-medium italic">
+                        "We don't just provide services. We deploy specialized intelligence to solve
+                        complex growth challenges at the highest level of execution."
                     </p>
                 </motion.div>
 
@@ -116,35 +65,37 @@ const Services: React.FC = () => {
                     {services.map((service, index) => (
                         <motion.div
                             key={index}
-                            initial={{ opacity: 0, y: 30 }}
-                            whileInView={{ opacity: 1, y: 0 }}
+                            initial={{ opacity: 0, scale: 0.95 }}
+                            whileInView={{ opacity: 1, scale: 1 }}
                             transition={{ duration: 0.5, delay: index * 0.1 }}
                             viewport={{ once: true }}
-                            whileHover={{ y: -8 }}
                             className="group"
                         >
-                            <div className={`h-full bg-white rounded-2xl p-8 border border-slate-200 hover:border-transparent hover:${service.shadow} transition-all duration-300`}>
+                            <div className={`h-full p-10 rounded-[48px] glass-dark border border-white/5 hover:border-white/10 transition-all duration-500 relative overflow-hidden ${service.glow}`}>
+                                {/* Inner Background Glow */}
+                                <div className={`absolute -top-24 -right-24 w-48 h-48 rounded-full blur-[80px] opacity-0 group-hover:opacity-20 transition-opacity duration-700 bg-current ${service.color}`} />
+
                                 {/* Icon */}
-                                <div className={`inline-flex p-4 bg-gradient-to-br ${service.gradient} rounded-xl text-white shadow-lg mb-6`}>
+                                <div className={`w-14 h-14 glass rounded-2xl flex items-center justify-center mb-8 border border-white/5 group-hover:scale-110 transition-transform duration-500 ${service.color}`}>
                                     {service.icon}
                                 </div>
 
                                 {/* Title */}
-                                <h3 className="text-xl font-bold mb-4 group-hover:gradient-text transition-all">
+                                <h3 className="text-2xl font-black mb-4 tracking-tighter text-white italic uppercase">
                                     {service.title}
                                 </h3>
 
                                 {/* Description */}
-                                <p className="text-slate-600 leading-relaxed mb-6">
+                                <p className="text-slate-500 leading-relaxed mb-8 text-sm font-medium">
                                     {service.description}
                                 </p>
 
                                 {/* Features */}
-                                <ul className="space-y-2">
+                                <ul className="space-y-4">
                                     {service.features.map((feature, featureIndex) => (
-                                        <li key={featureIndex} className="flex items-start gap-2 text-sm text-slate-600">
-                                            <span className="text-purple-600 font-bold mt-0.5">✓</span>
-                                            <span>{feature}</span>
+                                        <li key={featureIndex} className="flex items-center gap-3 text-[9px] font-black uppercase tracking-[0.2em] text-slate-600 group-hover:text-slate-400 transition-colors">
+                                            <div className={`w-1.5 h-1.5 rounded-sm bg-current rotate-45 ${service.color}`} />
+                                            {feature}
                                         </li>
                                     ))}
                                 </ul>
@@ -153,8 +104,13 @@ const Services: React.FC = () => {
                     ))}
                 </div>
             </div>
+
+            {/* Ambient Background Element */}
+            <div className="absolute top-1/2 left-1/2 -translate-x-1/2 -translate-y-1/2 w-full h-full bg-grid-white opacity-5 pointer-events-none" />
         </section>
     );
 };
+
+
 
 export default Services;

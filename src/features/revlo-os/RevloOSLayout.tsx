@@ -62,15 +62,15 @@ const RevloOSLayout: React.FC<RevloOSLayoutProps> = ({ children, currentView, se
     }, []);
 
     const menuItems: { icon: React.ReactNode; label: string; view: View; group?: string }[] = [
-        { group: "Command Center", icon: <LayoutDashboard className="w-5 h-5" />, label: 'Dashboard', view: 'dashboard' },
-        { group: "Engine", icon: <Briefcase className="w-5 h-5" />, label: 'Lead Engine', view: 'engine' },
-        { group: "Engine", icon: <Bot className="w-5 h-5" />, label: 'Agents', view: 'agents' },
+        { group: "Monitoring", icon: <LayoutDashboard className="w-5 h-5" />, label: 'Dashboard', view: 'dashboard' },
+        { group: "Growth", icon: <Briefcase className="w-5 h-5" />, label: 'Lead Engine', view: 'engine' },
+        { group: "Growth", icon: <Bot className="w-5 h-5" />, label: 'Agents', view: 'agents' },
         { group: "CRM", icon: <Database className="w-5 h-5" />, label: 'Database', view: 'crm' },
         { group: "CRM", icon: <KanbanSquare className="w-5 h-5" />, label: 'Pipeline', view: 'pipeline' },
         { group: "Inbox", icon: <Inbox className="w-5 h-5" />, label: 'Messages', view: 'inbox' },
         { group: "Inbox", icon: <Phone className="w-5 h-5" />, label: 'Voice', view: 'phone' },
-        { group: "Knowledge", icon: <FileText className="w-5 h-5" />, label: 'Vault', view: 'vault' },
-        { group: "Knowledge", icon: <Book className="w-5 h-5" />, label: 'Docs', view: 'docs' },
+        { group: "Resources", icon: <FileText className="w-5 h-5" />, label: 'Library', view: 'vault' },
+        { group: "Resources", icon: <Book className="w-5 h-5" />, label: 'Docs', view: 'docs' },
         { group: "Settings", icon: <Settings className="w-5 h-5" />, label: 'Settings', view: 'settings' },
     ];
 
@@ -82,7 +82,7 @@ const RevloOSLayout: React.FC<RevloOSLayoutProps> = ({ children, currentView, se
         return acc;
     }, {} as Record<string, typeof menuItems>);
 
-    const groups = ["Command Center", "Engine", "CRM", "Inbox", "Knowledge", "Settings"];
+    const groups = ["Monitoring", "Growth", "CRM", "Inbox", "Resources", "Settings"];
 
     return (
         <div className="flex h-screen bg-[#F8FAFC] overflow-hidden select-none">
@@ -125,9 +125,9 @@ const RevloOSLayout: React.FC<RevloOSLayoutProps> = ({ children, currentView, se
                                 <div className="flex flex-col">
                                     <div className="flex items-center gap-1.5">
                                         <span className="text-2xl font-black font-display tracking-tight text-slate-900">REVLO</span>
-                                        <span className="text-[10px] font-black bg-purple-600 text-white px-1.5 py-0.5 rounded-md leading-none shadow-sm shadow-purple-200">OS</span>
+                                        <span className="text-[10px] font-black bg-purple-600 text-white px-1.5 py-0.5 rounded-md leading-none shadow-sm shadow-purple-200 uppercase tracking-widest">Portal</span>
                                     </div>
-                                    <p className="text-[10px] font-bold text-slate-400 uppercase tracking-widest mt-1">Growth Protocol</p>
+                                    <p className="text-[10px] font-bold text-slate-400 uppercase tracking-widest mt-1">Partner Network</p>
                                 </div>
                             </div>
                         )}
@@ -235,7 +235,7 @@ const RevloOSLayout: React.FC<RevloOSLayoutProps> = ({ children, currentView, se
                             <LogOut className={`w-4 h-4 ${isSidebarCollapsed ? 'text-slate-400 group-hover:text-red-500' : 'text-slate-400 group-hover:text-red-500'} transition-colors`} />
                             {!isSidebarCollapsed && (
                                 <span className="text-[10px] font-black text-slate-500 group-hover:text-red-600 uppercase tracking-[0.2em] transition-colors">
-                                    Sign Out Protocol
+                                    Sign Out
                                 </span>
                             )}
                         </button>
@@ -268,7 +268,7 @@ const RevloOSLayout: React.FC<RevloOSLayoutProps> = ({ children, currentView, se
 
                         <div className="flex items-center gap-2 px-4 py-2 bg-gradient-to-r from-purple-50 to-blue-50 border border-purple-200 rounded-full shadow-sm">
                             <div className="w-2 h-2 bg-green-500 rounded-full animate-pulse" />
-                            <span className="text-[10px] font-black text-purple-700 uppercase tracking-widest">System Active</span>
+                            <span className="text-[10px] font-black text-purple-700 uppercase tracking-widest">Service Active</span>
                         </div>
                     </div>
                 </header>
@@ -297,7 +297,7 @@ const RevloOSLayout: React.FC<RevloOSLayoutProps> = ({ children, currentView, se
                                             {menuItems.find(m => m.view === currentView)?.icon}
                                         </span>
                                         <span className="text-[10px] font-black uppercase tracking-[0.2em] text-slate-500">
-                                            {menuItems.find(m => m.view === currentView)?.label || "Revlo System"}
+                                            {menuItems.find(m => m.view === currentView)?.label || "Partner Portal"}
                                         </span>
                                     </div>
                                 </div>

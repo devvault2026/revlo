@@ -6,118 +6,122 @@ import { Link } from 'react-router-dom';
 const ResultsPage: React.FC = () => {
     const mainResults = [
         {
-            number: '7+',
-            label: 'Figure ARR Scaling',
-            description: 'Consistent track record of taking businesses from low revenue to 7-figure annual recurring revenue and beyond.',
-            gradient: 'text-purple-600',
-            icon: <DollarSign className="w-12 h-12" />,
+            number: '347%',
+            label: 'AVERAGE REVENUE GROWTH',
+            description: 'The standard revenue increase our partners experience within the first 6 months of our collaboration.',
+            gradient: 'text-purple-400',
+            icon: <TrendingUp className="w-12 h-12" />,
         },
         {
             number: '40+',
-            label: 'Years Combined Experience',
-            description: 'Decades of expertise across all marketing channels, industries, and growth tactics working for you.',
-            gradient: 'text-red-600',
+            label: 'COMBINED EXPERIENCE',
+            description: 'Decades of expertise in business strategy, operations, and customer acquisition systems.',
+            gradient: 'text-red-400',
             icon: <Award className="w-12 h-12" />,
         },
         {
             number: '24/7',
-            label: 'AI Automation',
-            description: 'Enterprise-grade AI systems that never sleep, continuously optimizing and scaling your operations.',
-            gradient: 'text-blue-600',
+            label: 'MANAGED OPERATIONS',
+            description: 'AI-driven systems that manage your sales and support round-the-clock while you focus on vision.',
+            gradient: 'text-blue-400',
             icon: <Zap className="w-12 h-12" />,
         },
         {
             number: '100%',
-            label: 'In-House Team',
-            description: 'No outsourcing. No contractors. Full-stack expertise under one roof, dedicated to your success.',
-            gradient: 'text-purple-600',
+            label: 'DEDICATED TEAM',
+            description: 'No outsourcing. You work directly with our core growth leads on every aspect of your business.',
+            gradient: 'text-purple-400',
             icon: <Users className="w-12 h-12" />,
         },
     ];
 
     const detailedMetrics = [
         {
-            category: 'Revenue Growth',
+            category: 'Revenue & Growth',
             icon: <TrendingUp className="w-8 h-8" />,
-            gradient: 'from-purple-500 to-purple-400',
+            gradient: 'from-purple-500/20 to-purple-400/20',
+            color: 'text-purple-400',
             stats: [
-                { metric: 'Average Revenue Increase', value: '347%', period: 'First 12 months' },
-                { metric: 'Client Retention Rate', value: '94%', period: 'Year over year' },
-                { metric: 'Portfolio Companies at 7-Figs', value: '20+', period: 'And counting' },
-                { metric: 'Total Client Revenue Generated', value: '$500M+', period: 'Lifetime' },
+                { metric: 'Avg Revenue Velocity', value: '+347%', period: 'ANNUALIZED' },
+                { metric: 'Partner Retention Rate', value: '94%', period: 'YOY' },
+                { metric: '7-Fig Success Stories', value: '20+', period: 'VERIFIED' },
+                { metric: 'Total Partner Revenue', value: '$500M+', period: 'CUMULATIVE' },
             ],
         },
         {
-            category: 'Lead Generation',
+            category: 'Customer Acquisition',
             icon: <Target className="w-8 h-8" />,
-            gradient: 'from-red-500 to-red-400',
+            gradient: 'from-red-500/20 to-red-400/20',
+            color: 'text-red-400',
             stats: [
-                { metric: 'Leads Generated Monthly', value: '10K+', period: 'Per client average' },
-                { metric: 'Lead-to-Customer Rate', value: '40%', period: 'Qualified leads' },
-                { metric: 'Cost Per Lead Reduction', value: '65%', period: 'vs. industry avg' },
-                { metric: 'Total Leads Delivered', value: '500K+', period: 'All-time' },
+                { metric: 'Monthly Intent Leads', value: '10K+', period: 'AVERAGE' },
+                { metric: 'Lead-to-Call Rate', value: '40%', period: 'QUALIFIED' },
+                { metric: 'Acquisition Cost Reduction', value: '-65%', period: 'VS INDUSTRY' },
+                { metric: 'Total Leads Generated', value: '500K+', period: 'ALL-TIME' },
             ],
         },
         {
-            category: 'Marketing Performance',
+            category: 'Sales Performance',
             icon: <BarChart className="w-8 h-8" />,
-            gradient: 'from-blue-500 to-blue-400',
+            gradient: 'from-blue-500/20 to-blue-400/20',
+            color: 'text-blue-400',
             stats: [
-                { metric: 'Average ROAS', value: '8.5X', period: 'Across all channels' },
-                { metric: 'Conversion Rate Improvement', value: '3X', period: 'Average increase' },
-                { metric: 'Ad Spend Managed', value: '$50M+', period: 'Lifetime' },
-                { metric: 'Campaign Success Rate', value: '92%', period: 'Hit or exceed goals' },
+                { metric: 'Average ROAS', value: '8.5X', period: 'OMNI-CHANNEL' },
+                { metric: 'Conversion Lift', value: '3X', period: 'AVERAGE' },
+                { metric: 'Ad Spend Managed', value: '$50M+', period: 'TOTAL' },
+                { metric: 'System Efficiency', value: '92%', period: 'ACTIVE' },
             ],
         },
         {
-            category: 'Operational Efficiency',
+            category: 'Process Efficiency',
             icon: <Clock className="w-8 h-8" />,
-            gradient: 'from-purple-500 to-purple-400',
+            gradient: 'from-purple-500/20 to-purple-400/20',
+            color: 'text-purple-400',
             stats: [
-                { metric: 'Time to First Sale', value: '-60%', period: 'Reduction' },
-                { metric: 'Operational Cost Savings', value: '55%', period: 'Through automation' },
-                { metric: 'Sales Cycle Reduction', value: '45%', period: 'Average' },
-                { metric: 'Team Productivity Increase', value: '300%', period: 'With AI tools' },
+                { metric: 'Time Saved per Week', value: '40+', period: 'AVG PARTNER' },
+                { metric: 'Operational Overhead', value: '-55%', period: 'VIA AI' },
+                { metric: 'Sales Cycle Speed', value: '+45%', period: 'VELOCITY LIFT' },
+                { metric: 'Employee Productivity', value: '300%', period: 'LEVERAGE' },
             ],
         },
     ];
 
     const caseStudies = [
         {
-            industry: 'SaaS',
-            challenge: 'Struggling at $80K MRR with high churn and expensive CAC',
-            solution: 'Implemented AI-driven lead gen + retention automation',
+            industry: 'SaaS PARTNERSHIP',
+            challenge: 'Struggling at $80K MRR with high churn and expensive acquisition costs.',
+            solution: 'Implemented our AI-driven lead nurturing and customer retention systems.',
             results: [
                 '$1.2M MRR in 18 months',
                 'CAC reduced by 70%',
-                'Churn decreased from 8% to 2%',
+                'Churn decreased to 2%',
                 'Profitability increased 5X',
             ],
-            gradient: 'from-purple-500 to-purple-400',
+            gradient: 'from-purple-500/20 to-purple-400/20',
         },
         {
-            industry: 'E-commerce',
-            challenge: 'Plateaued at $2M annual revenue, poor ad performance',
-            solution: 'Complete ad strategy overhaul + conversion optimization',
+            industry: 'E-COMMERCE SCALE',
+            challenge: 'Plateaued at $2M annual revenue with poor ad performance and inconsistent flow.',
+            solution: 'Complete ad strategy overhaul combined with AI-driven conversion optimization.',
             results: [
                 '$8M annual revenue in 12 months',
-                'ROAS improved from 2X to 12X',
+                'ROAS improved to 12X',
                 'Customer LTV increased 300%',
-                'Expanded to 3 new markets',
+                'International market expansion',
             ],
-            gradient: 'from-red-500 to-red-400',
+            gradient: 'from-red-500/20 to-red-400/20',
         },
         {
-            industry: 'Professional Services',
-            challenge: 'Inconsistent pipeline, relying on referrals only',
-            solution: 'Built automated outbound system + content marketing',
+            industry: 'PROFESSIONAL SERVICES',
+            challenge: 'Inconsistent pipeline and relying solely on manual referrals and word of mouth.',
+            solution: 'Built an automated outbound system combined with strategic content marketing.',
             results: [
-                'Consistent 50+ qualified leads/month',
-                'Went from 0 to $3M ARR',
-                'Close rate improved to 85%',
-                'Scaled team from 3 to 25',
+                '50+ Qualified Leads/Month',
+                'Zero to $3M ARR Scaling',
+                'Close Rate 85% Efficiency',
+                'Successful Team Expansion',
             ],
-            gradient: 'from-blue-500 to-blue-400',
+            gradient: 'from-blue-500/20 to-blue-400/20',
         },
     ];
 
@@ -126,60 +130,63 @@ const ResultsPage: React.FC = () => {
             initial={{ opacity: 0 }}
             animate={{ opacity: 1 }}
             exit={{ opacity: 0 }}
-            className="min-h-screen bg-white pt-32 pb-20"
+            className="min-h-screen bg-[#020408] pt-40 pb-20 relative overflow-hidden"
         >
-            <div className="max-w-7xl mx-auto px-6 lg:px-8">
+            {/* Background elements */}
+            <div className="absolute top-0 left-0 w-full h-full bg-grid-white opacity-5 pointer-events-none" />
+            <div className="absolute top-[20%] left-[10%] w-[50%] h-[50%] bg-purple-900/10 blur-[150px] rounded-full" />
+            <div className="absolute bottom-[20%] right-[10%] w-[50%] h-[50%] bg-blue-900/10 blur-[150px] rounded-full" />
+
+            <div className="max-w-7xl mx-auto px-6 lg:px-8 relative z-10">
                 {/* Header */}
                 <motion.div
                     initial={{ opacity: 0, y: 30 }}
                     animate={{ opacity: 1, y: 0 }}
-                    transition={{ duration: 0.6 }}
-                    className="text-center max-w-4xl mx-auto mb-20"
+                    transition={{ duration: 0.8 }}
+                    className="text-center max-w-4xl mx-auto mb-32"
                 >
-                    <div className="inline-block px-4 py-2 bg-gradient-to-r from-purple-100 to-blue-100 border border-purple-200 rounded-full mb-6">
-                        <span className="text-sm font-bold text-purple-700 uppercase tracking-wide">
-                            Proven Track Record
+                    <div className="inline-block px-4 py-2 glass rounded-full mb-8">
+                        <span className="text-[10px] font-black text-purple-400 uppercase tracking-[0.4em]">
+                            Performance Data
                         </span>
                     </div>
 
-                    <h1 className="text-5xl lg:text-6xl font-black font-display mb-6">
-                        Scale to <span className="gradient-text-alt">7-Figure ARR</span>
+                    <h1 className="text-6xl lg:text-8xl font-black font-display mb-10 tracking-tighter italic text-white leading-tight">
+                        PARTNER <span className="gradient-text-alt">SUCCESS.</span>
                     </h1>
 
-                    <p className="text-xl text-slate-600 leading-relaxed">
-                        Not a pipe dream. Our systematic approach consistently delivers results that
-                        transform businesses and create lasting market dominance. The numbers speak for themselves.
+                    <p className="text-xl text-slate-400 leading-relaxed font-medium">
+                        Our results aren&apos;t just numbers on a screen. They represent real businesses
+                        transformed through strategic partnership and elite execution. The growth is real.
                     </p>
                 </motion.div>
 
                 {/* Main Results Grid */}
-                <div className="grid md:grid-cols-2 lg:grid-cols-4 gap-8 mb-20">
+                <div className="grid md:grid-cols-2 lg:grid-cols-4 gap-8 mb-40">
                     {mainResults.map((result, index) => (
                         <motion.div
                             key={index}
                             initial={{ opacity: 0, y: 30 }}
                             whileInView={{ opacity: 1, y: 0 }}
-                            transition={{ duration: 0.5, delay: index * 0.1 }}
+                            transition={{ duration: 0.8, delay: index * 0.1 }}
                             viewport={{ once: true }}
-                            whileHover={{ y: -4 }}
+                            className="group"
                         >
-                            <div className="bg-slate-50 rounded-2xl p-8 border-2 border-slate-200 hover:shadow-xl transition-all duration-300 text-center h-full">
-                                <div className={`${result.gradient} mb-4 inline-block`}>
+                            <div className="bg-white/5 backdrop-blur-3xl rounded-[32px] p-8 border border-white/5 hover:border-white/20 transition-all duration-500 text-center h-full relative overflow-hidden flex flex-col items-center">
+                                <div className="absolute top-0 right-0 p-4">
+                                    <div className="text-[8px] font-black text-slate-700 uppercase tracking-[0.3em]">METRIC {index + 1}</div>
+                                </div>
+
+                                <div className={`${result.gradient} mb-8 inline-block group-hover:scale-110 transition-transform duration-500`}>
                                     {result.icon}
                                 </div>
-                                <motion.div
-                                    initial={{ scale: 0.5, opacity: 0 }}
-                                    whileInView={{ scale: 1, opacity: 1 }}
-                                    transition={{ duration: 0.5, delay: index * 0.1 + 0.2 }}
-                                    viewport={{ once: true }}
-                                    className={`text-6xl font-black font-display mb-4 ${result.gradient}`}
-                                >
+                                <div className={`text-5xl font-black font-display mb-4 ${result.gradient} tracking-tighter italic`}>
                                     {result.number}
-                                </motion.div>
-                                <h3 className="text-lg font-bold mb-4">
+                                </div>
+                                <h3 className="text-[10px] font-black uppercase tracking-[0.3em] text-white mb-6">
                                     {result.label}
                                 </h3>
-                                <p className="text-slate-600 leading-relaxed">
+                                <p className="text-slate-500 text-xs font-medium leading-relaxed">
                                     {result.description}
                                 </p>
                             </div>
@@ -188,36 +195,36 @@ const ResultsPage: React.FC = () => {
                 </div>
 
                 {/* Detailed Metrics */}
-                <div className="mb-20">
-                    <h2 className="text-3xl font-black font-display text-center mb-12">
-                        Detailed <span className="gradient-text">Performance Metrics</span>
-                    </h2>
+                <div className="mb-40">
+                    <div className="text-center mb-20">
+                        <h2 className="text-4xl lg:text-6xl font-black font-display italic text-white tracking-tighter uppercase mb-6">
+                            PERFORMANCE <span className="gradient-text-alt">BENCHMARKS</span>
+                        </h2>
+                    </div>
 
-                    <div className="grid md:grid-cols-2 gap-8">
+                    <div className="grid md:grid-cols-2 gap-10">
                         {detailedMetrics.map((category, index) => (
                             <motion.div
                                 key={index}
-                                initial={{ opacity: 0, y: 30 }}
+                                initial={{ opacity: 0, y: 50 }}
                                 whileInView={{ opacity: 1, y: 0 }}
-                                transition={{ duration: 0.5, delay: index * 0.1 }}
+                                transition={{ duration: 0.8 }}
                                 viewport={{ once: true }}
-                                className="bg-slate-50 rounded-2xl p-8 border-2 border-slate-200 hover:shadow-xl transition-all duration-300"
+                                className="bg-white/5 backdrop-blur-3xl rounded-[48px] p-10 border border-white/5 group"
                             >
-                                <div className="flex items-center gap-4 mb-6">
-                                    <div className={`p-3 bg-gradient-to-br ${category.gradient} rounded-xl text-white`}>
+                                <div className="flex items-center gap-6 mb-12">
+                                    <div className={`p-4 glass rounded-2xl ${category.color} border border-white/10`}>
                                         {category.icon}
                                     </div>
-                                    <h3 className="text-2xl font-bold">{category.category}</h3>
+                                    <h3 className="text-2xl font-black font-display italic text-white uppercase tracking-tight">{category.category}</h3>
                                 </div>
 
-                                <div className="space-y-4">
+                                <div className="grid sm:grid-cols-2 gap-6">
                                     {category.stats.map((stat, i) => (
-                                        <div key={i} className="bg-white rounded-xl p-4 border border-slate-200">
-                                            <div className="flex items-center justify-between mb-2">
-                                                <span className="text-sm font-semibold text-slate-600">{stat.metric}</span>
-                                                <span className="text-2xl font-black gradient-text">{stat.value}</span>
-                                            </div>
-                                            <div className="text-xs text-slate-500">{stat.period}</div>
+                                        <div key={i} className="glass rounded-2xl p-6 border border-white/5 hover:border-white/20 transition-all group/item">
+                                            <div className="text-[8px] font-black text-slate-600 uppercase tracking-[0.3em] mb-4">{stat.period}</div>
+                                            <div className="text-3xl font-black font-display italic text-white mb-2 group-hover:scale-110 transition-transform origin-left">{stat.value}</div>
+                                            <div className="text-[9px] font-black text-slate-400 uppercase tracking-widest">{stat.metric}</div>
                                         </div>
                                     ))}
                                 </div>
@@ -227,46 +234,60 @@ const ResultsPage: React.FC = () => {
                 </div>
 
                 {/* Case Studies */}
-                <div className="mb-20">
-                    <h2 className="text-3xl font-black font-display text-center mb-12">
-                        Real <span className="gradient-text-alt">Case Studies</span>
-                    </h2>
+                <div className="mb-40">
+                    <div className="text-center mb-20">
+                        <h2 className="text-4xl lg:text-6xl font-black font-display italic text-white tracking-tighter uppercase mb-6">
+                            SUCCESS <span className="gradient-text-alt">STORIES</span>
+                        </h2>
+                    </div>
 
-                    <div className="space-y-8">
+                    <div className="space-y-12">
                         {caseStudies.map((study, index) => (
                             <motion.div
                                 key={index}
-                                initial={{ opacity: 0, y: 30 }}
-                                whileInView={{ opacity: 1, y: 0 }}
-                                transition={{ duration: 0.5, delay: index * 0.1 }}
+                                initial={{ opacity: 0, scale: 0.95 }}
+                                whileInView={{ opacity: 1, scale: 1 }}
+                                transition={{ duration: 0.8 }}
                                 viewport={{ once: true }}
-                                className="bg-slate-50 rounded-2xl p-8 lg:p-10 border-2 border-slate-200 hover:shadow-xl transition-all duration-300"
+                                className="bg-white/5 backdrop-blur-3xl rounded-[48px] p-12 lg:p-16 border border-white/5 relative overflow-hidden group"
                             >
-                                <div className="grid lg:grid-cols-3 gap-8">
+                                <div className="absolute top-0 right-0 p-12">
+                                    <div className="text-[10px] font-black text-slate-700 uppercase tracking-[0.5em]">PARTNER ID: {1000 + index}</div>
+                                </div>
+
+                                <div className="grid lg:grid-cols-3 gap-16 relative z-10">
                                     <div>
-                                        <div className={`inline-block px-4 py-2 bg-gradient-to-br ${study.gradient} text-white rounded-lg font-bold mb-4`}>
+                                        <div className="inline-block px-4 py-2 glass border border-white/10 text-white rounded-lg text-[10px] font-black uppercase tracking-[0.4em] mb-8 italic">
                                             {study.industry}
                                         </div>
-                                        <h3 className="text-xl font-bold mb-4">The Challenge</h3>
-                                        <p className="text-slate-600 leading-relaxed mb-6">{study.challenge}</p>
-                                        <h3 className="text-xl font-bold mb-4">Our Solution</h3>
-                                        <p className="text-slate-600 leading-relaxed">{study.solution}</p>
+                                        <div className="space-y-8">
+                                            <div>
+                                                <h3 className="text-[10px] font-black uppercase tracking-[0.4em] text-slate-500 mb-4">STARTING CHALLENGE</h3>
+                                                <p className="text-white font-black italic tracking-tight">{study.challenge}</p>
+                                            </div>
+                                            <div>
+                                                <h3 className="text-[10px] font-black uppercase tracking-[0.4em] text-purple-500 mb-4">OUR STRATEGY</h3>
+                                                <p className="text-slate-400 font-medium text-sm leading-relaxed">{study.solution}</p>
+                                            </div>
+                                        </div>
                                     </div>
 
                                     <div className="lg:col-span-2">
-                                        <h3 className="text-xl font-bold mb-6">The Results</h3>
-                                        <div className="grid md:grid-cols-2 gap-4">
+                                        <h3 className="text-[10px] font-black uppercase tracking-[0.4em] text-green-500 mb-8">PARTNERSHIP OUTCOMES</h3>
+                                        <div className="grid md:grid-cols-2 gap-6">
                                             {study.results.map((result, i) => (
-                                                <div key={i} className="flex items-start gap-3 bg-white rounded-xl p-4 border border-slate-200">
-                                                    <div className={`p-2 bg-gradient-to-br ${study.gradient} rounded-lg text-white flex-shrink-0`}>
-                                                        <TrendingUp className="w-5 h-5" />
+                                                <div key={i} className="flex items-center gap-6 p-6 glass rounded-2xl border border-white/5 hover:border-white/20 transition-all">
+                                                    <div className="w-10 h-10 rounded-xl bg-green-500/10 flex items-center justify-center">
+                                                        <TrendingUp className="w-5 h-5 text-green-400" />
                                                     </div>
-                                                    <span className="text-slate-700 font-semibold">{result}</span>
+                                                    <span className="text-white text-[12px] font-black uppercase tracking-widest">{result}</span>
                                                 </div>
                                             ))}
                                         </div>
                                     </div>
                                 </div>
+
+                                <div className="absolute -bottom-20 -right-20 w-64 h-64 bg-white/5 rounded-full blur-3xl group-hover:scale-150 transition-transform duration-1000" />
                             </motion.div>
                         ))}
                     </div>
@@ -274,29 +295,36 @@ const ResultsPage: React.FC = () => {
 
                 {/* CTA Section */}
                 <motion.div
-                    initial={{ opacity: 0, y: 30 }}
-                    whileInView={{ opacity: 1, y: 0 }}
-                    transition={{ duration: 0.6 }}
+                    initial={{ opacity: 0, scale: 0.95 }}
+                    whileInView={{ opacity: 1, scale: 1 }}
                     viewport={{ once: true }}
-                    className="bg-gradient-to-r from-purple-50 to-blue-50 border-2 border-purple-200 rounded-3xl p-12 text-center"
+                    className="relative group"
                 >
-                    <h2 className="text-4xl font-black font-display mb-6">
-                        Ready to Become Our Next Success Story?
-                    </h2>
-                    <p className="text-xl text-slate-700 mb-8 max-w-2xl mx-auto">
-                        Join the growing list of businesses we've scaled to 7-figure ARR and beyond.
-                        Your transformation starts with a conversation.
-                    </p>
-                    <Link to="/contact">
-                        <motion.button
-                            whileHover={{ scale: 1.05, y: -2 }}
-                            whileTap={{ scale: 0.95 }}
-                            className="px-8 py-4 bg-gradient-rainbow text-white font-bold rounded-xl shadow-xl hover:shadow-2xl transition-all duration-300 inline-flex items-center gap-2"
-                        >
-                            Start Your Growth Journey
-                            <ArrowRight className="w-5 h-5" />
-                        </motion.button>
-                    </Link>
+                    <div className="absolute inset-0 bg-gradient-to-r from-purple-500/20 to-blue-500/20 blur-[100px] opacity-30 group-hover:opacity-60 transition-opacity" />
+
+                    <div className="bg-white/5 backdrop-blur-3xl border border-white/5 rounded-[64px] p-16 lg:p-24 text-center relative overflow-hidden">
+                        <div className="absolute top-0 left-0 w-full h-full bg-grid-white opacity-5" />
+
+                        <div className="relative z-10 max-w-4xl mx-auto">
+                            <h2 className="text-5xl lg:text-7xl font-black font-display mb-10 tracking-tighter italic text-white leading-tight">
+                                BE THE NEXT <span className="gradient-text-alt">SUCCESS STORY.</span>
+                            </h2>
+                            <p className="text-xl text-slate-400 mb-12 font-medium">
+                                Join the elite circle of businesses we&apos;ve scaled to 7-figure revenue and beyond.
+                                Your growth journey starts with a simple conversation.
+                            </p>
+                            <Link to="/contact">
+                                <motion.button
+                                    whileHover={{ scale: 1.05 }}
+                                    whileTap={{ scale: 0.95 }}
+                                    className="px-12 py-6 bg-white text-black text-[12px] font-black uppercase tracking-[0.4em] rounded-2xl hover:bg-slate-200 transition-all duration-300 flex items-center gap-4 mx-auto italic"
+                                >
+                                    BOOK YOUR STRATEGY CALL
+                                    <ArrowRight className="w-5 h-5" />
+                                </motion.button>
+                            </Link>
+                        </div>
+                    </div>
                 </motion.div>
             </div>
         </motion.div>

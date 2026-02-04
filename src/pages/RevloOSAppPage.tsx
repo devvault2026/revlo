@@ -79,7 +79,22 @@ const RevloOSAppPageContent: React.FC = () => {
                     // Seed from defaults
                     const { DEFAULT_AGENTS } = await import('../features/revlo-os/components/AgentStudioView');
                     for (const defAgent of DEFAULT_AGENTS) {
-                        await upsertAgent({ ...defAgent, user_id: user.id });
+                        // Map frontend camelCase to database snake_case
+                        await upsertAgent({
+                            id: defAgent.id,
+                            name: defAgent.name,
+                            role: defAgent.role,
+                            version: defAgent.version,
+                            mandate: defAgent.mandate,
+                            responsibilities: defAgent.responsibilities,
+                            output_contract: defAgent.outputContract,
+                            behavior: defAgent.behavior,
+                            capabilities: defAgent.capabilities,
+                            chaining: defAgent.chaining,
+                            memory_type: defAgent.memoryType,
+                            stats: defAgent.stats,
+                            user_id: user.id
+                        });
                     }
                     agentData = await getAgents(user.id);
                 }
@@ -234,14 +249,29 @@ const RevloOSAppPageContent: React.FC = () => {
 
     const handleUpdateLead = async (updatedLead: Lead) => {
         try {
+            // IMMEDIATELY update local state so UI reflects changes instantly
+            setRemoteLeads(prev => {
+                const existingIndex = prev.findIndex(l => l.id === updatedLead.id);
+                if (existingIndex >= 0) {
+                    // Update existing lead
+                    const updated = [...prev];
+                    updated[existingIndex] = updatedLead;
+                    return updated;
+                } else {
+                    // Add new lead at the beginning
+                    return [updatedLead, ...prev];
+                }
+            });
+
+            // Then persist to Supabase in background
             await upsertLead({
                 ...updatedLead,
                 created_at: updatedLead.createdAt,
                 user_id: user?.id,
                 organization_id: profile?.organization_id
             } as any);
-            showToast('Lead intelligence synced', 'success');
         } catch (err) {
+            console.error('Lead sync failed:', err);
             showToast('Sync failed', 'error');
         }
     };
@@ -319,10 +349,21 @@ const RevloOSAppPageContent: React.FC = () => {
         if (user) {
             try {
                 for (const agent of nextAgents) {
+                    // Map frontend camelCase to database snake_case properly
                     await upsertAgent({
-                        ...agent,
-                        user_id: user.id,
+                        id: agent.id,
+                        name: agent.name,
+                        role: agent.role,
+                        version: agent.version,
+                        mandate: agent.mandate,
+                        responsibilities: agent.responsibilities,
                         output_contract: agent.outputContract,
+                        behavior: agent.behavior,
+                        capabilities: agent.capabilities,
+                        chaining: agent.chaining,
+                        memory_type: agent.memoryType,
+                        stats: agent.stats,
+                        user_id: user.id,
                         updated_at: new Date().toISOString()
                     });
                 }

@@ -260,7 +260,7 @@ const AgentStudioView: React.FC<AgentStudioViewProps> = ({ agents, setAgents, on
             return;
         }
         try {
-            await GeminiService.streamTestAgent(key, formData, testInput, (chunk) => {
+            await GeminiService.streamTestAgent(key, formData, testInput, (chunk: string) => {
                 setTestOutput(prev => prev + chunk);
             });
             showToast("Simulated Synthesis Complete", "success");
