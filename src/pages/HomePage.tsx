@@ -7,6 +7,7 @@ import Manifesto from '../components/Manifesto';
 import Process from '../components/Process';
 import RevloOS from '../components/RevloOS';
 import Services from '../components/Services';
+import Projects from '../components/Projects';
 import Team from '../components/Team';
 import Contact from '../components/Contact';
 
@@ -25,6 +26,7 @@ const HomePage: React.FC = () => {
             <Process />
             <RevloOS />
             <Services />
+            <Projects />
             <Team />
             <Contact />
         </motion.main>

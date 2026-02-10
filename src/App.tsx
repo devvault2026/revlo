@@ -26,12 +26,15 @@ import DashboardPage from './pages/DashboardPage';
 import EsdrOfferPage from './pages/EsdrOfferPage';
 import EsdrPaymentPage from './pages/EsdrPaymentPage';
 import AdminPaymentsPage from './pages/AdminPaymentsPage';
+import IndeedBotPage from './pages/projects/IndeedBotPage';
+import ScoutPage from './pages/ScoutPage';
 
 // Components
 import Navigation from './components/Navigation';
 import Footer from './components/Footer';
 import ProtectedRoute from './components/ProtectedRoute';
 import PartnerAgent from './components/PartnerAgent';
+import ScrollToTop from './components/ScrollToTop';
 
 
 function App() {
@@ -40,6 +43,7 @@ function App() {
             <ToastProvider>
                 <NotificationProvider>
                     <Router>
+                        <ScrollToTop />
                         <div className="min-h-screen flex flex-col bg-[#020408]">
                             <AnimatePresence mode="wait">
                                 <Routes>
@@ -98,6 +102,8 @@ function App() {
                                             <Footer />
                                         </>
                                     } />
+                                    <Route path="/projects/indeedbot" element={<IndeedBotPage />} />
+                                    <Route path="/scout" element={<ScoutPage />} />
                                     <Route path="/offer/esdr/payment" element={<EsdrPaymentPage />} />
                                     <Route path="/offers/esdr/payment" element={<EsdrPaymentPage />} />
 

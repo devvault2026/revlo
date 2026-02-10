@@ -200,7 +200,7 @@ export const chatWithAgent = async (
 export const scoutLeads = async (apiKey: string, niche: string, location: string, limit: number = 5, scanMode: 'niche' | 'zone' = 'niche'): Promise<Partial<Lead>[]> => {
     const genAI = getGenAI(apiKey);
     const model = genAI.getGenerativeModel({
-        model: "gemini-1.5-flash",
+        model: "gemini-2.0-flash", // Stabilized to Flash
         tools: [{ googleSearch: {} }] as any
     });
 
@@ -209,14 +209,27 @@ export const scoutLeads = async (apiKey: string, niche: string, location: string
         const text = result.response.text();
         const jsonMatch = text.match(/\[[\s\S]*\]/);
         return jsonMatch ? JSON.parse(jsonMatch[0]) : [];
-    } catch (e) {
-        return [];
+    } catch (e: any) {
+        console.warn("Scout with Pro failed, falling back to Flash...", e);
+        try {
+            // Fallback to Flash if Pro fails (e.g. Rate Limit)
+            const fallbackModel = genAI.getGenerativeModel({
+                model: "gemini-2.0-flash",
+                tools: [{ googleSearch: {} }] as any
+            });
+            const result = await fallbackModel.generateContent(`Find ${limit} ${scanMode === 'zone' ? 'businesses' : niche + ' businesses'} in "${location}". Return JSON array with name, website, phone.`);
+            const text = result.response.text();
+            const jsonMatch = text.match(/\[[\s\S]*\]/);
+            return jsonMatch ? JSON.parse(jsonMatch[0]) : [];
+        } catch (fallbackError) {
+            return [];
+        }
     }
 };
 
 export const enrichLeadData = async (apiKey: string, lead: Partial<Lead>): Promise<Partial<Lead>> => {
     const genAI = getGenAI(apiKey);
-    const model = genAI.getGenerativeModel({ model: "gemini-1.5-flash" });
+    const model = genAI.getGenerativeModel({ model: "gemini-2.0-flash" });
     try {
         const result = await model.generateContent(`Analyze lead: ${JSON.stringify(lead)}. Return JSON with pain_points and revenue_scale.`);
         const text = result.response.text();
@@ -227,7 +240,12 @@ export const enrichLeadData = async (apiKey: string, lead: Partial<Lead>): Promi
 
 export const analyzeCompetitors = async (apiKey: string, niche: string, location: string): Promise<Competitor[]> => {
     const genAI = getGenAI(apiKey);
-    const model = genAI.getGenerativeModel({ model: "gemini-1.5-flash" });
+    // Use Flash for stability, Pro Exp was failing
+    const model = genAI.getGenerativeModel({
+        model: "gemini-2.0-flash",
+        tools: [{ googleSearch: {} }] as any
+    });
+
     try {
         const prompt = `Research 3 key competitors for a ${niche} business in ${location}. 
         Return a JSON array of objects with these exact keys: "name" (string), "website" (string), "whyWinning" (string).
@@ -238,14 +256,23 @@ export const analyzeCompetitors = async (apiKey: string, niche: string, location
         const jsonMatch = text.match(/\[[\s\S]*\]/);
         return jsonMatch ? JSON.parse(jsonMatch[0]) : [];
     } catch (e) {
-        console.error("Competitor analysis failed:", e);
-        return [];
+        // Fallback to Flash
+        try {
+            const fallback = genAI.getGenerativeModel({ model: "gemini-2.0-flash", tools: [{ googleSearch: {} }] as any });
+            const result = await fallback.generateContent(`Research 3 competitors for ${niche} in ${location}. Return JSON array.`);
+            const text = result.response.text();
+            const jsonMatch = text.match(/\[[\s\S]*\]/);
+            return jsonMatch ? JSON.parse(jsonMatch[0]) : [];
+        } catch (ex) {
+            console.error("Competitor analysis failed:", ex);
+            return [];
+        }
     }
 };
 
 export const generateDossier = async (apiKey: string, lead: Lead): Promise<Partial<Lead>> => {
     const genAI = getGenAI(apiKey);
-    const model = genAI.getGenerativeModel({ model: "gemini-1.5-flash" });
+    const model = genAI.getGenerativeModel({ model: "gemini-2.0-flash" });
     try {
         const prompt = `Create a business dossier for ${lead.name} (${lead.website || 'No website'}).
         Identify:
@@ -264,7 +291,7 @@ export const generateDossier = async (apiKey: string, lead: Lead): Promise<Parti
 
 export const scoreLead = async (apiKey: string, lead: Lead): Promise<{ score: number; psychology: string }> => {
     const genAI = getGenAI(apiKey);
-    const model = genAI.getGenerativeModel({ model: "gemini-1.5-flash" });
+    const model = genAI.getGenerativeModel({ model: "gemini-2.0-flash" });
     try {
         const prompt = `Score the business potential for ${lead.name} in their niche.
         Provide a numeric score from 0-100 and a 1-sentence psychology profile of the owner.
@@ -345,7 +372,7 @@ export const scoutLeadsStreaming = async (
 ): Promise<Partial<Lead>[]> => {
     const genAI = getGenAI(apiKey);
     const model = genAI.getGenerativeModel({
-        model: "gemini-2.0-flash",
+        model: "gemini-2.0-flash", // Reverted to Flash for stability (Pro Exp was 404ing)
         tools: [{ googleSearch: {} }] as any
     });
 
@@ -367,9 +394,26 @@ export const scoutLeadsStreaming = async (
         }
 
         return leads;
-    } catch (e) {
-        console.error("Scout failed:", e);
-        return [];
+    } catch (e: any) {
+        console.warn("Streaming Scout with Pro failed, falling back to Flash...", e);
+        try {
+            const fallbackModel = genAI.getGenerativeModel({
+                model: "gemini-2.0-flash",
+                tools: [{ googleSearch: {} }] as any
+            });
+            const result = await fallbackModel.generateContent(`Search for ${limit} ${niche} businesses in ${location}. Return JSON array.`);
+            const text = result.response.text();
+            const jsonMatch = text.match(/\[[\s\S]*\]/);
+            const leads: Partial<Lead>[] = jsonMatch ? JSON.parse(jsonMatch[0]) : [];
+            for (const lead of leads) {
+                onLead(lead);
+                await new Promise(r => setTimeout(r, 200));
+            }
+            return leads;
+        } catch (finalError) {
+            console.error("Scout failed completely:", finalError);
+            return [];
+        }
     }
 };
 
@@ -430,7 +474,7 @@ export const streamTestAgent = async (
 
 export const generateCode = async (apiKey: string, prompt: string, language: string = 'typescript'): Promise<string> => {
     const genAI = getGenAI(apiKey);
-    const model = genAI.getGenerativeModel({ model: "gemini-1.5-flash" });
+    const model = genAI.getGenerativeModel({ model: "gemini-2.0-flash" });
     try {
         const result = await model.generateContent(`Code: ${prompt}. Return raw code only.`);
         return result.response.text();
@@ -439,7 +483,7 @@ export const generateCode = async (apiKey: string, prompt: string, language: str
 
 export const refineContent = async (apiKey: string, content: string, tone: string): Promise<string> => {
     const genAI = getGenAI(apiKey);
-    const model = genAI.getGenerativeModel({ model: "gemini-1.5-flash" });
+    const model = genAI.getGenerativeModel({ model: "gemini-2.0-flash" });
     try {
         const result = await model.generateContent(`Rewrite (${tone}): ${content}`);
         return result.response.text();
@@ -449,19 +493,28 @@ export const refineContent = async (apiKey: string, content: string, tone: strin
 export const marketResearch = async (apiKey: string, query: string): Promise<{ title: string; content: string }> => {
     const genAI = getGenAI(apiKey);
     const model = genAI.getGenerativeModel({
-        model: "gemini-1.5-flash",
+        model: "gemini-2.0-flash",
         tools: [{ googleSearch: {} }] as any
     });
     try {
         const result = await model.generateContent(`Research: ${query}`);
         return { title: query, content: result.response.text() };
-    } catch (e) { return { title: query, content: "Research failed." }; }
+    } catch (e) {
+        // Fallback
+        try {
+            const fallback = genAI.getGenerativeModel({ model: "gemini-1.5-flash", tools: [{ googleSearch: {} }] as any });
+            const res = await fallback.generateContent(`Research: ${query}`);
+            return { title: query, content: res.response.text() };
+        } catch (ex) {
+            return { title: query, content: "Research failed." };
+        }
+    }
 };
 
 export const validateApiKey = async (apiKey: string): Promise<boolean> => {
     try {
         const genAI = getGenAI(apiKey);
-        const model = genAI.getGenerativeModel({ model: "gemini-1.5-flash" });
+        const model = genAI.getGenerativeModel({ model: "gemini-2.0-flash" });
         const result = await model.generateContent("OK");
         return !!result.response.text();
     } catch (e) { return false; }

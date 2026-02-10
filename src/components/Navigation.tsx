@@ -1,7 +1,7 @@
 import React, { useState, useEffect } from 'react';
 import { Link, useLocation } from 'react-router-dom';
 import { motion } from 'framer-motion';
-import { Menu, X } from 'lucide-react';
+import { Menu, X, Sparkles } from 'lucide-react';
 import { useAppStore } from '../store/appStore';
 import { useAuth } from '../context/AuthContext';
 
@@ -28,6 +28,7 @@ const Navigation: React.FC = () => {
         { name: 'Home', path: '/' },
         { name: 'Services', path: '/services' },
         { name: 'Team', path: '/team' },
+        { name: 'SCOUT', path: '/scout' },
         user ? { name: 'Partner Portal', path: '/revlo-os' } : { name: 'Login', path: '/login' },
         { name: 'Results', path: '/results' },
     ];
@@ -67,12 +68,18 @@ const Navigation: React.FC = () => {
                             >
                                 <Link
                                     to={link.path}
-                                    className={`relative font-black text-[10px] uppercase tracking-[0.2em] transition-colors group ${location.pathname === link.path
+                                    className={`relative font-black text-[10px] uppercase tracking-[0.2em] transition-colors group flex items-center gap-2 ${location.pathname === link.path
                                         ? 'text-white'
-                                        : 'text-slate-500 hover:text-white'
+                                        : link.name === 'SCOUT' ? 'text-transparent bg-clip-text bg-gradient-to-r from-purple-400 to-fuchsia-400 hover:text-white' : 'text-slate-500 hover:text-white'
                                         }`}
                                 >
                                     {link.name}
+                                    {link.name === 'SCOUT' && (
+                                        <div className="flex items-center gap-1 px-1.5 py-0.5 bg-purple-500/20 border border-purple-500/30 rounded text-[7px] text-purple-400 leading-none">
+                                            <Sparkles className="w-2 h-2" />
+                                            AI
+                                        </div>
+                                    )}
                                     <span
                                         className={`absolute -bottom-1 left-0 h-0.5 bg-gradient-rainbow transition-all duration-300 ${location.pathname === link.path ? 'w-full' : 'w-0 group-hover:w-full'
                                             }`}

@@ -42,11 +42,11 @@ const TeamPage: React.FC = () => {
             id: 'LEAD-002'
         },
         {
-            name: 'NOUFAL',
+            name: 'NAOUFAL',
             role: 'Acquisition & Marketing Lead',
             title: 'CO-FOUNDER // CHIEF STRATEGY OFFICER',
-            bio: 'The customer acquisition specialist who knows every digital channel inside and out. Noufal manages the systems that bring high-quality leads directly to your business.',
-            extendedBio: `Noufal is a data-driven marketing strategist obsessed with acquisition efficiency. His multi-channel approach isn't just about traffic—it's about finding the right customers at the right moment. Through advanced data analysis and market research, he identifies and activates acquisition channels that deliver high-intent leads consistently and predictably.`,
+            bio: 'The customer acquisition specialist who knows every digital channel inside and out. Naoufal manages the systems that bring high-quality leads directly to your business.',
+            extendedBio: `Naoufal is a data-driven marketing strategist obsessed with acquisition efficiency. His multi-channel approach isn't just about traffic—it's about finding the right customers at the right moment. Through advanced data analysis and market research, he identifies and activates acquisition channels that deliver high-intent leads consistently and predictably.`,
             expertise: ['CUSTOMER ACQUISITION', 'MULTI-CHANNEL MARKETING', 'DATA ANALYSIS', 'MARKET RESEARCH', 'DIGITAL STRATEGY', 'PERFORMANCE TRACKING'],
             achievements: [
                 'Generated 500K+ qualified leads',
@@ -56,7 +56,7 @@ const TeamPage: React.FC = () => {
             ],
             gradient: 'from-blue-500 to-blue-400',
             initial: 'N',
-            image: '/594075087_122104441749139887_4262439585304172783_n.jpg',
+            image: '/623212696_1198362805386965_7706492375118911747_n.jpg',
             id: 'LEAD-003'
         },
     ];
@@ -210,7 +210,7 @@ const TeamPage: React.FC = () => {
                             </h2>
 
                             <p className="text-xl text-slate-400 leading-relaxed mb-12 font-medium">
-                                Jaryd&apos;s branding strategies lead into Eric&apos;s operational execution, fueled by Noufal&apos;s acquisition systems.
+                                Jaryd&apos;s branding strategies lead into Eric&apos;s operational execution, fueled by Naoufal&apos;s acquisition systems.
                                 We are a cohesive team built to scale your business as if it were our own.
                             </p>
 

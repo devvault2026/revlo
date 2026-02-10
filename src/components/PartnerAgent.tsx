@@ -56,7 +56,12 @@ interface Message {
     isSpeaking?: boolean;
 }
 
+import { useLocation } from 'react-router-dom'; // Added import
+
 const PartnerAgent: React.FC = () => {
+    const location = useLocation();
+    if (location.pathname.toLowerCase().includes('scout')) return null;
+
     const [isOpen, setIsOpen] = useState(false);
     const [input, setInput] = useState('');
     const [messages, setMessages] = useState<Message[]>([

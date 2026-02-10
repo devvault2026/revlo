@@ -23,13 +23,13 @@ const Team: React.FC = () => {
             image: '/515437137_761690583348698_3741883148247296552_n (1).jpg',
         },
         {
-            name: 'Noufal',
+            name: 'Naoufal',
             role: 'Acquisition & Marketing Lead',
-            bio: 'The lead generation specialist. Noufal manages the customer acquisition channels that bring high-quality leads directly to your business every single day.',
+            bio: 'The lead generation specialist. Naoufal manages the customer acquisition channels that bring high-quality leads directly to your business every single day.',
             expertise: ['Lead Generation', 'Digital Marketing', 'Market Expansion'],
             color: 'text-blue-400',
             initial: 'NM',
-            image: '/594075087_122104441749139887_4262439585304172783_n.jpg',
+            image: '/623212696_1198362805386965_7706492375118911747_n.jpg',
         },
     ];
 

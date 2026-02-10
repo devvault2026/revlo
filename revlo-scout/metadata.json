@@ -1,0 +1,7 @@
+{
+  "name": "Revlo Scout",
+  "description": "Elite lead intelligence for high-growth agencies.",
+  "requestFramePermissions": [
+    "microphone"
+  ]
+}
