@@ -5,21 +5,31 @@ import { ShieldAlert, Zap, Users, TrendingUp, ChevronLeft, ChevronRight, Play, P
 const testimonials = [
     {
         url: "https://res.cloudinary.com/dpfapm0tl/video/upload/v1769023688/URGENT_Agency_Owners_and_Entrepreneurs_-_Emotional_Testimonial_Video_Will_Blow_Your_Mind_1_ipz5cc.mp4",
+        poster: "https://res.cloudinary.com/dpfapm0tl/video/upload/v1769023688/URGENT_Agency_Owners_and_Entrepreneurs_-_Emotional_Testimonial_Video_Will_Blow_Your_Mind_1_ipz5cc.jpg",
         title: "Emotional Growth",
         client: "Ecom Founder",
         id: "v1"
     },
     {
-        url: "https://res.cloudinary.com/dpfapm0tl/video/upload/v1769023677/5cf6990c-c4d7-4ba9-9b32-66fa2113d1d1_agmkru.mp4",
+        url: "https://res.cloudinary.com/dpfapm0tl/video/upload/v1769023665/482268807_28714239028190908_2106583740464026710_n_fwvrem.mp4",
+        poster: "https://res.cloudinary.com/dpfapm0tl/video/upload/v1769023665/482268807_28714239028190908_2106583740464026710_n_fwvrem.jpg",
         title: "Scale Success",
         client: "Agency Owner",
         id: "v2"
     },
     {
-        url: "https://res.cloudinary.com/dpfapm0tl/video/upload/v1769023665/482268807_28714239028190908_2106583740464026710_n_fwvrem.mp4",
+        url: "https://res.cloudinary.com/dpfapm0tl/video/upload/v1769023677/5cf6990c-c4d7-4ba9-9b32-66fa2113d1d1_agmkru.mp4",
+        poster: "https://res.cloudinary.com/dpfapm0tl/video/upload/v1769023677/5cf6990c-c4d7-4ba9-9b32-66fa2113d1d1_agmkru.jpg",
         title: "Automation Edge",
         client: "Creative Director",
         id: "v3"
+    },
+    {
+        url: "https://res.cloudinary.com/dpfapm0tl/video/upload/v1769023844/Check_Out_Our_1_Testimonial___You_Cannot_Pay_For_Something_This_Good_1_okr5b6.mp4",
+        poster: "https://res.cloudinary.com/dpfapm0tl/video/upload/v1769023844/Check_Out_Our_1_Testimonial___You_Cannot_Pay_For_Something_This_Good_1_okr5b6.jpg",
+        title: "7-Figure Exit",
+        client: "Patient Boost",
+        id: "v4"
     }
 ];
 
@@ -170,7 +180,9 @@ const PromoVideo: React.FC = () => {
                                         <video
                                             ref={el => videoRefs.current[testimonials[activeIndex].id] = el}
                                             src={testimonials[activeIndex].url}
+                                            poster={testimonials[activeIndex].poster}
                                             playsInline
+                                            preload="metadata"
                                             className="w-full h-full object-cover"
                                             onEnded={() => setPlayingId(null)}
                                         />
