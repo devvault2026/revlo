@@ -49,8 +49,8 @@ const ReactiveBubble = React.memo(({ mouseX, mouseY }: { mouseX: any, mouseY: an
         xPercent: Math.random() * 100,
         startY: 110 + (Math.random() * 30),
         speed: Math.random() * 0.15 + 0.1,
-        size: Math.random() * 4 + 1.5,
-        brightness: 0.2 + Math.random() * 0.3
+        size: Math.random() * 8 + 4,
+        brightness: 0.3 + Math.random() * 0.4
     }), []);
 
     const bubbleXOffset = useMotionValue(0);
@@ -290,7 +290,7 @@ const EliteDevelopmentPage: React.FC = () => {
                 {/* Live Tactical Background Elements */}
                 <div className="absolute inset-0 overflow-hidden pointer-events-none">
                     {/* Interactive Purple Bubbles (from Scout Page) */}
-                    {[...Array(40)].map((_, i) => (
+                    {[...Array(150)].map((_, i) => (
                         <ReactiveBubble key={`bubble-${i}`} mouseX={mouseX} mouseY={mouseY} />
                     ))}
 
@@ -351,7 +351,7 @@ const EliteDevelopmentPage: React.FC = () => {
                 </div>
 
                 <div className="max-w-7xl mx-auto px-6 lg:px-8 relative z-10 w-full">
-                    <div className="grid lg:grid-cols-2 gap-16 items-center">
+                    <div className="grid grid-cols-1 lg:grid-cols-[0.9fr,1.1fr] gap-12 lg:gap-16 items-center">
                         {/* LEFT: LTR TYPOGRAPHY */}
                         <motion.div
                             initial={{ opacity: 0, x: -50 }}
@@ -365,7 +365,7 @@ const EliteDevelopmentPage: React.FC = () => {
                                 </span>
                             </div>
 
-                            <h1 className="text-5xl lg:text-[6rem] font-black font-display italic tracking-[-0.05em] mb-6 leading-[0.8] uppercase text-white text-left relative z-10">
+                            <h1 className="text-4xl sm:text-6xl lg:text-[6.5rem] font-black font-display italic tracking-tight mb-6 leading-[0.85] lg:leading-[0.8] uppercase text-white text-left relative z-10">
                                 <span className="relative inline-block group/impossible">
                                     {/* The Word - Base Layer */}
                                     <span className="relative z-10 text-white">IMPOSSIBLE</span>
@@ -405,7 +405,7 @@ const EliteDevelopmentPage: React.FC = () => {
                                             <motion.text
                                                 x="0"
                                                 y="0.82em"
-                                                className="font-black font-display italic text-5xl lg:text-[6rem] uppercase select-none"
+                                                className="font-black font-display italic text-4xl sm:text-6xl lg:text-[6.5rem] uppercase select-none"
                                                 fill="none"
                                                 stroke="#d8b4fe"
                                                 strokeWidth="3.5"
@@ -429,7 +429,7 @@ const EliteDevelopmentPage: React.FC = () => {
                                             <motion.text
                                                 x="0"
                                                 y="0.82em"
-                                                className="font-black font-display italic text-5xl lg:text-[6rem] uppercase select-none"
+                                                className="font-black font-display italic text-4xl sm:text-6xl lg:text-[6.5rem] uppercase select-none"
                                                 fill="none"
                                                 stroke="#d8b4fe"
                                                 strokeWidth="1.5"
@@ -465,7 +465,7 @@ const EliteDevelopmentPage: React.FC = () => {
                                 <span className="text-white font-bold">I architect market dominance through single-operator efficiency.</span>
                             </p>
 
-                            <div className="flex flex-col gap-4">
+                            <div className="hidden lg:flex flex-col gap-4">
                                 <div className="text-[10px] font-black uppercase tracking-[0.4em] text-slate-500 flex items-center gap-4 py-2 px-6 glass rounded-full border border-white/5">
                                     <ShieldCheck className="w-4 h-4 text-green-500" />
                                     <span>INFRASTRUCTURE: <span className="text-white italic">SCALABLE</span></span>
@@ -482,7 +482,7 @@ const EliteDevelopmentPage: React.FC = () => {
                             initial={{ opacity: 0, scale: 0.9, x: 50 }}
                             whileInView={{ opacity: 1, scale: 1, x: 0 }}
                             transition={{ duration: 0.8, delay: 0.2 }}
-                            className="relative group lg:pl-12 max-w-[420px] ml-auto"
+                            className="relative group lg:pl-12 max-w-[680px] lg:ml-auto w-full mt-12 lg:mt-0"
                         >
                             {/* Ambient Glows */}
                             <div className="absolute -inset-4 bg-gradient-to-r from-red-500/30 to-blue-500/30 blur-3xl opacity-40 group-hover:opacity-100 transition-opacity duration-700" />
@@ -580,7 +580,7 @@ const EliteDevelopmentPage: React.FC = () => {
                                 </div>
                             </div>
 
-                            {/* Floating S-CLASS Authority Seal */}
+                            {/* Floating Authority Seal */}
                             <motion.div
                                 animate={{
                                     y: [0, -10, 0],
@@ -595,9 +595,9 @@ const EliteDevelopmentPage: React.FC = () => {
                                     <div className="w-1 h-1 rounded-full bg-white/10" />
                                 </div>
                                 <div className="text-center relative">
-                                    <div className="text-[8px] font-black text-red-500 uppercase tracking-[0.2em] mb-1">S-01 STATUS</div>
+                                    <div className="text-[8px] font-black text-red-500 uppercase tracking-[0.2em] mb-1">CORE STATUS</div>
                                     <div className="text-4xl font-black text-white italic tracking-tighter leading-none">ACTIVE</div>
-                                    <div className="text-[7px] font-black text-slate-500 uppercase tracking-[0.5em] mt-1 italic">S-CLASS_QUALITY</div>
+                                    <div className="text-[7px] font-black text-slate-500 uppercase tracking-[0.5em] mt-1 italic">PREMIUM_QUALITY</div>
                                 </div>
                             </motion.div>
                         </motion.div>
@@ -664,7 +664,7 @@ const EliteDevelopmentPage: React.FC = () => {
             </section>
 
             {/* COMBAT READINESS - GLOBAL METRICS */}
-            <section className="py-32 relative overflow-hidden">
+            <section className="py-16 lg:py-32 relative overflow-hidden">
                 <div className="absolute inset-0 pointer-events-none">
                     <div className="absolute top-0 left-1/4 w-px h-full bg-gradient-to-b from-white/0 via-red-500/20 to-white/0" />
                     <div className="absolute top-0 left-2/4 w-px h-full bg-gradient-to-b from-white/0 via-blue-500/20 to-white/0" />
@@ -678,7 +678,7 @@ const EliteDevelopmentPage: React.FC = () => {
                                 <div className="h-px w-12 bg-red-500" />
                                 <span className="text-[10px] font-black text-red-500 uppercase tracking-[0.6em]">ELITE_PERFORMANCE_METRICS</span>
                             </div>
-                            <h2 className="text-6xl lg:text-8xl font-black font-display italic tracking-tight mb-0 uppercase text-white leading-[0.75]">
+                            <h2 className="text-4xl sm:text-6xl lg:text-8xl font-black font-display italic tracking-tight mb-0 uppercase text-white leading-[0.8] lg:leading-[0.75]">
                                 PERFORMANCE <br />
                                 <span className="gradient-text italic tracking-[-0.05em]">STANDARDS.</span>
                             </h2>
@@ -690,7 +690,7 @@ const EliteDevelopmentPage: React.FC = () => {
                         </div>
                     </div>
 
-                    <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-4 p-2 glass border border-white/5 rounded-[48px] bg-white/[0.02]">
+                    <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-4 p-2 glass border border-white/5 rounded-[32px] lg:rounded-[48px] bg-white/[0.02]">
                         {[
                             { label: "Security & Resilience", value: "100%", sub: "CRITICAL VULNERABILITIES ELIMINATED", icon: <ShieldAlert className="w-6 h-6" />, color: "text-red-500" },
                             { label: "Execution Speed", value: "12X", sub: "FASTER THAN TRADITIONAL AGENCIES", icon: <Zap className="w-6 h-6" />, color: "text-blue-500" },
@@ -700,14 +700,14 @@ const EliteDevelopmentPage: React.FC = () => {
                             <motion.div
                                 key={i}
                                 whileHover={{ y: -10, backgroundColor: 'rgba(255,255,255,0.04)' }}
-                                className="p-10 rounded-[40px] transition-all relative group overflow-hidden"
+                                className="p-6 lg:p-10 rounded-[24px] lg:rounded-[40px] transition-all relative group overflow-hidden"
                             >
-                                <div className={`absolute top-10 right-10 opacity-20 group-hover:opacity-100 transition-opacity ${stat.color}`}>
+                                <div className={`absolute top-6 right-6 lg:top-10 lg:right-10 opacity-20 group-hover:opacity-100 transition-opacity ${stat.color}`}>
                                     {stat.icon}
                                 </div>
-                                <div className="text-[10px] font-black text-slate-500 uppercase tracking-[0.4em] mb-8">{stat.label}</div>
-                                <div className="text-6xl lg:text-7xl font-black italic tracking-tighter text-white mb-6 group-hover:scale-110 transition-transform origin-left">{stat.value}</div>
-                                <div className={`text-[11px] font-black uppercase tracking-widest ${stat.color} flex items-center gap-3`}>
+                                <div className="text-[8px] lg:text-[10px] font-black text-slate-500 uppercase tracking-[0.3em] lg:tracking-[0.4em] mb-4 lg:mb-8">{stat.label}</div>
+                                <div className="text-5xl lg:text-7xl font-black italic tracking-tighter text-white mb-4 lg:mb-6 group-hover:scale-110 transition-transform origin-left">{stat.value}</div>
+                                <div className={`text-[9px] lg:text-[11px] font-black uppercase tracking-widest ${stat.color} flex items-center gap-2 lg:gap-3`}>
                                     <div className={`w-1.5 h-1.5 rounded-full animate-pulse bg-current`} />
                                     {stat.sub}
                                 </div>
@@ -718,7 +718,7 @@ const EliteDevelopmentPage: React.FC = () => {
             </section>
 
             {/* TACTICAL ARCHIVE - VERIFIED DEBRIEFS */}
-            <section className="py-32 relative border-y border-white/5 bg-[#020408] overflow-hidden">
+            <section className="py-16 lg:py-32 relative border-y border-white/5 bg-[#020408] overflow-hidden">
                 {/* Background HUD Layer */}
                 <div className="absolute inset-0 opacity-[0.03] pointer-events-none select-none overflow-hidden">
                     <div className="absolute top-1/2 left-1/2 -translate-x-1/2 -translate-y-1/2 scale-[3] blur-3xl text-[12rem] font-black text-white italic tracking-tighter uppercase whitespace-nowrap">
@@ -727,8 +727,8 @@ const EliteDevelopmentPage: React.FC = () => {
                 </div>
 
                 <div className="max-w-[1800px] mx-auto px-6 lg:px-12 relative z-10">
-                    <div className="grid lg:grid-cols-[1.2fr_0.8fr] gap-32 items-center">
-                        <div className="relative order-2 lg:order-1">
+                    <div className="grid grid-cols-1 lg:grid-cols-[1.2fr_0.8fr] gap-12 lg:gap-32 items-start">
+                        <div className="relative order-1">
                             <AnimatePresence mode="wait">
                                 <motion.div
                                     key={activeVideo}
@@ -757,18 +757,18 @@ const EliteDevelopmentPage: React.FC = () => {
                                         </div>
                                     </div>
 
-                                    {/* Overlay Tactical HUD */}
-                                    <div className="absolute top-12 left-12 flex flex-col gap-2">
+                                    {/* Overlay Tactical HUD - Hidden on Mobile */}
+                                    <div className="hidden sm:flex absolute top-12 left-12 flex-col gap-2 pointer-events-none">
                                         <div className="flex items-center gap-3 px-4 py-2 bg-black/40 backdrop-blur-md border border-white/10 rounded-xl">
                                             <div className="w-2 h-2 rounded-full bg-red-500 animate-ping" />
                                             <span className="text-[10px] font-black text-white uppercase tracking-widest leading-none">REPLAYING_INTEL: CLIENT_{activeVideo + 1}</span>
                                         </div>
                                     </div>
 
-                                    <div className="absolute inset-x-0 bottom-0 p-10 bg-gradient-to-t from-black via-black/40 to-transparent">
-                                        <div className="text-[12px] font-black text-blue-500 uppercase tracking-[0.4em] mb-4">{testimonials[activeVideo].client}</div>
-                                        <div className="text-4xl font-black italic text-white uppercase tracking-tighter mb-4 leading-none">{testimonials[activeVideo].title}</div>
-                                        <div className="flex gap-4 items-center">
+                                    <div className="absolute inset-x-0 bottom-0 p-6 sm:p-10 bg-gradient-to-t from-black via-black/40 to-transparent pointer-events-none">
+                                        <div className="text-[10px] sm:text-[12px] font-black text-blue-500 uppercase tracking-[0.2em] sm:tracking-[0.4em] mb-2 sm:mb-4">{testimonials[activeVideo].client}</div>
+                                        <div className="text-2xl sm:text-4xl font-black italic text-white uppercase tracking-tighter mb-0 sm:mb-4 leading-none">{testimonials[activeVideo].title}</div>
+                                        <div className="hidden sm:flex gap-4 items-center">
                                             <div className="h-px w-20 bg-white/20" />
                                             <div className="text-[10px] font-bold text-slate-500 uppercase tracking-widest">AUTHENTICATED_TRANSMISSION</div>
                                         </div>
@@ -776,11 +776,11 @@ const EliteDevelopmentPage: React.FC = () => {
                                 </motion.div>
                             </AnimatePresence>
 
-                            {/* Decorative Floating Status */}
+                            {/* Decorative Floating Status - Desktop Only */}
                             <motion.div
                                 animate={{ y: [0, -20, 0] }}
                                 transition={{ duration: 6, repeat: Infinity }}
-                                className="absolute -bottom-10 -right-10 glass p-6 rounded-[32px] border border-white/10 shadow-2xl z-20 max-w-[280px]"
+                                className="hidden lg:block absolute -bottom-10 -right-10 glass p-6 rounded-[32px] border border-white/10 shadow-2xl z-20 max-w-[280px]"
                             >
                                 <div className="flex items-start gap-4">
                                     <div className="w-12 h-12 rounded-2xl bg-blue-500/10 flex items-center justify-center border border-blue-500/20">
@@ -794,9 +794,9 @@ const EliteDevelopmentPage: React.FC = () => {
                             </motion.div>
                         </div>
 
-                        <div className="order-1 lg:order-2">
-                            <span className="text-[12px] font-black text-red-500 uppercase tracking-[0.6em] mb-12 block font-mono">// TACTICAL_DEBRIEFING_UNIT</span>
-                            <h2 className="text-6xl lg:text-7xl font-black font-display italic tracking-tight mb-16 uppercase text-white leading-[0.8]">
+                        <div className="order-2">
+                            <span className="text-[10px] sm:text-[12px] font-black text-red-500 uppercase tracking-[0.4em] lg:tracking-[0.6em] mb-6 lg:mb-12 block font-mono">// TACTICAL_DEBRIEFING_UNIT</span>
+                            <h2 className="text-4xl sm:text-6xl lg:text-7xl font-black font-display italic tracking-tight mb-8 lg:mb-16 uppercase text-white leading-[0.8]">
                                 VERIFIED <br />
                                 <span className="gradient-text italic tracking-[-0.03em]">INTEL.</span>
                             </h2>
@@ -809,12 +809,12 @@ const EliteDevelopmentPage: React.FC = () => {
                                             setActiveVideo(i);
                                             setPlayingId(null);
                                         }}
-                                        className={`flex items-center gap-10 w-full text-left transition-all p-8 rounded-[32px] border ${activeVideo === i ? 'bg-white/5 border-white/10 scale-105' : 'border-transparent opacity-40 hover:opacity-100 hover:bg-white/[0.02]'}`}
+                                        className={`flex items-center gap-6 sm:gap-10 w-full text-left transition-all p-5 sm:p-8 rounded-[24px] lg:rounded-[32px] border ${activeVideo === i ? 'bg-white/5 border-white/10 scale-102 lg:scale-105' : 'border-transparent opacity-40 hover:opacity-100 hover:bg-white/[0.02]'}`}
                                     >
-                                        <div className="text-5xl font-black italic tracking-tighter text-white opacity-20">0{i + 1}</div>
+                                        <div className="text-3xl sm:text-5xl font-black italic tracking-tighter text-white opacity-20">0{i + 1}</div>
                                         <div className="flex-1">
-                                            <div className="text-[10px] font-black uppercase tracking-[0.3em] text-blue-500 mb-2">{t.client}</div>
-                                            <div className="text-2xl font-black italic uppercase tracking-tight text-white leading-none">{t.title}</div>
+                                            <div className="text-[9px] sm:text-[10px] font-black uppercase tracking-[0.3em] text-blue-500 mb-1 sm:mb-2">{t.client}</div>
+                                            <div className="text-lg sm:text-2xl font-black italic uppercase tracking-tight text-white leading-none">{t.title}</div>
                                         </div>
                                         {activeVideo === i && (
                                             <motion.div layoutId="videoIndicator" className="w-3 h-3 rounded-full bg-blue-500 shadow-[0_0_15px_#3b82f6]" />
@@ -823,7 +823,7 @@ const EliteDevelopmentPage: React.FC = () => {
                                 ))}
                             </div>
 
-                            <p className="mt-20 text-xl text-slate-400 font-medium leading-relaxed italic border-l-4 border-red-500 pl-10 max-w-lg">
+                            <p className="mt-12 lg:mt-20 text-base sm:text-xl text-slate-400 font-medium leading-relaxed italic border-l-4 border-red-500 pl-6 lg:pl-10 max-w-lg">
                                 "In this game, there are those who talk about growth, and there are those who build the engines that force it. These are the engines."
                             </p>
                         </div>
@@ -832,7 +832,7 @@ const EliteDevelopmentPage: React.FC = () => {
             </section>
 
             {/* THE BLITZ PROTOCOL - MISSION TIMELINE */}
-            <section className="py-24 relative border-y border-white/5 overflow-hidden bg-[#020408]">
+            <section className="py-16 lg:py-24 relative border-y border-white/5 overflow-hidden bg-[#020408]">
                 {/* Tactical Background Overlay */}
                 <div className="absolute inset-0 pointer-events-none">
                     <div className="absolute inset-0 bg-dot-white opacity-[0.03]" />
@@ -849,7 +849,7 @@ const EliteDevelopmentPage: React.FC = () => {
                             <div className="w-2.5 h-2.5 rounded-full bg-fuchsia-500 animate-pulse" />
                             <span className="text-[10px] font-black text-fuchsia-400 uppercase tracking-[0.5em]">MISSION_EXECUTION_STAGES</span>
                         </motion.div>
-                        <h2 className="text-6xl lg:text-7xl font-black font-display italic tracking-tight uppercase leading-[0.8] text-white">
+                        <h2 className="text-4xl sm:text-6xl lg:text-7xl font-black font-display italic tracking-tight uppercase leading-[0.8] text-white">
                             THE BLITZ <span className="text-transparent bg-clip-text bg-gradient-to-r from-purple-400 via-fuchsia-400 to-red-400">PROTOCOL.</span>
                         </h2>
                     </div>
@@ -866,7 +866,7 @@ const EliteDevelopmentPage: React.FC = () => {
                                     whileInView={{ opacity: 1, x: 0 }}
                                     transition={{ duration: 0.8, delay: i * 0.1 }}
                                     viewport={{ once: true, margin: "-50px" }}
-                                    className="relative pl-24 group"
+                                    className="relative pl-16 lg:pl-24 group"
                                 >
                                     {/* NODE MARKER */}
                                     <div className="absolute left-0 top-0 flex items-center justify-center w-[64px] h-[64px] rounded-2xl bg-[#0a0c10] border border-white/10 z-20 group-hover:border-purple-500/50 transition-colors shadow-2xl">
@@ -875,40 +875,40 @@ const EliteDevelopmentPage: React.FC = () => {
                                     </div>
 
                                     {/* UNIFIED MISSION CARD */}
-                                    <div className="glass-dark border border-white/5 rounded-[32px] p-8 lg:p-10 hover:border-white/10 transition-all bg-white/[0.01]">
-                                        <div className="grid lg:grid-cols-[1.5fr_1fr] gap-12">
+                                    <div className="glass-dark border border-white/5 rounded-[24px] lg:rounded-[32px] p-6 lg:p-10 hover:border-white/10 transition-all bg-white/[0.01]">
+                                        <div className="grid lg:grid-cols-[1.5fr_1fr] gap-8 lg:gap-12">
                                             {/* LEFT SIDE: INTEL */}
                                             <div>
-                                                <div className="flex flex-wrap items-center gap-4 mb-6">
-                                                    <span className="text-[10px] font-black text-purple-400 uppercase tracking-[0.3em] font-mono px-3 py-1 bg-purple-500/10 border border-purple-500/20 rounded-md">
+                                                <div className="flex flex-wrap items-center gap-3 lg:gap-4 mb-4 lg:mb-6">
+                                                    <span className="text-[9px] lg:text-[10px] font-black text-purple-400 uppercase tracking-[0.3em] font-mono px-3 py-1 bg-purple-500/10 border border-purple-500/20 rounded-md">
                                                         {step.phase}
                                                     </span>
-                                                    <span className="text-[10px] font-black text-slate-500 uppercase tracking-[0.3em] font-mono px-3 py-1 bg-white/5 border border-white/10 rounded-md">
+                                                    <span className="text-[9px] lg:text-[10px] font-black text-slate-500 uppercase tracking-[0.3em] font-mono px-3 py-1 bg-white/5 border border-white/10 rounded-md">
                                                         DURATION: {step.duration}
                                                     </span>
                                                 </div>
 
-                                                <h3 className="text-3xl lg:text-4xl font-black italic uppercase tracking-tighter text-white mb-6 leading-none group-hover:text-purple-400 transition-colors">
+                                                <h3 className="text-2xl lg:text-3xl xl:text-4xl font-black italic uppercase tracking-tighter text-white mb-4 lg:mb-6 leading-none group-hover:text-purple-400 transition-colors">
                                                     {step.title}
                                                 </h3>
-                                                <p className="text-lg text-slate-400 font-medium italic leading-relaxed mb-6 border-l-2 border-white/5 pl-6">
+                                                <p className="text-sm lg:text-lg text-slate-400 font-medium italic leading-relaxed mb-6 border-l-2 border-white/5 pl-4 lg:pl-6">
                                                     "{step.desc}"
                                                 </p>
                                             </div>
 
                                             {/* RIGHT SIDE: MISSION MANIFEST (Deliverables) */}
-                                            <div className="bg-black/40 rounded-2xl p-6 border border-white/5">
-                                                <div className="flex items-center gap-2 mb-6">
+                                            <div className="bg-black/40 rounded-2xl p-4 lg:p-6 border border-white/5">
+                                                <div className="flex items-center gap-2 mb-4 lg:mb-6">
                                                     <div className="w-1.5 h-1.5 rounded-full bg-red-500 animate-pulse" />
                                                     <span className="text-[9px] font-black text-slate-400 uppercase tracking-widest">MISSION_MANIFEST</span>
                                                 </div>
-                                                <ul className="space-y-4">
+                                                <ul className="space-y-3 lg:space-y-4">
                                                     {step.deliverables.map((d, idx) => (
                                                         <li key={idx} className="flex items-center gap-3 group/item">
-                                                            <div className="w-6 h-6 rounded-lg bg-white/5 flex items-center justify-center border border-white/10 group-hover/item:border-purple-500/30 transition-colors">
-                                                                <CheckCircle2 className="w-3.5 h-3.5 text-purple-500/50 group-hover/item:text-purple-400 transition-colors" />
+                                                            <div className="w-5 h-5 lg:w-6 lg:h-6 rounded-lg bg-white/5 flex items-center justify-center border border-white/10 group-hover/item:border-purple-500/30 transition-colors">
+                                                                <CheckCircle2 className="w-3 h-3 lg:w-3.5 lg:h-3.5 text-purple-500/50 group-hover/item:text-purple-400 transition-colors" />
                                                             </div>
-                                                            <span className="text-xs font-black uppercase tracking-tight text-slate-300 group-hover/item:text-white transition-colors">{d}</span>
+                                                            <span className="text-[10px] lg:text-xs font-black uppercase tracking-tight text-slate-300 group-hover/item:text-white transition-colors">{d}</span>
                                                         </li>
                                                     ))}
                                                 </ul>
@@ -923,13 +923,13 @@ const EliteDevelopmentPage: React.FC = () => {
             </section>
 
             {/* THE EXPERIENCE - SYSTEM SYNCHRONIZATION */}
-            <section className="py-32 relative overflow-hidden">
+            <section className="py-16 lg:py-32 relative overflow-hidden">
                 <div className="max-w-[1800px] mx-auto px-6 lg:px-12">
-                    <div className="glass border border-white/5 rounded-[48px] p-12 lg:p-24 relative overflow-hidden bg-white/[0.01]">
+                    <div className="glass border border-white/5 rounded-[32px] lg:rounded-[48px] p-6 lg:p-24 relative overflow-hidden bg-white/[0.01]">
                         {/* Background Overlay */}
                         <div className="absolute -top-40 -right-40 w-[800px] h-[800px] bg-blue-500/5 blur-[200px] rounded-full pointer-events-none" />
 
-                        <div className="grid lg:grid-cols-[1fr_1.2fr] gap-32 items-center">
+                        <div className="grid grid-cols-1 lg:grid-cols-[1fr_1.2fr] gap-12 lg:gap-32 items-center">
                             <div>
                                 <div className="flex items-center gap-4 mb-4">
                                     <div className="h-px w-8 bg-blue-500" />
@@ -948,14 +948,14 @@ const EliteDevelopmentPage: React.FC = () => {
                                         <motion.div
                                             key={i}
                                             whileHover={{ x: 20 }}
-                                            className="flex gap-10 group cursor-default"
+                                            className="flex flex-col sm:flex-row gap-6 sm:gap-10 group cursor-default"
                                         >
-                                            <div className="flex-shrink-0 w-20 h-20 glass rounded-[32px] flex items-center justify-center text-blue-400 border border-white/10 group-hover:bg-blue-500 group-hover:text-white transition-all duration-500 shadow-xl">
-                                                {React.cloneElement(item.icon as React.ReactElement, { className: "w-8 h-8" })}
+                                            <div className="flex-shrink-0 w-16 h-16 lg:w-20 lg:h-20 glass rounded-[24px] lg:rounded-[32px] flex items-center justify-center text-blue-400 border border-white/10 group-hover:bg-blue-500 group-hover:text-white transition-all duration-500 shadow-xl">
+                                                {React.cloneElement(item.icon as React.ReactElement, { className: "w-6 h-6 lg:w-8 lg:h-8" })}
                                             </div>
                                             <div>
-                                                <h3 className="text-3xl font-black uppercase italic mb-3 tracking-tighter text-white group-hover:text-blue-400 transition-colors uppercase">{item.title}</h3>
-                                                <p className="text-lg text-slate-500 font-medium leading-relaxed max-w-lg">{item.desc}</p>
+                                                <h3 className="text-2xl lg:text-3xl font-black uppercase italic mb-3 tracking-tighter text-white group-hover:text-blue-400 transition-colors uppercase">{item.title}</h3>
+                                                <p className="text-sm lg:text-lg text-slate-500 font-medium leading-relaxed max-w-lg">{item.desc}</p>
                                             </div>
                                         </motion.div>
                                     ))}
@@ -1052,7 +1052,7 @@ const EliteDevelopmentPage: React.FC = () => {
             </section>
 
             {/* THE ARCHITECT'S DOSSIER - SOUL TRANSMISSION */}
-            <section className="py-32 relative overflow-hidden bg-white/[0.01]">
+            <section className="py-16 lg:py-32 relative overflow-hidden bg-white/[0.01]">
                 {/* Massive Watermark Background */}
                 <div className="absolute top-1/2 left-0 w-full text-center opacity-[0.01] pointer-events-none select-none">
                     <div className="text-[20rem] font-black italic tracking-tighter uppercase leading-none text-white whitespace-nowrap">
@@ -1061,7 +1061,7 @@ const EliteDevelopmentPage: React.FC = () => {
                 </div>
 
                 <div className="max-w-7xl mx-auto px-6 lg:px-8 relative z-10">
-                    <div className="grid lg:grid-cols-2 gap-24 items-start">
+                    <div className="grid lg:grid-cols-2 gap-12 lg:gap-24 items-start">
                         {/* Column 1: The Narrative */}
                         <div className="relative">
                             <motion.div
@@ -1079,11 +1079,11 @@ const EliteDevelopmentPage: React.FC = () => {
                             </h2>
 
                             <div className="space-y-10 relative">
-                                <div className="absolute left-[-24px] top-0 bottom-0 w-px bg-gradient-to-b from-red-500/50 via-white/10 to-transparent" />
-                                <p className="text-2xl text-slate-300 font-medium leading-tight italic border-l-2 border-red-500 pl-10 py-6 rounded-r-[32px] bg-red-500/[0.02]">
+                                <div className="absolute left-[-24px] top-0 bottom-0 w-px bg-gradient-to-b from-red-500/50 via-white/10 to-transparent hidden lg:block" />
+                                <p className="text-xl lg:text-2xl text-slate-300 font-medium leading-tight italic border-l-2 border-red-500 pl-6 lg:pl-10 py-6 rounded-r-[32px] bg-red-500/[0.02]">
                                     "Architecture is more than code. It is the calculated removal of friction between a visionary idea and market dominance."
                                 </p>
-                                <p className="text-lg text-slate-400 leading-relaxed font-light italic max-w-xl">
+                                <p className="text-base lg:text-lg text-slate-400 leading-relaxed font-light italic max-w-xl">
                                     I don't just build systems; I build foundations for the next decade of your enterprise. My philosophy is simple: Eliminate complexity, prioritize velocity, and maintain absolute quality.
                                 </p>
                             </div>
@@ -1114,13 +1114,13 @@ const EliteDevelopmentPage: React.FC = () => {
                         {/* Column 2: The Action & Manifesto */}
                         <div className="relative lg:pt-24">
                             <div className="space-y-20">
-                                <div className="glass border border-white/10 rounded-[40px] p-12 relative overflow-hidden bg-white/[0.02]">
+                                <div className="glass border border-white/10 rounded-[32px] lg:rounded-[40px] p-6 lg:p-12 relative overflow-hidden bg-white/[0.02]">
                                     <div className="absolute -right-10 -top-10 w-[200px] h-[200px] bg-red-500/5 blur-[100px] rounded-full" />
-                                    <h3 className="text-3xl font-black italic uppercase tracking-tight mb-10 text-white flex items-center gap-4">
-                                        <Zap className="w-8 h-8 text-yellow-500" />
+                                    <h3 className="text-2xl lg:text-3xl font-black italic uppercase tracking-tight mb-8 lg:mb-10 text-white flex items-center gap-4">
+                                        <Zap className="w-6 h-6 lg:w-8 lg:h-8 text-yellow-500" />
                                         THE UGLY WORK.
                                     </h3>
-                                    <div className="grid gap-6">
+                                    <div className="grid gap-4 lg:gap-6">
                                         {[
                                             { label: "Boredom Over Chaos", desc: "Doing the reps even when my mind begged for distraction." },
                                             { label: "Discipline Over Dopamine", desc: "Setting standards no one sees and doing the work no one praises." },
@@ -1130,12 +1130,12 @@ const EliteDevelopmentPage: React.FC = () => {
                                             <motion.div
                                                 key={i}
                                                 whileHover={{ scale: 1.02, x: 10 }}
-                                                className="flex gap-6 items-start p-6 bg-white/[0.02] border border-white/5 rounded-3xl hover:border-red-500/30 transition-all group"
+                                                className="flex gap-4 lg:gap-6 items-start p-4 lg:p-6 bg-white/[0.02] border border-white/5 rounded-2xl lg:rounded-3xl hover:border-red-500/30 transition-all group"
                                             >
-                                                <div className="text-red-500 font-black text-xl pt-0.5 group-hover:scale-110 transition-transform">{i + 1}.</div>
+                                                <div className="text-red-500 font-black text-lg lg:text-xl pt-0.5 group-hover:scale-110 transition-transform">{i + 1}.</div>
                                                 <div>
-                                                    <div className="text-[11px] font-black text-white uppercase tracking-[0.2em] mb-1">{work.label}</div>
-                                                    <div className="text-sm text-slate-500 uppercase font-medium tracking-tight leading-relaxed italic">{work.desc}</div>
+                                                    <div className="text-[10px] lg:text-[11px] font-black text-white uppercase tracking-[0.2em] mb-1">{work.label}</div>
+                                                    <div className="text-xs lg:text-sm text-slate-500 uppercase font-medium tracking-tight leading-relaxed italic">{work.desc}</div>
                                                 </div>
                                             </motion.div>
                                         ))}
@@ -1173,9 +1173,9 @@ const EliteDevelopmentPage: React.FC = () => {
                                     className="p-10 bg-white text-black rounded-[40px] relative overflow-hidden group shadow-2xl"
                                 >
                                     <div className="absolute top-0 right-0 p-8 opacity-10 group-hover:rotate-12 transition-transform">
-                                        <Rocket className="w-32 h-32 text-black" />
+                                        <Rocket className="w-24 h-24 lg:w-32 lg:h-32 text-black" />
                                     </div>
-                                    <h4 className="text-3xl font-black italic uppercase mb-4 tracking-tighter">THE PATH FORWARD</h4>
+                                    <h4 className="text-2xl lg:text-3xl font-black italic uppercase mb-4 tracking-tighter">THE PATH FORWARD</h4>
                                     <p className="text-sm font-bold leading-relaxed mb-6 uppercase tracking-tight max-w-md">
                                         You’re not lost – you’re in transit. The discomfort means you’re shedding an old skin.
                                     </p>
@@ -1190,9 +1190,9 @@ const EliteDevelopmentPage: React.FC = () => {
             </section>
 
             {/* THE PROPRIETARY SYSTEM - REVLO.OS */}
-            <section className="py-24 relative overflow-hidden bg-red-500/[0.01]">
+            <section className="py-16 lg:py-24 bg-red-500/[0.01] relative overflow-hidden">
                 <div className="max-w-7xl mx-auto px-6 lg:px-8 relative z-10">
-                    <div className="grid lg:grid-cols-[0.8fr_1.2fr] gap-20 items-center">
+                    <div className="grid grid-cols-1 lg:grid-cols-[0.8fr_1.2fr] gap-12 lg:gap-20 items-center">
                         <div className="relative">
                             <motion.div
                                 animate={{ rotate: 360 }}
@@ -1248,7 +1248,7 @@ const EliteDevelopmentPage: React.FC = () => {
                                     <motion.div
                                         key={i}
                                         whileHover={{ x: 20, backgroundColor: 'rgba(255,255,255,0.03)' }}
-                                        className="flex gap-8 p-8 glass border border-white/5 rounded-3xl transition-all group cursor-default"
+                                        className="flex flex-col sm:flex-row gap-6 sm:gap-8 p-6 lg:p-8 glass border border-white/5 rounded-3xl transition-all group cursor-default"
                                     >
                                         <div className="w-12 h-12 rounded-xl bg-white/5 border border-white/10 flex items-center justify-center text-red-500 group-hover:bg-red-500 group-hover:text-white transition-all shadow-lg">
                                             {sys.icon}
@@ -1267,7 +1267,7 @@ const EliteDevelopmentPage: React.FC = () => {
 
             {/* THE ARSENAL - TECH STACK */}
             {/* THE INFRASTRUCTURE - TECH ARSENAL */}
-            <section className="py-32 relative">
+            <section className="py-16 lg:py-32 relative">
                 <div className="max-w-7xl mx-auto px-6 lg:px-8">
                     <div className="flex flex-col lg:flex-row gap-12 items-end mb-16">
                         <div className="max-w-2xl">
@@ -1334,7 +1334,7 @@ const EliteDevelopmentPage: React.FC = () => {
             </section>
 
             {/* THE OFFERS - DEFINITIVE TIERS */}
-            <section className="py-24 bg-white/[0.01] border-y border-white/5 relative overflow-hidden">
+            <section className="py-16 lg:py-24 bg-white/[0.01] border-y border-white/5 relative overflow-hidden">
                 <div className="absolute top-1/2 left-1/2 -translate-x-1/2 -translate-y-1/2 w-[600px] h-[600px] bg-red-600/5 blur-[150px] rounded-full" />
 
                 <div className="max-w-7xl mx-auto px-6 lg:px-8 relative z-10">
@@ -1351,7 +1351,7 @@ const EliteDevelopmentPage: React.FC = () => {
                             {...fadeIn}
                             className="group p-1 bg-white/5 border border-white/10 rounded-[48px] hover:border-blue-500/30 transition-all"
                         >
-                            <div className="bg-[#020408] rounded-[44px] p-10 lg:p-14 relative overflow-hidden h-full flex flex-col">
+                            <div className="bg-[#020408] rounded-[44px] p-8 lg:p-14 relative overflow-hidden h-full flex flex-col">
                                 <div className="absolute top-0 right-0 p-10 opacity-5 scale-125 group-hover:scale-100 transition-transform duration-700">
                                     <Rocket className="w-48 h-48 text-blue-500" />
                                 </div>
@@ -1406,7 +1406,7 @@ const EliteDevelopmentPage: React.FC = () => {
                             className="group p-1 bg-white/10 border border-red-500/20 rounded-[48px] hover:border-red-500/50 transition-all relative overflow-hidden"
                         >
                             <div className="absolute inset-0 bg-red-500/5 blur-3xl opacity-50 pointer-events-none" />
-                            <div className="bg-[#020408] rounded-[44px] p-10 lg:p-14 relative overflow-hidden h-full flex flex-col">
+                            <div className="bg-[#020408] rounded-[44px] p-8 lg:p-14 relative overflow-hidden h-full flex flex-col">
                                 <div className="absolute top-0 right-0 p-10 opacity-10 scale-125 group-hover:scale-100 transition-transform duration-700">
                                     <Target className="w-48 h-48 text-red-500" />
                                 </div>
@@ -1475,7 +1475,7 @@ const EliteDevelopmentPage: React.FC = () => {
             </section>
 
             {/* THE MISSIONS - TACTICAL ARCHIVE SHOWCASE */}
-            <section className="py-32 relative overflow-hidden bg-[#020408]">
+            <section className="py-16 lg:py-32 relative overflow-hidden bg-[#020408]">
                 {/* Tactical Background Elements */}
                 <div className="absolute inset-0 pointer-events-none">
                     <div className="absolute inset-0 bg-dot-white opacity-[0.02]" />
@@ -1497,7 +1497,7 @@ const EliteDevelopmentPage: React.FC = () => {
                         </h2>
                     </div>
 
-                    <div className="space-y-32">
+                    <div className="space-y-16 lg:space-y-32">
                         {eliteProjects.map((project, i) => (
                             <motion.div
                                 key={project.id}
@@ -1505,7 +1505,7 @@ const EliteDevelopmentPage: React.FC = () => {
                                 whileInView={{ opacity: 1, y: 0 }}
                                 className="group relative"
                             >
-                                <div className={`grid gap-12 lg:gap-20 items-start ${i % 2 === 0 ? 'lg:grid-cols-[1.2fr,0.8fr]' : 'lg:grid-cols-[0.8fr,1.2fr]'}`}>
+                                <div className={`grid grid-cols-1 gap-8 lg:gap-20 items-start ${i % 2 === 0 ? 'lg:grid-cols-[1.2fr,0.8fr]' : 'lg:grid-cols-[0.8fr,1.2fr]'}`}>
                                     {/* Project Visual Container */}
                                     <div className={`relative ${i % 2 === 1 ? 'lg:order-2' : ''}`}>
                                         <div className="relative aspect-video rounded-3xl overflow-hidden glass border border-white/10 group-hover:border-purple-500/30 transition-all duration-700">
@@ -1572,7 +1572,7 @@ const EliteDevelopmentPage: React.FC = () => {
             </section>
 
             {/* THE COMPARISON - TACTICAL AUDIT */}
-            <section className="py-32 relative bg-[#020408] overflow-hidden">
+            <section className="py-16 lg:py-32 relative bg-[#020408] overflow-hidden">
                 {/* Background Grid */}
                 <div className="absolute inset-0 bg-grid-white opacity-[0.01] pointer-events-none" />
                 <div className="absolute top-0 left-0 w-full h-px bg-gradient-to-r from-transparent via-red-500/20 to-transparent" />
@@ -1595,12 +1595,12 @@ const EliteDevelopmentPage: React.FC = () => {
                         </p>
                     </div>
 
-                    <div className="grid lg:grid-cols-2 gap-8 items-stretch">
+                    <div className="grid grid-cols-1 lg:grid-cols-2 gap-8 items-stretch">
                         {/* TRADITIONAL AGENCY - THE OBSOLETE */}
                         <motion.div
                             initial={{ opacity: 0, x: -30 }}
                             whileInView={{ opacity: 1, x: 0 }}
-                            className="glass-dark border border-white/5 rounded-[40px] p-12 lg:p-16 relative overflow-hidden group bg-white/[0.01]"
+                            className="glass-dark border border-white/5 rounded-[40px] p-8 lg:p-16 relative overflow-hidden group bg-white/[0.01]"
                         >
                             <div className="absolute top-0 left-0 p-8 opacity-5 scale-125 rotate-12">
                                 <XCircle className="w-32 h-32 text-slate-500" />
@@ -1631,7 +1631,7 @@ const EliteDevelopmentPage: React.FC = () => {
                         <motion.div
                             initial={{ opacity: 0, x: 30 }}
                             whileInView={{ opacity: 1, x: 0 }}
-                            className="bg-white rounded-[40px] p-12 lg:p-16 relative overflow-hidden group shadow-[0_30px_60px_rgba(255,255,255,0.03)]"
+                            className="bg-white rounded-[40px] p-8 lg:p-16 relative overflow-hidden group shadow-[0_30px_60px_rgba(255,255,255,0.03)]"
                         >
                             <div className="absolute top-0 right-0 p-8 opacity-10 scale-125 -rotate-12 group-hover:rotate-0 transition-transform duration-700">
                                 <Rocket className="w-32 h-32 text-red-600" />
@@ -1660,7 +1660,7 @@ const EliteDevelopmentPage: React.FC = () => {
                     </div>
 
                     {/* COMPARISON METRICS - THE BOTTOM LINE */}
-                    <div className="mt-24 grid sm:grid-cols-2 lg:grid-cols-4 gap-6">
+                    <div className="mt-24 grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-6">
                         {comparisons.slice(0, 4).map((c, i) => (
                             <motion.div
                                 key={i}
@@ -1687,12 +1687,12 @@ const EliteDevelopmentPage: React.FC = () => {
             </section>
 
             {/* COMMANDER'S INTEL - FAQ DEBRIEF */}
-            <section className="py-24 relative overflow-hidden bg-[#020408]">
+            <section className="py-16 lg:py-24 relative overflow-hidden bg-[#020408]">
                 <div className="absolute top-0 right-0 w-[800px] h-[800px] bg-red-600/[0.02] blur-[200px] rounded-full -z-10 opacity-60" />
                 <div className="absolute inset-0 bg-grid-white opacity-[0.01]" />
 
                 <div className="max-w-7xl mx-auto px-6 lg:px-8 relative z-10">
-                    <div className="grid lg:grid-cols-[0.7fr_1.3fr] gap-24">
+                    <div className="grid grid-cols-1 lg:grid-cols-[0.7fr_1.3fr] gap-12 lg:gap-24">
                         <motion.div {...fadeIn}>
                             <motion.div
                                 initial={{ opacity: 0, scale: 0.95 }}
@@ -1710,7 +1710,7 @@ const EliteDevelopmentPage: React.FC = () => {
                                 "The only thing standing between you and market dominance is a lack of clarity. Let's resolve the intel gaps."
                             </p>
 
-                            <div className="p-10 glass-dark border border-white/5 rounded-[32px] relative overflow-hidden group bg-white/[0.01]">
+                            <div className="p-8 lg:p-10 glass-dark border border-white/5 rounded-[32px] relative overflow-hidden group bg-white/[0.01]">
                                 <Quote className="absolute -top-6 -right-6 w-32 h-32 text-red-500/5 group-hover:text-red-500/10 transition-all rotate-12" />
                                 <div className="relative z-10">
                                     <div className="flex items-center gap-6 mb-8">
@@ -1758,7 +1758,7 @@ const EliteDevelopmentPage: React.FC = () => {
             {/* ZERO-RISK MISSION PROTOCOL */}
             <section className="py-32 relative bg-[#020408] overflow-hidden">
                 <div className="max-w-7xl mx-auto px-6 lg:px-8 relative z-10">
-                    <div className="bg-red-500/[0.02] rounded-[48px] border border-red-500/10 p-10 lg:p-14 overflow-hidden relative group">
+                    <div className="bg-red-500/[0.02] rounded-[48px] border border-red-500/10 p-8 lg:p-14 overflow-hidden relative group">
                         <div className="absolute inset-0 bg-grid-white opacity-[0.01] pointer-events-none" />
                         <div className="absolute -bottom-20 -right-20 w-[600px] h-[600px] bg-red-500/10 blur-[150px] rounded-full group-hover:bg-red-500/15 transition-all duration-1000" />
 
@@ -1789,7 +1789,7 @@ const EliteDevelopmentPage: React.FC = () => {
                                     <motion.div
                                         key={i}
                                         whileHover={{ x: 10, backgroundColor: 'rgba(239, 68, 68, 0.03)' }}
-                                        className="p-8 glass-dark border border-white/5 rounded-3xl transition-all flex items-start gap-8 group/item shadow-xl bg-white/[0.01]"
+                                        className="p-6 lg:p-8 glass-dark border border-white/5 rounded-3xl transition-all flex items-start gap-4 lg:gap-8 group/item shadow-xl bg-white/[0.01]"
                                     >
                                         <div className="w-14 h-14 rounded-2xl bg-red-500/10 flex items-center justify-center text-red-500 border border-red-500/20 group-hover/item:scale-105 transition-all">
                                             {g.icon}
@@ -1807,7 +1807,7 @@ const EliteDevelopmentPage: React.FC = () => {
             </section>
 
             {/* FINAL MISSION CONTROL - CTA */}
-            <section className="py-32 relative overflow-hidden bg-[#020408]">
+            <section className="py-16 lg:py-32 relative overflow-hidden bg-[#020408]">
                 {/* Massive Animated Background Text */}
                 <div className="absolute inset-0 flex items-center justify-center opacity-[0.01] pointer-events-none select-none overflow-hidden" >
                     <span className="text-[25vw] font-black italic tracking-tighter uppercase whitespace-nowrap animate-pulse text-white/5">DEPLOY_NOW.</span>
