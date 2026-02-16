@@ -553,9 +553,13 @@ const EliteDevelopmentPage: React.FC = () => {
                                     <div className="mt-4 flex items-center justify-between bg-white/[0.02] p-3 rounded-xl border border-white/5">
                                         <div className="flex items-center gap-3">
                                             <div className="flex -space-x-3">
-                                                {[1, 2, 3].map(i => (
+                                                {[
+                                                    "https://res.cloudinary.com/dpfapm0tl/image/upload/v1770747933/ChatGPT_Image_Feb_10_2026_01_25_10_PM_azsx64.png",
+                                                    "https://res.cloudinary.com/dpfapm0tl/image/upload/v1771260637/280035b5-28eb-46de-afb9-34e98fdc48cb_ijq1zm.jpg",
+                                                    "https://res.cloudinary.com/dpfapm0tl/image/upload/v1771260716/ChatGPT_Image_Feb_16_2026_11_51_38_AM_elz0tz.png"
+                                                ].map((url, i) => (
                                                     <div key={i} className="w-8 h-8 rounded-full border-2 border-black bg-slate-800 flex items-center justify-center overflow-hidden ring-1 ring-red-500/30">
-                                                        <div className="w-full h-full bg-gradient-to-br from-slate-700 to-slate-900" />
+                                                        <img src={url} alt={`Project ${i + 1}`} className="w-full h-full object-cover" />
                                                     </div>
                                                 ))}
                                             </div>
