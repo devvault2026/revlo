@@ -28,6 +28,7 @@ const Navigation: React.FC = () => {
         { name: 'Home', path: '/' },
         { name: 'Solutions', path: '/services' },
         { name: 'Build', path: '/elite-development' },
+        { name: 'GHL', path: '/ghl-automation' },
         { name: 'Takeoff', path: '/takeoff-agent' },
         { name: 'Team', path: '/team' },
         { name: 'SCOUT', path: '/scout' },

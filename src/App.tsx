@@ -35,6 +35,7 @@ import SnowblowrPage from './pages/projects/SnowblowrPage';
 import ScoutPage from './pages/ScoutPage';
 import TakeoffAgentPage from './pages/TakeoffAgentPage';
 import EliteDevelopmentPage from './pages/EliteDevelopmentPage';
+import GHLAutomationPage from './pages/GHLAutomationPage';
 
 // Components
 import Navigation from './components/Navigation';
@@ -104,6 +105,7 @@ function App() {
                                     } />
                                     <Route path="/takeoff-agent" element={<TakeoffAgentPage />} />
                                     <Route path="/elite-development" element={<EliteDevelopmentPage />} />
+                                    <Route path="/ghl-automation" element={<GHLAutomationPage />} />
                                     <Route path="/offers/esdr" element={
                                         <>
                                             <Navigation />

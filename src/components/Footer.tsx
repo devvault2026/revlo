@@ -42,6 +42,11 @@ const Footer: React.FC = () => {
                                 </Link>
                             </li>
                             <li>
+                                <Link to="/ghl-automation" className="text-sm font-medium text-slate-500 hover:text-white transition-all uppercase tracking-[0.2em]">
+                                    GHL Automation
+                                </Link>
+                            </li>
+                            <li>
                                 <Link to="/services" className="text-sm font-medium text-slate-500 hover:text-white transition-all uppercase tracking-[0.2em]">
                                     Sales Automation
                                 </Link>
