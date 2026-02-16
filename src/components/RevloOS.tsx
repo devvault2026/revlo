@@ -128,7 +128,7 @@ const RevloOS: React.FC = () => {
                             </p>
                         </div>
 
-                        <motion.button
+                        {/* <motion.button
                             onClick={scrollToContact}
                             className="group px-12 py-6 bg-white text-black font-black uppercase tracking-widest text-[11px] rounded-2xl hover:bg-slate-200 transition-all duration-300 flex items-center gap-4 shadow-[0_0_30px_rgba(255,255,255,0.1)] hover:shadow-[0_0_50px_rgba(255,255,255,0.2)] italic"
                             whileHover={{ scale: 1.05, y: -2 }}
@@ -136,7 +136,7 @@ const RevloOS: React.FC = () => {
                         >
                             PARTNER NOW
                             <Zap className="w-4 h-4 fill-current" />
-                        </motion.button>
+                        </motion.button> */}
                     </div>
                 </motion.div>
             </div>

@@ -1,7 +1,6 @@
 import React from 'react';
 import { motion } from 'framer-motion';
 import Hero from '../components/Hero';
-import SnowblowrShowcase from '../components/SnowblowrShowcase';
 import PromoVideo from '../components/PromoVideo';
 import Results from '../components/Results';
 import Manifesto from '../components/Manifesto';
@@ -21,7 +20,6 @@ const HomePage: React.FC = () => {
             transition={{ duration: 0.5 }}
         >
             <Hero />
-            <SnowblowrShowcase />
             <PromoVideo />
             <Results />
             <Manifesto />
