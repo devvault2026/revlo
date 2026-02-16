@@ -22,9 +22,9 @@ const Manifesto: React.FC = () => {
                     viewport={{ once: true }}
                     className="text-4xl lg:text-7xl font-black font-display tracking-tight leading-[0.9] italic uppercase"
                 >
-                    SOFTWARE PROVIDES <span className="bg-black text-white px-4">TOOLS.</span>
-                    <br />PARTNERS PROVIDE
-                    <br /><span className="text-red-600">RESULTS.</span> WE ARE YOUR TEAM.
+                    MEDIOCRE IS <span className="bg-black text-white px-4">DEAD.</span>
+                    <br />THE FUTURE IS
+                    <br /><span className="text-red-600">IRREFUTABLE.</span> WE ARE THE EDGE.
                 </motion.h2>
 
                 <motion.div
@@ -35,8 +35,7 @@ const Manifesto: React.FC = () => {
                     className="mt-16 max-w-2xl mx-auto"
                 >
                     <p className="text-xl lg:text-3xl font-bold leading-tight text-black/60">
-                        The AI revolution isn&apos;t about replacing humans—it&apos;s about empowering them.
-                        We don&apos;t just sell you a platform; we join your mission as your dedicated AI growth department.
+                        In a world of noise, we provide the signal. We don't just build websites or agents; we build the absolute, undisputed standard for how your business should operate and scale in 2026.
                     </p>
                 </motion.div>
             </div>

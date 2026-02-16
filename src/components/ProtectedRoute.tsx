@@ -13,7 +13,7 @@ const ProtectedRoute: React.FC<ProtectedRouteProps> = ({ children, requiredRole 
 
     if (loading) {
         return (
-            <div className="h-screen w-screen flex items-center justify-center bg-white">
+            <div className="h-screen w-screen flex items-center justify-center bg-[#020408]">
                 <NeuralLoader />
             </div>
         );

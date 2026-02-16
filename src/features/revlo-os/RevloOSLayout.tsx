@@ -85,15 +85,15 @@ const RevloOSLayout: React.FC<RevloOSLayoutProps> = ({ children, currentView, se
     const groups = ["Monitoring", "Growth", "CRM", "Inbox", "Resources", "Settings"];
 
     return (
-        <div className="flex h-screen bg-[#F8FAFC] overflow-hidden select-none">
+        <div className="flex h-screen bg-[#020408] text-slate-200 overflow-hidden select-none">
             {/* Ambient Background Glows */}
-            <div className="fixed top-0 right-0 w-[500px] h-[500px] bg-purple-100/30 rounded-full blur-[120px] -translate-y-1/2 translate-x-1/2 pointer-events-none" />
-            <div className="fixed bottom-0 left-0 w-[500px] h-[500px] bg-blue-100/20 rounded-full blur-[120px] translate-y-1/2 -translate-x-1/2 pointer-events-none" />
+            <div className="fixed top-0 right-0 w-[500px] h-[500px] bg-purple-600/5 rounded-full blur-[120px] -translate-y-1/2 translate-x-1/2 pointer-events-none" />
+            <div className="fixed bottom-0 left-0 w-[500px] h-[500px] bg-blue-600/5 rounded-full blur-[120px] translate-y-1/2 -translate-x-1/2 pointer-events-none" />
 
             {/* Mobile Overlay */}
             {isSidebarOpen && (
                 <div
-                    className="fixed inset-0 bg-purple-500/10 backdrop-blur-md z-30 lg:hidden"
+                    className="fixed inset-0 bg-black/60 backdrop-blur-md z-30 lg:hidden"
                     onClick={() => setIsSidebarOpen(false)}
                 />
             )}
@@ -106,28 +106,28 @@ const RevloOSLayout: React.FC<RevloOSLayoutProps> = ({ children, currentView, se
                     width: isSidebarCollapsed ? 90 : 280
                 }}
                 transition={{ type: "spring", damping: 25, stiffness: 200 }}
-                className={`fixed lg:relative z-[100] h-full bg-white border-r border-slate-200 shadow-xl lg:shadow-none`}
+                className={`fixed lg:relative z-[100] h-full bg-[#0a0c12]/80 backdrop-blur-xl border-r border-white/5 shadow-2xl lg:shadow-none`}
             >
                 <div className="flex flex-col h-full">
                     {/* Logo Section */}
-                    <div className={`border-b border-slate-100 relative transition-all duration-300 ${isSidebarCollapsed ? 'p-5' : 'p-8'}`}>
+                    <div className={`border-b border-white/5 relative transition-all duration-300 ${isSidebarCollapsed ? 'p-5' : 'p-8'}`}>
                         {isSidebarCollapsed ? (
                             <div className="flex items-center justify-center">
-                                <div className="p-2 bg-gradient-rainbow rounded-xl shadow-lg shadow-purple-200">
+                                <div className="p-2 bg-gradient-rainbow rounded-xl shadow-lg shadow-purple-500/10">
                                     <img src="/logo.png" alt="R" className="w-6 h-6 object-contain brightness-0 invert" />
                                 </div>
                             </div>
                         ) : (
                             <div className="flex items-center gap-4">
-                                <div className="p-2.5 bg-gradient-rainbow rounded-2xl shadow-xl shadow-purple-200">
+                                <div className="p-2.5 bg-gradient-rainbow rounded-2xl shadow-xl shadow-purple-500/10">
                                     <img src="/logo.png" alt="Revlo" className="w-8 h-8 object-contain brightness-0 invert" />
                                 </div>
                                 <div className="flex flex-col">
                                     <div className="flex items-center gap-1.5">
-                                        <span className="text-2xl font-black font-display tracking-tight text-slate-900">REVLO</span>
+                                        <span className="text-2xl font-black font-display tracking-tight text-white">REVLO</span>
                                         <span className="text-[10px] font-black bg-purple-600 text-white px-1.5 py-0.5 rounded-md leading-none shadow-sm shadow-purple-200 uppercase tracking-widest">Portal</span>
                                     </div>
-                                    <p className="text-[10px] font-bold text-slate-400 uppercase tracking-widest mt-1">Partner Network</p>
+                                    <p className="text-[10px] font-bold text-slate-500 uppercase tracking-widest mt-1">Partner Network</p>
                                 </div>
                             </div>
                         )}
@@ -135,9 +135,9 @@ const RevloOSLayout: React.FC<RevloOSLayoutProps> = ({ children, currentView, se
                         {/* Collapse Button - Desktop Only */}
                         <button
                             onClick={() => setIsSidebarCollapsed(!isSidebarCollapsed)}
-                            className="hidden lg:flex absolute -right-3.5 top-8 w-7 h-7 bg-white border border-slate-200 rounded-full items-center justify-center shadow-md hover:shadow-lg hover:border-purple-300 transition-all z-50 group"
+                            className="hidden lg:flex absolute -right-3.5 top-8 w-7 h-7 bg-[#0a0c12] border border-white/10 rounded-full items-center justify-center shadow-md hover:shadow-lg hover:border-purple-500/50 transition-all z-50 group"
                         >
-                            <ChevronRight className={`w-4 h-4 text-slate-400 group-hover:text-purple-600 transition-transform ${isSidebarCollapsed ? '' : 'rotate-180'}`} />
+                            <ChevronRight className={`w-4 h-4 text-slate-500 group-hover:text-purple-400 transition-transform ${isSidebarCollapsed ? '' : 'rotate-180'}`} />
                         </button>
                     </div>
 
@@ -146,9 +146,9 @@ const RevloOSLayout: React.FC<RevloOSLayoutProps> = ({ children, currentView, se
                         {groups.map((group) => (
                             <div key={group}>
                                 {!isSidebarCollapsed ? (
-                                    <div className="text-[10px] font-black text-slate-400 uppercase tracking-[0.2em] mb-4 px-3 opacity-60">{group}</div>
+                                    <div className="text-[10px] font-black text-slate-600 uppercase tracking-[0.2em] mb-4 px-3 opacity-60">{group}</div>
                                 ) : (
-                                    <div className="h-px bg-slate-100 mb-6 mx-2" />
+                                    <div className="h-px bg-white/5 mb-6 mx-2" />
                                 )}
                                 <div className="space-y-1.5">
                                     {groupedItems[group]?.map((item, index) => {
@@ -162,20 +162,20 @@ const RevloOSLayout: React.FC<RevloOSLayoutProps> = ({ children, currentView, se
                                                 }}
                                                 className={`w-full flex items-center transition-all duration-300 group relative ${isSidebarCollapsed ? 'justify-center py-3' : 'gap-3.5 px-4 py-3'
                                                     } rounded-2xl ${isActive
-                                                        ? 'bg-purple-50 text-purple-700 shadow-sm border border-purple-100/50'
-                                                        : 'text-slate-500 hover:bg-slate-50 hover:text-slate-900'
+                                                        ? 'bg-purple-500/10 text-white shadow-sm border border-purple-500/20'
+                                                        : 'text-slate-400 hover:bg-white/5 hover:text-white'
                                                     }`}
                                             >
-                                                <span className={`${isActive ? 'text-purple-600' : 'text-slate-400 group-hover:text-slate-600'} transition-colors`}>
+                                                <span className={`${isActive ? 'text-purple-400' : 'text-slate-500 group-hover:text-slate-300'} transition-colors`}>
                                                     {item.icon}
                                                 </span>
                                                 {!isSidebarCollapsed && (
-                                                    <span className={`font-black text-sm tracking-tight ${isActive ? 'text-purple-900' : ''}`}>{item.label}</span>
+                                                    <span className={`font-black text-sm tracking-tight ${isActive ? 'text-white' : ''}`}>{item.label}</span>
                                                 )}
 
                                                 {/* Tooltip for collapsed mode */}
                                                 {isSidebarCollapsed && (
-                                                    <div className="absolute left-[110%] bg-white border border-slate-200 text-slate-900 text-[10px] font-black uppercase tracking-widest px-3 py-2 rounded-xl opacity-0 pointer-events-none group-hover:opacity-100 transition-all transform group-hover:translate-x-1 whitespace-nowrap z-50 shadow-2xl">
+                                                    <div className="absolute left-[110%] bg-[#0a0c12] border border-white/10 text-white text-[10px] font-black uppercase tracking-widest px-3 py-2 rounded-xl opacity-0 pointer-events-none group-hover:opacity-100 transition-all transform group-hover:translate-x-1 whitespace-nowrap z-50 shadow-2xl">
                                                         {item.label}
                                                     </div>
                                                 )}
@@ -195,18 +195,31 @@ const RevloOSLayout: React.FC<RevloOSLayoutProps> = ({ children, currentView, se
                     </nav>
 
                     {/* Footer / User Section */}
-                    <div className={`border-t border-slate-100 transition-all duration-300 ${isSidebarCollapsed ? 'p-3' : 'p-6'}`}>
-                        <div className={`flex items-center transition-all bg-slate-50 border border-slate-100 rounded-2xl ${isSidebarCollapsed ? 'justify-center p-2' : 'gap-3 p-4'}`}>
-                            <div className="w-10 h-10 bg-gradient-purple rounded-xl flex items-center justify-center text-white font-black shadow-lg shadow-purple-100 flex-shrink-0">
-                                {profile?.full_name?.charAt(0) || user?.email?.charAt(0) || 'A'}
+                    <div className={`border-t border-white/5 transition-all duration-300 ${isSidebarCollapsed ? 'p-3' : 'p-6'}`}>
+                        {isSidebarCollapsed ? (
+                            <div className="flex justify-center mb-4">
+                                <img
+                                    src={user?.imageUrl}
+                                    alt="Profile"
+                                    className="w-10 h-10 rounded-xl object-cover shadow-lg shadow-purple-500/20"
+                                />
                             </div>
-                            {!isSidebarCollapsed && (
+                        ) : (
+                            <div className="flex items-center gap-3 bg-white/5 border border-white/5 rounded-2xl p-4 mb-4">
+                                <img
+                                    src={user?.imageUrl}
+                                    alt="Profile"
+                                    className="w-10 h-10 rounded-xl object-cover shadow-lg shadow-purple-500/20"
+                                />
                                 <div className="flex-1 min-w-0">
-                                    <p className="text-sm font-black text-slate-900 truncate">{profile?.full_name || 'Admin User'}</p>
-                                    <p className="text-[11px] font-bold text-slate-400 truncate tracking-tight">{user?.email}</p>
+                                    <p className="text-sm font-black text-white truncate">{user?.fullName || 'User'}</p>
+                                    <p className="text-[11px] font-bold text-slate-500 truncate tracking-tight">
+                                        {user?.primaryEmailAddress?.emailAddress}
+                                    </p>
                                 </div>
-                            )}
-                        </div>
+                            </div>
+                        )}
+
 
                         {/* SECURE SIGN OUT */}
                         <button
@@ -214,27 +227,20 @@ const RevloOSLayout: React.FC<RevloOSLayoutProps> = ({ children, currentView, se
                             onClick={async (e) => {
                                 e.preventDefault();
                                 e.stopPropagation();
-                                console.log("SYSTEM: Terminating encryption keys and session...");
                                 try {
-                                    // 1. Wipe local state
                                     localStorage.clear();
                                     sessionStorage.clear();
-
-                                    // 2. Kill Supabase session
                                     await signOut();
-
-                                    // 3. Final atomic exit
                                     window.location.replace('/login');
                                 } catch (err) {
-                                    console.error("EXIT ERROR:", err);
                                     window.location.replace('/login');
                                 }
                             }}
-                            className={`w-full mt-4 flex items-center transition-all duration-300 group relative z-50 ${isSidebarCollapsed ? 'justify-center py-4' : 'gap-3 px-4 py-3 bg-slate-50 hover:bg-red-50 rounded-2xl border border-slate-100 hover:border-red-100 shadow-sm hover:shadow-md'}`}
+                            className={`w-full mt-4 flex items-center transition-all duration-300 group relative z-50 ${isSidebarCollapsed ? 'justify-center py-4' : 'gap-3 px-4 py-3 bg-white/5 hover:bg-red-500/10 rounded-2xl border border-white/5 hover:border-red-500/20 shadow-sm'}`}
                         >
-                            <LogOut className={`w-4 h-4 ${isSidebarCollapsed ? 'text-slate-400 group-hover:text-red-500' : 'text-slate-400 group-hover:text-red-500'} transition-colors`} />
+                            <LogOut className={`w-4 h-4 ${isSidebarCollapsed ? 'text-slate-500 group-hover:text-red-500' : 'text-slate-500 group-hover:text-red-500'} transition-colors`} />
                             {!isSidebarCollapsed && (
-                                <span className="text-[10px] font-black text-slate-500 group-hover:text-red-600 uppercase tracking-[0.2em] transition-colors">
+                                <span className="text-[10px] font-black text-slate-500 group-hover:text-red-400 uppercase tracking-[0.2em] transition-colors">
                                     Sign Out
                                 </span>
                             )}
@@ -246,29 +252,29 @@ const RevloOSLayout: React.FC<RevloOSLayoutProps> = ({ children, currentView, se
             {/* Main Content Area */}
             <div className="flex-1 flex flex-col overflow-hidden relative">
                 {/* Top Bar */}
-                <header className="bg-white border-b border-slate-200 px-6 py-4 flex items-center justify-between z-20">
+                <header className="bg-[#0a0c12]/80 backdrop-blur-xl border-b border-white/5 px-6 py-4 flex items-center justify-between z-20">
                     <button
                         onClick={() => setIsSidebarOpen(true)}
-                        className="lg:hidden p-2 text-slate-600 hover:bg-slate-50 rounded-xl"
+                        className="lg:hidden p-2 text-slate-400 hover:bg-white/5 rounded-xl"
                     >
                         <Menu className="w-6 h-6" />
                     </button>
 
                     {!isSidebarOpen && (
                         <div className="lg:hidden flex items-center gap-2">
-                            <span className="text-xl font-black tracking-tight">REVLO</span>
+                            <span className="text-xl font-black tracking-tight text-white">REVLO</span>
                         </div>
                     )}
 
                     <div className="flex items-center gap-5 ml-auto">
-                        <button className="relative p-2.5 text-slate-400 hover:text-purple-600 hover:bg-purple-50 rounded-xl transition-all active:scale-90 group">
+                        <button className="relative p-2.5 text-slate-500 hover:text-purple-400 hover:bg-purple-500/10 rounded-xl transition-all active:scale-90 group">
                             <Bell className="w-5 h-5" />
-                            <span className="absolute top-2.5 right-2.5 w-2 h-2 bg-purple-600 border-2 border-white rounded-full animate-pulse shadow-sm shadow-purple-200" />
+                            <span className="absolute top-2.5 right-2.5 w-2 h-2 bg-purple-500 border-2 border-[#0a0c12] rounded-full animate-pulse shadow-sm shadow-purple-500/20" />
                         </button>
 
-                        <div className="flex items-center gap-2 px-4 py-2 bg-gradient-to-r from-purple-50 to-blue-50 border border-purple-200 rounded-full shadow-sm">
-                            <div className="w-2 h-2 bg-green-500 rounded-full animate-pulse" />
-                            <span className="text-[10px] font-black text-purple-700 uppercase tracking-widest">Service Active</span>
+                        <div className="flex items-center gap-2 px-4 py-2 bg-white/5 border border-white/10 rounded-full shadow-sm">
+                            <div className="w-2 h-2 bg-green-500 rounded-full animate-pulse shadow-[0_0_8px_rgba(34,197,94,0.5)]" />
+                            <span className="text-[10px] font-black text-slate-400 uppercase tracking-widest">Service Active</span>
                         </div>
                     </div>
                 </header>
@@ -279,24 +285,24 @@ const RevloOSLayout: React.FC<RevloOSLayoutProps> = ({ children, currentView, se
                         {/* the "Mac App" Container */}
                         <motion.div
                             key={currentView}
-                            initial={{ opacity: 0, y: 8, scale: 0.99 }}
-                            animate={{ opacity: 1, y: 0, scale: 1 }}
+                            initial={{ opacity: 0, scale: 0.98 }}
+                            animate={{ opacity: 1, scale: 1 }}
                             transition={{ duration: 0.4, ease: [0.23, 1, 0.32, 1] }}
-                            className="flex-1 bg-white rounded-[20px] shadow-[0_20px_50px_rgba(0,0,0,0.05)] border border-slate-200/60 overflow-hidden flex flex-col"
+                            className="flex-1 bg-[#0a0c12]/40 backdrop-blur-xl rounded-[20px] shadow-[0_20px_50px_rgba(0,0,0,0.3)] border border-white/5 overflow-hidden flex flex-col"
                         >
                             {/* Window Title Bar */}
-                            <div className="h-12 bg-slate-50/80 backdrop-blur-md border-b border-slate-100 flex items-center px-5 gap-4 flex-shrink-0 select-none">
+                            <div className="h-12 bg-white/5 backdrop-blur-md border-b border-white/5 flex items-center px-5 gap-4 flex-shrink-0 select-none">
                                 <div className="flex gap-2">
-                                    <div className="w-3 h-3 rounded-full bg-[#FF5F57] shadow-inner" />
-                                    <div className="w-3 h-3 rounded-full bg-[#FFBD2E] shadow-inner" />
-                                    <div className="w-3 h-3 rounded-full bg-[#28C840] shadow-inner" />
+                                    <div className="w-3 h-3 rounded-full bg-[#FF5F57] shadow-inner opacity-80" />
+                                    <div className="w-3 h-3 rounded-full bg-[#FFBD2E] shadow-inner opacity-80" />
+                                    <div className="w-3 h-3 rounded-full bg-[#28C840] shadow-inner opacity-80" />
                                 </div>
                                 <div className="flex-1 flex justify-center items-center">
-                                    <div className="flex items-center gap-2 px-4 py-1.5 bg-white border border-slate-200/50 rounded-full shadow-sm">
-                                        <span className="text-slate-400">
+                                    <div className="flex items-center gap-2 px-4 py-1.5 bg-black/20 border border-white/5 rounded-full shadow-sm">
+                                        <span className="text-slate-500">
                                             {menuItems.find(m => m.view === currentView)?.icon}
                                         </span>
-                                        <span className="text-[10px] font-black uppercase tracking-[0.2em] text-slate-500">
+                                        <span className="text-[10px] font-black uppercase tracking-[0.2em] text-slate-400">
                                             {menuItems.find(m => m.view === currentView)?.label || "Partner Portal"}
                                         </span>
                                     </div>
@@ -305,7 +311,7 @@ const RevloOSLayout: React.FC<RevloOSLayoutProps> = ({ children, currentView, se
                             </div>
 
                             {/* App Content */}
-                            <div className="flex-1 relative overflow-y-auto custom-scrollbar">
+                            <div className="flex-1 relative overflow-hidden">
                                 {children}
                             </div>
                         </motion.div>

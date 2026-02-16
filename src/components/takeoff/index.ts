@@ -1,0 +1,12 @@
+export { default as TakeoffHero } from './TakeoffHero';
+export { default as TakeoffMirror } from './TakeoffMirror';
+export { default as TakeoffSplitReality } from './TakeoffSplitReality';
+export { default as TakeoffRelief } from './TakeoffRelief';
+export { default as TakeoffAgentWorkflow } from './TakeoffAgentWorkflow';
+export { default as TakeoffBottleneck } from './TakeoffBottleneck';
+export { default as TakeoffReplacement } from './TakeoffReplacement';
+export { default as TakeoffPricing } from './TakeoffPricing';
+export { default as TakeoffGuarantee } from './TakeoffGuarantee';
+export { default as TakeoffCTA } from './TakeoffCTA';
+export { default as TakeoffWidget } from './TakeoffWidget';
+export { default as TakeoffFeatures } from './TakeoffFeatures';

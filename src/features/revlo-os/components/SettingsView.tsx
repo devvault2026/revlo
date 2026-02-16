@@ -538,32 +538,13 @@ const SettingsView: React.FC<SettingsViewProps> = ({ settings, onUpdate, onSaveE
                                 </h3>
                                 <div className="space-y-3">
                                     <div className="flex justify-between items-center ml-1">
-                                        <label className="text-xs font-bold text-slate-500 uppercase tracking-widest">API Key</label>
-                                        {keyStatus === 'valid' && <span className="text-[10px] font-black text-green-500 uppercase tracking-widest flex items-center gap-1"><CheckCircle2 size={10} /> Active</span>}
-                                        {keyStatus === 'invalid' && <span className="text-[10px] font-black text-red-500 uppercase tracking-widest flex items-center gap-1"><AlertTriangle size={10} /> Link Severed</span>}
+                                        <label className="text-xs font-bold text-slate-500 uppercase tracking-widest">Neural Link Status</label>
+                                        <span className="text-[10px] font-black text-green-500 uppercase tracking-widest flex items-center gap-1"><CheckCircle2 size={10} /> System Integrated</span>
                                     </div>
-                                    <div className="flex gap-3">
-                                        <div className="relative flex-1">
-                                            <Terminal className="absolute left-5 top-1/2 -translate-y-1/2 text-slate-300" size={18} />
-                                            <input
-                                                type="password"
-                                                value={settings.apiKey}
-                                                onChange={(e) => {
-                                                    onUpdate({ ...settings, apiKey: e.target.value });
-                                                    setKeyStatus('idle');
-                                                }}
-                                                className="w-full bg-slate-50 border border-slate-200 rounded-[2rem] pl-12 pr-6 py-4 text-sm font-bold text-slate-900 focus:border-purple-500 focus:bg-white focus:outline-none transition-all font-mono"
-                                                placeholder="sk-..."
-                                            />
-                                        </div>
-                                        <button
-                                            onClick={handleTestKey}
-                                            disabled={isTestingKey}
-                                            className="px-6 rounded-[2rem] bg-purple-600 text-white font-black uppercase tracking-widest text-[10px] hover:bg-purple-700 transition-all disabled:opacity-50 flex items-center gap-2"
-                                        >
-                                            {isTestingKey ? <Loader2 size={14} className="animate-spin" /> : <Wifi size={14} />}
-                                            {isTestingKey ? 'Verifying...' : 'Test & Save'}
-                                        </button>
+                                    <div className="p-4 bg-slate-50 border border-slate-200 rounded-[2rem] flex items-center gap-3">
+                                        <div className="w-2 h-2 bg-green-500 rounded-full animate-pulse" />
+                                        <span className="text-xs font-black text-slate-700 uppercase tracking-widest">Core Intelligence Online</span>
+                                        <span className="text-[10px] text-slate-400 font-medium ml-auto">Baked-in Protocol v2.0</span>
                                     </div>
                                     <p className="text-[10px] text-slate-400 mt-2 font-medium ml-4 uppercase tracking-widest">
                                         Handshake protocol: Gemini-2.0-Flash Optimized • Encrypted Storage

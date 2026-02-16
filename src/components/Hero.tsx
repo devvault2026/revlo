@@ -96,8 +96,8 @@ const Hero: React.FC = () => {
                                 transition={{ duration: 0.8 }}
                                 className="text-6xl lg:text-8xl font-black font-display leading-[0.85] tracking-tighter italic overflow-visible py-4"
                             >
-                                <span className="block text-white">SCALE THE</span>
-                                <span className="inline-block gradient-text pr-24 pb-4 whitespace-nowrap">UNTHINKABLE.</span>
+                                <span className="block text-white">IRREFUTABLE</span>
+                                <span className="inline-block gradient-text pr-24 pb-4 whitespace-nowrap">ELITE SCALE.</span>
                             </motion.h1>
 
                             <motion.p
@@ -106,8 +106,8 @@ const Hero: React.FC = () => {
                                 transition={{ delay: 0.4 }}
                                 className="text-xl lg:text-3xl text-slate-400 leading-tight max-w-2xl font-bold tracking-tight"
                             >
-                                Your Global AI Growth Team. <br />
-                                <span className="text-white/80">We don't just build software. We partner with you to automate your sales, scale your operations, and multiply your revenue.</span>
+                                The New Standard in AI Agents & Digital Design. <br />
+                                <span className="text-white/80">We build the systems that build your business—from Human-Grade Voice AI to World-Class Web Design starting at $750. No jargon. Just scale.</span>
                             </motion.p>
                         </div>
 

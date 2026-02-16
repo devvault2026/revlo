@@ -13,24 +13,6 @@ const Team: React.FC = () => {
             initial: 'JS',
             image: '/619228587_1473924384299979_5558935500619533353_n.jpg',
         },
-        {
-            name: 'Eric',
-            role: 'Operations & Partner Lead',
-            bio: 'Dedicated to ensuring your operations run like clockwork. Eric manages the systems and communication protocols that keep our partnership efficient and results-oriented.',
-            expertise: ['Partner Relations', 'Operations', 'Systems Design'],
-            color: 'text-red-400',
-            initial: 'EO',
-            image: '/515437137_761690583348698_3741883148247296552_n (1).jpg',
-        },
-        {
-            name: 'Naoufal',
-            role: 'Acquisition & Marketing Lead',
-            bio: 'The lead generation specialist. Naoufal manages the customer acquisition channels that bring high-quality leads directly to your business every single day.',
-            expertise: ['Lead Generation', 'Digital Marketing', 'Market Expansion'],
-            color: 'text-blue-400',
-            initial: 'NM',
-            image: '/623212696_1198362805386965_7706492375118911747_n.jpg',
-        },
     ];
 
     return (
@@ -45,22 +27,22 @@ const Team: React.FC = () => {
                 >
                     <div className="inline-block px-4 py-2 glass rounded-full mb-8">
                         <span className="text-[10px] font-black text-purple-400 uppercase tracking-[0.4em]">
-                            Our Core Team
+                            The Architect
                         </span>
                     </div>
 
                     <h2 className="text-5xl lg:text-7xl font-black font-display mb-8 tracking-tighter italic text-white leading-none">
-                        YOUR GROWTH <span className="gradient-text-alt">PARTNERS.</span>
+                        YOUR GROWTH <span className="gradient-text-alt">PARTNER.</span>
                     </h2>
 
                     <p className="text-xl text-slate-400 leading-relaxed font-medium">
-                        40+ years of combined experience in business development. We are not just service providers;
-                        we are an extension of your own team dedicated to your success.
+                        Deep expertise in business development and digital orchestration. I am not just a service provider;
+                        I am an extension of your own team dedicated to your success.
                     </p>
                 </motion.div>
 
                 {/* Team Grid */}
-                <div className="grid md:grid-cols-2 lg:grid-cols-3 gap-8">
+                <div className="max-w-md mx-auto">
                     {teamMembers.map((member, index) => (
                         <motion.div
                             key={index}
@@ -73,7 +55,7 @@ const Team: React.FC = () => {
                             <div className="h-full bg-white/5 backdrop-blur-3xl rounded-[32px] p-8 border border-white/5 hover:border-white/10 transition-all duration-500 relative overflow-hidden">
                                 {/* Operator Badge */}
                                 <div className="absolute top-6 right-6 text-[10px] font-black text-slate-600 group-hover:text-slate-400 transition-colors uppercase tracking-widest">
-                                    {member.initial} / TEAM
+                                    {member.initial} / LEAD
                                 </div>
 
                                 {/* Avatar Circle */}
@@ -129,12 +111,12 @@ const Team: React.FC = () => {
 
                     <div className="relative z-10">
                         <h3 className="text-3xl lg:text-5xl font-black font-display mb-8 text-white italic tracking-tighter">
-                            THE <span className="gradient-text">POWER OF THREE.</span>
+                            THE POWER OF <span className="gradient-text">ONE + OS.</span>
                         </h3>
                         <p className="text-xl text-slate-400 leading-relaxed max-w-4xl mx-auto font-medium">
-                            Our collective expertise ensures that every aspect of your growth is covered.
-                            From the initial strategy and branding to the daily operations and lead acquisition,
-                            we work in sync to turn your business into a market leader. This isn&apos;t just
+                            My expertise, amplified by the proprietary Revlo OS, ensures that every aspect of your growth is covered.
+                            From initial strategy and branding to daily operations and lead acquisition,
+                            I work in sync with neural systems to turn your business into a market leader. This isn&apos;t just
                             consulting. This is a dedicated partnership built for scale.
                         </p>
                     </div>

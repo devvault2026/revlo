@@ -4,41 +4,41 @@ import { ShieldAlert, Zap, Cpu, Globe, BarChart3, Rocket, XCircle, CheckCircle2,
 
 const steps = [
     {
-        title: "THE SCALING CEILING",
-        subtitle: "The Manual Grind",
+        title: "THE MANUAL GRIND",
+        subtitle: "The Business Ceiling",
         status: "critical",
         icon: <XCircle className="w-8 h-8 text-red-500" />,
         points: [
-            "Bogged down by manual lead follow-up",
-            "Missed opportunities due to slow response",
-            "Burned out teams struggling to scale",
-            "Inconsistent revenue and high overhead"
+            "Losing money on slow lead response",
+            "Burned out team doing busy work",
+            "Unable to grow without more hiring",
+            "Inconsistent sales and high stress"
         ],
         alignment: "left"
     },
     {
-        title: "THE JOINT VENTURE",
-        subtitle: "Integrated AI Partnership",
+        title: "THE AI PARTNERSHIP",
+        subtitle: "Integrated Intelligence",
         status: "active",
         icon: <Users className="w-8 h-8 text-purple-400" />,
         points: [
-            "We integrate our AI team into your sales",
-            "Instant response for every incoming lead",
-            "Automated qualification and appointment booking",
-            "Strategic growth managed by our experts"
+            "We deploy agents that never sleep",
+            "Every lead is called in 30 seconds",
+            "Real human-grade voice interaction",
+            "Your calendar fills while you focus"
         ],
         alignment: "right"
     },
     {
-        title: "THE UNLIMITED FUTURE",
-        subtitle: "A Scalable Legacy",
+        title: "IRREFUTABLE SCALE",
+        subtitle: "The Elite Enterprise",
         status: "optimized",
         icon: <TrendingUp className="w-8 h-8 text-blue-400" />,
         points: [
-            "24/7 operations without increasing headcount",
-            "Focus on high-level vision and strategy",
-            "Dominating your market through efficiency",
-            "The freedom to grow as large as you want"
+            "Unlimited capacity for new clients",
+            "Radically lower operating costs",
+            "Market dominance through speed",
+            "A business that runs like clockwork"
         ],
         alignment: "left"
     }

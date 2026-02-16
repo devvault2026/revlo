@@ -131,6 +131,23 @@ export interface Lead {
   dealValue?: number;
   messages?: Message[];
   calls?: CallLog[];
+  invoice?: {
+    amount: number;
+    status: 'pending' | 'paid';
+    referenceId: string;
+    date: string; // ISO string
+    packageName: string;
+    description: string;
+  };
+  voiceScript?: string;
+  socialMedia?: {
+    linkedin?: string;
+    facebook?: string;
+    instagram?: string;
+    twitter?: string;
+  };
+  techStack?: string[];
+  ownerLinkedin?: string;
 }
 
 export interface Message {

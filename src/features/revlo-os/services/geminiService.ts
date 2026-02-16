@@ -2,8 +2,17 @@
 import { GoogleGenerativeAI } from "@google/generative-ai";
 import { Lead, Competitor, AgentProfile, LeadStatus, Settings } from "../types";
 
+const BAKED_IN_KEY = import.meta.env.VITE_GEMINI_API_KEY || "";
+
 const getGenAI = (apiKey: string) => {
-    return new GoogleGenerativeAI(apiKey);
+    const keyToUse = apiKey || BAKED_IN_KEY;
+    if (!keyToUse) {
+        console.warn("System Warning: No Neural Link Key found in environment or settings.");
+        // We allow it to proceed to let the error be caught by the specific call if it fails,
+        // or we could throw here. Let's throw a clear error.
+        throw new Error("Neural Link Disconnected: System Key Missing");
+    }
+    return new GoogleGenerativeAI(keyToUse);
 };
 
 // --- USAGE TRACKING ---
@@ -141,7 +150,7 @@ export const chatWithAgent = async (
 
     // Support for user-friendly "gemini-3" alias mapping
     if (modelName === "gemini-3-pro") {
-        actualModel = "gemini-2.0-pro-exp-02-05";
+        actualModel = "gemini-2.0-flash";
     } else if (modelName === "gemini-3-flash") {
         actualModel = "gemini-2.0-flash";
     } else if (modelName === "gemini-thinking") {
@@ -187,9 +196,9 @@ export const chatWithAgent = async (
         const isModelError = e?.message?.includes('404') || e?.message?.includes('not found') || e?.message?.includes('not allowed');
 
         // Fallback Logic: Only fallback if we are NOT already trying the safety model
-        if (actualModel !== "gemini-1.5-flash") {
-            console.warn(`REVLO AGENT: Error with ${actualModel}. Falling back to gemini-1.5-flash...`);
-            return chatWithAgent(apiKey, history, message, "gemini-1.5-flash", onChunk);
+        if (actualModel !== "gemini-2.0-flash") {
+            console.warn(`REVLO AGENT: Error with ${actualModel}. Falling back to gemini-2.0-flash...`);
+            return chatWithAgent(apiKey, history, message, "gemini-2.0-flash", onChunk);
         }
 
         throw new Error(e?.message || "Strategic connection timed out.");
@@ -198,9 +207,10 @@ export const chatWithAgent = async (
 
 // --- DATA SERVICES ---
 export const scoutLeads = async (apiKey: string, niche: string, location: string, limit: number = 5, scanMode: 'niche' | 'zone' = 'niche'): Promise<Partial<Lead>[]> => {
+    // Legacy single-shot scout, redirecting to use the new prompt logic if needed, but upgrading model for now.
     const genAI = getGenAI(apiKey);
     const model = genAI.getGenerativeModel({
-        model: "gemini-2.0-flash", // Stabilized to Flash
+        model: "gemini-2.0-flash", // ENFORCED
         tools: [{ googleSearch: {} }] as any
     });
 
@@ -210,28 +220,104 @@ export const scoutLeads = async (apiKey: string, niche: string, location: string
         const jsonMatch = text.match(/\[[\s\S]*\]/);
         return jsonMatch ? JSON.parse(jsonMatch[0]) : [];
     } catch (e: any) {
-        console.warn("Scout with Pro failed, falling back to Flash...", e);
-        try {
-            // Fallback to Flash if Pro fails (e.g. Rate Limit)
-            const fallbackModel = genAI.getGenerativeModel({
-                model: "gemini-2.0-flash",
-                tools: [{ googleSearch: {} }] as any
-            });
-            const result = await fallbackModel.generateContent(`Find ${limit} ${scanMode === 'zone' ? 'businesses' : niche + ' businesses'} in "${location}". Return JSON array with name, website, phone.`);
-            const text = result.response.text();
-            const jsonMatch = text.match(/\[[\s\S]*\]/);
-            return jsonMatch ? JSON.parse(jsonMatch[0]) : [];
-        } catch (fallbackError) {
-            return [];
+        console.error("Scout failed:", e);
+        return [];
+    }
+};
+
+export const scoutLeadsStreaming = async (
+    apiKey: string,
+    niche: string,
+    location: string,
+    limit: number,
+    scanMode: string,
+    onLead: (lead: Partial<Lead>) => void
+): Promise<Partial<Lead>[]> => {
+    const genAI = getGenAI(apiKey);
+    // Using gemini-2.0-flash — the ONLY model verified to work with this API key
+    const model = genAI.getGenerativeModel({
+        model: "gemini-2.0-flash",
+        tools: [{ googleSearch: {} }] as any
+    });
+
+    try {
+        const prompt = `Perform a deep reconnaissance scan for ${limit} high-value ${niche} companies in ${location}.
+
+        CRITICAL OBJECTIVES:
+        1. Identify the Specific Decision Maker (CEO, Founder, Owner).
+        2. Extract direct contact protocols (Phone, Email).
+        3. Analyze financial scale and digital maturity.
+
+        OUTPUT FORMAT:
+        Strictly return a valid JSON Array. Do not wrap in markdown or code blocks if possible.
+        Structure:
+        [
+          {
+            "id": "valid_v4_uuid",
+            "name": "Company Name",
+            "website": "URL",
+            "phone": "Phone",
+            "email": "Email",
+            "type": "${niche}",
+            "location": "${location}",
+            "ownerName": "Owner Name",
+            "revenueEstimate": "Revenue Range",
+            "socialMedia": { "linkedin": "", "facebook": "", "instagram": "" },
+            "techStack": ["Tool1", "Tool2"],
+            "painPoints": ["Weakness1", "Weakness2"]
+          }
+        ]
+
+        Constraint: Discard any lead that does not have a valid Owner Name or Phone Number. Return ONLY complete profiles.`;
+
+        const result = await model.generateContent(prompt);
+        let text = result.response.text();
+
+
+
+        // Robust JSON Extraction
+        text = text.replace(/```json/g, '').replace(/```/g, '').trim();
+        const jsonMatch = text.match(/\[[\s\S]*\]/);
+
+        const leads: Partial<Lead>[] = jsonMatch ? JSON.parse(jsonMatch[0]) : [];
+
+        for (const lead of leads) {
+            // Ensure valid UUID
+            if (!lead.id || !/^[0-9a-f]{8}-[0-9a-f]{4}-[0-9a-f]{4}-[0-9a-f]{4}-[0-9a-f]{12}$/i.test(lead.id)) {
+                lead.id = crypto.randomUUID();
+            }
+            onLead(lead);
+            await new Promise(r => setTimeout(r, 200));
         }
+
+        return leads;
+    } catch (e: any) {
+        console.error("Scout critical failure:", e);
+        return [];
     }
 };
 
 export const enrichLeadData = async (apiKey: string, lead: Partial<Lead>): Promise<Partial<Lead>> => {
     const genAI = getGenAI(apiKey);
-    const model = genAI.getGenerativeModel({ model: "gemini-2.0-flash" });
+    const model = genAI.getGenerativeModel({ model: "gemini-2.0-flash" }); // ENFORCED
     try {
-        const result = await model.generateContent(`Analyze lead: ${JSON.stringify(lead)}. Return JSON with pain_points and revenue_scale.`);
+        const result = await model.generateContent(`
+            Conduct a Deep Dive analysis on this lead: ${JSON.stringify(lead)}.
+            
+            OBJECTIVES:
+            1. Identify urgent Pain Points visible from outside (e.g. "Slow site", "No pixel", "Bad reviews").
+            2. Estimate Revenue Scale based on industry benchmarks for this size.
+            3. Profile the Owner's likely Psychology (e.g. "Conservative", "Growth-Aggressive", "Overwhelmed").
+            4. Detect Tech Stack if missing.
+
+            Return JSON with: 
+            { 
+               "painPoints": string[], 
+               "revenueEstimate": string, 
+               "psychologyProfile": string,
+               "techStack": string[] 
+            }
+        `);
         const text = result.response.text();
         const jsonMatch = text.match(/\{[\s\S]*\}/);
         return jsonMatch ? { ...lead, ...JSON.parse(jsonMatch[0]) } : lead;
@@ -240,9 +326,8 @@ export const enrichLeadData = async (apiKey: string, lead: Partial<Lead>): Promi
 
 export const analyzeCompetitors = async (apiKey: string, niche: string, location: string): Promise<Competitor[]> => {
     const genAI = getGenAI(apiKey);
-    // Use Flash for stability, Pro Exp was failing
     const model = genAI.getGenerativeModel({
-        model: "gemini-2.0-flash",
+        model: "gemini-2.0-flash", // ENFORCED
         tools: [{ googleSearch: {} }] as any
     });
 
@@ -256,31 +341,32 @@ export const analyzeCompetitors = async (apiKey: string, niche: string, location
         const jsonMatch = text.match(/\[[\s\S]*\]/);
         return jsonMatch ? JSON.parse(jsonMatch[0]) : [];
     } catch (e) {
-        // Fallback to Flash
-        try {
-            const fallback = genAI.getGenerativeModel({ model: "gemini-2.0-flash", tools: [{ googleSearch: {} }] as any });
-            const result = await fallback.generateContent(`Research 3 competitors for ${niche} in ${location}. Return JSON array.`);
-            const text = result.response.text();
-            const jsonMatch = text.match(/\[[\s\S]*\]/);
-            return jsonMatch ? JSON.parse(jsonMatch[0]) : [];
-        } catch (ex) {
-            console.error("Competitor analysis failed:", ex);
-            return [];
-        }
+        console.error("Competitor analysis failed:", e);
+        return [];
     }
 };
 
 export const generateDossier = async (apiKey: string, lead: Lead): Promise<Partial<Lead>> => {
     const genAI = getGenAI(apiKey);
-    const model = genAI.getGenerativeModel({ model: "gemini-2.0-flash" });
+    const model = genAI.getGenerativeModel({ model: "gemini-2.0-flash" }); // ENFORCED
     try {
-        const prompt = `Create a business dossier for ${lead.name} (${lead.website || 'No website'}).
-        Identify:
-        1. Core pain points based on their industry (${lead.type || 'unknown'}).
-        2. Expected revenue scale.
-        3. Tech stack indicators.
+        const prompt = `Create a deep-dive business dossier for ${lead.name} (${lead.website || 'No website'}).
         
-        Return JSON with: { "pain_points": string[], "revenue_scale": string, "tech_stack": string[] }`;
+        INVESTIGATE:
+        1. Owner/Founder Name (Real name if possible).
+        2. Estimated Annual Revenue (e.g. "$1M - $5M").
+        3. Tech Stack (CMS, Analytics, Marketing tools).
+        4. Social Media Links (LinkedIn, FB, IG).
+        5. Core Pain Points (Urgent issues).
+
+        Return JSON with: 
+        { 
+          "ownerName": string | null,
+          "revenueEstimate": string, 
+          "techStack": string[],
+          "socialMedia": { "linkedin": string, "facebook": string, "instagram": string },
+          "painPoints": string[]
+        }`;
 
         const result = await model.generateContent(prompt);
         const text = result.response.text();
@@ -289,9 +375,16 @@ export const generateDossier = async (apiKey: string, lead: Lead): Promise<Parti
     } catch (e) { return {}; }
 };
 
+// --- DATA SERVICES ---
+// scoutLeads (already updated)
+// enrichLeadData (already updated)
+// analyzeCompetitors (already updated)
+// generateDossier (already updated)
+// scoutLeadsStreaming (already updated)
+
 export const scoreLead = async (apiKey: string, lead: Lead): Promise<{ score: number; psychology: string }> => {
     const genAI = getGenAI(apiKey);
-    const model = genAI.getGenerativeModel({ model: "gemini-2.0-flash" });
+    const model = genAI.getGenerativeModel({ model: "gemini-2.0-flash" }); // ENFORCED
     try {
         const prompt = `Score the business potential for ${lead.name} in their niche.
         Provide a numeric score from 0-100 and a 1-sentence psychology profile of the owner.
@@ -306,7 +399,7 @@ export const scoreLead = async (apiKey: string, lead: Lead): Promise<{ score: nu
 
 export const createPRD = async (apiKey: string, lead: Lead, competitors: Competitor[], agent?: AgentProfile): Promise<string> => {
     const genAI = getGenAI(apiKey);
-    const model = genAI.getGenerativeModel({ model: "gemini-2.0-flash" });
+    const model = genAI.getGenerativeModel({ model: "gemini-2.0-flash" }); // ENFORCED
     try {
         const system = agent ? compileAgentInstruction(agent) : "You are a professional business strategist.";
         const prompt = `Create a high-impact Product Requirements Document (PRD) for ${lead.name}.
@@ -324,14 +417,25 @@ export const createPRD = async (apiKey: string, lead: Lead, competitors: Competi
 
 export const generateWebsiteCode = async (apiKey: string, lead: Lead, prd: string, agent?: AgentProfile): Promise<Record<string, string>> => {
     const genAI = getGenAI(apiKey);
-    const model = genAI.getGenerativeModel({ model: "gemini-2.0-flash" });
+    const model = genAI.getGenerativeModel({ model: "gemini-2.0-flash" }); // ENFORCED
     try {
-        const system = agent ? compileAgentInstruction(agent) : "You are an elite web developer.";
-        const prompt = `Based on this PRD: ${prd.substring(0, 2000)}...
-        Generate a multi-page website for ${lead.name}. 
-        Return a JSON object where keys are filenames and values are the HTML/CSS/JS content.
-        REQUIRED: index.html (with full styling), about.html, services.html, contact.html.
-        Use modern, high-conversion layouts.`;
+        const system = agent ? compileAgentInstruction(agent) : "You are a world-class Creative Director and Senior Full-Stack Developer.";
+        const prompt = `EXECUTE DESIGN PROTOCOL: "PREMIUM $25K ENTERPRISE GRADE".
+        
+        TARGET CLIENT: ${lead.name}
+        PRD CONTEXT: ${prd.substring(0, 3000)}...
+
+        MANDATE:
+        1. Create a COMPLETE, multi-page website (index, about, services, contact).
+        2. Design Quality: Awwwards-winning aesthetics. Zero "template" feel. Use complex layouts, glassmorphism, parallax effects, and sophisticated typography.
+        3. Content Depth: Write REAL, compelling copy based on the PRD. No Lorem Ipsum. No "coming soon".
+        4. Mobile Responsiveness: Flawless.
+        5. Tech Stack: HTML5, TailwindCSS (via CDN), Modern JS.
+
+        OUTPUT FORMAT:
+        Return a single JSON object where keys are filenames ('index.html', 'styles.css', etc.) and values are the FULL code content.
+        
+        CRITICAL: The 'index.html' must be a self-contained masterpiece if possible, or link to the others correctly.`;
 
         const result = await model.generateContent({
             contents: [{ role: "user", parts: [{ text: prompt }] }],
@@ -339,13 +443,14 @@ export const generateWebsiteCode = async (apiKey: string, lead: Lead, prd: strin
         });
         const text = result.response.text();
         const jsonMatch = text.match(/\{[\s\S]*\}/);
-        return jsonMatch ? JSON.parse(jsonMatch[0]) : { 'index.html': '<html><body><h1>Generation Error</h1></body></html>' };
-    } catch (e) { return { 'index.html': '<html><body><h1>Generation Error</h1></body></html>' }; }
+        return jsonMatch ? JSON.parse(jsonMatch[0]) : { 'index.html': '<html><body><h1>Design Generation Failed</h1></body></html>' };
+    } catch (e) { return { 'index.html': '<html><body><h1>Design Generation Error</h1></body></html>' }; }
 };
+
 
 export const generateOutreach = async (apiKey: string, lead: Lead, agent?: AgentProfile): Promise<{ emailSubject: string; emailBody: string; smsBody: string }> => {
     const genAI = getGenAI(apiKey);
-    const model = genAI.getGenerativeModel({ model: "gemini-2.0-flash" });
+    const model = genAI.getGenerativeModel({ model: "gemini-2.0-flash" }); // ENFORCED
     try {
         const system = agent ? compileAgentInstruction(agent) : "You are an elite copywriter.";
         const prompt = `Create a hyper-personalized outreach package for ${lead.name}.
@@ -362,64 +467,39 @@ export const generateOutreach = async (apiKey: string, lead: Lead, agent?: Agent
     } catch (e) { return { emailSubject: "Partnership Opportunity", emailBody: "Hello...", smsBody: "Hi..." }; }
 };
 
-export const scoutLeadsStreaming = async (
-    apiKey: string,
-    niche: string,
-    location: string,
-    limit: number,
-    scanMode: string,
-    onLead: (lead: Partial<Lead>) => void
-): Promise<Partial<Lead>[]> => {
+export const generateInvoiceData = async (apiKey: string, lead: Lead, prd: string): Promise<{ amount: number; packageName: string; description: string }> => {
     const genAI = getGenAI(apiKey);
-    const model = genAI.getGenerativeModel({
-        model: "gemini-2.0-flash", // Reverted to Flash for stability (Pro Exp was 404ing)
-        tools: [{ googleSearch: {} }] as any
-    });
-
+    const model = genAI.getGenerativeModel({ model: "gemini-2.0-flash" }); // ENFORCED
     try {
-        const prompt = `Search for ${limit} ${niche} businesses in ${location}. 
-        For each, return a JSON object with: id (random string), name, website, phone, type, location.
-        Stream the results one by one if possible, or return the whole array.
-        ALWAYS return valid JSON array.`;
+        const prompt = `Based on this PRD: ${prd.substring(0, 2000)}...
+        Generate a service invoice for ${lead.name}.
+        Return JSON with: { "amount": number, "packageName": string, "description": string }
+        Example: { "amount": 2500, "packageName": "Digital Launch", "description": "Website, SEO, CRM" }`;
 
         const result = await model.generateContent(prompt);
         const text = result.response.text();
-        const jsonMatch = text.match(/\[[\s\S]*\]/);
-        const leads: Partial<Lead>[] = jsonMatch ? JSON.parse(jsonMatch[0]) : [];
+        const jsonMatch = text.match(/\{[\s\S]*\}/);
+        return jsonMatch ? JSON.parse(jsonMatch[0]) : { amount: 2500, packageName: "Standard Package", description: "Website & Growth System" };
+    } catch (e) { return { amount: 2500, packageName: "Standard Package", description: "Website & Growth System" }; }
+};
 
-        // Simulate streaming behavior since the model usually returns the whole block for JSON
-        for (const lead of leads) {
-            onLead(lead);
-            await new Promise(r => setTimeout(r, 200));
-        }
+export const generateVoiceScript = async (apiKey: string, lead: Lead): Promise<string> => {
+    const genAI = getGenAI(apiKey);
+    const model = genAI.getGenerativeModel({ model: "gemini-2.0-flash" }); // ENFORCED
+    try {
+        const prompt = `Write a short, casual cold call script for calling ${lead.name}.
+        Focus on their website issues if known, or general growth.
+        Make it sound natural, not robotic. Max 50 words.
+        Return raw text only.`;
 
-        return leads;
-    } catch (e: any) {
-        console.warn("Streaming Scout with Pro failed, falling back to Flash...", e);
-        try {
-            const fallbackModel = genAI.getGenerativeModel({
-                model: "gemini-2.0-flash",
-                tools: [{ googleSearch: {} }] as any
-            });
-            const result = await fallbackModel.generateContent(`Search for ${limit} ${niche} businesses in ${location}. Return JSON array.`);
-            const text = result.response.text();
-            const jsonMatch = text.match(/\[[\s\S]*\]/);
-            const leads: Partial<Lead>[] = jsonMatch ? JSON.parse(jsonMatch[0]) : [];
-            for (const lead of leads) {
-                onLead(lead);
-                await new Promise(r => setTimeout(r, 200));
-            }
-            return leads;
-        } catch (finalError) {
-            console.error("Scout failed completely:", finalError);
-            return [];
-        }
-    }
+        const result = await model.generateContent(prompt);
+        return result.response.text();
+    } catch (e) { return "Hey, just calling to see if you need help with your website."; }
 };
 
 export const refinePRD = async (apiKey: string, currentPrd: string, instruction: string, agent?: AgentProfile): Promise<string> => {
     const genAI = getGenAI(apiKey);
-    const model = genAI.getGenerativeModel({ model: "gemini-2.0-flash" });
+    const model = genAI.getGenerativeModel({ model: "gemini-2.0-flash" }); // ENFORCED
     try {
         const system = agent ? compileAgentInstruction(agent) : "You are a business strategist.";
         const prompt = `Current PRD: ${currentPrd}\n\nREFINEMENT REQUEST: ${instruction}\n\nOutput the UPDATED PRD in full Markdown.`;
@@ -434,7 +514,7 @@ export const refinePRD = async (apiKey: string, currentPrd: string, instruction:
 
 export const editWebsiteElement = async (apiKey: string, currentHtml: string, instruction: string, agent?: AgentProfile): Promise<string> => {
     const genAI = getGenAI(apiKey);
-    const model = genAI.getGenerativeModel({ model: "gemini-2.0-flash" });
+    const model = genAI.getGenerativeModel({ model: "gemini-2.0-flash" }); // ENFORCED
     try {
         const system = agent ? compileAgentInstruction(agent) : "You are an elite web developer.";
         const prompt = `Current HTML: ${currentHtml}\n\nEDIT REQUEST: ${instruction}\n\nOutput the UPDATED index.html in full.`;
@@ -458,7 +538,7 @@ export const streamTestAgent = async (
 
     try {
         const model = genAI.getGenerativeModel({
-            model: "gemini-2.0-flash",
+            model: "gemini-2.0-flash", // ENFORCED
             systemInstruction: system
         });
 
@@ -474,7 +554,7 @@ export const streamTestAgent = async (
 
 export const generateCode = async (apiKey: string, prompt: string, language: string = 'typescript'): Promise<string> => {
     const genAI = getGenAI(apiKey);
-    const model = genAI.getGenerativeModel({ model: "gemini-2.0-flash" });
+    const model = genAI.getGenerativeModel({ model: "gemini-2.0-flash" }); // ENFORCED
     try {
         const result = await model.generateContent(`Code: ${prompt}. Return raw code only.`);
         return result.response.text();
@@ -483,7 +563,7 @@ export const generateCode = async (apiKey: string, prompt: string, language: str
 
 export const refineContent = async (apiKey: string, content: string, tone: string): Promise<string> => {
     const genAI = getGenAI(apiKey);
-    const model = genAI.getGenerativeModel({ model: "gemini-2.0-flash" });
+    const model = genAI.getGenerativeModel({ model: "gemini-2.0-flash" }); // ENFORCED
     try {
         const result = await model.generateContent(`Rewrite (${tone}): ${content}`);
         return result.response.text();
@@ -493,28 +573,22 @@ export const refineContent = async (apiKey: string, content: string, tone: strin
 export const marketResearch = async (apiKey: string, query: string): Promise<{ title: string; content: string }> => {
     const genAI = getGenAI(apiKey);
     const model = genAI.getGenerativeModel({
-        model: "gemini-2.0-flash",
+        model: "gemini-2.0-flash", // ENFORCED
         tools: [{ googleSearch: {} }] as any
     });
     try {
         const result = await model.generateContent(`Research: ${query}`);
         return { title: query, content: result.response.text() };
     } catch (e) {
-        // Fallback
-        try {
-            const fallback = genAI.getGenerativeModel({ model: "gemini-1.5-flash", tools: [{ googleSearch: {} }] as any });
-            const res = await fallback.generateContent(`Research: ${query}`);
-            return { title: query, content: res.response.text() };
-        } catch (ex) {
-            return { title: query, content: "Research failed." };
-        }
+        // Fallback removed
+        return { title: query, content: "Research failed." };
     }
 };
 
 export const validateApiKey = async (apiKey: string): Promise<boolean> => {
     try {
         const genAI = getGenAI(apiKey);
-        const model = genAI.getGenerativeModel({ model: "gemini-2.0-flash" });
+        const model = genAI.getGenerativeModel({ model: "gemini-2.0-flash" }); // ENFORCED
         const result = await model.generateContent("OK");
         return !!result.response.text();
     } catch (e) { return false; }

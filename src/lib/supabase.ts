@@ -27,37 +27,26 @@ export type VaultDoc = Database['public']['Tables']['vault_documents']['Row'];
 
 // --- AUTH HELPERS ---
 
+// --- AUTH HELPERS ---
+// DEPRECATED: Use Clerk for authentication
+
 export const signUp = async (email: string, password: string, metadata?: any) => {
-    const { data, error } = await supabase.auth.signUp({
-        email,
-        password,
-        options: {
-            data: metadata
-        }
-    });
-    if (error) throw error;
-    return data;
+    throw new Error("Supabase Auth is deprecated. Please use Clerk.");
 };
 
 export const signIn = async (email: string, password: string) => {
-    const { data, error } = await supabase.auth.signInWithPassword({ email, password });
-    if (error) throw error;
-    return data;
+    throw new Error("Supabase Auth is deprecated. Please use Clerk.");
 };
 
 export const getCurrentUser = async () => {
-    const { data: { user } } = await supabase.auth.getUser();
-    return user;
+    console.warn("Supabase Auth is deprecated. Please use Clerk.");
+    return null;
 };
 
 export const getProfile = async (userId: string) => {
-    const { data, error } = await supabase
-        .from('profiles')
-        .select('*')
-        .eq('id', userId)
-        .single();
-    if (error) throw error;
-    return data;
+    // Return null or throw error depending on how critical this is.
+    // Throwing might be safer to identify usages.
+    throw new Error("Supabase Auth (Profiles) is deprecated. Please use Clerk.");
 };
 
 // --- DATA HELPERS ---
@@ -188,3 +177,33 @@ export const upsertSettings = async (settings: any) => {
     if (error) throw error;
     return data;
 };
+
+// --- DEMO USAGE HELPERS ---
+
+export const getDemoUsage = async (userId: string) => {
+    const { data, error } = await supabase
+        .from('demo_usage')
+        .select('*')
+        .eq('user_id', userId)
+        .single();
+    if (error && error.code !== 'PGRST116') throw error;
+    return data;
+};
+
+export const incrementDemoUsage = async (userId: string) => {
+    const usage = await getDemoUsage(userId);
+    const currentCount = usage?.usage_count || 0;
+
+    const { data, error } = await supabase
+        .from('demo_usage')
+        .upsert({
+            user_id: userId,
+            usage_count: currentCount + 1,
+            last_used_at: new Date().toISOString()
+        })
+        .select()
+        .single();
+    if (error) throw error;
+    return data;
+};
+

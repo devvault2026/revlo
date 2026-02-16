@@ -1,10 +1,14 @@
 import React, { useState, useRef, useEffect, useMemo } from 'react';
-import { Search, Loader2, Zap, AlertTriangle, Download, Terminal, ChevronRight, Globe, Shield, Target, Cpu, Activity, Fingerprint, Lock, Star, Radiation } from 'lucide-react';
+import { Search, Loader2, Zap, AlertTriangle, Download, Terminal, ChevronRight, Globe, Shield, Target, Cpu, Activity, Fingerprint, Lock, Star, Radiation, Home } from 'lucide-react';
 import { motion, AnimatePresence, useMotionValue, useSpring, useTransform, useAnimationFrame } from 'framer-motion';
+import { Link } from 'react-router-dom';
 import LeadResult from '../features/scout-engine/components/LeadResult';
 import KnowledgePanel from '../features/scout-engine/components/KnowledgePanel';
 import { streamLeads, deepScanLead, enrichLeadData } from '../features/scout-engine/services/geminiService';
 import { Lead, AppState } from '../features/scout-engine/types';
+import LiveCoach from '../features/scout-engine/components/LiveCoach';
+import PitchModal from '../features/scout-engine/components/PitchModal';
+import { useAuth } from '../context/AuthContext';
 
 // Constants
 // Constants removed: DAILY_LIMIT, VISITS_KEY
@@ -196,7 +200,8 @@ const RevloLogo = React.memo(({ size = "large" }: { size?: "small" | "large" }) 
   </div>
 ));
 
-function App() {
+function ScoutPage() {
+  const { user, signOut } = useAuth();
   const [query, setQuery] = useState('');
   const [leads, setLeads] = useState<Lead[]>([]);
   const [appState, setAppState] = useState<AppState>(AppState.IDLE);
@@ -205,6 +210,23 @@ function App() {
   const [errorMsg, setErrorMsg] = useState<string | null>(null);
 
   const [isPanelExpanded, setIsPanelExpanded] = useState(false);
+  const [showCoach, setShowCoach] = useState(false);
+  const [showPitch, setShowPitch] = useState(false);
+
+  const exportLeads = () => {
+    if (leads.length === 0) return;
+    const csvContent = "data:text/csv;charset=utf-8,"
+      + ["Business Name,Industry,Location,Phone,Email,Website,Score"]
+        .concat(leads.map(l => `${l.businessName},${l.industry},${l.location},${l.phoneNumber || ''},${l.email || ''},${l.website || ''},${l.leadScore}`))
+        .join("\n");
+    const encodedUri = encodeURI(csvContent);
+    const link = document.createElement("a");
+    link.setAttribute("href", encodedUri);
+    link.setAttribute("download", `revlo_recon_${new Date().toISOString().split('T')[0]}.csv`);
+    document.body.appendChild(link);
+    link.click();
+    document.body.removeChild(link);
+  };
 
   const handleSearch = async (e: React.FormEvent) => {
     e.preventDefault();
@@ -282,10 +304,39 @@ function App() {
       <BackgroundSystem />
       <div className="fixed inset-0 pointer-events-none z-[100] opacity-[0.06]" style={{ backgroundImage: 'url("https://grainy-gradients.vercel.app/noise.svg")' }}></div>
 
+      {/* FIXED NAVIGATION */}
+      <Link to="/" className="fixed top-8 left-8 z-[110] flex items-center gap-3 group px-5 py-2.5 glass-dark rounded-2xl border border-white/5 hover:border-white/10 transition-all duration-300 backdrop-blur-xl shadow-2xl">
+        <Home className="w-4 h-4 text-purple-400 group-hover:text-white transition-colors" />
+        <span className="text-[10px] font-black uppercase tracking-[0.2em] text-white/40 group-hover:text-white transition-colors">Home</span>
+      </Link>
+
       <AnimatePresence mode="wait">
 
         {appState === AppState.IDLE && (
           <div key="idle-screen" className="flex-1 flex flex-col items-center justify-center p-4 relative z-10 transition-all duration-1000">
+            {/* User Profile Bubble */}
+            {user && (
+              <motion.div
+                initial={{ opacity: 0, scale: 0.8 }}
+                animate={{ opacity: 1, scale: 1 }}
+                className="fixed top-8 right-8 z-[110] flex items-center gap-4 group"
+              >
+                <div className="flex flex-col items-end">
+                  <span className="text-[10px] font-black uppercase tracking-widest text-white/40 group-hover:text-purple-400 transition-colors">Operative</span>
+                  <span className="text-xs font-black text-white group-hover:text-purple-300 transition-colors">{user.fullName || 'Authorized'}</span>
+                </div>
+                <div className="relative">
+                  <div className="absolute -inset-1 bg-gradient-to-r from-purple-600 to-fuchsia-600 rounded-2xl blur opacity-30 group-hover:opacity-100 transition duration-500" />
+                  <img
+                    src={user.imageUrl}
+                    alt="Operative"
+                    className="relative w-12 h-12 rounded-2xl object-cover border border-white/10 group-hover:border-purple-500/50 transition-all duration-500"
+                  />
+                  <div className="absolute -bottom-1 -right-1 w-3.5 h-3.5 bg-green-500 rounded-full border-4 border-[#010103] shadow-[0_0_10px_rgba(34,197,94,0.5)]" />
+                </div>
+              </motion.div>
+            )}
+
             <RevloLogo />
 
             <div className="w-full relative px-6 mt-4 max-w-xl mx-auto mb-16">
@@ -338,11 +389,21 @@ function App() {
                 <span className="font-black text-sm tracking-widest text-white italic">REVLO <span className="text-purple-500">SCOUT</span></span>
               </div>
               <div className="ml-auto flex items-center gap-4">
+                {user && (
+                  <div className="flex items-center gap-3 px-3 py-1.5 bg-white/5 border border-white/5 rounded-xl">
+                    <img
+                      src={user.imageUrl}
+                      alt="Operative"
+                      className="w-6 h-6 rounded-lg object-cover border border-white/10"
+                    />
+                    <span className="text-[10px] font-bold text-slate-400 capitalize truncate max-w-[80px]">{(user.firstName || 'User').toLowerCase()}</span>
+                  </div>
+                )}
                 <div className="hidden lg:flex items-center gap-2 px-3 py-1.5 bg-white/5 rounded-lg border border-white/5">
                   <Activity className="w-3 h-3 text-green-500" />
                   <span className="text-[9px] font-bold uppercase tracking-widest text-slate-400">System_Online</span>
                 </div>
-                <button onClick={() => { }} className="bg-white text-black px-5 py-2 rounded-lg text-[9px] font-black uppercase tracking-widest shadow-xl italic hover:bg-purple-500 hover:text-white transition-all">Export Intelligence</button>
+                <button onClick={exportLeads} className="bg-white text-black px-5 py-2 rounded-lg text-[9px] font-black uppercase tracking-widest shadow-xl italic hover:bg-purple-500 hover:text-white transition-all">Export Intelligence</button>
               </div>
             </header>
 
@@ -423,12 +484,26 @@ function App() {
                         setSelectedLead(null);
                         setIsPanelExpanded(false);
                       }}
-                      onStartCoach={() => { }}
+                      onStartCoach={() => setShowCoach(true)}
                       onDeepScan={handleDeepScan}
                     />
                   </motion.div>
                 )}
               </AnimatePresence>
+
+              {showCoach && selectedLead && (
+                <LiveCoach
+                  businessName={selectedLead.businessName}
+                  onClose={() => setShowCoach(false)}
+                />
+              )}
+
+              {showPitch && selectedLead && (
+                <PitchModal
+                  lead={selectedLead}
+                  onClose={() => setShowPitch(false)}
+                />
+              )}
 
             </div>
           </div>
@@ -448,4 +523,4 @@ function App() {
   );
 }
 
-export default App;
+export default ScoutPage;

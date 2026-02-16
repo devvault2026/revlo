@@ -233,7 +233,11 @@ const PhoneView: React.FC<PhoneViewProps> = ({ leads, agents, vapiConfig, update
                             <div className="absolute top-0 left-0 w-1 h-full bg-purple-600 opacity-20 group-hover:opacity-100 transition-opacity"></div>
                             <h4 className="text-[10px] font-black text-slate-400 uppercase mb-3 flex items-center tracking-[0.2em]"><Settings size={14} className="mr-2 text-purple-600" /> Agent Script Protocol</h4>
                             <p className="text-sm text-slate-600 italic font-medium leading-relaxed">
-                                "Hey, we found your site <span className="text-purple-600 font-bold not-italic underline decoration-2 underline-offset-4">{selectedLead.website || 'domain'}</span> and noticed its a little wonky... we went ahead and took the initiative and built you out a demo to offer a new facelift. We fired you off an email a few minutes ago with all the info. You can call us back here anytime or check the link to book a time if you want us to claim it for you."
+                                {selectedLead.voiceScript ? (
+                                    <span>"{selectedLead.voiceScript}"</span>
+                                ) : (
+                                    <span>"Hey, we found your site <span className="text-purple-600 font-bold not-italic underline decoration-2 underline-offset-4">{selectedLead.website || 'domain'}</span> and noticed its a little wonky... we went ahead and took the initiative and built you out a demo to offer a new facelift. We fired you off an email a few minutes ago with all the info. You can call us back here anytime or check the link to book a time if you want us to claim it for you."</span>
+                                )}
                             </p>
                         </div>
                     </div>

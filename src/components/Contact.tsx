@@ -1,8 +1,7 @@
-import React, { useState } from 'react';
+import React from 'react';
 import { motion } from 'framer-motion';
-import { useForm } from 'react-hook-form';
-import { CheckCircle2, Loader2, ArrowRight, Zap, Target, TrendingUp, Handshake } from 'lucide-react';
-import { upsertLead } from '../lib/supabase';
+import { Target, TrendingUp, Handshake } from 'lucide-react';
+import CalEmbed from './CalEmbed';
 
 interface FormData {
     name: string;
@@ -13,31 +12,6 @@ interface FormData {
 }
 
 const Contact: React.FC = () => {
-    const [isSubmitting, setIsSubmitting] = useState(false);
-    const [isSuccess, setIsSuccess] = useState(false);
-    const { register, handleSubmit, reset, formState: { errors } } = useForm<FormData>();
-
-    const onSubmit = async (data: FormData) => {
-        setIsSubmitting(true);
-        try {
-            await upsertLead({
-                name: data.name,
-                email: data.email,
-                business_core: data.company,
-                revenue_estimate: data.revenue,
-                notes: data.message,
-                type: 'inbound',
-            } as any);
-            setIsSuccess(true);
-            reset();
-            setTimeout(() => setIsSuccess(false), 5000);
-        } catch (error) {
-            console.error('Error submitting form:', error);
-            alert('Submission failed. Please try again.');
-        } finally {
-            setIsSubmitting(false);
-        }
-    };
 
     const features = [
         {
@@ -107,112 +81,14 @@ const Contact: React.FC = () => {
                         </div>
                     </motion.div>
 
-                    {/* Right Column - Form */}
+                    {/* Right Column - Booking Embed */}
                     <motion.div
                         initial={{ opacity: 0, scale: 0.95 }}
                         whileInView={{ opacity: 1, scale: 1 }}
                         viewport={{ once: true }}
+                        className="h-full"
                     >
-                        <div className="bg-white/5 backdrop-blur-3xl rounded-[48px] p-8 lg:p-12 border border-white/5 relative overflow-hidden group">
-                            {/* Animated Border */}
-                            <div className="absolute inset-0 bg-gradient-to-r from-purple-500/10 via-blue-500/10 to-red-500/10 opacity-0 group-hover:opacity-100 transition-opacity duration-1000" />
-
-                            <div className="relative z-10">
-                                {isSuccess ? (
-                                    <motion.div
-                                        initial={{ scale: 0.9, opacity: 0 }}
-                                        animate={{ scale: 1, opacity: 1 }}
-                                        className="text-center py-20"
-                                    >
-                                        <div className="w-20 h-20 glass rounded-3xl flex items-center justify-center mx-auto mb-8 border border-green-500/20">
-                                            <CheckCircle2 className="w-10 h-10 text-green-400" />
-                                        </div>
-                                        <h3 className="text-3xl font-black text-white italic mb-4 uppercase">Thank You.</h3>
-                                        <p className="text-slate-400 font-medium font-display uppercase tracking-widest text-xs">
-                                            We have received your message. <br /> A growth lead will be in touch shortly.
-                                        </p>
-                                    </motion.div>
-                                ) : (
-                                    <form onSubmit={handleSubmit(onSubmit)} className="space-y-6">
-                                        <div className="grid md:grid-cols-2 gap-6">
-                                            {/* Name */}
-                                            <div className="space-y-2">
-                                                <label className="text-[10px] font-black uppercase tracking-widest text-slate-500 ml-2">Full Name</label>
-                                                <input
-                                                    {...register('name', { required: true })}
-                                                    className="w-full px-6 py-4 glass-dark rounded-2xl border border-white/5 text-white placeholder:text-slate-600 focus:outline-none focus:border-purple-500/50 transition-all font-medium"
-                                                    placeholder="John Doe"
-                                                />
-                                            </div>
-
-                                            {/* Email */}
-                                            <div className="space-y-2">
-                                                <label className="text-[10px] font-black uppercase tracking-widest text-slate-500 ml-2">Email Address</label>
-                                                <input
-                                                    {...register('email', { required: true })}
-                                                    className="w-full px-6 py-4 glass-dark rounded-2xl border border-white/5 text-white placeholder:text-slate-600 focus:outline-none focus:border-blue-500/50 transition-all font-medium"
-                                                    placeholder="john@company.com"
-                                                />
-                                            </div>
-                                        </div>
-
-                                        {/* Company */}
-                                        <div className="space-y-2">
-                                            <label className="text-[10px] font-black uppercase tracking-widest text-slate-500 ml-2">Company Name</label>
-                                            <input
-                                                {...register('company', { required: true })}
-                                                className="w-full px-6 py-4 glass-dark rounded-2xl border border-white/5 text-white placeholder:text-slate-600 focus:outline-none focus:border-red-500/50 transition-all font-medium"
-                                                placeholder="TechCorp Global"
-                                            />
-                                        </div>
-
-                                        {/* Revenue */}
-                                        <div className="space-y-2">
-                                            <label className="text-[10px] font-black uppercase tracking-widest text-slate-500 ml-2">Current Monthly Revenue</label>
-                                            <select
-                                                {...register('revenue', { required: true })}
-                                                className="w-full px-6 py-4 glass-dark rounded-2xl border border-white/5 text-white focus:outline-none focus:border-purple-500/50 transition-all font-medium appearance-none"
-                                            >
-                                                <option value="" className="bg-[#020408]">Select Revenue Range...</option>
-                                                <option value="0-10k" className="bg-[#020408] font-medium">$0 - $10K</option>
-                                                <option value="10k-50k" className="bg-[#020408] font-medium">$10K - $50K</option>
-                                                <option value="50k-100k" className="bg-[#020408] font-medium">$50K - $100K</option>
-                                                <option value="100k+" className="bg-[#020408] font-medium">$100K+</option>
-                                            </select>
-                                        </div>
-
-                                        {/* Message */}
-                                        <div className="space-y-2">
-                                            <label className="text-[10px] font-black uppercase tracking-widest text-slate-500 ml-2">How Can We Help?</label>
-                                            <textarea
-                                                {...register('message', { required: true })}
-                                                rows={4}
-                                                className="w-full px-6 py-4 glass-dark rounded-2xl border border-white/5 text-white placeholder:text-slate-600 focus:outline-none focus:border-blue-500/50 transition-all font-medium resize-none"
-                                                placeholder="Describe your goals and current bottlenecks..."
-                                            />
-                                        </div>
-
-                                        {/* Submit Button */}
-                                        <motion.button
-                                            type="submit"
-                                            disabled={isSubmitting}
-                                            className="w-full py-6 bg-white text-black font-black uppercase tracking-[0.2em] text-[10px] rounded-2xl shadow-2xl hover:bg-slate-200 transition-all duration-300 flex items-center justify-center gap-4 disabled:opacity-50"
-                                            whileHover={{ scale: isSubmitting ? 1 : 1.02 }}
-                                            whileTap={{ scale: isSubmitting ? 1 : 0.98 }}
-                                        >
-                                            {isSubmitting ? (
-                                                <Loader2 className="w-4 h-4 animate-spin" />
-                                            ) : (
-                                                <>
-                                                    Access Strategy Session
-                                                    <ArrowRight className="w-4 h-4" />
-                                                </>
-                                            )}
-                                        </motion.button>
-                                    </form>
-                                )}
-                            </div>
-                        </div>
+                        <CalEmbed />
                     </motion.div>
                 </div>
             </div>

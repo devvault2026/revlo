@@ -32,8 +32,47 @@ const DEFAULT_SETTINGS: SettingsType = {
     vapi: { privateApiKey: '', publicApiKey: '', phoneNumberId: '' }
 };
 
+const mapDbLeadToLead = (l: any): Lead => ({
+    ...l,
+    id: l.id,
+    name: l.name,
+    email: l.email,
+    phone: l.phone,
+    website: l.website,
+    address: l.address,
+    type: l.type,
+    status: l.status as LeadStatus,
+    rating: l.rating,
+    userRatingCount: l.user_rating_count,
+    notes: l.notes,
+    createdAt: l.created_at,
+    ownerName: l.owner_name,
+    ownerEmail: l.owner_email,
+    ownerLinkedin: l.owner_linkedin,
+    businessCore: l.business_core,
+    revenueEstimate: l.revenue_estimate,
+    painPoints: l.pain_points || [],
+    propensityScore: l.propensity_score,
+    psychologyProfile: l.psychology_profile,
+    competitors: l.competitors || [],
+    prd: l.prd,
+    siteStructure: l.site_structure || {},
+    generatedSiteCode: l.generated_site_code,
+    outreachEmailSubject: l.outreach_email_subject,
+    outreachEmailBody: l.outreach_email_body,
+    outreachSmsBody: l.outreach_sms_body,
+    lastContactDate: l.last_contact_date,
+    dealValue: l.deal_value,
+    messages: l.messages || [],
+    calls: l.calls || [],
+    invoice: l.invoice || null,
+    voiceScript: l.voice_script,
+    socialMedia: l.social_media || {},
+    techStack: l.tech_stack || []
+});
+
 const RevloOSAppPageContent: React.FC = () => {
-    const { user, profile, refreshProfile } = useAuth();
+    const { user, profile, loading: authLoading, refreshProfile } = useAuth();
     const { notifications, unreadCount } = useNotifications();
     const { showToast } = useToast();
     const [currentView, setCurrentView] = useState<View>('dashboard');
@@ -56,22 +95,27 @@ const RevloOSAppPageContent: React.FC = () => {
 
     // 1. Initial Data Load
     useEffect(() => {
-        if (!user) return;
+        if (!user || authLoading) return;
 
         const loadContent = async () => {
             try {
-                // 1. Load Leads
+                // 0. Instant Load from Local Storage (Cache)
+                const localCache = localStorage.getItem(`revlo_leads_${user.id}`);
+                if (localCache) {
+                    const parsed = JSON.parse(localCache);
+                    setRemoteLeads(parsed);
+                    setSessions([{ id: 'default', name: 'Main Pipeline', createdAt: new Date().toISOString(), leads: parsed }]);
+                }
+
+                // 1. Load Leads from Supabase
                 const leadData = await getLeads();
-                const mappedLeads = (leadData || []).map(l => ({
-                    ...l,
-                    createdAt: l.created_at,
-                    status: l.status as LeadStatus,
-                    messages: (l.messages as any) || [],
-                    competitors: (l.competitors as any) || []
-                })) as unknown as Lead[];
+                const mappedLeads = (leadData || []).map(l => mapDbLeadToLead(l));
 
                 setRemoteLeads(mappedLeads);
                 setSessions([{ id: 'default', name: 'Main Pipeline', createdAt: new Date().toISOString(), leads: mappedLeads }]);
+
+                // Update Cache
+                localStorage.setItem(`revlo_leads_${user.id}`, JSON.stringify(mappedLeads));
 
                 // 2. Load Agents
                 let agentData = await getAgents(user.id);
@@ -146,10 +190,10 @@ const RevloOSAppPageContent: React.FC = () => {
             .channel('public:leads')
             .on('postgres_changes', { event: '*', schema: 'public', table: 'leads' }, (payload) => {
                 if (payload.eventType === 'INSERT') {
-                    const newLead = payload.new as Lead;
+                    const newLead = mapDbLeadToLead(payload.new);
                     setRemoteLeads(prev => [newLead, ...prev]);
                 } else if (payload.eventType === 'UPDATE') {
-                    const updatedLead = payload.new as Lead;
+                    const updatedLead = mapDbLeadToLead(payload.new);
                     setRemoteLeads(prev => prev.map(l => l.id === updatedLead.id ? updatedLead : l));
                 }
             })
@@ -248,28 +292,62 @@ const RevloOSAppPageContent: React.FC = () => {
     };
 
     const handleUpdateLead = async (updatedLead: Lead) => {
-        try {
-            // IMMEDIATELY update local state so UI reflects changes instantly
-            setRemoteLeads(prev => {
-                const existingIndex = prev.findIndex(l => l.id === updatedLead.id);
-                if (existingIndex >= 0) {
-                    // Update existing lead
-                    const updated = [...prev];
-                    updated[existingIndex] = updatedLead;
-                    return updated;
-                } else {
-                    // Add new lead at the beginning
-                    return [updatedLead, ...prev];
-                }
-            });
+        // Optimistic State Update
+        setRemoteLeads(prev => {
+            const existingIndex = prev.findIndex(l => l.id === updatedLead.id);
+            let nextLeads;
+            if (existingIndex >= 0) {
+                const updated = [...prev];
+                updated[existingIndex] = updatedLead;
+                nextLeads = updated;
+            } else {
+                nextLeads = [updatedLead, ...prev];
+            }
 
-            // Then persist to Supabase in background
-            await upsertLead({
-                ...updatedLead,
+            // Auto-save to Local Storage
+            localStorage.setItem(`revlo_leads_${user?.id || 'anon'}`, JSON.stringify(nextLeads));
+            return nextLeads;
+        });
+
+        try {
+            if (!user) return;
+            const dbLead: any = {
+                id: updatedLead.id,
+                name: updatedLead.name,
+                email: updatedLead.email,
+                phone: updatedLead.phone,
+                website: updatedLead.website,
+                address: updatedLead.address,
+                type: updatedLead.type,
+                status: updatedLead.status,
+                rating: updatedLead.rating,
+                user_rating_count: updatedLead.userRatingCount,
+                propensity_score: updatedLead.propensityScore,
+                psychology_profile: updatedLead.psychologyProfile,
+                business_core: updatedLead.businessCore,
+                revenue_estimate: updatedLead.revenueEstimate,
+                pain_points: updatedLead.painPoints,
+                competitors: updatedLead.competitors,
+                prd: updatedLead.prd,
+                site_structure: updatedLead.siteStructure,
+                generated_site_code: updatedLead.generatedSiteCode,
+                outreach_email_subject: updatedLead.outreachEmailSubject,
+                outreach_email_body: updatedLead.outreachEmailBody,
+                outreach_sms_body: updatedLead.outreachSmsBody,
+                deal_value: updatedLead.dealValue,
+                messages: updatedLead.messages,
+                owner_name: updatedLead.ownerName,
+                owner_email: updatedLead.ownerEmail,
+                owner_linkedin: updatedLead.ownerLinkedin,
+                tech_stack: updatedLead.techStack,
+                last_contact_date: updatedLead.lastContactDate,
                 created_at: updatedLead.createdAt,
                 user_id: user?.id,
-                organization_id: profile?.organization_id
-            } as any);
+                organization_id: profile?.organization_id,
+                updated_at: new Date().toISOString()
+            };
+
+            await upsertLead(dbLead);
         } catch (err) {
             console.error('Lead sync failed:', err);
             showToast('Sync failed', 'error');
@@ -434,7 +512,7 @@ const RevloOSAppPageContent: React.FC = () => {
     const currentSession = sessions.find(s => s.id === currentSessionId) || sessions[0];
 
     return (
-        <div className="bg-slate-50 min-h-screen">
+        <div className="bg-[#020408] min-h-screen">
             <RevloOSLayout currentView={currentView} setCurrentView={setCurrentView}>
                 {currentView === 'dashboard' && <DashboardView leads={allLeads} usage={usage} />}
                 {currentView === 'engine' && (

@@ -269,7 +269,15 @@ const KnowledgePanel: React.FC<KnowledgePanelProps> = ({ lead, onClose, onStartC
                       "{lead.suggestedPitch}"
                     </p>
                     <div className="mt-8 flex gap-3">
-                      <button className="flex-1 py-3 bg-purple-500 text-white text-[9px] font-black uppercase tracking-widest rounded-xl hover:bg-purple-600 transition-all">Copy Dossier</button>
+                      <button
+                        onClick={() => {
+                          navigator.clipboard.writeText(lead.suggestedPitch);
+                          // Optional: Add toast notification if available
+                        }}
+                        className="flex-1 py-3 bg-purple-500 text-white text-[9px] font-black uppercase tracking-widest rounded-xl hover:bg-purple-600 transition-all font-sans"
+                      >
+                        Copy Dossier
+                      </button>
                       <button onClick={handleDeepScan} className="flex-1 py-3 border border-white/10 text-white text-[9px] font-black uppercase tracking-widest rounded-xl hover:bg-white/5 transition-all flex items-center justify-center gap-2">
                         {isScanning ? <Loader2 className="w-3 h-3 animate-spin" /> : <ScanSearch className="w-3 h-3" />}
                         {isScanning ? 'Scrutinizing...' : 'Forensic_Trace'}

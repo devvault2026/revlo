@@ -6,25 +6,25 @@ const Services: React.FC = () => {
     const services = [
         {
             icon: <Layers className="w-8 h-8" />,
-            title: 'I: DIGITAL FOUNDATION',
-            description: 'We build high-performance digital identities that command attention. From conversion-focused websites to comprehensive brand systems, we ensure your business is perceived as a market leader.',
-            features: ['BRAND STRATEGY', 'HIGH-CONVERSION HUBS', 'MARKET POSITIONING', 'PREMIUM UI/UX'],
+            title: 'I: ELITE WEB DESIGN',
+            description: 'Top-tier digital presence for brands that refuse to be second best. We deliver fully-realized, high-performance websites built to convert and scale from day one.',
+            features: ['MODERN ARCHITECTURE', 'FROM $750 TOTAL', 'CONVERSION OPTIMIZED', 'MOBILE-FIRST DESIGN'],
             color: 'text-purple-400',
             glow: 'group-hover:shadow-[0_0_50px_rgba(139,92,246,0.3)]',
         },
         {
             icon: <TrendingUp className="w-8 h-8" />,
-            title: 'II: MANAGED GROWTH',
-            description: 'We don&apos;t just run ads; we manage your entire customer journey. Our team uses AI-driven insights to find your ideal customers and bring them to your door with unmatched consistency.',
-            features: ['OMNI-CHANNEL ADS', 'CONTENT STRATEGY', 'LEAD GENERATION', 'MARKET EXPANSION'],
+            title: 'II: VOICE AI AGENTS',
+            description: 'Human-grade voice intelligence that handles your sales, support, and appointments 24/7. It sounds like you, works like your best employee, and never takes a day off.',
+            features: ['INSTANT RESPONSE', 'FLAWLESS ACCEENT/TONE', 'COLD CALL AUTOMATION', 'CALENDLY INTEGRATION'],
             color: 'text-blue-400',
             glow: 'group-hover:shadow-[0_0_50px_rgba(59,130,246,0.3)]',
         },
         {
             icon: <Cpu className="w-8 h-8" />,
-            title: 'III: AI OPERATIONS',
-            description: 'The ultimate leverage for your business. We deploy and manage AI systems that handle your sales follow-up, customer support, and appointment setting, 24 hours a day.',
-            features: ['AI SALES AGENTS', 'WORKFLOW EFFICIENCY', 'MANAGED SYSTEMS', 'DATABASE REWIND'],
+            title: 'III: AI AGENT DEV',
+            description: 'The ultimate operating system for your business. We build custom AI agents that manage your workflows, sales pipelines, and customer data with irrefutable precision.',
+            features: ['CUSTOM WORKFLOWS', 'SYSTEM INTEGRATION', '24/7 OPERATIONS', 'ZERO TECH JARGON'],
             color: 'text-red-400',
             glow: 'group-hover:shadow-[0_0_50px_rgba(239,68,68,0.3)]',
         }
@@ -46,12 +46,12 @@ const Services: React.FC = () => {
                         className="inline-block px-4 py-2 glass rounded-full mb-8"
                     >
                         <span className="text-[10px] font-black text-purple-400 uppercase tracking-[0.4em]">
-                            Intelligence Matrix
+                            The Revlo Standard
                         </span>
                     </motion.div>
 
                     <h2 className="text-5xl lg:text-7xl font-black font-display mb-8 tracking-tighter italic text-white uppercase">
-                        CORE <span className="gradient-text">CAPABILITIES.</span>
+                        UNRIVALED <span className="gradient-text">SOLUTIONS.</span>
                     </h2>
 
                     <p className="text-xl text-slate-400 leading-relaxed font-medium italic">

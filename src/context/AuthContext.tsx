@@ -1,9 +1,9 @@
-import React, { createContext, useContext, useEffect, useState } from 'react';
-import { User } from '@supabase/supabase-js';
-import { supabase, getProfile, Profile } from '../lib/supabase';
+import React, { createContext, useContext } from 'react';
+import { useUser, useClerk, useSession } from '@clerk/clerk-react';
+import { Profile, supabase } from '../lib/supabase';
 
 interface AuthContextType {
-    user: User | null;
+    user: any;
     profile: Profile | null;
     loading: boolean;
     signOut: () => Promise<void>;
@@ -13,108 +13,80 @@ interface AuthContextType {
 const AuthContext = createContext<AuthContextType | undefined>(undefined);
 
 export const AuthProvider: React.FC<{ children: React.ReactNode }> = ({ children }) => {
-    const [user, setUser] = useState<User | null>(null);
-    const [profile, setProfile] = useState<Profile | null>(null);
-    const [loading, setLoading] = useState(true);
+    const { user, isLoaded } = useUser();
+    const { session } = useSession();
+    const { signOut } = useClerk();
+    const [profile, setProfile] = React.useState<Profile | null>(null);
+    const [loadingProfile, setLoadingProfile] = React.useState(false);
+    const [isSynced, setIsSynced] = React.useState(false);
 
-    const fetchProfile = async (userId: string) => {
+    const refreshProfile = React.useCallback(async () => {
+        if (!user) return;
+        setLoadingProfile(true);
         try {
-            const data = await getProfile(userId);
-            setProfile(data);
-        } catch (error: any) {
-            if (error?.message?.includes("signal is aborted") || error?.name === 'AbortError') return;
-            // Only log actual errors, not 'no rows found' which is expected for new users
-            if (error?.code !== 'PGRST116') {
-                console.error('CRITICAL: Profile fetch failed:', error?.message || error);
-            } else {
-                console.log('SYSTEM: Profile not yet initialized for user.');
+            const { data, error } = await supabase
+                .from('profiles')
+                .select('*')
+                .eq('id', user.id)
+                .single();
+
+            if (error && error.code === 'PGRST116') {
+                // Create profile if missing
+                const { data: newProfile, error: createError } = await supabase
+                    .from('profiles')
+                    .insert({
+                        id: user.id,
+                        email: user.primaryEmailAddress?.emailAddress,
+                        full_name: user.fullName || '',
+                        avatar_url: user.imageUrl || ''
+                    })
+                    .select()
+                    .single();
+                if (!createError) setProfile(newProfile);
+            } else if (!error) {
+                setProfile(data);
             }
+        } catch (err) {
+            console.error('Profile sync failed:', err);
+        } finally {
+            setLoadingProfile(false);
         }
-    };
+    }, [user]);
 
-    useEffect(() => {
-        let mounted = true;
-
-        const initAuth = async () => {
-            // Safety timeout - extended to 8s for cold starts
-            const timeoutId = setTimeout(() => {
-                if (mounted && loading) {
-                    console.warn("AUTH_GATE: Initialization taking longer than expected. Bypassing gate...");
-                    setLoading(false);
-                }
-            }, 8000);
-
-            try {
-                // Get initial state
-                console.log("AUTH_GATE: Querying session...");
-                const { data: { session }, error } = await supabase.auth.getSession();
-
-                if (error) {
-                    // Handle AbortError specifically
-                    if (error.name === 'AbortError') {
-                        console.warn("AUTH_GATE: Session query aborted. Retrying via state listener...");
-                    } else {
-                        throw error;
-                    }
-                }
-
-                if (mounted) {
-                    const currentUser = session?.user ?? null;
-                    setUser(currentUser);
-                    if (currentUser) {
-                        await fetchProfile(currentUser.id);
-                    }
-                }
-            } catch (error: any) {
-                if (error?.message?.includes("signal is aborted") || error?.name === 'AbortError') return;
-                console.error('AUTH_GATE: Failed to initialize session:', error?.message || error);
-            } finally {
-                clearTimeout(timeoutId);
-                if (mounted) setLoading(false);
-            }
-        };
-
-        initAuth();
-
-        const { data: { subscription } } = supabase.auth.onAuthStateChange(async (event, session) => {
-            if (!mounted) return;
-
-            console.log(`AUTH_GATE: State changed [${event}]`);
-            const currentUser = session?.user ?? null;
-            setUser(currentUser);
-
-            if (currentUser) {
-                try {
-                    await fetchProfile(currentUser.id);
-                } catch (error: any) {
-                    if (error?.message?.includes("signal is aborted") || error?.name === 'AbortError') return;
-                    console.error('AUTH_GATE: Profile fetch failed:', error);
+    // Sync Clerk Session with Supabase
+    React.useEffect(() => {
+        const syncSupabase = async () => {
+            if (session) {
+                const token = await session.getToken({ template: 'supabase' });
+                if (token) {
+                    await supabase.auth.setSession({
+                        access_token: token,
+                        refresh_token: '', // Clerk handles refreshing
+                    });
+                    // After setting session, load/refresh profile
+                    await refreshProfile();
+                    setIsSynced(true);
                 }
             } else {
+                // Clear supabase session on logout
+                await supabase.auth.signOut();
                 setProfile(null);
             }
-
-            if (mounted) setLoading(false);
-        });
-
-        return () => {
-            mounted = false;
-            subscription.unsubscribe();
         };
-    }, []);
 
-    const signOut = async () => {
-        await supabase.auth.signOut();
-    };
+        syncSupabase();
+    }, [session, refreshProfile]);
 
-    const refreshProfile = async () => {
-        if (user) {
-            await fetchProfile(user.id);
-        }
+    const value = {
+        user: user || null,
+        profile,
+        loading: !isLoaded || loadingProfile || (!!user && !isSynced),
+        signOut: async () => { await signOut(); },
+        refreshProfile,
     };
 
     return (
-        <AuthContext.Provider value={{ user, profile, loading, signOut, refreshProfile }}>
+        <AuthContext.Provider value={value}>
             {children}
         </AuthContext.Provider>
     );

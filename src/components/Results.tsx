@@ -16,9 +16,9 @@ const Results: React.FC = () => {
             color: 'text-blue-400',
         },
         {
-            number: 'Instant',
-            label: 'Response Speed',
-            description: 'Our AI agents engage every single lead in seconds, ensuring no opportunity ever goes cold.',
+            number: '100%',
+            label: 'Design Perfection',
+            description: 'Elite, high-performance web architecture starting at $750. We build digital assets that outshine the top 1% of your niche.',
             color: 'text-red-400',
         },
         {

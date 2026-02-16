@@ -152,6 +152,50 @@ const ServicesPage: React.FC = () => {
                 'Zero Lead Abandonment',
                 '24/7 Sales Persistence',
             ],
+        },
+        {
+            icon: <Zap className="w-8 h-8" />,
+            title: 'AI Takeoff & Estimating Agent',
+            shortDesc: 'Instant, accurate bids for contractors & trades.',
+            description: 'Stop wasting late nights on manual takeoffs. Our vision-enabled AI Agent analyzes your PDF/DWG plans to return measured quantities, material line-items, and draft pricing in minutes instead of hours.',
+            process: [
+                {
+                    step: '01. PLAN UPLOAD',
+                    desc: 'Drop your blueprints (PDF/DWG) into our secure portal for immediate vision-language processing.'
+                },
+                {
+                    step: '02. AGENT ANALYSIS',
+                    desc: 'The agent identifies walls, symbols, and openings, calculating exact quantities with 99.8% precision.'
+                },
+                {
+                    step: '03. LINE-ITEM MAPPING',
+                    desc: 'Automated conversion of measurements into specific material lists and labor requirements.'
+                },
+                {
+                    step: '04. BID GENERATION',
+                    desc: 'Export professional, downloadable Excel and PDF bids ready for procurement or client sign-off.'
+                }
+            ],
+            features: [
+                'Automated Measured Quantities',
+                'Line-Item Material Breakdown',
+                'Complex Assembly Calculations',
+                'Visual Markup & Verification',
+                'Contextual Market Pricing',
+                'Multi-Format Export (Excel/PDF)',
+                'Historical Project Database',
+                'Real-Time Scope Summaries'
+            ],
+            price: 'Starting at $1,250/mo',
+            duration: 'Monthly Performance',
+            color: 'text-fuchsia-400',
+            bg: 'bg-fuchsia-500/10',
+            benefits: [
+                'Win More High-Value Bids',
+                'Zero Manual Count Errors',
+                'Reclaim 15+ Hours Weekly',
+                'Instant Procurement Lists',
+            ],
         }
     ];
 

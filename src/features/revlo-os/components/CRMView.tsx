@@ -29,24 +29,24 @@ const CRMView: React.FC<CRMViewProps> = ({ leads }) => {
     };
 
     return (
-        <div className="flex flex-col h-full bg-white overflow-hidden">
-            <div className="p-8 border-b border-slate-100 bg-slate-50/30">
-                <div className="flex justify-between items-end mb-8">
+        <div className="flex flex-col h-full bg-[#020408] overflow-hidden text-slate-300">
+            <div className="p-10 border-b border-white/5 bg-[#0a0c12]/50 backdrop-blur-md">
+                <div className="flex justify-between items-end mb-10">
                     <div className="animate-in fade-in slide-in-from-left-2 duration-300">
-                        <div className="flex items-center gap-2 mb-2">
-                            <div className="w-2 h-4 bg-purple-600 rounded-full" />
-                            <h2 className="text-[10px] font-black text-slate-400 uppercase tracking-[0.2em]">Intel Directory</h2>
+                        <div className="flex items-center gap-2 mb-3">
+                            <div className="w-2 h-4 bg-purple-600 rounded-full shadow-[0_0_8px_rgba(147,51,234,0.5)]" />
+                            <h2 className="text-[10px] font-black text-slate-500 uppercase tracking-[0.2em]">Intel Directory</h2>
                         </div>
-                        <h1 className="text-3xl font-black text-slate-900 tracking-tight leading-none">Database OS</h1>
-                        <p className="text-[10px] text-slate-400 font-bold uppercase tracking-widest mt-2">Active Intelligence Nodes</p>
+                        <h1 className="text-3xl font-black text-white tracking-tight leading-none italic uppercase">Database <span className="gradient-text">OS</span></h1>
+                        <p className="text-[10px] text-slate-500 font-bold uppercase tracking-widest mt-2">Active Intelligence Nodes</p>
                     </div>
                     <div className="flex space-x-3">
-                        <div className="relative">
-                            <Search className="absolute left-3 top-3 text-slate-400" size={18} />
+                        <div className="relative group">
+                            <Search className="absolute left-4 top-3.5 text-slate-600 group-focus-within:text-purple-500 transition-colors" size={18} />
                             <input
                                 value={filter}
                                 onChange={e => setFilter(e.target.value)}
-                                className="bg-white border-2 border-slate-200 rounded-xl pl-11 pr-4 py-2.5 text-sm text-slate-900 focus:border-purple-500 focus:outline-none w-72 transition-colors"
+                                className="bg-white/5 border border-white/5 rounded-2xl pl-12 pr-6 py-3 text-sm text-white focus:border-purple-500/50 focus:outline-none w-80 transition-all placeholder-slate-600 font-bold shadow-2xl"
                                 placeholder="Search leads..."
                             />
                         </div>
@@ -54,10 +54,10 @@ const CRMView: React.FC<CRMViewProps> = ({ leads }) => {
                 </div>
 
                 {/* Filters */}
-                <div className="flex gap-2 overflow-x-auto pb-1 no-scrollbar shrink-0">
+                <div className="flex gap-3 overflow-x-auto pb-1 no-scrollbar shrink-0">
                     <button
                         onClick={() => setIndustryFilter('All')}
-                        className={`px-5 py-2.5 rounded-xl text-[10px] font-black uppercase tracking-widest border transition-all ${industryFilter === 'All' ? 'bg-purple-600 text-white border-purple-600 shadow-lg' : 'bg-white text-slate-500 border-slate-200 hover:border-purple-300'}`}
+                        className={`px-6 py-3 rounded-xl text-[10px] font-black uppercase tracking-widest border transition-all ${industryFilter === 'All' ? 'bg-purple-600 text-white border-purple-600 shadow-lg shadow-purple-500/20' : 'bg-white/5 text-slate-500 border-white/5 hover:border-white/20 hover:text-slate-300 shadow-xl'}`}
                     >
                         ALL Entities
                     </button>
@@ -65,7 +65,7 @@ const CRMView: React.FC<CRMViewProps> = ({ leads }) => {
                         <button
                             key={ind}
                             onClick={() => setIndustryFilter(ind)}
-                            className={`px-5 py-2.5 rounded-xl text-[10px] font-black uppercase tracking-widest border whitespace-nowrap transition-all ${industryFilter === ind ? 'bg-purple-600 text-white border-purple-600 shadow-lg' : 'bg-white text-slate-500 border-slate-200 hover:border-purple-300'}`}
+                            className={`px-6 py-3 rounded-xl text-[10px] font-black uppercase tracking-widest border whitespace-nowrap transition-all ${industryFilter === ind ? 'bg-purple-600 text-white border-purple-600 shadow-lg shadow-purple-500/20' : 'bg-white/5 text-slate-500 border-white/5 hover:border-white/20 hover:text-slate-300 shadow-xl'}`}
                         >
                             {ind}
                         </button>
@@ -75,57 +75,57 @@ const CRMView: React.FC<CRMViewProps> = ({ leads }) => {
 
             <div className="flex-1 overflow-auto custom-scrollbar">
                 <table className="w-full text-left border-collapse min-w-[1000px]">
-                    <thead className="bg-slate-50/50 backdrop-blur-sm sticky top-0 z-20">
+                    <thead className="bg-[#0a0c12]/80 backdrop-blur-xl sticky top-0 z-20">
                         <tr>
-                            <th className="p-6 text-[10px] font-black text-slate-400 uppercase tracking-[0.2em] border-b border-slate-100">Prospect Intelligence</th>
-                            <th className="p-6 text-[10px] font-black text-slate-400 uppercase tracking-[0.2em] border-b border-slate-100">Sector</th>
-                            <th className="p-6 text-[10px] font-black text-slate-400 uppercase tracking-[0.2em] border-b border-slate-100">Propensity Index</th>
-                            <th className="p-6 text-[10px] font-black text-slate-400 uppercase tracking-[0.2em] border-b border-slate-100">Operational Phase</th>
-                            <th className="p-6 text-[10px] font-black text-slate-400 uppercase tracking-[0.2em] border-b border-slate-100">Est. Valuation</th>
-                            <th className="p-6 text-[10px] font-black text-slate-400 uppercase tracking-[0.2em] border-b border-slate-100"></th>
+                            <th className="p-8 text-[10px] font-black text-slate-500 uppercase tracking-[0.2em] border-b border-white/5">Prospect Intelligence</th>
+                            <th className="p-8 text-[10px] font-black text-slate-500 uppercase tracking-[0.2em] border-b border-white/5">Sector</th>
+                            <th className="p-8 text-[10px] font-black text-slate-500 uppercase tracking-[0.2em] border-b border-white/5">Propensity Index</th>
+                            <th className="p-8 text-[10px] font-black text-slate-500 uppercase tracking-[0.2em] border-b border-white/5">Operational Phase</th>
+                            <th className="p-8 text-[10px] font-black text-slate-500 uppercase tracking-[0.2em] border-b border-white/5">Est. Valuation</th>
+                            <th className="p-8 text-[10px] font-black text-slate-500 uppercase tracking-[0.2em] border-b border-white/5"></th>
                         </tr>
                     </thead>
-                    <tbody className="divide-y divide-slate-100">
+                    <tbody className="divide-y divide-white/5 bg-[#020408]">
                         {filteredLeads.map(lead => (
-                            <tr key={lead.id} className="hover:bg-purple-50/50 transition-colors group">
-                                <td className="p-4">
-                                    <div className="font-semibold text-slate-900">{lead.name}</div>
-                                    <div className="text-xs text-slate-500 mt-0.5">{lead.address}</div>
+                            <tr key={lead.id} className="hover:bg-white/[0.02] transition-colors group">
+                                <td className="p-6">
+                                    <div className="font-black text-white text-sm uppercase italic tracking-tight">{lead.name}</div>
+                                    <div className="text-[11px] text-slate-600 mt-1 font-bold">{lead.address}</div>
                                 </td>
-                                <td className="p-4">
-                                    <span className="text-xs font-medium text-slate-700 bg-slate-100 px-3 py-1.5 rounded-lg">{lead.type || 'Unknown'}</span>
+                                <td className="p-6">
+                                    <span className="text-[10px] font-black text-slate-400 bg-white/5 px-3 py-1.5 rounded-lg border border-white/5 uppercase tracking-widest">{lead.type || 'Unknown'}</span>
                                 </td>
-                                <td className="p-4">
+                                <td className="p-6">
                                     {lead.propensityScore ? (
                                         <div className="flex items-center">
-                                            <div className="flex-1 h-2.5 bg-slate-200 rounded-full w-24 mr-3 overflow-hidden">
+                                            <div className="flex-1 h-1.5 bg-white/5 rounded-full w-24 mr-4 overflow-hidden border border-white/5">
                                                 <div className={`h-full ${getScoreColor(lead.propensityScore)}`} style={{ width: `${lead.propensityScore}%` }}></div>
                                             </div>
-                                            <span className="text-xs font-bold text-slate-900">{lead.propensityScore}</span>
+                                            <span className="text-[11px] font-black text-white">{lead.propensityScore}</span>
                                         </div>
                                     ) : (
-                                        <span className="text-xs text-slate-400 italic">Pending Analysis</span>
+                                        <span className="text-[10px] text-slate-600 italic font-black uppercase tracking-widest">Pending Analysis</span>
                                     )}
                                 </td>
-                                <td className="p-4">
-                                    <span className={`text-xs px-3 py-1.5 rounded-lg font-semibold border-2 ${lead.status === LeadStatus.REPLIED ? 'bg-green-50 text-green-700 border-green-200' :
-                                        lead.status === LeadStatus.CONTACTED ? 'bg-purple-50 text-purple-700 border-purple-200' :
-                                            lead.status === LeadStatus.OUTREACH_READY ? 'bg-blue-50 text-blue-700 border-blue-200' :
-                                                'bg-slate-50 text-slate-700 border-slate-200'
+                                <td className="p-6">
+                                    <span className={`text-[10px] px-3 py-1.5 rounded-lg font-black uppercase tracking-widest border transition-all ${lead.status === LeadStatus.REPLIED ? 'bg-green-500/10 text-green-400 border-green-500/20' :
+                                        lead.status === LeadStatus.CONTACTED ? 'bg-purple-500/10 text-purple-400 border-purple-500/20 shadow-[0_0_15px_rgba(147,51,234,0.1)]' :
+                                            lead.status === LeadStatus.OUTREACH_READY ? 'bg-blue-500/10 text-blue-400 border-blue-500/20' :
+                                                'bg-white/5 text-slate-500 border-white/5'
                                         }`}>
                                         {lead.status.replace('_', ' ')}
                                     </span>
                                 </td>
-                                <td className="p-4">
+                                <td className="p-6">
                                     {lead.dealValue ? (
-                                        <span className="text-green-600 font-mono font-bold">$ {lead.dealValue}</span>
+                                        <span className="text-green-500 font-mono font-black text-sm">$ {lead.dealValue}</span>
                                     ) : (
-                                        <span className="text-slate-400 font-mono">-</span>
+                                        <span className="text-slate-700 font-mono">-</span>
                                     )}
                                 </td>
-                                <td className="p-4 text-right">
-                                    <button className="text-slate-400 hover:text-slate-700 p-2 rounded-lg hover:bg-slate-100 transition-colors">
-                                        <MoreHorizontal size={16} />
+                                <td className="p-6 text-right">
+                                    <button className="text-slate-600 hover:text-white p-2.5 rounded-xl hover:bg-white/5 transition-all border border-transparent hover:border-white/5">
+                                        <MoreHorizontal size={18} />
                                     </button>
                                 </td>
                             </tr>
@@ -133,12 +133,13 @@ const CRMView: React.FC<CRMViewProps> = ({ leads }) => {
                     </tbody>
                 </table>
                 {filteredLeads.length === 0 && (
-                    <div className="flex-1 flex flex-col items-center justify-center py-32 text-center">
-                        <div className="w-20 h-20 bg-slate-50 rounded-full flex items-center justify-center mb-8 border border-slate-100 shadow-sm">
-                            <BarChart2 size={32} className="text-purple-300 animate-pulse" />
+                    <div className="flex-1 flex flex-col items-center justify-center py-40 text-center">
+                        <div className="w-24 h-24 bg-[#0a0c12] rounded-[32px] flex items-center justify-center mb-10 border border-white/10 shadow-2xl relative group overflow-hidden">
+                            <div className="absolute inset-0 bg-gradient-to-br from-purple-500/10 to-transparent" />
+                            <BarChart2 size={36} className="text-purple-500 animate-pulse relative z-10" />
                         </div>
-                        <h2 className="text-lg font-black text-slate-900 uppercase tracking-[0.3em] leading-none mb-4">No Nodes Found</h2>
-                        <p className="max-w-xs mx-auto text-slate-400 font-bold text-sm leading-relaxed uppercase tracking-widest opacity-60">Adjust your search parameters or sector filters to locate intelligence records.</p>
+                        <h2 className="text-xl font-black text-white uppercase tracking-[0.4em] leading-none mb-4 italic">No Nodes <span className="gradient-text">Found</span></h2>
+                        <p className="max-w-xs mx-auto text-slate-600 font-black text-[10px] leading-relaxed uppercase tracking-[0.2em] opacity-80">Adjust your search parameters or sector filters to locate intelligence records.</p>
                     </div>
                 )}
             </div>

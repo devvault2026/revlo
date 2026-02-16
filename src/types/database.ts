@@ -71,6 +71,38 @@ export type Database = {
                     }
                 ]
             }
+            demo_usage: {
+                Row: {
+                    id: string
+                    user_id: string | null
+                    usage_count: number | null
+                    last_used_at: string | null
+                    created_at: string | null
+                }
+                Insert: {
+                    id?: string
+                    user_id?: string | null
+                    usage_count?: number | null
+                    last_used_at?: string | null
+                    created_at?: string | null
+                }
+                Update: {
+                    id?: string
+                    user_id?: string | null
+                    usage_count?: number | null
+                    last_used_at?: string | null
+                    created_at?: string | null
+                }
+                Relationships: [
+                    {
+                        foreignKeyName: "demo_usage_user_id_fkey"
+                        columns: ["user_id"]
+                        isOneToOne: true
+                        referencedRelation: "users"
+                        referencedColumns: ["id"]
+                    }
+                ]
+            }
             leads: {
                 Row: {
                     address: string | null

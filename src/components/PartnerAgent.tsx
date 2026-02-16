@@ -60,7 +60,7 @@ import { useLocation } from 'react-router-dom'; // Added import
 
 const PartnerAgent: React.FC = () => {
     const location = useLocation();
-    if (location.pathname.toLowerCase().includes('scout')) return null;
+    // Early return moved after hooks to prevent "Rendered more hooks than during the previous render" error
 
     const [isOpen, setIsOpen] = useState(false);
     const [input, setInput] = useState('');
@@ -82,6 +82,8 @@ const PartnerAgent: React.FC = () => {
             scrollRef.current.scrollTop = scrollRef.current.scrollHeight;
         }
     }, [messages]);
+
+    if (location.pathname.toLowerCase().includes('scout')) return null;
 
     const handleSend = async () => {
         if (!input.trim() || isLoading) return;

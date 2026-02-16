@@ -8,7 +8,7 @@ const TeamPage: React.FC = () => {
         {
             name: 'JARYD',
             role: 'Strategy & Growth Lead',
-            title: 'CO-FOUNDER // CHIEF GROWTH OFFICER',
+            title: 'FOUNDER // CHIEF ARCHITECT',
             bio: 'Master of strategic branding, market positioning, and direct-response media buying. Jaryd turns unknown brands into market leaders through high-impact strategy.',
             extendedBio: `With over 15 years of experience in the digital marketing landscape, Jaryd has pioneered growth strategies for both startups and established businesses. His focus is on high-level market positioning and buildling sustainable growth engines that stand out in crowded markets. Jaryd believes that a strong brand foundation is the most valuable asset any modern business can own.`,
             expertise: ['MARKET POSITIONING', 'GROWTH STRATEGY', 'MEDIA BUYING', 'AI INTEGRATION', 'CONVERSION OPTIMIZATION', 'VIRAL STRATEGY'],
@@ -22,42 +22,6 @@ const TeamPage: React.FC = () => {
             initial: 'J',
             image: '/619228587_1473924384299979_5558935500619533353_n.jpg',
             id: 'LEAD-001'
-        },
-        {
-            name: 'ERIC',
-            role: 'Operations & Partner Lead',
-            title: 'CO-FOUNDER // CHIEF REVENUE OFFICER',
-            bio: 'The architect of airtight sales operations and partner success. Eric ensures every customer interaction is managed with precision and every partner is supported.',
-            extendedBio: `Eric's philosophy is centered on operational excellence and partnership. With a background in business development and consultative sales, he's built repeatable systems that consistently turn leads into long-term partners. His meticulous approach to partner relations and system design ensures that no opportunity is ever missed and every business scales smoothly.`,
-            expertise: ['SALES SYSTEMS', 'PARTNER SUCCESS', 'OPERATIONS DESIGN', 'CUSTOMER INSIGHTS', 'BUSINESS DEVELOPMENT', 'STRATEGIC NEGOTIATION'],
-            achievements: [
-                'Managed $100M+ in contract value',
-                '85% Close Rate Efficiency',
-                'Built 50+ scaling frameworks',
-                'Trained 200+ sales professionals',
-            ],
-            gradient: 'from-red-500 to-red-400',
-            initial: 'E',
-            image: '/515437137_761690583348698_3741883148247296552_n (1).jpg',
-            id: 'LEAD-002'
-        },
-        {
-            name: 'NAOUFAL',
-            role: 'Acquisition & Marketing Lead',
-            title: 'CO-FOUNDER // CHIEF STRATEGY OFFICER',
-            bio: 'The customer acquisition specialist who knows every digital channel inside and out. Naoufal manages the systems that bring high-quality leads directly to your business.',
-            extendedBio: `Naoufal is a data-driven marketing strategist obsessed with acquisition efficiency. His multi-channel approach isn't just about traffic—it's about finding the right customers at the right moment. Through advanced data analysis and market research, he identifies and activates acquisition channels that deliver high-intent leads consistently and predictably.`,
-            expertise: ['CUSTOMER ACQUISITION', 'MULTI-CHANNEL MARKETING', 'DATA ANALYSIS', 'MARKET RESEARCH', 'DIGITAL STRATEGY', 'PERFORMANCE TRACKING'],
-            achievements: [
-                'Generated 500K+ qualified leads',
-                'Built $500M+ in pipeline value',
-                '40% Average Conversion Lift',
-                'Expertise in 15+ marketing channels',
-            ],
-            gradient: 'from-blue-500 to-blue-400',
-            initial: 'N',
-            image: '/623212696_1198362805386965_7706492375118911747_n.jpg',
-            id: 'LEAD-003'
         },
     ];
 
@@ -83,17 +47,17 @@ const TeamPage: React.FC = () => {
                 >
                     <div className="inline-block px-4 py-2 glass rounded-full mb-8">
                         <span className="text-[10px] font-black text-purple-400 uppercase tracking-[0.4em]">
-                            The Founders
+                            The Architect
                         </span>
                     </div>
 
                     <h1 className="text-6xl lg:text-8xl font-black font-display mb-10 tracking-tighter italic text-white leading-tight">
-                        YOUR GROWTH <span className="gradient-text-alt">PARTNERS.</span>
+                        YOUR GROWTH <span className="gradient-text-alt">PARTNER.</span>
                     </h1>
 
                     <p className="text-xl text-slate-400 leading-relaxed font-medium">
-                        40+ years of combined experience across every major industry. Each founder is a specialist
-                        dedicated to the success of our partners. We don&apos;t just work for you—we work with you.
+                        Deep expertise across high-impact growth channels. I don't just provide a service—I build
+                        the proprietary systems that turn your business into a market leader.
                     </p>
                 </motion.div>
 
@@ -206,12 +170,12 @@ const TeamPage: React.FC = () => {
 
                         <div className="relative z-10 max-w-4xl mx-auto">
                             <h2 className="text-5xl lg:text-7xl font-black font-display mb-10 tracking-tighter italic text-white leading-tight">
-                                THE ELITE <span className="gradient-text-alt">TEAM.</span>
+                                THE ARCHITECT&apos;S <span className="gradient-text-alt">SYSTEM.</span>
                             </h2>
 
                             <p className="text-xl text-slate-400 leading-relaxed mb-12 font-medium">
-                                Jaryd&apos;s branding strategies lead into Eric&apos;s operational execution, fueled by Naoufal&apos;s acquisition systems.
-                                We are a cohesive team built to scale your business as if it were our own.
+                                My branding and growth strategies are amplified by the proprietary Revlo OS orchestration.
+                                I build the system, deploy the intelligence, and scale your business with surgical precision.
                             </p>
 
                             <Link to="/contact">

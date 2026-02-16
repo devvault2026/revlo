@@ -26,10 +26,10 @@ const Navigation: React.FC = () => {
 
     const navLinks = [
         { name: 'Home', path: '/' },
-        { name: 'Services', path: '/services' },
+        { name: 'Solutions', path: '/services' },
+        { name: 'Takeoff', path: '/takeoff-agent' },
         { name: 'Team', path: '/team' },
         { name: 'SCOUT', path: '/scout' },
-        user ? { name: 'Partner Portal', path: '/revlo-os' } : { name: 'Login', path: '/login' },
         { name: 'Results', path: '/results' },
     ];
 

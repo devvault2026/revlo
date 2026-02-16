@@ -10,11 +10,22 @@ const Projects: React.FC = () => {
             name: 'IndeedBot 2026',
             tagline: 'AI Career Intelligence Platform',
             description: 'Built a production-grade, multi-agent AI system that analyzes live job listings, ATS behavior, market demand, and offer risk before application. IndeedBot transforms the job search into a data-driven decision engine.',
-            image: 'https://www.indeedbot.xyz/og-image.png', // Fallback or placeholder, actual UI will use a stylized card
+            image: 'https://www.indeedbot.xyz/og-image.png',
             link: '/projects/indeedbot',
             externalLink: 'https://www.indeedbot.xyz/',
             stats: ['Multi-Agent Reasoning', 'ATS Optimized', 'Enterprise Security'],
             color: 'from-blue-500 to-indigo-500'
+        },
+        {
+            id: 'elite-design',
+            name: 'Elite Digital Front',
+            tagline: 'World-Class Web Design',
+            description: 'Crafting high-performance digital identities that command authority. We deliver premium, custom-coded web architectures for brands that need world-class quality at disruptive efficiency.',
+            image: 'https://res.cloudinary.com/dpfapm0tl/image/upload/v1769023912/ChatGPT_Image_Jan_21_2026_02_07_55_AM_yv9lxy.png',
+            link: '/projects/design',
+            externalLink: '#',
+            stats: ['Premium UI/UX', 'Starts at $750', 'Framer Motionified', 'SEO Domination'],
+            color: 'from-purple-600 to-red-600'
         }
     ];
 
@@ -41,7 +52,7 @@ const Projects: React.FC = () => {
                     </h2>
 
                     <p className="text-xl text-slate-400 leading-relaxed font-medium max-w-3xl">
-                        We don't just consult on AI—we build and deploy it. From complex multi-agent systems to secure enterprise infrastructure, see how we are solving non-trivial problems for the 2026 reality.
+                        We don't just consult—we build. From high-end, conversion-heavy web design to complex multi-agent AI systems, we provide the elite infrastructure for the 2026 digital economy.
                     </p>
                 </motion.div>
 
