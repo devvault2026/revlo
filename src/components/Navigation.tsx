@@ -91,8 +91,8 @@ const Navigation: React.FC = () => {
 
                     {/* Buttons Container */}
                     <div className="hidden md:flex items-center gap-4">
-                        {/* REVLO OS Electric Button */}
-                        <style>{`
+                        {/* START PARTNER PORTAL BUTTON - HIDDEN FOR NOW */}
+                        {/* <style>{`
                             .electric-button {
                                 --h-button: 48px;
                                 --w-button: 102px;
@@ -197,7 +197,7 @@ const Navigation: React.FC = () => {
                                 height: 2px;
                                 background-color: #fff;
                                 border-radius: 9999px;
-                            }
+                                }
                             @keyframes floating-points {
                                 0% {
                                     transform: translateY(0);
@@ -348,7 +348,8 @@ const Navigation: React.FC = () => {
                                 </svg>
                                 {user ? 'PARTNER PORTAL' : 'LOGIN'}
                             </span>
-                        </Link>
+                        </Link> */}
+                        {/* END PARTNER PORTAL BUTTON */}
 
                         {/* CTA Button */}
                         <Link to="/contact">
