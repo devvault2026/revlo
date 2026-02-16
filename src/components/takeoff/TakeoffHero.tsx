@@ -25,7 +25,7 @@ const TakeoffHero: React.FC = () => {
 
                     <p className="text-zinc-400 text-xl md:text-3xl font-bold leading-relaxed italic uppercase text-left mb-12">
                         You already worked a full day. <br />
-                        <span className="text-white">Upload the plans and let us do the takeoff and estimate for you.</span>
+                        <span className="text-white">Upload the plans and let Revlo do the takeoff and estimate for you.</span>
                     </p>
 
                     <div className="flex flex-col sm:flex-row items-start gap-8">

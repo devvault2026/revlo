@@ -201,7 +201,7 @@ const RevloLogo = React.memo(({ size = "large" }: { size?: "small" | "large" }) 
 ));
 
 function ScoutPage() {
-  const { user, signOut } = useAuth();
+  const { user, signOut, isSynced, syncError } = useAuth();
   const [query, setQuery] = useState('');
   const [leads, setLeads] = useState<Lead[]>([]);
   const [appState, setAppState] = useState<AppState>(AppState.IDLE);
@@ -304,35 +304,62 @@ function ScoutPage() {
       <BackgroundSystem />
       <div className="fixed inset-0 pointer-events-none z-[100] opacity-[0.06]" style={{ backgroundImage: 'url("https://grainy-gradients.vercel.app/noise.svg")' }}></div>
 
-      {/* FIXED NAVIGATION */}
-      <Link to="/" className="fixed top-8 left-8 z-[110] flex items-center gap-3 group px-5 py-2.5 glass-dark rounded-2xl border border-white/5 hover:border-white/10 transition-all duration-300 backdrop-blur-xl shadow-2xl">
-        <Home className="w-4 h-4 text-purple-400 group-hover:text-white transition-colors" />
-        <span className="text-[10px] font-black uppercase tracking-[0.2em] text-white/40 group-hover:text-white transition-colors">Home</span>
-      </Link>
+
+      {/* TOP TACTICAL BAR */}
+      <div className="fixed top-0 left-0 right-0 h-1 z-[120] bg-gradient-to-r from-transparent via-purple-500/20 to-transparent" />
+      <div className="fixed top-8 left-1/2 -translate-x-1/2 z-[110] hidden lg:flex items-center gap-8">
+        <div className="flex flex-col items-center">
+          <span className="text-[7px] font-black text-white/20 uppercase tracking-[0.5em] mb-1 italic">SATELLITE POSITION</span>
+          <span className="text-[10px] font-mono text-purple-500/40 tabular-nums uppercase">40.7128° N, 74.0060° W</span>
+        </div>
+        <div className="w-px h-6 bg-white/5" />
+        <div className="flex flex-col items-center">
+          <span className="text-[7px] font-black text-white/20 uppercase tracking-[0.5em] mb-1 italic">NEURAL LINK</span>
+          <div className="flex items-center gap-2">
+            <div className={`w-1 h-1 rounded-full ${isSynced ? 'bg-green-500 animate-pulse' : syncError ? 'bg-red-500' : 'bg-yellow-500'}`} />
+            <span className={`text-[10px] font-black uppercase tracking-widest ${isSynced ? 'text-green-500/60' : syncError ? 'text-red-500/60' : 'text-yellow-500/60'}`}>
+              {isSynced ? 'Synchronized' : syncError ? 'Link Failed' : 'Handshake...'}
+            </span>
+          </div>
+        </div>
+      </div>
 
       <AnimatePresence mode="wait">
 
         {appState === AppState.IDLE && (
           <div key="idle-screen" className="flex-1 flex flex-col items-center justify-center p-4 relative z-10 transition-all duration-1000">
+            {/* Mission Home Navigation */}
+            <Link to="/" className="fixed top-8 left-8 z-[110] flex items-center gap-3 group px-6 py-3 bg-[#0A0A0C]/80 backdrop-blur-2xl border border-white/5 rounded-2xl hover:border-purple-500/50 transition-all duration-500 group shadow-[0_0_50px_rgba(0,0,0,0.5)]">
+              <Home className="w-4 h-4 text-purple-500 group-hover:scale-110 transition-transform" />
+              <div className="flex flex-col items-start leading-none gap-1">
+                <span className="text-[7px] font-black text-white/20 uppercase tracking-[0.4em]">Sovereign State</span>
+                <span className="text-[10px] font-black uppercase tracking-widest text-white group-hover:text-purple-400">OS HOME</span>
+              </div>
+            </Link>
+
             {/* User Profile Bubble */}
             {user && (
               <motion.div
-                initial={{ opacity: 0, scale: 0.8 }}
-                animate={{ opacity: 1, scale: 1 }}
+                initial={{ opacity: 0, x: 20 }}
+                animate={{ opacity: 1, x: 0 }}
                 className="fixed top-8 right-8 z-[110] flex items-center gap-4 group"
               >
                 <div className="flex flex-col items-end">
-                  <span className="text-[10px] font-black uppercase tracking-widest text-white/40 group-hover:text-purple-400 transition-colors">Operative</span>
-                  <span className="text-xs font-black text-white group-hover:text-purple-300 transition-colors">{user.fullName || 'Authorized'}</span>
+                  <span className="text-[10px] font-black uppercase tracking-widest text-white/40 group-hover:text-purple-400 transition-colors">
+                    {syncError ? 'STATION OFFLINE' : 'Authorized Operative'}
+                  </span>
+                  <span className={`text-xs font-black uppercase italic tracking-tight transition-colors ${syncError ? 'text-red-500' : 'text-white group-hover:text-purple-300'}`}>
+                    {syncError ? 'SYNC REQUIRED' : user.fullName || 'Authorized'}
+                  </span>
                 </div>
                 <div className="relative">
-                  <div className="absolute -inset-1 bg-gradient-to-r from-purple-600 to-fuchsia-600 rounded-2xl blur opacity-30 group-hover:opacity-100 transition duration-500" />
+                  <div className={`absolute -inset-1 rounded-2xl blur opacity-30 group-hover:opacity-100 transition duration-500 ${syncError ? 'bg-red-600' : 'bg-gradient-to-r from-purple-600 to-fuchsia-600'}`} />
                   <img
                     src={user.imageUrl}
                     alt="Operative"
-                    className="relative w-12 h-12 rounded-2xl object-cover border border-white/10 group-hover:border-purple-500/50 transition-all duration-500"
+                    className={`relative w-12 h-12 rounded-2xl object-cover border transition-all duration-500 ${syncError ? 'border-red-500/50' : 'border-white/10 group-hover:border-purple-500/50'}`}
                   />
-                  <div className="absolute -bottom-1 -right-1 w-3.5 h-3.5 bg-green-500 rounded-full border-4 border-[#010103] shadow-[0_0_10px_rgba(34,197,94,0.5)]" />
+                  <div className={`absolute -bottom-1 -right-1 w-3.5 h-3.5 rounded-full border-4 border-[#010103] shadow-lg ${syncError ? 'bg-red-500' : 'bg-green-500 shadow-[0_0_10px_rgba(34,197,94,0.5)]'}`} />
                 </div>
               </motion.div>
             )}
@@ -354,18 +381,36 @@ function ScoutPage() {
                     value={query}
                     onChange={(e) => setQuery(e.target.value)}
                     autoFocus
-                    className="flex-1 h-12 bg-transparent text-white placeholder-slate-900 focus:outline-none font-black italic text-xl tracking-tight uppercase"
-                    placeholder="INITIATE RECON..."
+                    className="flex-1 h-12 bg-transparent text-white placeholder-slate-800 focus:outline-none font-black italic text-xl tracking-tight uppercase"
+                    placeholder="INITIATE DEEP SCAN..."
+                  />
+                  <motion.div
+                    animate={{ opacity: [1, 0] }}
+                    transition={{ duration: 0.8, repeat: Infinity }}
+                    className={`absolute left-[54px] top-6 w-0.5 h-6 bg-purple-500/40 pointer-events-none ${query ? 'hidden' : 'block'}`}
                   />
                   <button
                     type="submit"
                     disabled={!query}
-                    className="bg-white text-black h-10 w-10 rounded-2xl flex items-center justify-center hover:bg-purple-600 hover:text-white transition-all transform active:scale-95 disabled:opacity-5"
+                    className="bg-gradient-to-r from-purple-600 to-fuchsia-600 text-white px-8 h-12 rounded-2xl flex items-center justify-center gap-3 hover:shadow-[0_0_30px_rgba(168,85,247,0.4)] transition-all transform active:scale-95 disabled:opacity-50 group/btn"
                   >
-                    <ChevronRight className="w-6 h-6" />
+                    <Zap className="w-4 h-4 text-yellow-300" />
+                    <span className="text-[10px] font-black uppercase tracking-widest italic relative z-10">IGNITE ENGINE</span>
+                    <ChevronRight className="w-4 h-4 group-hover/btn:translate-x-1 transition-transform" />
                   </button>
                 </div>
               </form>
+              <div className="mt-6 flex justify-center gap-4 overflow-hidden py-2 whitespace-nowrap overflow-x-auto no-scrollbar opacity-30">
+                {['Roofers', 'HVAC Miami', 'AI Agencies', 'Fine Dining'].map((tag) => (
+                  <button
+                    key={tag}
+                    onClick={() => setQuery(tag)}
+                    className="px-4 py-1.5 glass rounded-full text-[8px] font-black uppercase tracking-widest text-white/60 hover:text-white transition-colors"
+                  >
+                    {tag}
+                  </button>
+                ))}
+              </div>
             </div>
 
             <div className="flex gap-16 opacity-30 mt-4">
@@ -486,6 +531,10 @@ function ScoutPage() {
                       }}
                       onStartCoach={() => setShowCoach(true)}
                       onDeepScan={handleDeepScan}
+                      onUpdateLead={(updatedLead) => {
+                        setLeads(prev => prev.map(l => l.id === updatedLead.id ? updatedLead : l));
+                        setSelectedLead(updatedLead);
+                      }}
                     />
                   </motion.div>
                 )}

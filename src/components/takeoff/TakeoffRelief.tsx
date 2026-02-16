@@ -27,7 +27,7 @@ const TakeoffRelief: React.FC = () => {
                     <div className="space-y-8 border-l-4 border-orange-600 pl-10 py-4">
                         <div className="space-y-2">
                             <p className="text-3xl font-black text-white italic uppercase italic">You upload plans.</p>
-                            <p className="text-3xl font-black text-white italic uppercase italic">We send back the takeoff and estimate.</p>
+                            <p className="text-3xl font-black text-white italic uppercase italic">I send back the takeoff and estimate.</p>
                         </div>
                         <p className="text-xl font-black text-zinc-600 italic uppercase italic tracking-widest mt-8">That’s it.</p>
                     </div>

@@ -98,7 +98,7 @@ const EsdrOfferPage = () => {
 
                         <p className="text-xl md:text-2xl text-slate-600 leading-relaxed mb-12">
                             Transforming your physical assets into a <span className="text-purple-600 font-semibold">digital empire.</span> <br />
-                            We build the "Brain" of your business so you can focus on the growth.
+                            I build the "Brain" of your business so you can focus on the growth.
                         </p>
                     </motion.div>
                 </div>
@@ -118,10 +118,10 @@ const EsdrOfferPage = () => {
                                 The "Base Sponge" Strategy
                             </h2>
                             <p className="text-lg text-slate-600 mb-6 leading-relaxed">
-                                You mentioned wanting a "base" for all your ideas—a place to absorb and organize your vision. We aren't just building a website; we are building that <strong>Digital Infrastructure</strong>.
+                                You mentioned wanting a "base" for all your ideas—a place to absorb and organize your vision. I am not just building a website; I am building that <strong>Digital Infrastructure</strong>.
                             </p>
                             <p className="text-lg text-slate-600 mb-8 leading-relaxed">
-                                From <strong>Navin to Russell</strong>, from rentals to storage units, your digital presence needs to be as robust as your physical properties. We provide the trust, the automation, and the professional polish that attracts high-quality tenants.
+                                From <strong>Navin to Russell</strong>, from rentals to storage units, your digital presence needs to be as robust as your physical properties. I provide the trust, the automation, and the professional polish that attracts high-quality tenants.
                             </p>
 
                             <div className="grid grid-cols-1 sm:grid-cols-2 gap-6">
@@ -192,7 +192,7 @@ const EsdrOfferPage = () => {
                             Choose Your Infrastructure
                         </h2>
                         <p className="text-xl text-slate-600">
-                            We have two paths forward. A tailored <strong>Launch</strong> to get you live, or a comprehensive <strong>Partnership</strong> to fuel your growth.
+                            There are two paths forward. A tailored <strong>Launch</strong> to get you live, or a comprehensive <strong>Partnership</strong> to fuel your growth.
                         </p>
                     </div>
 
@@ -263,10 +263,10 @@ const EsdrOfferPage = () => {
                     {/* Partnership Tiers - Intro */}
                     <div className="text-center mb-12">
                         <h3 className="text-3xl font-display font-bold text-slate-900">
-                            Or Partner With Us & Save
+                            Or Partner With Me & Save
                         </h3>
                         <p className="text-lg text-slate-600 mt-4 max-w-2xl mx-auto">
-                            Join a monthly support tier and we'll lower your initial build cost to <span className="text-green-600 font-bold">$1,750</span>. We become your backend team.
+                            Join a monthly support tier and I'll lower your initial build cost to <span className="text-green-600 font-bold">$1,750</span>. I become your dedicated architect.
                         </p>
                     </div>
 
@@ -287,7 +287,7 @@ const EsdrOfferPage = () => {
                                     <span className="text-slate-500">/mo</span>
                                 </div>
                                 <p className="text-sm text-slate-500 mb-8">
-                                    Perfect for peace of mind. We ensure your digital assets are always live, secure, and up-to-date.
+                                    Perfect for peace of mind. I ensure your digital assets are always live, secure, and up-to-date.
                                 </p>
                                 <ul className="space-y-4 mb-8">
                                     <li className="flex items-start gap-3 text-sm text-slate-700">
@@ -334,7 +334,7 @@ const EsdrOfferPage = () => {
                                     <span className="text-slate-500">/mo</span>
                                 </div>
                                 <p className="text-sm text-slate-500 mb-8">
-                                    For active expansion. We automate your marketing presence to keep ESDR top-of-mind.
+                                    For active expansion. I automate your marketing presence to keep ESDR top-of-mind.
                                 </p>
                                 <ul className="space-y-4 mb-8">
                                     <li className="flex items-start gap-3 text-sm text-slate-700">
@@ -384,7 +384,7 @@ const EsdrOfferPage = () => {
                                     <span className="text-slate-400">/mo</span>
                                 </div>
                                 <p className="text-sm text-slate-300 mb-8">
-                                    Your dedicated backend team. We handle all technical operations so you focus on the properties.
+                                    Your dedicated architect. I handle all technical operations so you focus on the properties.
                                 </p>
                                 <ul className="space-y-4 mb-8">
                                     <li className="flex items-start gap-3 text-sm text-slate-300">
@@ -434,7 +434,7 @@ const EsdrOfferPage = () => {
                 <div className="max-w-4xl mx-auto px-4 text-center">
                     <h2 className="text-3xl font-bold text-slate-900 mb-6">Ready to Digitalize ESDR Group?</h2>
                     <p className="text-lg text-slate-600 mb-8">
-                        Let's get the keys to your new digital property. Select a package above to get started immediately, or text us to discuss the best fit.
+                        Let's get the keys to your new digital property. Select a package above to get started immediately, or text me to discuss the best fit.
                     </p>
                     <div className="flex justify-center gap-4">
                         <button

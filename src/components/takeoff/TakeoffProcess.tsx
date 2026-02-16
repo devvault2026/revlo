@@ -7,7 +7,7 @@ const TakeoffProcess: React.FC = () => {
         {
             icon: FileUp,
             title: "Drop the plans",
-            detail: "Upload your PDF or DWG set. We handle the ingestion."
+            detail: "Upload your PDF or DWG set. I handle the ingestion."
         },
         {
             icon: Cpu,

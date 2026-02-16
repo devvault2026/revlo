@@ -24,7 +24,7 @@ const Manifesto: React.FC = () => {
                 >
                     MEDIOCRE IS <span className="bg-black text-white px-4">DEAD.</span>
                     <br />THE FUTURE IS
-                    <br /><span className="text-red-600">IRREFUTABLE.</span> WE ARE THE EDGE.
+                    <br /><span className="text-red-600">IRREFUTABLE.</span> I AM THE EDGE.
                 </motion.h2>
 
                 <motion.div
@@ -35,7 +35,7 @@ const Manifesto: React.FC = () => {
                     className="mt-16 max-w-2xl mx-auto"
                 >
                     <p className="text-xl lg:text-3xl font-bold leading-tight text-black/60">
-                        In a world of noise, we provide the signal. We don't just build websites or agents; we build the absolute, undisputed standard for how your business should operate and scale in 2026.
+                        In a world of noise, I provide the signal. I don't just build websites or agents; I build the absolute, undisputed standard for how your business should operate and scale in 2026.
                     </p>
                 </motion.div>
             </div>

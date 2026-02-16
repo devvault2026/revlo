@@ -6,25 +6,25 @@ const Results: React.FC = () => {
         {
             number: '347%',
             label: 'Average Growth',
-            description: 'The standard revenue increase our partners experience within the first 6 months of our collaboration.',
+            description: 'The standard revenue increase partners experience within the first 6 months of partnership.',
             color: 'text-purple-400',
         },
         {
             number: '40+',
             label: 'Hours Saved / Wk',
-            description: 'We handle the repetitive grind of lead management and sales, giving you your time back to lead.',
+            description: 'I handle the repetitive grind of lead management and sales, giving you your time back to lead.',
             color: 'text-blue-400',
         },
         {
             number: '100%',
             label: 'Design Perfection',
-            description: 'Elite, high-performance web architecture starting at $750. We build digital assets that outshine the top 1% of your niche.',
+            description: 'Elite, high-performance web architecture starting at $750. I build digital assets that outshine the top 1% of your niche.',
             color: 'text-red-400',
         },
         {
             number: 'Infinite',
             label: 'Scalability',
-            description: 'Your growth is no longer limited by your headcount. We provide the leverage to scale to the moon.',
+            description: 'Your growth is no longer limited by your headcount. I provide the leverage to scale to the moon.',
             color: 'text-purple-400',
         },
     ];
@@ -50,8 +50,8 @@ const Results: React.FC = () => {
                     </h2>
 
                     <p className="text-xl text-slate-400 leading-relaxed font-medium">
-                        Our systematic approach delivers results that aren't just incremental—they
-                        are transformational. We build market leaders.
+                        My systematic approach delivers results that aren't just incremental—they
+                        are transformational. I build market leaders.
                     </p>
                 </motion.div>
 

@@ -1,3 +1,12 @@
+export enum LeadStage {
+  SCOUTED = 'SCOUTED',
+  RESEARCH = 'RESEARCH',
+  PRD = 'PRD',
+  DESIGN = 'DESIGN',
+  OUTREACH = 'OUTREACH',
+  DONE = 'DONE'
+}
+
 export interface Lead {
   id: string;
   businessName: string;
@@ -32,6 +41,7 @@ export interface Lead {
   serviceFit: 'Marketing' | 'AI Automation' | 'Web Design' | 'Full Stack';
   isEnriched?: boolean;
   enrichmentStatus?: 'pending' | 'scanning' | 'complete' | 'failed';
+  currentStage: LeadStage;
 }
 
 export enum AppState {

@@ -27,10 +27,10 @@ const Navigation: React.FC = () => {
     const navLinks = [
         { name: 'Home', path: '/' },
         { name: 'Solutions', path: '/services' },
+        { name: 'Build', path: '/elite-development' },
         { name: 'Takeoff', path: '/takeoff-agent' },
         { name: 'Team', path: '/team' },
         { name: 'SCOUT', path: '/scout' },
-        { name: 'Results', path: '/results' },
     ];
 
     return (

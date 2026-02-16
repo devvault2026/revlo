@@ -1,5 +1,5 @@
 import { GoogleGenAI } from "@google/genai";
-import { Lead } from "../types";
+import { Lead, LeadStage } from "../types";
 
 const generateId = () => Math.random().toString(36).substr(2, 9);
 
@@ -194,7 +194,8 @@ async function processJsonLead(jsonStr: string): Promise<Lead | null> {
       competitiveInsights: {
         competitorAdvantages: Array.isArray(leadData.competitiveInsights?.competitorAdvantages) ? leadData.competitiveInsights.competitorAdvantages : [],
         missedOpportunities: Array.isArray(leadData.competitiveInsights?.missedOpportunities) ? leadData.competitiveInsights.missedOpportunities : [],
-      }
+      },
+      currentStage: LeadStage.SCOUTED
     };
   } catch (e) {
     return null;

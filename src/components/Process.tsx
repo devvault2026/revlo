@@ -10,7 +10,7 @@ const steps = [
         icon: <XCircle className="w-8 h-8 text-red-500" />,
         points: [
             "Losing money on slow lead response",
-            "Burned out team doing busy work",
+            "Drained human labor doing busy work",
             "Unable to grow without more hiring",
             "Inconsistent sales and high stress"
         ],
@@ -22,7 +22,7 @@ const steps = [
         status: "active",
         icon: <Users className="w-8 h-8 text-purple-400" />,
         points: [
-            "We deploy agents that never sleep",
+            "I deploy agents that never sleep",
             "Every lead is called in 30 seconds",
             "Real human-grade voice interaction",
             "Your calendar fills while you focus"

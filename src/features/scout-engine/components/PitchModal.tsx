@@ -1,6 +1,6 @@
 import React from 'react';
 import { Lead } from '../types';
-import { X, Copy, CheckCircle, Zap, Phone } from 'lucide-react';
+import { X, Copy, CheckCircle, Zap, Phone, Shield, Activity, Fingerprint, Cpu } from 'lucide-react';
 
 interface PitchModalProps {
   lead: Lead | null;
@@ -19,80 +19,110 @@ const PitchModal: React.FC<PitchModalProps> = ({ lead, onClose }) => {
   };
 
   return (
-    <div className="fixed inset-0 z-50 flex items-center justify-center p-4 bg-black/80 backdrop-blur-sm">
-      <div className="glass-panel w-full max-w-2xl max-h-[90vh] overflow-y-auto rounded-2xl shadow-2xl animate-fadeIn">
-        
+    <div className="fixed inset-0 z-[150] flex items-center justify-center p-4 bg-[#010103]/90 backdrop-blur-md">
+      <div className="relative w-full max-w-3xl overflow-hidden rounded-[2.5rem] border border-white/10 shadow-[0_0_100px_rgba(0,0,0,1)] bg-[#070709] animate-fadeIn">
+
+        {/* Scanline Effect Overlay */}
+        <div className="absolute inset-0 pointer-events-none bg-[linear-gradient(rgba(18,16,16,0)_50%,rgba(0,0,0,0.1)_50%),linear-gradient(90deg,rgba(255,0,0,0.03),rgba(0,255,0,0.01),rgba(0,0,255,0.03))] bg-[size:100%_2px,3px_100%] opacity-20" />
+
         {/* Header */}
-        <div className="sticky top-0 z-10 p-6 border-b border-white/10 bg-slate-900/95 flex justify-between items-center backdrop-blur-md">
-           <div>
-             <h2 className="text-2xl font-bold text-white flex items-center gap-2">
-               <Zap className="w-6 h-6 text-yellow-400" />
-               Strategy & Pitch
-             </h2>
-             <p className="text-sm text-slate-400">Target: {lead.businessName}</p>
-           </div>
-           <button onClick={onClose} className="p-2 hover:bg-white/10 rounded-full transition-colors">
-             <X className="w-6 h-6 text-slate-400" />
-           </button>
+        <div className="relative z-10 p-8 border-b border-white/5 bg-black/40 flex justify-between items-center backdrop-blur-3xl">
+          <div className="flex items-center gap-5">
+            <div className="w-14 h-14 bg-red-600/10 rounded-2xl flex items-center justify-center border border-red-500/20 shadow-[0_0_20px_rgba(239,68,68,0.1)]">
+              <Shield className="w-7 h-7 text-red-500" />
+            </div>
+            <div>
+              <div className="flex items-center gap-3 mb-1">
+                <span className="text-[10px] font-black text-red-500 uppercase tracking-[0.4em]">Classified // Strategic Intel</span>
+                <div className="w-1 h-1 bg-red-500 rounded-full animate-pulse" />
+              </div>
+              <h2 className="text-3xl font-black text-white italic tracking-tighter uppercase leading-none">
+                Mission Briefing
+              </h2>
+            </div>
+          </div>
+          <button onClick={onClose} className="p-3 bg-white/5 hover:bg-white/10 rounded-2xl border border-white/5 transition-all group">
+            <X className="w-6 h-6 text-slate-500 group-hover:text-white transition-colors" />
+          </button>
         </div>
 
-        <div className="p-6 space-y-8">
-          
+        <div className="relative z-10 p-8 space-y-10 overflow-y-auto max-h-[70vh] custom-scrollbar">
+
           {/* Analysis Section */}
-          <div className="space-y-3">
-            <h3 className="text-sm uppercase tracking-wider text-slate-500 font-bold">Digital Audit</h3>
-            <div className="p-4 rounded-lg bg-slate-800/50 border border-white/5">
-              <p className="text-slate-300 leading-relaxed">
-                {lead.onlinePresenceAnalysis}
+          <div className="space-y-4">
+            <div className="flex items-center gap-3">
+              <Activity className="w-4 h-4 text-purple-400" />
+              <h3 className="text-[10px] uppercase tracking-[0.3em] text-slate-500 font-black">Digital Fingerprint Analysis</h3>
+            </div>
+            <div className="p-6 rounded-3xl bg-white/[0.02] border border-white/5 relative overflow-hidden group">
+              <div className="absolute top-0 right-0 p-4 opacity-5">
+                <Fingerprint className="w-32 h-32 text-white" />
+              </div>
+              <p className="text-lg text-slate-300 leading-relaxed font-medium italic relative z-10">
+                "{lead.onlinePresenceAnalysis}"
               </p>
-              <div className="mt-4 grid grid-cols-2 gap-4">
-                 <div className="p-3 bg-black/20 rounded border border-white/5">
-                    <span className="text-xs text-slate-500 block">Website Status</span>
-                    <span className={`font-semibold ${!lead.website ? 'text-red-400' : 'text-slate-200'}`}>
-                        {lead.website ? 'Active' : 'Missing / Broken'}
-                    </span>
-                 </div>
-                 <div className="p-3 bg-black/20 rounded border border-white/5">
-                    <span className="text-xs text-slate-500 block">GMB Health</span>
-                    <span className="font-semibold text-slate-200">{lead.gmbStatus}</span>
-                 </div>
+
+              <div className="mt-8 grid grid-cols-3 gap-4">
+                <div className="p-4 bg-black/40 rounded-2xl border border-white/5">
+                  <span className="text-[8px] text-slate-600 block uppercase font-black tracking-widest mb-2">Target Entity</span>
+                  <span className="text-sm font-black text-white uppercase italic truncate block">
+                    {lead.businessName}
+                  </span>
+                </div>
+                <div className="p-4 bg-black/40 rounded-2xl border border-white/5">
+                  <span className="text-[8px] text-slate-600 block uppercase font-black tracking-widest mb-2">Digital Maturity</span>
+                  <span className={`text-sm font-black uppercase italic ${lead.digitalMaturity === 'Critical' ? 'text-red-500' : 'text-purple-400'}`}>
+                    {lead.digitalMaturity}
+                  </span>
+                </div>
+                <div className="p-4 bg-black/40 rounded-2xl border border-white/5">
+                  <span className="text-[8px] text-slate-600 block uppercase font-black tracking-widest mb-2">Lead Score</span>
+                  <span className="text-sm font-black text-white uppercase italic">
+                    {lead.leadScore} / 100
+                  </span>
+                </div>
               </div>
             </div>
           </div>
 
           {/* Pitch Section */}
-          <div className="space-y-3">
+          <div className="space-y-4">
             <div className="flex justify-between items-center">
-                <h3 className="text-sm uppercase tracking-wider text-primary font-bold">Generated Cold Call Script</h3>
-                <button 
-                  onClick={handleCopy}
-                  className="flex items-center gap-2 px-3 py-1.5 text-xs font-medium rounded-full bg-primary/10 text-primary hover:bg-primary/20 transition-colors"
-                >
-                  {copied ? <CheckCircle className="w-3 h-3" /> : <Copy className="w-3 h-3" />}
-                  {copied ? 'Copied' : 'Copy Script'}
-                </button>
+              <div className="flex items-center gap-3">
+                <Cpu className="w-4 h-4 text-blue-400" />
+                <h3 className="text-[10px] uppercase tracking-[0.3em] text-slate-500 font-black">Execution Script // Cold Protocol</h3>
+              </div>
+              <button
+                onClick={handleCopy}
+                className="flex items-center gap-2 px-5 py-2.5 text-[9px] font-black uppercase tracking-widest rounded-xl bg-white text-black hover:bg-purple-600 hover:text-white transition-all italic shadow-xl"
+              >
+                {copied ? <CheckCircle className="w-3 h-3" /> : <Copy className="w-3 h-3" />}
+                {copied ? 'Copied to Buffer' : 'Copy Protocol'}
+              </button>
             </div>
-            
-            <div className="p-6 rounded-xl bg-gradient-to-br from-slate-800 to-slate-900 border border-primary/20 relative group">
-              <div className="absolute top-0 left-0 w-1 h-full bg-primary rounded-l-xl"></div>
-              <pre className="whitespace-pre-wrap font-sans text-lg text-slate-200 leading-relaxed">
-                {lead.suggestedPitch}
-              </pre>
+
+            <div className="p-8 rounded-[2rem] bg-gradient-to-br from-slate-900 to-black border border-white/5 relative group shadow-inner">
+              <div className="absolute top-0 right-0 w-24 h-24 bg-purple-500/5 blur-3xl rounded-full" />
+              <div className="relative z-10 whitespace-pre-wrap font-mono text-lg text-emerald-400/90 leading-relaxed">
+                {lead.suggestedPitch || "Protocol Generation Failed. Re-run scan."}
+              </div>
             </div>
-            <p className="text-xs text-slate-500 italic text-center">
-                *This script is auto-generated based on the business's specific digital weaknesses.*
-            </p>
+            <div className="flex items-center justify-center gap-3 opacity-20">
+              <div className="h-px w-10 bg-white" />
+              <span className="text-[8px] font-black uppercase tracking-[0.5em]">End Mission Intel</span>
+              <div className="h-px w-10 bg-white" />
+            </div>
           </div>
 
           {/* Action Footer */}
-          <div className="pt-4 border-t border-white/10 flex gap-4">
-             <button onClick={onClose} className="flex-1 py-3 rounded-lg bg-slate-700 hover:bg-slate-600 text-white font-semibold transition-colors">
-               Close Analysis
-             </button>
-             <a href={`tel:${lead.phoneNumber}`} className="flex-1 py-3 rounded-lg bg-primary hover:bg-blue-600 text-white font-semibold flex justify-center items-center gap-2 transition-colors shadow-lg shadow-blue-500/20">
-               <Phone className="w-5 h-5" />
-               Call Now
-             </a>
+          <div className="pt-6 flex gap-6">
+            <button onClick={onClose} className="flex-1 py-5 rounded-2xl bg-white/5 hover:bg-white/10 text-white font-black uppercase tracking-[0.2em] text-[10px] transition-all border border-white/5 italic">
+              Abort Briefing
+            </button>
+            <a href={`tel:${lead.phoneNumber}`} className="flex-1 py-5 rounded-2xl bg-red-600 hover:bg-red-500 text-white font-black uppercase tracking-[0.2em] text-[10px] flex justify-center items-center gap-3 transition-all shadow-[0_0_30px_rgba(220,38,38,0.3)] italic">
+              <Phone className="w-4 h-4" />
+              Initiate Contact
+            </a>
           </div>
 
         </div>

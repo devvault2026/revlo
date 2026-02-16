@@ -29,8 +29,12 @@ import EsdrOfferPage from './pages/EsdrOfferPage';
 import EsdrPaymentPage from './pages/EsdrPaymentPage';
 import AdminPaymentsPage from './pages/AdminPaymentsPage';
 import IndeedBotPage from './pages/projects/IndeedBotPage';
+import EsdrLivingPage from './pages/projects/EsdrLivingPage';
+import ScaleWithJarydPage from './pages/projects/ScaleWithJarydPage';
+import SnowblowrPage from './pages/projects/SnowblowrPage';
 import ScoutPage from './pages/ScoutPage';
 import TakeoffAgentPage from './pages/TakeoffAgentPage';
+import EliteDevelopmentPage from './pages/EliteDevelopmentPage';
 
 // Components
 import Navigation from './components/Navigation';
@@ -99,6 +103,7 @@ function App() {
                                         </>
                                     } />
                                     <Route path="/takeoff-agent" element={<TakeoffAgentPage />} />
+                                    <Route path="/elite-development" element={<EliteDevelopmentPage />} />
                                     <Route path="/offers/esdr" element={
                                         <>
                                             <Navigation />
@@ -107,6 +112,9 @@ function App() {
                                         </>
                                     } />
                                     <Route path="/projects/indeedbot" element={<IndeedBotPage />} />
+                                    <Route path="/projects/esdr-living" element={<EsdrLivingPage />} />
+                                    <Route path="/projects/scale-with-jaryd" element={<ScaleWithJarydPage />} />
+                                    <Route path="/projects/snowblowr" element={<SnowblowrPage />} />
                                     <Route path="/scout" element={
                                         <ProtectedRoute>
                                             <ScoutPage />

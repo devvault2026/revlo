@@ -1,6 +1,7 @@
 import React from 'react';
 import { motion } from 'framer-motion';
 import Hero from '../components/Hero';
+import SnowblowrShowcase from '../components/SnowblowrShowcase';
 import PromoVideo from '../components/PromoVideo';
 import Results from '../components/Results';
 import Manifesto from '../components/Manifesto';
@@ -8,7 +9,7 @@ import Process from '../components/Process';
 import RevloOS from '../components/RevloOS';
 import Services from '../components/Services';
 import Projects from '../components/Projects';
-import Team from '../components/Team';
+import FounderOperator from '../components/FounderOperator';
 import Contact from '../components/Contact';
 
 const HomePage: React.FC = () => {
@@ -20,6 +21,7 @@ const HomePage: React.FC = () => {
             transition={{ duration: 0.5 }}
         >
             <Hero />
+            <SnowblowrShowcase />
             <PromoVideo />
             <Results />
             <Manifesto />
@@ -27,7 +29,7 @@ const HomePage: React.FC = () => {
             <RevloOS />
             <Services />
             <Projects />
-            <Team />
+            <FounderOperator />
             <Contact />
         </motion.main>
     );

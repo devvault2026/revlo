@@ -174,7 +174,7 @@ const AdminPaymentsPage = () => {
                                 value={username}
                                 onChange={(e) => setUsername(e.target.value)}
                                 className="w-full bg-slate-900 border border-slate-700 rounded-lg px-4 py-3 text-white focus:outline-none focus:border-purple-500 transition-colors"
-                                placeholder="Jaryd / Eric"
+                                placeholder="Jaryd"
                             />
                         </div>
                         <div>

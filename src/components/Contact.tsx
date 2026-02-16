@@ -51,7 +51,7 @@ const Contact: React.FC = () => {
                         </div>
 
                         <h2 className="text-5xl lg:text-7xl font-black font-display mb-8 tracking-tighter italic text-white leading-tight uppercase">
-                            PARTNER <span className="gradient-text-alt">WITH US.</span>
+                            PARTNER <span className="gradient-text-alt">WITH ME.</span>
                         </h2>
 
                         <p className="text-xl text-slate-400 leading-relaxed mb-12 font-medium">

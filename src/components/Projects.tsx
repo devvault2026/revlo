@@ -6,26 +6,52 @@ import { Link } from 'react-router-dom';
 const Projects: React.FC = () => {
     const projects = [
         {
+            id: 'snowblowr',
+            name: 'SNOWBLOWR',
+            tagline: 'On-Demand Snow Clearing Ecosystem',
+            description: 'The Snow Removal Revolution. Your driveway. Cleared on demand. Every. Single. Storm. SNOWBLOWR connects you to verified local operators with guaranteed service times using our proprietary Revlo matching engine.',
+            image: 'https://res.cloudinary.com/dpfapm0tl/image/upload/v1771218296/snowblowr_bcrgjb.png',
+            link: '/projects/snowblowr',
+            externalLink: 'https://www.snowblowr.com/',
+            stats: ['On-Demand Clearing', 'Storm Pass Priority', 'Operator Hub', 'Stripe Security'],
+            color: 'from-blue-600 to-indigo-600',
+            bgPosition: 'bg-left'
+        },
+        {
             id: 'indeedbot',
             name: 'IndeedBot 2026',
             tagline: 'AI Career Intelligence Platform',
             description: 'Built a production-grade, multi-agent AI system that analyzes live job listings, ATS behavior, market demand, and offer risk before application. IndeedBot transforms the job search into a data-driven decision engine.',
-            image: 'https://www.indeedbot.xyz/og-image.png',
+            image: 'https://res.cloudinary.com/dpfapm0tl/image/upload/v1771201324/indeedbotxyz_sw842o.png',
             link: '/projects/indeedbot',
             externalLink: 'https://www.indeedbot.xyz/',
             stats: ['Multi-Agent Reasoning', 'ATS Optimized', 'Enterprise Security'],
-            color: 'from-blue-500 to-indigo-500'
+            color: 'from-blue-500 to-indigo-500',
+            bgPosition: 'bg-left'
         },
         {
-            id: 'elite-design',
-            name: 'Elite Digital Front',
-            tagline: 'World-Class Web Design',
-            description: 'Crafting high-performance digital identities that command authority. We deliver premium, custom-coded web architectures for brands that need world-class quality at disruptive efficiency.',
-            image: 'https://res.cloudinary.com/dpfapm0tl/image/upload/v1769023912/ChatGPT_Image_Jan_21_2026_02_07_55_AM_yv9lxy.png',
-            link: '/projects/design',
-            externalLink: '#',
-            stats: ['Premium UI/UX', 'Starts at $750', 'Framer Motionified', 'SEO Domination'],
-            color: 'from-purple-600 to-red-600'
+            id: 'esdr-living',
+            name: 'ESDR Living',
+            tagline: 'Custom Real Estate Platform',
+            description: 'Strategically engineered a high-performance real estate ecosystem for a local investor. ESDR Living combines an elite, Airbnb-style property showcase with a sophisticated tenant management portal, bridging the gap between luxury marketing and functional logistics.',
+            image: 'https://res.cloudinary.com/dpfapm0tl/image/upload/v1771214488/esdr_dowjzk.png',
+            link: '/projects/esdr-living',
+            externalLink: 'https://esdr-group.vercel.app/',
+            stats: ['Airbnb Style UX', 'Tenant Portal', 'Property Showcase', 'Management Hub'],
+            color: 'from-purple-600 to-indigo-500',
+            bgPosition: 'bg-center'
+        },
+        {
+            id: 'scale-with-jaryd',
+            name: 'Scale with Jaryd',
+            tagline: 'Psychological Operating System',
+            description: 'The world\'s first "War Machine for the Psyche." A sovereign digital ecosystem that replaces traditional coaches and therapists with military-grade strategy, psychographic sales agents (The Oracle), and $JARYD tokenomics.',
+            image: 'https://res.cloudinary.com/dpfapm0tl/image/upload/v1771216503/swj_mvygic.png',
+            link: '/projects/scale-with-jaryd',
+            externalLink: 'https://www.scalewithjaryd.com/',
+            stats: ['Jaryd.OS Architecture', 'The Oracle Sales AI', '$JARYD Tokenomics', 'Time Collapse Protocol'],
+            color: 'from-indigo-600 to-purple-600',
+            bgPosition: 'bg-center'
         }
     ];
 
@@ -52,7 +78,7 @@ const Projects: React.FC = () => {
                     </h2>
 
                     <p className="text-xl text-slate-400 leading-relaxed font-medium max-w-3xl">
-                        We don't just consult—we build. From high-end, conversion-heavy web design to complex multi-agent AI systems, we provide the elite infrastructure for the 2026 digital economy.
+                        I don't just consult—I build. From high-end, conversion-heavy web design to complex multi-agent AI systems, I provide the elite infrastructure for the 2026 digital economy.
                     </p>
                 </motion.div>
 
@@ -119,30 +145,17 @@ const Projects: React.FC = () => {
                                     </div>
 
                                     {/* Visual Representation */}
-                                    <div className="relative h-[400px] lg:h-auto bg-gradient-to-br from-blue-500/20 to-purple-500/20 group-hover:from-blue-500/30 group-hover:to-purple-500/30 transition-all duration-700 overflow-hidden">
-                                        <div className="absolute inset-0 bg-[url('https://res.cloudinary.com/dpfapm0tl/image/upload/v1769023912/ChatGPT_Image_Jan_21_2026_02_07_55_AM_yv9lxy.png')] bg-cover bg-center mix-blend-overlay opacity-40 group-hover:scale-110 transition-transform duration-700" />
+                                    <div className="relative h-[400px] lg:h-auto overflow-hidden bg-black group/img">
+                                        <motion.div
+                                            className={`absolute inset-0 bg-cover ${project.bgPosition} transition-all duration-700 group-hover/img:scale-105`}
+                                            style={{ backgroundImage: `url(${project.image})` }}
+                                        />
 
-                                        {/* Floating Elements/Mockup look */}
-                                        <div className="absolute inset-x-8 bottom-0 top-12 bg-black/40 backdrop-blur-xl border-t border-x border-white/10 rounded-t-[32px] translate-y-24 group-hover:translate-y-12 transition-transform duration-700 shadow-2xl">
-                                            <div className="p-6 border-b border-white/5 flex items-center justify-between">
-                                                <div className="flex gap-2">
-                                                    <div className="w-3 h-3 rounded-full bg-red-500/20" />
-                                                    <div className="w-3 h-3 rounded-full bg-yellow-500/20" />
-                                                    <div className="w-3 h-3 rounded-full bg-green-500/20" />
-                                                </div>
-                                                <div className="text-[8px] font-black text-slate-500 tracking-[0.3em] uppercase">SYSTEM ANALYSIS IN PROGRESS...</div>
-                                            </div>
-                                            <div className="p-8 space-y-6">
-                                                <div className="h-4 w-2/3 bg-blue-500/20 rounded animate-pulse" />
-                                                <div className="h-4 w-full bg-slate-500/10 rounded" />
-                                                <div className="h-4 w-full bg-slate-500/10 rounded" />
-                                                <div className="grid grid-cols-3 gap-4 pt-4">
-                                                    <div className="h-20 rounded-2xl bg-white/5 border border-white/5" />
-                                                    <div className="h-20 rounded-2xl bg-white/5 border border-white/5" />
-                                                    <div className="h-20 rounded-2xl bg-white/5 border border-white/5" />
-                                                </div>
-                                            </div>
-                                        </div>
+                                        {/* Premium Glass Overlay on Hover */}
+                                        <div className="absolute inset-0 bg-gradient-to-t from-black via-transparent to-transparent opacity-60 group-hover:opacity-40 transition-opacity duration-500" />
+
+                                        {/* Subtle Border Glow */}
+                                        <div className="absolute inset-0 border border-white/5 group-hover:border-white/20 transition-colors duration-500 pointer-events-none" />
                                     </div>
                                 </div>
                             </div>

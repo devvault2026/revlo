@@ -10,7 +10,7 @@ const TakeoffQualification: React.FC = () => {
                     <h2 className="text-4xl md:text-7xl font-black italic uppercase tracking-tighter text-white">
                         IS THIS FOR <span className="text-orange-500">YOUR CREW?</span>
                     </h2>
-                    <p className="text-zinc-500 font-bold uppercase tracking-[0.4em] text-xs italic">WE AREN'T FOR EVERYONE. JUST THE ONES WHO WANT TO SCALE.</p>
+                    <p className="text-zinc-500 font-bold uppercase tracking-[0.4em] text-xs italic">I'M NOT FOR EVERYONE. JUST THE ONES WHO WANT TO SCALE.</p>
                 </div>
 
                 <div className="grid md:grid-cols-2 gap-10 max-w-5xl mx-auto">

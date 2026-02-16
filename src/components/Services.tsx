@@ -7,7 +7,7 @@ const Services: React.FC = () => {
         {
             icon: <Layers className="w-8 h-8" />,
             title: 'I: ELITE WEB DESIGN',
-            description: 'Top-tier digital presence for brands that refuse to be second best. We deliver fully-realized, high-performance websites built to convert and scale from day one.',
+            description: 'Top-tier digital presence for brands that refuse to be second best. I deliver fully-realized, high-performance websites built to convert and scale from day one.',
             features: ['MODERN ARCHITECTURE', 'FROM $750 TOTAL', 'CONVERSION OPTIMIZED', 'MOBILE-FIRST DESIGN'],
             color: 'text-purple-400',
             glow: 'group-hover:shadow-[0_0_50px_rgba(139,92,246,0.3)]',
@@ -23,7 +23,7 @@ const Services: React.FC = () => {
         {
             icon: <Cpu className="w-8 h-8" />,
             title: 'III: AI AGENT DEV',
-            description: 'The ultimate operating system for your business. We build custom AI agents that manage your workflows, sales pipelines, and customer data with irrefutable precision.',
+            description: 'The ultimate operating system for your business. I build custom AI agents that manage your workflows, sales pipelines, and customer data with irrefutable precision.',
             features: ['CUSTOM WORKFLOWS', 'SYSTEM INTEGRATION', '24/7 OPERATIONS', 'ZERO TECH JARGON'],
             color: 'text-red-400',
             glow: 'group-hover:shadow-[0_0_50px_rgba(239,68,68,0.3)]',
@@ -55,7 +55,7 @@ const Services: React.FC = () => {
                     </h2>
 
                     <p className="text-xl text-slate-400 leading-relaxed font-medium italic">
-                        "We don't just provide services. We deploy specialized intelligence to solve
+                        "I don't just provide services. I deploy specialized intelligence to solve
                         complex growth challenges at the highest level of execution."
                     </p>
                 </motion.div>

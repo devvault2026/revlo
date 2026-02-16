@@ -11,7 +11,7 @@ const TakeoffGuarantee: React.FC = () => {
                     </h2>
 
                     <p className="text-xl md:text-3xl font-black text-zinc-300 italic uppercase italic leading-tight max-w-2xl mx-auto">
-                        If your first estimate isn’t usable, we redo it or refund you. <br />
+                        If your first estimate isn’t usable, I redo it or refund you. <br />
                         <span className="text-white mt-4 block underline decoration-zinc-700 underline-offset-4">No questions asked.</span>
                     </p>
 

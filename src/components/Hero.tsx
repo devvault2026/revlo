@@ -107,7 +107,7 @@ const Hero: React.FC = () => {
                                 className="text-xl lg:text-3xl text-slate-400 leading-tight max-w-2xl font-bold tracking-tight"
                             >
                                 The New Standard in AI Agents & Digital Design. <br />
-                                <span className="text-white/80">We build the systems that build your business—from Human-Grade Voice AI to World-Class Web Design starting at $750. No jargon. Just scale.</span>
+                                <span className="text-white/80">I build the systems that build your business—from Human-Grade Voice AI to World-Class Web Design starting at $750. No jargon. Just scale.</span>
                             </motion.p>
                         </div>
 
@@ -123,7 +123,7 @@ const Hero: React.FC = () => {
                                 whileHover={{ scale: 1.05, y: -2 }}
                                 whileTap={{ scale: 0.95 }}
                             >
-                                PARTNER WITH US
+                                PARTNER WITH ME
                                 <ArrowRight className="w-4 h-4 group-hover:translate-x-1 transition-transform" />
                             </motion.button>
 

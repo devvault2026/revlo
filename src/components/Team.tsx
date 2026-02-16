@@ -37,7 +37,7 @@ const Team: React.FC = () => {
 
                     <p className="text-xl text-slate-400 leading-relaxed font-medium">
                         Deep expertise in business development and digital orchestration. I am not just a service provider;
-                        I am an extension of your own team dedicated to your success.
+                        I am a partner dedicated to your success.
                     </p>
                 </motion.div>
 

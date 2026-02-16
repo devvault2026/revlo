@@ -65,7 +65,7 @@ const RevloOS: React.FC = () => {
                 >
                     <div className="inline-block px-4 py-2 glass rounded-full mb-8">
                         <span className="text-[10px] font-black text-purple-400 uppercase tracking-[0.4em]">
-                            Our Growth Architecture
+                            The Growth Architecture
                         </span>
                     </div>
 
@@ -124,7 +124,7 @@ const RevloOS: React.FC = () => {
                             </h3>
                             <p className="text-xl text-slate-400 font-medium leading-relaxed">
                                 Experience the power of dedicated growth systems. Schedule a mapping session
-                                to see how our portal can automate your predictable growth engine.
+                                to see how the portal can automate your predictable growth engine.
                             </p>
                         </div>
 

@@ -1,7 +1,7 @@
 import React, { useState } from 'react';
-import { Lead } from '../types';
-import { Phone, Globe, ShieldAlert, Zap, Mic, Mail, Facebook, Instagram, Linkedin, Link as LinkIcon, ScanSearch, Loader2, X, Target, User, Activity, Fingerprint, Maximize2, Minimize2, Star } from 'lucide-react';
-// motion removed, handled by parent
+import { Lead, LeadStage } from '../types';
+import { Phone, Globe, ShieldAlert, Zap, Mic, Mail, Facebook, Instagram, Linkedin, Link as LinkIcon, ScanSearch, Loader2, X, Target, User, Activity, Fingerprint, Maximize2, Minimize2, Star, CheckCircle2, ArrowRight, FileText, Palette, Send } from 'lucide-react';
+import { motion } from 'framer-motion';
 
 interface KnowledgePanelProps {
   lead: Lead | null;
@@ -10,19 +10,60 @@ interface KnowledgePanelProps {
   onDeepScan: (lead: Lead) => Promise<void>;
   isExpanded: boolean;
   onToggleExpand: () => void;
+  onUpdateLead: (lead: Lead) => void;
 }
 
-const KnowledgePanel: React.FC<KnowledgePanelProps> = ({ lead, onClose, onStartCoach, onDeepScan, isExpanded, onToggleExpand }) => {
-  const [isScanning, setIsScanning] = useState(false);
+const KnowledgePanel: React.FC<KnowledgePanelProps> = ({ lead, onClose, onStartCoach, onDeepScan, isExpanded, onToggleExpand, onUpdateLead }) => {
+  const [isProcessing, setIsProcessing] = useState(false);
   const [activeTab, setActiveTab] = useState<'INTEL' | 'WEB'>('INTEL');
 
   if (!lead) return null;
 
-  const handleDeepScan = async () => {
-    setIsScanning(true);
-    await onDeepScan(lead);
-    setIsScanning(false);
+  const stages = [
+    { key: LeadStage.SCOUTED, label: 'SCOUTED', icon: ScanSearch, color: 'text-purple-500' },
+    { key: LeadStage.RESEARCH, label: 'RESEARCH', icon: Activity, color: 'text-blue-500' },
+    { key: LeadStage.PRD, label: 'STRATEGY', icon: FileText, color: 'text-emerald-500' },
+    { key: LeadStage.DESIGN, label: 'DESIGN', icon: Palette, color: 'text-fuchsia-500' },
+    { key: LeadStage.OUTREACH, label: 'OUTREACH', icon: Send, color: 'text-orange-500' },
+  ];
+
+  const currentStageIndex = stages.findIndex(s => s.key === lead.currentStage);
+
+  const handleNextStage = async () => {
+    setIsProcessing(true);
+    // Simulate AI processing
+    await new Promise(r => setTimeout(r, 2000));
+
+    const nextStageMap: Record<LeadStage, LeadStage> = {
+      [LeadStage.SCOUTED]: LeadStage.RESEARCH,
+      [LeadStage.RESEARCH]: LeadStage.PRD,
+      [LeadStage.PRD]: LeadStage.DESIGN,
+      [LeadStage.DESIGN]: LeadStage.OUTREACH,
+      [LeadStage.OUTREACH]: LeadStage.DONE,
+      [LeadStage.DONE]: LeadStage.DONE,
+    };
+
+    const nextStage = nextStageMap[lead.currentStage];
+    onUpdateLead({ ...lead, currentStage: nextStage });
+    setIsProcessing(false);
+
+    if (nextStage === LeadStage.RESEARCH) {
+      await onDeepScan(lead);
+    }
   };
+
+  const getButtonConfig = () => {
+    switch (lead.currentStage) {
+      case LeadStage.SCOUTED: return { text: 'INITIATE RESEARCH', icon: Activity, color: 'bg-blue-600' };
+      case LeadStage.RESEARCH: return { text: 'GENERATE PRD', icon: FileText, color: 'bg-emerald-600' };
+      case LeadStage.PRD: return { text: 'CREATE DESIGN', icon: Palette, color: 'bg-fuchsia-600' };
+      case LeadStage.DESIGN: return { text: 'START OUTREACH', icon: Send, color: 'bg-orange-600' };
+      case LeadStage.OUTREACH: return { text: 'CAMPAIGN ACTIVE', icon: CheckCircle2, color: 'bg-green-600' };
+      default: return { text: 'MISSION COMPLETE', icon: CheckCircle2, color: 'bg-green-600' };
+    }
+  };
+
+  const btn = getButtonConfig();
 
   const socialLinks = [
     { key: 'facebook', icon: Facebook, color: 'text-blue-500', url: lead.socials?.facebook },
@@ -41,11 +82,62 @@ const KnowledgePanel: React.FC<KnowledgePanelProps> = ({ lead, onClose, onStartC
         <div className="flex items-center gap-6">
           <div className="flex flex-col">
             <div className="flex items-center gap-2 mb-1">
-              <div className="w-1 h-1 rounded-full bg-red-500 animate-pulse" />
-              <span className="text-[8px] font-black uppercase tracking-[0.4em] text-slate-500">Live_Dossier_Link</span>
+              <div className={`w-2 h-2 rounded-full ${lead.currentStage === LeadStage.DONE ? 'bg-green-500' : 'bg-red-500 animate-pulse'}`} />
+              <span className="text-[8px] font-black uppercase tracking-[0.4em] text-slate-500">
+                {lead.currentStage === LeadStage.DONE ? 'OPERATIONAL_READY' : 'ENGINE_STAGE: ' + lead.currentStage}
+              </span>
             </div>
             <h2 className="text-xl font-black italic text-white uppercase tracking-tighter leading-none">{lead.businessName}</h2>
           </div>
+
+          <div className="h-10 w-px bg-white/5 mx-2" />
+
+          {/* PROGRESS STEPS */}
+          <div className="hidden lg:flex items-center gap-4">
+            {stages.map((stage, idx) => {
+              const Icon = stage.icon;
+              const isActive = idx === currentStageIndex;
+              const isCompleted = idx < currentStageIndex;
+              return (
+                <div key={stage.key} className="flex items-center gap-3">
+                  <div className={`flex flex-col items-center gap-1.5 transition-all duration-500 ${isActive ? 'opacity-100 scale-110' : isCompleted ? 'opacity-50' : 'opacity-20'}`}>
+                    <div className={`w-8 h-8 rounded-xl flex items-center justify-center border ${isActive ? `bg-white/10 ${stage.color} border-white/20 shadow-[0_0_20px_rgba(255,255,255,0.05)]` : isCompleted ? 'border-green-500/30' : 'border-white/5'}`}>
+                      {isCompleted ? <CheckCircle2 className="w-4 h-4 text-green-500" /> : <Icon className={`w-4 h-4 ${isActive ? stage.color : 'text-slate-500'}`} />}
+                    </div>
+                    <span className="text-[7px] font-black tracking-widest uppercase">{stage.label}</span>
+                  </div>
+                  {idx < stages.length - 1 && (
+                    <div className="w-6 h-px bg-white/5" />
+                  )}
+                </div>
+              );
+            })}
+          </div>
+        </div>
+
+        <div className="flex items-center gap-3">
+          {/* DYNAMIC ACTION BUTTON */}
+          <button
+            onClick={handleNextStage}
+            disabled={isProcessing || lead.currentStage === LeadStage.DONE}
+            className={`flex items-center gap-3 px-6 py-3 rounded-2xl font-black text-[10px] tracking-[0.15em] uppercase transition-all group overflow-hidden relative ${btn.color} text-white shadow-[0_0_30px_rgba(0,0,0,0.5)] border border-white/10 hover:scale-[1.02] active:scale-95 disabled:opacity-50`}
+          >
+            {isProcessing && (
+              <motion.div
+                initial={{ x: '-100%' }}
+                animate={{ x: '100%' }}
+                transition={{ duration: 1.5, repeat: Infinity, ease: "linear" }}
+                className="absolute inset-0 bg-gradient-to-r from-transparent via-white/20 to-transparent pointer-events-none"
+              />
+            )}
+            {isProcessing ? (
+              <Loader2 className="w-4 h-4 animate-spin" />
+            ) : (
+              <btn.icon className="w-4 h-4 group-hover:rotate-12 transition-transform" />
+            )}
+            <span className="relative z-10">{isProcessing ? 'PROCESSING...' : btn.text}</span>
+            {!isProcessing && lead.currentStage !== LeadStage.DONE && <ArrowRight className="w-4 h-4 ml-1 group-hover:translate-x-1 transition-transform" />}
+          </button>
 
           <div className="h-8 w-px bg-white/5 mx-2" />
 
@@ -54,22 +146,19 @@ const KnowledgePanel: React.FC<KnowledgePanelProps> = ({ lead, onClose, onStartC
               onClick={() => setActiveTab('INTEL')}
               className={`text-[8px] font-black px-4 py-1.5 rounded-md tracking-widest uppercase transition-all ${activeTab === 'INTEL' ? 'bg-white text-black' : 'text-slate-500 hover:text-white hover:bg-white/5'}`}
             >
-              DATA_CORE
+              DATA
             </button>
             <button
               onClick={() => setActiveTab('WEB')}
               className={`text-[8px] font-black px-4 py-1.5 rounded-md tracking-widest uppercase transition-all ${activeTab === 'WEB' ? 'bg-white text-black' : 'text-slate-500 hover:text-white hover:bg-white/5'}`}
             >
-              VIRTUAL_SCAN
+              WEB
             </button>
           </div>
-        </div>
 
-        <div className="flex items-center gap-2">
-          {/* MAXIMIZE TOGGLE: Makes panel take 100% width for deep focus */}
           <button
             onClick={onToggleExpand}
-            className="p-2.5 bg-white/[0.03] text-slate-500 hover:text-white rounded-xl border border-white/5 transition-all group"
+            className="p-3 bg-white/[0.03] text-slate-500 hover:text-white rounded-xl border border-white/5 transition-all group"
             title={isExpanded ? "Collapse View" : "Expand Workspace"}
           >
             {isExpanded ? <Minimize2 className="w-4 h-4" /> : <Maximize2 className="w-4 h-4" />}
@@ -77,7 +166,7 @@ const KnowledgePanel: React.FC<KnowledgePanelProps> = ({ lead, onClose, onStartC
 
           <button
             onClick={onClose}
-            className="p-2.5 bg-red-500/10 text-red-500 hover:bg-red-500 hover:text-white rounded-xl border border-red-500/20 transition-all"
+            className="p-3 bg-red-500/10 text-red-500 hover:bg-red-500 hover:text-white rounded-xl border border-red-500/20 transition-all"
           >
             <X className="w-4 h-4" />
           </button>
@@ -278,9 +367,9 @@ const KnowledgePanel: React.FC<KnowledgePanelProps> = ({ lead, onClose, onStartC
                       >
                         Copy Dossier
                       </button>
-                      <button onClick={handleDeepScan} className="flex-1 py-3 border border-white/10 text-white text-[9px] font-black uppercase tracking-widest rounded-xl hover:bg-white/5 transition-all flex items-center justify-center gap-2">
-                        {isScanning ? <Loader2 className="w-3 h-3 animate-spin" /> : <ScanSearch className="w-3 h-3" />}
-                        {isScanning ? 'Scrutinizing...' : 'Forensic_Trace'}
+                      <button onClick={() => onDeepScan(lead)} className="flex-1 py-3 border border-white/10 text-white text-[9px] font-black uppercase tracking-widest rounded-xl hover:bg-white/5 transition-all flex items-center justify-center gap-2">
+                        {isProcessing ? <Loader2 className="w-3 h-3 animate-spin" /> : <ScanSearch className="w-3 h-3" />}
+                        {isProcessing ? 'Scrutinizing...' : 'Forensic_Trace'}
                       </button>
                     </div>
                   </div>

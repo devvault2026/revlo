@@ -27,7 +27,7 @@ const ContactPage: React.FC = () => {
                 </h1>
 
                 <p className="text-xl text-slate-400 leading-relaxed font-medium">
-                    Stop theorizing and start scaling. Our team is ready to partner with you to automate
+                    Stop theorizing and start scaling. I am ready to architect the systems that automate
                     your operations and multiply your revenue. Access your strategy session today.
                 </p>
             </div>

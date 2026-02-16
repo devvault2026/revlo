@@ -8,14 +8,14 @@ const ResultsPage: React.FC = () => {
         {
             number: '347%',
             label: 'AVERAGE REVENUE GROWTH',
-            description: 'The standard revenue increase our partners experience within the first 6 months of our collaboration.',
+            description: 'The standard revenue increase partners experience within the first 6 months of partnership.',
             gradient: 'text-purple-400',
             icon: <TrendingUp className="w-12 h-12" />,
         },
         {
-            number: '40+',
-            label: 'COMBINED EXPERIENCE',
-            description: 'Decades of expertise in business strategy, operations, and customer acquisition systems.',
+            number: '15+',
+            label: 'YEARS EXPERTISE',
+            description: 'Over 15 years of deep expertise in business strategy, operations, and customer acquisition systems.',
             gradient: 'text-red-400',
             icon: <Award className="w-12 h-12" />,
         },
@@ -28,8 +28,8 @@ const ResultsPage: React.FC = () => {
         },
         {
             number: '100%',
-            label: 'DEDICATED TEAM',
-            description: 'No outsourcing. You work directly with our core growth leads on every aspect of your business.',
+            label: 'DEDICATED PARTNER',
+            description: 'No outsourcing. You work directly with The Architect on every aspect of your growth.',
             gradient: 'text-purple-400',
             icon: <Users className="w-12 h-12" />,
         },
@@ -78,7 +78,7 @@ const ResultsPage: React.FC = () => {
             gradient: 'from-purple-500/20 to-purple-400/20',
             color: 'text-purple-400',
             stats: [
-                { metric: 'Time Saved per Week', value: '40+', period: 'AVG PARTNER' },
+                { metric: 'Time Saved per Week', value: '40+', period: 'PARTNER AVERAGE' },
                 { metric: 'Operational Overhead', value: '-55%', period: 'VIA AI' },
                 { metric: 'Sales Cycle Speed', value: '+45%', period: 'VELOCITY LIFT' },
                 { metric: 'Employee Productivity', value: '300%', period: 'LEVERAGE' },
@@ -90,7 +90,7 @@ const ResultsPage: React.FC = () => {
         {
             industry: 'SaaS PARTNERSHIP',
             challenge: 'Struggling at $80K MRR with high churn and expensive acquisition costs.',
-            solution: 'Implemented our AI-driven lead nurturing and customer retention systems.',
+            solution: 'Implemented AI-driven lead nurturing and customer retention systems.',
             results: [
                 '$1.2M MRR in 18 months',
                 'CAC reduced by 70%',
@@ -119,7 +119,7 @@ const ResultsPage: React.FC = () => {
                 '50+ Qualified Leads/Month',
                 'Zero to $3M ARR Scaling',
                 'Close Rate 85% Efficiency',
-                'Successful Team Expansion',
+                'Operational Scaling Success',
             ],
             gradient: 'from-blue-500/20 to-blue-400/20',
         },
@@ -156,8 +156,8 @@ const ResultsPage: React.FC = () => {
                     </h1>
 
                     <p className="text-xl text-slate-400 leading-relaxed font-medium">
-                        Our results aren&apos;t just numbers on a screen. They represent real businesses
-                        transformed through strategic partnership and elite execution. The growth is real.
+                        My results aren&apos;t just numbers on a screen. They represent real businesses
+                        transformed through strategic partnership and elite execution.
                     </p>
                 </motion.div>
 
@@ -266,7 +266,7 @@ const ResultsPage: React.FC = () => {
                                                 <p className="text-white font-black italic tracking-tight">{study.challenge}</p>
                                             </div>
                                             <div>
-                                                <h3 className="text-[10px] font-black uppercase tracking-[0.4em] text-purple-500 mb-4">OUR STRATEGY</h3>
+                                                <h3 className="text-[10px] font-black uppercase tracking-[0.4em] text-purple-500 mb-4">THE STRATEGY</h3>
                                                 <p className="text-slate-400 font-medium text-sm leading-relaxed">{study.solution}</p>
                                             </div>
                                         </div>
@@ -310,7 +310,7 @@ const ResultsPage: React.FC = () => {
                                 BE THE NEXT <span className="gradient-text-alt">SUCCESS STORY.</span>
                             </h2>
                             <p className="text-xl text-slate-400 mb-12 font-medium">
-                                Join the elite circle of businesses we&apos;ve scaled to 7-figure revenue and beyond.
+                                Join the elite circle of businesses I&apos;ve scaled to 7-figure revenue and beyond.
                                 Your growth journey starts with a simple conversation.
                             </p>
                             <Link to="/contact">

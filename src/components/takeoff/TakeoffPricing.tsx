@@ -74,7 +74,7 @@ const TakeoffPricing: React.FC = () => {
                                     "Priority processing",
                                     "Custom unit rate matching",
                                     "Your branding on every PDF",
-                                    "Direct account manager line",
+                                    "Direct line to The Architect",
                                     "First access to Voice-AI"
                                 ].map((feature, i) => (
                                     <li key={i} className="flex items-center gap-4 text-zinc-800 text-lg font-black italic uppercase italic">

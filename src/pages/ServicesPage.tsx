@@ -64,6 +64,7 @@ const ServicesPage: React.FC = () => {
                 'Clear Competitive Edge',
                 'Airtight Brand Consistency',
             ],
+            customLink: '/contact'
         },
         {
             icon: <TrendingUp className="w-8 h-8" />,
@@ -108,6 +109,7 @@ const ServicesPage: React.FC = () => {
                 'High-Intent Lead Flow',
                 'Scale Beyond Local Markets',
             ],
+            customLink: '/contact'
         },
         {
             icon: <Cpu className="w-8 h-8" />,
@@ -152,6 +154,7 @@ const ServicesPage: React.FC = () => {
                 'Zero Lead Abandonment',
                 '24/7 Sales Persistence',
             ],
+            customLink: '/contact'
         },
         {
             icon: <Zap className="w-8 h-8" />,
@@ -196,6 +199,52 @@ const ServicesPage: React.FC = () => {
                 'Reclaim 15+ Hours Weekly',
                 'Instant Procurement Lists',
             ],
+            customLink: '/takeoff-agent'
+        },
+        {
+            icon: <Code className="w-8 h-8" />,
+            title: 'Elite Development // The One-Man Army',
+            shortDesc: 'Custom engineering for mission-critical software.',
+            description: 'The ultimate leverage. Direct access to a Category of One operator to build complex, IPO-grade systems—from AI marketplaces to secure fintech. If you can dream it, I can build it. With or without AI.',
+            process: [
+                {
+                    step: '01. MISSION BRIEF',
+                    desc: 'We define the objectives, complexity, and technical requirements for your custom build.'
+                },
+                {
+                    step: '02. RAPID PROTOTYPE',
+                    desc: 'I deploy a functional MVP in weeks, not months, focusing on core value and architectural robustness.'
+                },
+                {
+                    step: '03. HARDENING & SCALE',
+                    desc: 'Implementing security, optimization, and scaling layers to ensure the system is production-ready.'
+                },
+                {
+                    step: '04. DEPLOYMENT & HANDOFF',
+                    desc: 'Launching the system with full documentation and a 90-day execution standard.'
+                }
+            ],
+            features: [
+                'Full-Stack Architecture',
+                'Custom AI Instrumentations',
+                'Mobile App (iOS/Android)',
+                'Real-Time Systems (WS)',
+                'Dynamic Logic & Algorithms',
+                'Security Auditing & Hardening',
+                'Fractional CTO Strategy',
+                'Performance Optimization'
+            ],
+            price: 'Starting at $5,000',
+            duration: 'Blitz Project',
+            color: 'text-red-500',
+            bg: 'bg-red-500/10',
+            benefits: [
+                'Impossible Build Velocity',
+                'Direct Expert Access',
+                'No Agency Bloat/Noise',
+                'IPO-Grade System Quality',
+            ],
+            customLink: '/elite-development'
         }
     ];
 
@@ -326,7 +375,7 @@ const ServicesPage: React.FC = () => {
                                             </div>
                                         ))}
 
-                                        <Link to="/contact">
+                                        <Link to={service.customLink}>
                                             <motion.button
                                                 whileHover={{ scale: 1.05 }}
                                                 whileTap={{ scale: 0.95 }}

@@ -23,10 +23,10 @@ const TakeoffStory: React.FC = () => {
 
                         <div className="space-y-6 text-slate-400 text-lg font-medium leading-relaxed italic">
                             <p>
-                                We didn't build a software company. We built a weapon for the guys in the trucks, the ones who are tired of staying up late counting tiles.
+                                I didn't build a software company. I built a weapon for the guys in the trucks, the ones who are tired of staying up late counting tiles.
                             </p>
                             <p className="text-white font-black uppercase tracking-tight text-sm">
-                                THE TAKEOFF SYSTEM IS OUR RESPONSE TO THE "ESTIMATING BOTTLENECK".
+                                THE TAKEOFF SYSTEM IS MY RESPONSE TO THE "ESTIMATING BOTTLENECK".
                             </p>
                             <p className="text-sm">
                                 You're not just buying a tool; you're hiring an autonomous agent that works 24/7 to ensure your bids are accurate and your margins are protected.

@@ -55,7 +55,7 @@ const Footer: React.FC = () => {
                         <ul className="space-y-4">
                             <li>
                                 <Link to="/team" className="text-sm font-medium text-slate-500 hover:text-white transition-all uppercase tracking-[0.2em]">
-                                    Core Team
+                                    The Architect
                                 </Link>
                             </li>
                             <li>
@@ -70,7 +70,7 @@ const Footer: React.FC = () => {
                             </li>
                             <li>
                                 <Link to="/contact" className="text-sm font-medium text-slate-500 hover:text-white transition-all uppercase tracking-[0.2em]">
-                                    Contact Us
+                                    Contact Me
                                 </Link>
                             </li>
                         </ul>

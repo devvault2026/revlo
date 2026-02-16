@@ -8,6 +8,8 @@ interface AuthContextType {
     loading: boolean;
     signOut: () => Promise<void>;
     refreshProfile: () => Promise<void>;
+    isSynced: boolean;
+    syncError: boolean;
 }
 
 const AuthContext = createContext<AuthContextType | undefined>(undefined);
@@ -19,6 +21,7 @@ export const AuthProvider: React.FC<{ children: React.ReactNode }> = ({ children
     const [profile, setProfile] = React.useState<Profile | null>(null);
     const [loadingProfile, setLoadingProfile] = React.useState(false);
     const [isSynced, setIsSynced] = React.useState(false);
+    const [syncError, setSyncError] = React.useState(false);
 
     const refreshProfile = React.useCallback(async () => {
         if (!user) return;
@@ -57,15 +60,21 @@ export const AuthProvider: React.FC<{ children: React.ReactNode }> = ({ children
     React.useEffect(() => {
         const syncSupabase = async () => {
             if (session) {
-                const token = await session.getToken({ template: 'supabase' });
-                if (token) {
-                    await supabase.auth.setSession({
-                        access_token: token,
-                        refresh_token: '', // Clerk handles refreshing
-                    });
-                    // After setting session, load/refresh profile
-                    await refreshProfile();
-                    setIsSynced(true);
+                try {
+                    const token = await session.getToken({ template: 'supabase' });
+                    if (token) {
+                        await supabase.auth.setSession({
+                            access_token: token,
+                            refresh_token: '', // Clerk handles refreshing
+                        });
+                        // After setting session, load/refresh profile
+                        await refreshProfile();
+                        setIsSynced(true);
+                    }
+                } catch (err) {
+                    console.error('Supabase JWT template not found in Clerk. Please check your Clerk dashboard configuration.', err);
+                    setSyncError(true);
+                    // Don't set isSynced to true, but maybe allow site to load anyway
                 }
             } else {
                 // Clear supabase session on logout
@@ -80,9 +89,11 @@ export const AuthProvider: React.FC<{ children: React.ReactNode }> = ({ children
     const value = {
         user: user || null,
         profile,
-        loading: !isLoaded || loadingProfile || (!!user && !isSynced),
+        loading: !isLoaded || loadingProfile,
         signOut: async () => { await signOut(); },
         refreshProfile,
+        isSynced,
+        syncError,
     };
 
     return (

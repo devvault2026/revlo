@@ -1,5 +1,5 @@
 import React from 'react';
-import { Lead } from '../types';
+import { Lead, LeadStage } from '../types';
 import { MoreVertical, Globe, ShieldAlert, BarChart3, Lock, Target, ArrowRight, Activity, Mail, Phone, Star, ChevronRight } from 'lucide-react';
 import { motion } from 'framer-motion';
 
@@ -50,9 +50,15 @@ const LeadResult: React.FC<LeadResultProps> = ({ lead, onSelect, isSelected }) =
         <div className="flex items-center gap-3 opacity-70 group-hover:opacity-100 transition-opacity">
           <span className="text-[10px] font-bold text-slate-500 uppercase tracking-widest">{lead.industry}</span>
           <span className="w-1 h-1 rounded-full bg-slate-700" />
-          <span className="text-[10px] font-bold text-slate-500 uppercase tracking-widest text-purple-400">{lead.location}</span>
+          <span className={`text-[9px] font-black px-2 py-0.5 rounded border uppercase tracking-wider ${lead.currentStage === LeadStage.DONE ? 'bg-green-500/10 border-green-500/30 text-green-500' :
+              lead.currentStage === LeadStage.SCOUTED ? 'bg-purple-500/10 border-purple-500/30 text-purple-500' :
+                'bg-blue-500/10 border-blue-500/30 text-blue-500'
+            }`}>
+            {lead.currentStage}
+          </span>
         </div>
       </div>
+
 
       {/* Signal Grid - Cleaner icons */}
       <div className="flex items-center gap-6 shrink-0">
