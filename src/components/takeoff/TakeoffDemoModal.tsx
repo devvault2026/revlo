@@ -1,7 +1,8 @@
 import React, { useState, useEffect } from 'react';
 import { motion, AnimatePresence } from 'framer-motion';
 import { X, FileUp, Loader2, CheckCircle, Lock, ArrowRight, UserPlus } from 'lucide-react';
-import { supabase, getCurrentUser, getDemoUsage, incrementDemoUsage } from '../../lib/supabase';
+import { useUser } from '@clerk/clerk-react';
+import { getDemoUsage, incrementDemoUsage } from '../../lib/supabase';
 
 interface TakeoffDemoModalProps {
     isOpen: boolean;
@@ -9,25 +10,30 @@ interface TakeoffDemoModalProps {
 }
 
 const TakeoffDemoModal: React.FC<TakeoffDemoModalProps> = ({ isOpen, onClose }) => {
-    const [user, setUser] = useState<any>(null);
+    const { user, isLoaded, isSignedIn } = useUser();
     const [usage, setUsage] = useState<any>(null);
     const [status, setStatus] = useState<'idle' | 'uploading' | 'processing' | 'ready' | 'limit_reached'>('idle');
     const [progress, setProgress] = useState(0);
     const [loading, setLoading] = useState(true);
 
     useEffect(() => {
-        checkUser();
-    }, [isOpen]);
+        if (isOpen && isLoaded) {
+            checkUser();
+        }
+    }, [isOpen, isLoaded, user]);
 
     const checkUser = async () => {
         setLoading(true);
-        const currentUser = await getCurrentUser();
-        setUser(currentUser);
-        if (currentUser) {
-            const usageData = await getDemoUsage(currentUser.id);
-            setUsage(usageData);
-            if (usageData && (usageData.usage_count ?? 0) >= 3) {
-                setStatus('limit_reached');
+
+        if (user) {
+            try {
+                const usageData = await getDemoUsage(user.id);
+                setUsage(usageData);
+                if (usageData && (usageData.usage_count ?? 0) >= 3) {
+                    setStatus('limit_reached');
+                }
+            } catch (error) {
+                console.error("Error fetching demo usage:", error);
             }
         }
         setLoading(false);
@@ -93,7 +99,7 @@ const TakeoffDemoModal: React.FC<TakeoffDemoModalProps> = ({ isOpen, onClose }) 
                 </div>
 
                 <div className="p-10 md:p-16">
-                    {loading ? (
+                    {loading && !isLoaded ? (
                         <div className="py-20 flex flex-col items-center gap-4">
                             <Loader2 className="animate-spin text-orange-600" size={32} />
                             <p className="text-xs font-black text-zinc-600 uppercase tracking-[0.3em]">AUTHENTICATING...</p>
