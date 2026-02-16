@@ -1,4 +1,5 @@
 import React from 'react';
+import { Link } from 'react-router-dom';
 import { motion } from 'framer-motion';
 import { Layers, TrendingUp, Cpu, Users, Briefcase, DollarSign } from 'lucide-react';
 
@@ -11,6 +12,7 @@ const Services: React.FC = () => {
             features: ['MODERN ARCHITECTURE', 'FROM $750 TOTAL', 'CONVERSION OPTIMIZED', 'MOBILE-FIRST DESIGN'],
             color: 'text-purple-400',
             glow: 'group-hover:shadow-[0_0_50px_rgba(139,92,246,0.3)]',
+            link: '/websites'
         },
         {
             icon: <TrendingUp className="w-8 h-8" />,
@@ -19,6 +21,7 @@ const Services: React.FC = () => {
             features: ['INSTANT RESPONSE', 'FLAWLESS ACCEENT/TONE', 'COLD CALL AUTOMATION', 'CALENDLY INTEGRATION'],
             color: 'text-blue-400',
             glow: 'group-hover:shadow-[0_0_50px_rgba(59,130,246,0.3)]',
+            link: '/takeoff-agent'
         },
         {
             icon: <Cpu className="w-8 h-8" />,
@@ -27,6 +30,7 @@ const Services: React.FC = () => {
             features: ['CUSTOM WORKFLOWS', 'SYSTEM INTEGRATION', '24/7 OPERATIONS', 'ZERO TECH JARGON'],
             color: 'text-red-400',
             glow: 'group-hover:shadow-[0_0_50px_rgba(239,68,68,0.3)]',
+            link: '/elite-development'
         }
     ];
 
@@ -69,37 +73,39 @@ const Services: React.FC = () => {
                             whileInView={{ opacity: 1, scale: 1 }}
                             transition={{ duration: 0.5, delay: index * 0.1 }}
                             viewport={{ once: true }}
-                            className="group"
+                            className="group h-full"
                         >
-                            <div className={`h-full p-10 rounded-[48px] glass-dark border border-white/5 hover:border-white/10 transition-all duration-500 relative overflow-hidden ${service.glow}`}>
-                                {/* Inner Background Glow */}
-                                <div className={`absolute -top-24 -right-24 w-48 h-48 rounded-full blur-[80px] opacity-0 group-hover:opacity-20 transition-opacity duration-700 bg-current ${service.color}`} />
+                            <Link to={service.link} className="block h-full">
+                                <div className={`h-full p-10 rounded-[48px] glass-dark border border-white/5 hover:border-white/10 transition-all duration-500 relative overflow-hidden ${service.glow}`}>
+                                    {/* Inner Background Glow */}
+                                    <div className={`absolute -top-24 -right-24 w-48 h-48 rounded-full blur-[80px] opacity-0 group-hover:opacity-20 transition-opacity duration-700 bg-current ${service.color}`} />
 
-                                {/* Icon */}
-                                <div className={`w-14 h-14 glass rounded-2xl flex items-center justify-center mb-8 border border-white/5 group-hover:scale-110 transition-transform duration-500 ${service.color}`}>
-                                    {service.icon}
+                                    {/* Icon */}
+                                    <div className={`w-14 h-14 glass rounded-2xl flex items-center justify-center mb-8 border border-white/5 group-hover:scale-110 transition-transform duration-500 ${service.color}`}>
+                                        {service.icon}
+                                    </div>
+
+                                    {/* Title */}
+                                    <h3 className="text-2xl font-black mb-4 tracking-tighter text-white italic uppercase">
+                                        {service.title}
+                                    </h3>
+
+                                    {/* Description */}
+                                    <p className="text-slate-500 leading-relaxed mb-8 text-sm font-medium">
+                                        {service.description}
+                                    </p>
+
+                                    {/* Features */}
+                                    <ul className="space-y-4">
+                                        {service.features.map((feature, featureIndex) => (
+                                            <li key={featureIndex} className="flex items-center gap-3 text-[9px] font-black uppercase tracking-[0.2em] text-slate-600 group-hover:text-slate-400 transition-colors">
+                                                <div className={`w-1.5 h-1.5 rounded-sm bg-current rotate-45 ${service.color}`} />
+                                                {feature}
+                                            </li>
+                                        ))}
+                                    </ul>
                                 </div>
-
-                                {/* Title */}
-                                <h3 className="text-2xl font-black mb-4 tracking-tighter text-white italic uppercase">
-                                    {service.title}
-                                </h3>
-
-                                {/* Description */}
-                                <p className="text-slate-500 leading-relaxed mb-8 text-sm font-medium">
-                                    {service.description}
-                                </p>
-
-                                {/* Features */}
-                                <ul className="space-y-4">
-                                    {service.features.map((feature, featureIndex) => (
-                                        <li key={featureIndex} className="flex items-center gap-3 text-[9px] font-black uppercase tracking-[0.2em] text-slate-600 group-hover:text-slate-400 transition-colors">
-                                            <div className={`w-1.5 h-1.5 rounded-sm bg-current rotate-45 ${service.color}`} />
-                                            {feature}
-                                        </li>
-                                    ))}
-                                </ul>
-                            </div>
+                            </Link>
                         </motion.div>
                     ))}
                 </div>

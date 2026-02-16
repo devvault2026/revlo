@@ -27,6 +27,7 @@ const Navigation: React.FC = () => {
     const navLinks = [
         { name: 'Home', path: '/' },
         { name: 'Solutions', path: '/services' },
+        { name: 'Websites', path: '/websites' },
         { name: 'Build', path: '/elite-development' },
         { name: 'GHL', path: '/ghl-automation' },
         { name: 'Takeoff', path: '/takeoff-agent' },

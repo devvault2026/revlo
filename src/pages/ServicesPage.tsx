@@ -64,7 +64,7 @@ const ServicesPage: React.FC = () => {
                 'Clear Competitive Edge',
                 'Airtight Brand Consistency',
             ],
-            customLink: '/contact'
+            customLink: '/websites'
         },
         {
             icon: <TrendingUp className="w-8 h-8" />,
