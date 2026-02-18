@@ -296,7 +296,7 @@ const OpenClawPage: React.FC = () => {
                 <meta property="og:url" content="https://www.wearerevlo.com/openclaw" />
                 <meta property="og:title" content="OPENCLAW BY REVLO // #1 AUTONOMOUS INFRASTRUCTURE AGENCY" />
                 <meta property="og:description" content="Deploy the unimaginable. Revlo builds OpenClaw agents that generate revenue in your sleep. The world's #1 infrastructure for autonomous browser control, operational dominance, and wealth generation with ZERO human intervention." />
-                <meta property="og:image" content="https://res.cloudinary.com/dpfapm0tl/image/upload/v1771383151/ChatGPT_Image_Feb_17_2026_09_52_11_PM_pm7mkm.png" />
+                <meta property="og:image" content="https://res.cloudinary.com/dpfapm0tl/image/upload/v1771435259/ChatGPT_Image_Feb_18_2026_12_20_07_PM_xujfpp.png" />
                 <meta property="og:image:width" content="1200" />
                 <meta property="og:image:height" content="630" />
 
@@ -305,7 +305,7 @@ const OpenClawPage: React.FC = () => {
                 <meta name="twitter:url" content="https://www.wearerevlo.com/openclaw" />
                 <meta name="twitter:title" content="OPENCLAW BY REVLO // #1 AUTONOMOUS INFRASTRUCTURE AGENCY" />
                 <meta name="twitter:description" content="Deploy the unimaginable. Revlo builds OpenClaw agents that generate revenue in your sleep. The world's #1 infrastructure for autonomous browser control, operational dominance, and wealth generation with ZERO human intervention." />
-                <meta name="twitter:image" content="https://res.cloudinary.com/dpfapm0tl/image/upload/v1771383151/ChatGPT_Image_Feb_17_2026_09_52_11_PM_pm7mkm.png" />
+                <meta name="twitter:image" content="https://res.cloudinary.com/dpfapm0tl/image/upload/v1771435259/ChatGPT_Image_Feb_18_2026_12_20_07_PM_xujfpp.png" />
             </Helmet>
             <Navigation />
 

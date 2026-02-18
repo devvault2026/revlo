@@ -38,6 +38,8 @@ import EliteDevelopmentPage from './pages/EliteDevelopmentPage';
 import OpenClawPage from './pages/OpenClawPage';
 import GHLAutomationPage from './pages/GHLAutomationPage';
 import WebsitesPage from './pages/WebsitesPage';
+import BlogPage from './pages/BlogPage';
+import BlogPostPage from './pages/BlogPostPage';
 
 // Components
 import Navigation from './components/Navigation';
@@ -110,6 +112,14 @@ function App() {
                                     <Route path="/openclaw" element={<OpenClawPage />} />
                                     <Route path="/ghl-automation" element={<GHLAutomationPage />} />
                                     <Route path="/websites" element={<WebsitesPage />} />
+                                    <Route path="/blog" element={
+                                        <>
+                                            <Navigation />
+                                            <BlogPage />
+                                            <Footer />
+                                        </>
+                                    } />
+                                    <Route path="/blog/:slug" element={<BlogPostPage />} />
                                     <Route path="/offers/esdr" element={
                                         <>
                                             <Navigation />
