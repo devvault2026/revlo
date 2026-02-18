@@ -1,9 +1,145 @@
-import React, { useRef } from 'react';
+import React, { useRef, useState, useEffect } from 'react';
 import { motion, useScroll, useTransform } from 'framer-motion';
 import { Bot, Terminal, Shield, Zap, ArrowRight, Crosshair } from 'lucide-react';
 import { Link } from 'react-router-dom';
 
+const OpenClawMascot = () => {
+    return (
+        <motion.div
+            className="absolute -top-28 -right-12 z-50 pointer-events-none select-none w-40 h-40 hidden lg:block"
+            animate={{
+                y: [0, -12, 0],
+                rotate: [0, 2, -2, 0]
+            }}
+            transition={{
+                duration: 5,
+                repeat: Infinity,
+                ease: "easeInOut"
+            }}
+        >
+            <div className="relative w-full h-full scale-90">
+                {/* Antennas */}
+                <svg className="absolute -top-6 w-full h-24 overflow-visible" viewBox="0 0 100 50">
+                    <motion.path
+                        d="M35 50 Q 25 10 10 20"
+                        fill="none"
+                        stroke="#ef4444"
+                        strokeWidth="4"
+                        strokeLinecap="round"
+                        animate={{ d: ["M35 50 Q 25 10 10 20", "M35 50 Q 20 15 5 25", "M35 50 Q 25 10 10 20"] }}
+                        transition={{ duration: 2, repeat: Infinity, ease: "easeInOut" }}
+                    />
+                    <motion.path
+                        d="M65 50 Q 75 10 90 20"
+                        fill="none"
+                        stroke="#ef4444"
+                        strokeWidth="4"
+                        strokeLinecap="round"
+                        animate={{ d: ["M65 50 Q 75 10 90 20", "M65 50 Q 80 15 95 25", "M65 50 Q 75 10 90 20"] }}
+                        transition={{ duration: 2.2, repeat: Infinity, ease: "easeInOut" }}
+                    />
+                </svg>
+
+                {/* Arms */}
+                <motion.div
+                    className="absolute top-[45%] -left-3 w-8 h-8 bg-[#dc2626] rounded-full"
+                    animate={{ rotate: [0, -15, 0], x: [0, -2, 0] }}
+                    transition={{ duration: 2, repeat: Infinity }}
+                />
+                <motion.div
+                    className="absolute top-[45%] -right-3 w-8 h-8 bg-[#dc2626] rounded-full"
+                    animate={{ rotate: [0, 15, 0], x: [0, 2, 0] }}
+                    transition={{ duration: 2, repeat: Infinity, delay: 0.5 }}
+                />
+
+                {/* Legs */}
+                <div className="absolute bottom-0 left-[35%] w-3 h-6 bg-[#b91c1c] rounded-b-md z-0" />
+                <div className="absolute bottom-0 right-[35%] w-3 h-6 bg-[#b91c1c] rounded-b-md z-0" />
+
+                {/* Main Body */}
+                <div className="absolute inset-2 bg-[#ef4444] rounded-full shadow-[inset_-4px_-4px_20px_rgba(0,0,0,0.3),0_0_40px_rgba(239,68,68,0.4)] flex items-center justify-center border-t border-white/20 z-10">
+                    <div className="relative w-full h-full">
+                        {/* Eyes */}
+                        <div className="absolute top-[35%] left-[28%] w-4 h-5 bg-black rounded-full shadow-inner flex items-center justify-center">
+                            <motion.div
+                                className="w-1.5 h-1.5 bg-cyan-400 rounded-full shadow-[0_0_10px_rgba(34,211,238,1)]"
+                                animate={{ opacity: [1, 0.6, 1] }}
+                                transition={{ duration: 0.2, repeat: Infinity, repeatDelay: 3 }}
+                            />
+                        </div>
+                        <div className="absolute top-[35%] right-[28%] w-4 h-5 bg-black rounded-full shadow-inner flex items-center justify-center">
+                            <motion.div
+                                className="w-1.5 h-1.5 bg-cyan-400 rounded-full shadow-[0_0_10px_rgba(34,211,238,1)]"
+                                animate={{ opacity: [1, 0.6, 1] }}
+                                transition={{ duration: 0.2, repeat: Infinity, repeatDelay: 3 }}
+                            />
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </motion.div>
+    );
+};
+
+const terminalActions = [
+    { cmd: "detect_inefficiency --all", result: "[SUCCESS] 4,203 email threads analyzed", color: "text-green-400", delay: 2400 },
+    { cmd: "deploy_agent --context='inbox_zero'", result: "[RUNNING] Autonomous response loops active...", color: "text-blue-400", delay: 3600 },
+    { cmd: "scan_calendar --conflict_mode='aggressive'", result: "[RESOLVED] 3 meetings rescheduled seamlessly", color: "text-purple-400", delay: 3000 },
+    { cmd: "scrape_linkedin --target='CTO' --geo='NYC'", result: "[FOUND] 142 qualified leads extracted", color: "text-yellow-400", delay: 4500 },
+    { cmd: "analyze_pnl --q3_forecast", result: "[ALERT] Revenue opportunity detected in SaaS vertical", color: "text-red-400", delay: 3300 },
+    { cmd: "generate_invoice --client='Acme Corp'", result: "[SENT] Invoice #4429 sent via Stripe", color: "text-green-400", delay: 2700 },
+    { cmd: "book_travel --dest='SF' --pref='business'", result: "[BOOKED] United Flight 492 - Seat 3A", color: "text-blue-400", delay: 4200 },
+    { cmd: "monitor_server_logs --error_rate", result: "[STABLE] 99.99% uptime maintained", color: "text-green-400", delay: 2400 },
+    { cmd: "draft_contract --template='nda_v2'", result: "[READY] Contrast sent for e-signature", color: "text-purple-400", delay: 3000 },
+    { cmd: "optimize_ad_spend --platform='meta'", result: "[SAVED] $1,200/mo in waste removed", color: "text-green-400", delay: 3900 },
+    { cmd: "enrich_data --source='clearbit'", result: "[UPDATED] 5,000+ CRM records enriched", color: "text-blue-400", delay: 3300 },
+    { cmd: "slack_summary --channel='#dev'", result: "[POSTED] Daily standup summary to #general", color: "text-yellow-400", delay: 2700 },
+    { cmd: "git_push --force", result: "[DEPLOYED] Production hotfix live", color: "text-red-400", delay: 2100 },
+    { cmd: "check_competitor_pricing", result: "[INSIGHT] Competitor lowered prices by 15%", color: "text-orange-400", delay: 3600 },
+    { cmd: "schedule_zoom --attendees='all_hands'", result: "[INVITE] Calendar invite sent to 45 people", color: "text-blue-400", delay: 3000 },
+    { cmd: "notion_sync --db='tasks'", result: "[SYNCED] 24 tasks moved to 'Done'", color: "text-purple-400", delay: 2400 },
+    { cmd: "order_supplies --coffee='bulk'", result: "[ORDERED] 50lbs coffee arriving Tuesday", color: "text-green-400", delay: 2700 },
+    { cmd: "audit_security --level='paranoid'", result: "[SECURE] No vulnerabilities detected", color: "text-green-400", delay: 4500 },
+    { cmd: "run_payroll --cycle='bi-weekly'", result: "[PROCESSED] $124,000 disbursed", color: "text-green-400", delay: 3300 },
+    { cmd: "tweet_thread --topic='AI_Agent_Future'", result: "[PUBLISHED] Thread gaining traction (120 likes)", color: "text-blue-400", delay: 3900 },
+    { cmd: "research_topic --query='quantum_computing'", result: "[COMPLETED] 30-page briefing doc generated", color: "text-purple-400", delay: 6000 },
+    { cmd: "negotiate_contract --vendor='aws'", result: "[SUCCESS] Rate reduced by 12%", color: "text-green-400", delay: 4200 },
+    { cmd: "organize_files --folder='downloads'", result: "[CLEANED] 430 files archived", color: "text-yellow-400", delay: 1800 },
+    { cmd: "ping_server --latency", result: "[FAST] 12ms response time", color: "text-green-400", delay: 1500 },
+    { cmd: "transcribe_meeting --audio='zoom_rec.mp3'", result: "[DONE] Transcript uploaded to Drive", color: "text-blue-400", delay: 4800 },
+    { cmd: "generate_logo --style='minimal'", result: "[CREATED] 4 variations exported", color: "text-purple-400", delay: 3300 },
+    { cmd: "check_crypto_portfolio", result: "[UPDATE] Portfolio up 4.2% today", color: "text-green-400", delay: 2400 },
+    { cmd: "find_email --name='Sam Altman'", result: "[FOUND] sam@openai.com (verified)", color: "text-red-400", delay: 3000 },
+    { cmd: "summarize_pdf --file='annual_report.pdf'", result: "[SUMMARY] Key points extracted to Notion", color: "text-blue-400", delay: 3600 },
+    { cmd: "system_status --full", result: "[OPTIMAL] Systems operating at 100%", color: "text-green-400", delay: 3000 }
+];
+
 const OpenClawIntro: React.FC = () => {
+    const [logs, setLogs] = useState<typeof terminalActions>([]);
+    const [currentActionIndex, setCurrentActionIndex] = useState(0);
+
+    // Terminal Animation Loop
+    useEffect(() => {
+        const action = terminalActions[currentActionIndex];
+
+        // Add action to logs immediately
+        setLogs(prev => {
+            // Prevent duplicate logs if strict mode runs effect twice
+            if (prev.length > 0 && prev[prev.length - 1] === action) return prev;
+
+            const newLogs = [...prev, action];
+            if (newLogs.length > 5) return newLogs.slice(newLogs.length - 5);
+            return newLogs;
+        });
+
+        // Schedule moving to the next action
+        const timeout = setTimeout(() => {
+            setCurrentActionIndex(prev => (prev + 1) % terminalActions.length);
+        }, action.delay);
+
+        return () => clearTimeout(timeout);
+    }, [currentActionIndex]);
+
     const sectionRef = useRef<HTMLDivElement>(null);
     const { scrollYProgress } = useScroll({
         target: sectionRef,
@@ -46,23 +182,27 @@ const OpenClawIntro: React.FC = () => {
                                         <div className="text-[10px] font-mono text-white/40">V.1.0.4</div>
                                     </div>
 
-                                    {/* Terminal Content */}
-                                    <div className="space-y-4 font-mono text-sm">
-                                        <div className="flex gap-3 text-slate-400">
-                                            <span className="text-red-500">➜</span>
-                                            <span>detect_inefficiency --all</span>
-                                        </div>
-                                        <div className="text-green-500/80 pl-6">
-                                            [SUCCESS] 4,203 email threads analyzed
-                                        </div>
-                                        <div className="flex gap-3 text-slate-400">
-                                            <span className="text-red-500">➜</span>
-                                            <span>deploy_agent --context="inbox_zero"</span>
-                                        </div>
-                                        <div className="text-green-500/80 pl-6">
-                                            [RUNNING] Autonomous response loops active...
-                                        </div>
-                                        <div className="flex gap-3 text-slate-400 animate-pulse">
+                                    {/* Terminal Content - Dynamic Stream */}
+                                    <div className="space-y-4 font-mono text-sm min-h-[220px]">
+                                        {logs.map((log, i) => (
+                                            <motion.div
+                                                key={i}
+                                                initial={{ opacity: 0, x: -10 }}
+                                                animate={{ opacity: 1, x: 0 }}
+                                                className="border-l-2 border-white/5 pl-3"
+                                            >
+                                                <div className="flex gap-3 text-slate-400 text-xs mb-1">
+                                                    <span className="text-red-500">➜</span>
+                                                    <span>{log.cmd}</span>
+                                                </div>
+                                                <div className={`${log.color} font-bold text-[13px] pl-4`}>
+                                                    {log.result}
+                                                </div>
+                                            </motion.div>
+                                        ))}
+
+                                        {/* Cursor Line */}
+                                        <div className="flex gap-3 text-slate-400 animate-pulse pl-3 pt-2">
                                             <span className="text-red-500">➜</span>
                                             <span className="border-r-2 border-red-500 pr-1">awaiting_command</span>
                                         </div>
@@ -77,6 +217,7 @@ const OpenClawIntro: React.FC = () => {
                                         ))}
                                     </div>
                                 </div>
+                                <OpenClawMascot />
                             </div>
                         </motion.div>
 
