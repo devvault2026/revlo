@@ -88,6 +88,85 @@ const ReactiveBubble = React.memo(({ mouseX, mouseY }: { mouseX: any, mouseY: an
     );
 });
 
+// The Animated Mascot - "The Claw"
+const OpenClawMascot = () => {
+    return (
+        <motion.div
+            className="absolute -top-28 -right-12 z-50 pointer-events-none select-none w-40 h-40 hidden lg:block"
+            animate={{
+                y: [0, -12, 0],
+                rotate: [0, 2, -2, 0]
+            }}
+            transition={{
+                duration: 5,
+                repeat: Infinity,
+                ease: "easeInOut"
+            }}
+        >
+            <div className="relative w-full h-full scale-90">
+                {/* Antennas - SVG Curves */}
+                <svg className="absolute -top-6 w-full h-24 overflow-visible" viewBox="0 0 100 50">
+                    <motion.path
+                        d="M35 50 Q 25 10 10 20"
+                        fill="none"
+                        stroke="#ef4444"
+                        strokeWidth="4"
+                        strokeLinecap="round"
+                        animate={{ d: ["M35 50 Q 25 10 10 20", "M35 50 Q 20 15 5 25", "M35 50 Q 25 10 10 20"] }}
+                        transition={{ duration: 2, repeat: Infinity, ease: "easeInOut" }}
+                    />
+                    <motion.path
+                        d="M65 50 Q 75 10 90 20"
+                        fill="none"
+                        stroke="#ef4444"
+                        strokeWidth="4"
+                        strokeLinecap="round"
+                        animate={{ d: ["M65 50 Q 75 10 90 20", "M65 50 Q 80 15 95 25", "M65 50 Q 75 10 90 20"] }}
+                        transition={{ duration: 2.2, repeat: Infinity, ease: "easeInOut" }}
+                    />
+                </svg>
+
+                {/* Arms - Behind Body */}
+                <motion.div
+                    className="absolute top-[45%] -left-3 w-8 h-8 bg-[#dc2626] rounded-full"
+                    animate={{ rotate: [0, -15, 0], x: [0, -2, 0] }}
+                    transition={{ duration: 2, repeat: Infinity }}
+                />
+                <motion.div
+                    className="absolute top-[45%] -right-3 w-8 h-8 bg-[#dc2626] rounded-full"
+                    animate={{ rotate: [0, 15, 0], x: [0, 2, 0] }}
+                    transition={{ duration: 2, repeat: Infinity, delay: 0.5 }}
+                />
+
+                {/* Legs */}
+                <div className="absolute bottom-0 left-[35%] w-3 h-6 bg-[#b91c1c] rounded-b-md z-0" />
+                <div className="absolute bottom-0 right-[35%] w-3 h-6 bg-[#b91c1c] rounded-b-md z-0" />
+
+                {/* Main Body */}
+                <div className="absolute inset-2 bg-[#ef4444] rounded-full shadow-[inset_-4px_-4px_20px_rgba(0,0,0,0.3),0_0_40px_rgba(239,68,68,0.4)] flex items-center justify-center border-t border-white/20 z-10">
+                    <div className="relative w-full h-full">
+                        {/* Eyes */}
+                        <div className="absolute top-[35%] left-[28%] w-4 h-5 bg-black rounded-full shadow-inner flex items-center justify-center">
+                            <motion.div
+                                className="w-1.5 h-1.5 bg-cyan-400 rounded-full shadow-[0_0_10px_rgba(34,211,238,1)]"
+                                animate={{ opacity: [1, 0.6, 1] }}
+                                transition={{ duration: 0.2, repeat: Infinity, repeatDelay: 3 }}
+                            />
+                        </div>
+                        <div className="absolute top-[35%] right-[28%] w-4 h-5 bg-black rounded-full shadow-inner flex items-center justify-center">
+                            <motion.div
+                                className="w-1.5 h-1.5 bg-cyan-400 rounded-full shadow-[0_0_10px_rgba(34,211,238,1)]"
+                                animate={{ opacity: [1, 0.6, 1] }}
+                                transition={{ duration: 0.2, repeat: Infinity, repeatDelay: 3 }}
+                            />
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </motion.div>
+    );
+};
+
 const OpenClawPage: React.FC = () => {
     const mouseX = useMotionValue(0);
     const mouseY = useMotionValue(0);
@@ -369,6 +448,9 @@ const OpenClawPage: React.FC = () => {
                             transition={{ duration: 0.8, delay: 0.2 }}
                             className="relative group lg:pl-12 max-w-[680px] lg:ml-auto w-full mt-12 lg:mt-0"
                         >
+                            {/* The Animated Mascot */}
+                            <OpenClawMascot />
+
                             <div className="absolute -inset-4 bg-gradient-to-r from-red-500/30 to-orange-500/30 blur-3xl opacity-40 group-hover:opacity-100 transition-opacity duration-700" />
 
                             <div className="relative glass-dark rounded-[24px] border border-white/10 shadow-[0_0_80px_rgba(0,0,0,0.8)] overflow-hidden flex flex-col items-stretch">
@@ -424,25 +506,59 @@ const OpenClawPage: React.FC = () => {
                     </div>
                 </div>
 
-                {/* TACTICAL RIBBON */}
+                {/* THE TACTICAL DATA RIBBON - BOXING OFF HERO */}
                 <div className="absolute bottom-8 left-0 w-full z-40 -rotate-1 skew-x-[0.2deg]">
+                    {/* Thin technical data strip (Top) */}
+                    <div className="w-full bg-red-500/10 border-y border-white/5 py-1 overflow-hidden backdrop-blur-sm">
+                        <div className="flex animate-marquee whitespace-nowrap gap-20 items-center opacity-40">
+                            {[...Array(10)].map((_, i) => (
+                                <div key={i} className="flex gap-10 text-[7px] font-mono font-black text-red-500 uppercase tracking-widest">
+                                    <span>COORD: 40.7128° N, 74.0060° W</span>
+                                    <span>STATUS: OPTIMIZING_SCALE</span>
+                                    <span>LATENCY: 12.00ms</span>
+                                    <span>UID: OPENCLAW_CORE_V1</span>
+                                </div>
+                            ))}
+                        </div>
+                    </div>
+
+                    {/* Main Authority Strip - Extreme Slim & Technical */}
                     <div className="w-full border-b border-white/10 py-3 overflow-hidden bg-black/95 relative shadow-[0_0_100px_rgba(0,0,0,1)]">
+                        <div className="absolute inset-x-0 inset-y-0 bg-[linear-gradient(90deg,transparent_0%,rgba(255,255,255,0.02)_50%,transparent_100%)] w-1/4 h-full animate-scan pointer-events-none" />
+
                         <div className="flex animate-marquee whitespace-nowrap gap-40 items-center relative z-10">
                             {[1, 2, 3, 4].map(i => (
                                 <React.Fragment key={i}>
                                     <div className="flex items-center gap-6 group">
-                                        <div className="w-2 h-2 bg-red-500 rounded-sm rotate-45" />
-                                        <span className="text-lg lg:text-xl font-black italic uppercase tracking-[0.2em] text-white text-glow">0_HUMAN_INTERVENTION</span>
+                                        <div className="w-2 h-2 bg-red-500 rounded-sm rotate-45 group-hover:scale-125 transition-transform shadow-[0_0_10px_rgba(239,68,68,0.8)]" />
+                                        <span className="text-lg lg:text-xl font-black italic uppercase tracking-[0.2em] text-white text-glow">ZERO_HUMAN_INTERVENTION</span>
                                     </div>
                                     <div className="flex items-center gap-6 group">
-                                        <div className="w-2 h-2 bg-blue-500 rounded-sm rotate-45" />
+                                        <div className="w-2 h-2 bg-blue-500 rounded-sm rotate-45 group-hover:scale-125 transition-transform shadow-[0_0_10px_rgba(59,130,246,0.8)]" />
                                         <span className="text-lg lg:text-xl font-black italic uppercase tracking-[0.2em] text-blue-400">FULLY_AUTONOMOUS</span>
                                     </div>
                                     <div className="flex items-center gap-6 group">
-                                        <div className="w-2 h-2 bg-white rounded-sm rotate-45" />
+                                        <div className="w-2 h-2 bg-white rounded-sm rotate-45 group-hover:scale-125 transition-transform shadow-[0_0_10px_rgba(255,255,255,0.8)]" />
                                         <span className="text-lg lg:text-xl font-black italic uppercase tracking-[0.2em] text-white">SYSTEM_ACCESS</span>
                                     </div>
+                                    <div className="flex items-center gap-6 group">
+                                        <div className="w-2 h-2 bg-red-500 rounded-sm rotate-45 group-hover:scale-125 transition-transform shadow-[0_0_10px_rgba(239,68,68,0.8)]" />
+                                        <span className="text-lg lg:text-xl font-black italic uppercase tracking-[0.2em] text-red-500 text-glow">MARKET_DOMINANCE</span>
+                                    </div>
                                 </React.Fragment>
+                            ))}
+                        </div>
+                    </div>
+
+                    {/* Bottom Technical Strip (Bottom) */}
+                    <div className="w-full bg-blue-500/10 border-b border-white/5 py-1 overflow-hidden backdrop-blur-sm">
+                        <div className="flex animate-marquee whitespace-nowrap gap-20 items-center opacity-40 justify-end" style={{ animationDirection: 'reverse' }}>
+                            {[...Array(10)].map((_, i) => (
+                                <div key={i} className="flex gap-10 text-[7px] font-mono font-black text-blue-500 uppercase tracking-widest">
+                                    <span>ENCRYPTION: AES-256-GCM</span>
+                                    <span>PROTOCOL: AUTOMATION_VELOCITY</span>
+                                    <span>NODE: {Math.random().toString(36).substring(7).toUpperCase()}</span>
+                                </div>
                             ))}
                         </div>
                     </div>
@@ -738,6 +854,150 @@ const OpenClawPage: React.FC = () => {
                 </div>
             </section>
 
+
+
+            {/* 16 REVENUE VECTORS */}
+            <section className="py-24 lg:py-32 bg-[#020408] border-t border-white/5 relative overflow-hidden">
+                <div className="absolute inset-0 bg-[url('https://grainy-gradients.vercel.app/noise.svg')] opacity-[0.02]" />
+
+                <div className="max-w-[1600px] mx-auto px-6 lg:px-12 relative z-10">
+                    <div className="text-center mb-24">
+                        <div className="inline-flex items-center gap-3 px-4 py-2 bg-green-500/10 border border-green-500/20 rounded-full mb-8">
+                            <span className="text-[10px] font-black text-green-500 uppercase tracking-[0.4em]">PROFIT_GENERATION_MODELS</span>
+                        </div>
+                        <h2 className="text-4xl sm:text-6xl lg:text-7xl font-black font-display italic tracking-tight uppercase text-white leading-[0.85] mb-8">
+                            16 WAYS TO <br />
+                            <span className="text-transparent bg-clip-text bg-gradient-to-r from-green-400 to-emerald-600">PRINT REVENUE.</span>
+                        </h2>
+                        <p className="text-lg text-slate-400 font-medium italic max-w-2xl mx-auto leading-relaxed">
+                            Stop paying humans to do robot work. Deploy OpenClaw to execute high-value revenue generating activities 24/7.
+                        </p>
+                    </div>
+
+                    <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-6">
+                        {[
+                            {
+                                id: "01",
+                                title: "OUTBOUND_ORCHESTRATOR",
+                                category: "SALES",
+                                desc: "Scrapes leads from LinkedIn/Apollo. Enriches emails. Sends personalized DMs. Follows up forever until they reply."
+                            },
+                            {
+                                id: "02",
+                                title: "INBOUND_QUALIFIER",
+                                category: "SALES",
+                                desc: "Responds to website leads instantly (Speed to Lead < 5s). Qualifies budget/authority. Books the meeting on your Calendly."
+                            },
+                            {
+                                id: "03",
+                                title: "PRICING_WARFARE",
+                                category: "STRATEGY",
+                                desc: "Monitors competitor pricing pages daily. Alerts you if they undercut. Can auto-adjust your Stripe prices dynamicially."
+                            },
+                            {
+                                id: "04",
+                                title: "CONTENT_FACTORIZATION",
+                                category: "MARKETING",
+                                desc: "Takes one YouTube video. Transcribes it. Writes 10 Tweets, 3 LinkedIn posts, and 1 Blog article. Schedules them all."
+                            },
+                            {
+                                id: "05",
+                                title: "SEO_DOMINANCE",
+                                category: "MARKETING",
+                                desc: "Finds low-competition keywords. Writes 2,000-word programmatic SEO pages. Internal links them. Publishes to CMS."
+                            },
+                            {
+                                id: "06",
+                                title: "LOCAL_DOMINATION",
+                                category: "SALES",
+                                desc: "Scrapes Google Maps for every 'Plumber in [City]'. Extracts phones/emails.  Initiates cold call/email sequences."
+                            },
+                            {
+                                id: "07",
+                                title: "REPUTATION_DEFENSE",
+                                category: "BRAND",
+                                desc: "Monitors G2, Capterra, Google Reviews. Auto-replies to 5-star reviews. Flags 1-star reviews for human intervention instantly."
+                            },
+                            {
+                                id: "08",
+                                title: "INFLUENCER_ACQUISITION",
+                                category: "MARKETING",
+                                desc: "Identifies micro-influencers in your niche. Sends collaboration offers. Negotiates rates based on your playbook."
+                            },
+                            {
+                                id: "09",
+                                title: "AFFILIATE_OPTIMIZER",
+                                category: "REVENUE",
+                                desc: "Scans your blog for dead affiliate links. Replaces them with high-converting offers. Rotates offers based on click yield."
+                            },
+                            {
+                                id: "10",
+                                title: "CHURN_PREVENTION",
+                                category: "RETENTION",
+                                desc: "Detects 'cancel' intent keywords in support tickets. Auto-offers discounts or calls a 'Save Team' human immediately."
+                            },
+                            {
+                                id: "11",
+                                title: "CASHFLOW_ACCELERATION",
+                                category: "FINANCE",
+                                desc: "The polite but persistent debt collector. Auto-emails clients with overdue invoices every 48h until payment clears."
+                            },
+                            {
+                                id: "12",
+                                title: "OPEX_KILLER",
+                                category: "OPS",
+                                desc: "Audits your SaaS subscriptions. Finds cheaper alternatives. Negotiates renewals by generating competitor quote emails."
+                            },
+                            {
+                                id: "13",
+                                title: "VIRALITY_SNIPER",
+                                category: "MARKETING",
+                                desc: "Monitors Twitter/X trends. Identifies topics relevant to your niche. Drafts 'hot take' content for you to approve instantly."
+                            },
+                            {
+                                id: "14",
+                                title: "CONTRACT_HUNTER",
+                                category: "SALES",
+                                desc: "Scrapes government RFP sites (Upwork, etc). Matches your skills. Drafts huge proposal documents customized to the tender."
+                            },
+                            {
+                                id: "15",
+                                title: "OMNICHANNEL_SYNC",
+                                category: "SALES",
+                                desc: "Takes your Shopify product. Lists it on Amazon, eBay, Etsy, and TikTok Shop. Syncs inventory across all channels."
+                            },
+                            {
+                                id: "16",
+                                title: "AUDIENCE_SIPHON",
+                                category: "GROWTH",
+                                desc: "Scrapes followers of your competitors. Engages with their reliable posts. Soft-pitches your solution in the replies."
+                            }
+                        ].map((model, i) => (
+                            <motion.div
+                                key={i}
+                                initial={{ opacity: 0, scale: 0.9 }}
+                                whileInView={{ opacity: 1, scale: 1 }}
+                                transition={{ delay: i * 0.05 }}
+                                whileHover={{ y: -5 }}
+                                className="group relative p-6 bg-white/[0.02] border border-white/5 rounded-2xl hover:bg-white/[0.05] hover:border-green-500/30 transition-all duration-300"
+                            >
+                                <div className="flex justify-between items-start mb-4">
+                                    <span className="text-[9px] font-black text-slate-600 uppercase tracking-widest group-hover:text-green-500 transition-colors">MODEL_{model.id}</span>
+                                    <span className="text-[8px] font-bold text-white/20 uppercase px-2 py-1 bg-white/5 rounded-md">{model.category}</span>
+                                </div>
+                                <h3 className="text-xl font-black italic uppercase tracking-tighter text-white mb-3 leading-none group-hover:text-green-400 transition-colors">
+                                    {model.title}
+                                </h3>
+                                <p className="text-xs text-slate-400 font-medium leading-relaxed">
+                                    {model.desc}
+                                </p>
+                            </motion.div>
+                        ))}
+                    </div>
+                </div>
+
+            </section>
+
             {/* SYSTEM ARCHITECTURE - EXPERTISE */}
             <section className="py-24 relative bg-[#020408] overflow-hidden">
                 <div className="max-w-7xl mx-auto px-6 lg:px-8">
@@ -844,42 +1104,219 @@ const OpenClawPage: React.FC = () => {
                 </div>
             </section>
 
-            {/* PRICING - THE OFFER */}
-            <section className="py-16 lg:py-24 bg-white/[0.01] border-y border-white/5 relative overflow-hidden">
-                <div className="max-w-4xl mx-auto px-6 lg:px-8 relative z-10">
-                    <motion.div
-                        initial={{ opacity: 0, y: 30 }}
-                        whileInView={{ opacity: 1, y: 0 }}
-                        className="group p-1 bg-gradient-to-br from-red-500 to-orange-500 rounded-[52px]"
-                    >
-                        <div className="bg-[#020408] rounded-[50px] p-8 lg:p-20 text-center relative overflow-hidden">
-                            <div className="absolute top-0 right-0 w-[500px] h-[500px] bg-red-500/10 blur-[150px] rounded-full pointer-events-none" />
 
-                            <div className="relative z-10">
-                                <h3 className="text-5xl lg:text-8xl font-black italic uppercase tracking-tighter text-white mb-6">THE SETUP</h3>
-                                <p className="text-xl text-slate-400 font-medium italic mb-12 max-w-2xl mx-auto">
-                                    We install, configure, and deploy your autonomous OpenClaw system. You get the keys, the code, and the control.
-                                </p>
+            <section className="py-16 lg:py-24 bg-[#020408] border-t border-white/5 relative overflow-hidden">
+                <div className="max-w-7xl mx-auto px-6 lg:px-8 relative z-10">
+                    <div className="text-center mb-20">
+                        <div className="inline-flex items-center gap-3 px-4 py-2 bg-blue-500/10 border border-blue-500/20 rounded-full mb-8">
+                            <span className="text-[10px] font-black text-blue-500 uppercase tracking-[0.4em]">FINANCIAL_IMPACT_ASSESSMENT</span>
+                        </div>
+                        <h2 className="text-4xl lg:text-7xl font-black font-display italic tracking-tight uppercase text-white leading-[0.85]">
+                            THE MATH IS <br />
+                            <span className="text-blue-500">SIMPLE.</span>
+                        </h2>
+                    </div>
 
-                                <div className="text-6xl lg:text-9xl font-black text-white italic tracking-tighter mb-12">$500</div>
+                    <div className="grid grid-cols-1 md:grid-cols-2 gap-8 lg:gap-16 items-center">
+                        {/* THE OLD WAY */}
+                        <div className="p-8 lg:p-12 rounded-[40px] border border-white/5 bg-white/[0.02] relative group">
+                            <div className="absolute top-6 right-6 text-[10px] font-black text-slate-600 uppercase tracking-widest">LEGACY_OPEX</div>
+                            <h3 className="text-3xl font-black italic uppercase tracking-tight text-slate-500 mb-8 decoration-slate-700/50 line-through decoration-2">HUMAN TEAM</h3>
 
-                                <Link to="/contact">
-                                    <motion.button
-                                        whileHover={{ scale: 1.05 }}
-                                        className="px-12 py-6 bg-white text-black text-lg font-black uppercase tracking-widest rounded-2xl italic shadow-[0_0_50px_rgba(255,255,255,0.3)] hover:shadow-[0_0_80px_rgba(255,255,255,0.5)] transition-all"
-                                    >
-                                        SECURE SETUP
-                                    </motion.button>
-                                </Link>
+                            <div className="space-y-6 mb-12">
+                                <div className="flex justify-between items-center py-4 border-b border-white/5">
+                                    <div className="text-lg text-slate-400 font-medium italic">Sales Development Rep</div>
+                                    <div className="text-xl font-bold text-red-400 font-mono">$3,500<span className="text-xs text-slate-600">/mo</span></div>
+                                </div>
+                                <div className="flex justify-between items-center py-4 border-b border-white/5">
+                                    <div className="text-lg text-slate-400 font-medium italic">Virtual Assistant</div>
+                                    <div className="text-xl font-bold text-red-400 font-mono">$1,800<span className="text-xs text-slate-600">/mo</span></div>
+                                </div>
+                                <div className="flex justify-between items-center py-4 border-b border-white/5">
+                                    <div className="text-lg text-slate-400 font-medium italic">Data Researcher</div>
+                                    <div className="text-xl font-bold text-red-400 font-mono">$2,200<span className="text-xs text-slate-600">/mo</span></div>
+                                </div>
+                            </div>
 
-                                <div className="mt-12 flex flex-wrap justify-center gap-6 opacity-60">
-                                    {["ONE-TIME PAYMENT", "FULL OWNERSHIP", "NO SUBSCRIPTION"].map(tag => (
-                                        <span key={tag} className="text-[10px] font-black uppercase tracking-widest text-slate-500 border border-white/10 px-4 py-2 rounded-full">{tag}</span>
-                                    ))}
+                            <div className="flex justify-between items-end">
+                                <span className="text-xs font-black text-slate-600 uppercase tracking-widest">MONTHLY BURN</span>
+                                <span className="text-4xl font-black text-white italic tracking-tighter">$7,500<span className="text-lg text-slate-600">/mo</span></span>
+                            </div>
+                        </div>
+
+                        {/* THE OPENCLAW WAY */}
+                        <div className="relative">
+                            <div className="absolute -inset-1 bg-gradient-to-r from-green-500 to-emerald-500 rounded-[42px] blur opacity-20 group-hover:opacity-40 transition-opacity duration-1000" />
+                            <div className="p-8 lg:p-12 rounded-[40px] border border-green-500/20 bg-[#05070a] relative z-10">
+                                <div className="absolute top-6 right-6 text-[10px] font-black text-green-500 uppercase tracking-widest animate-pulse">AUTONOMOUS_CAPEX</div>
+                                <h3 className="text-3xl font-black italic uppercase tracking-tight text-white mb-8">OPENCLAW UNIT</h3>
+
+                                <div className="space-y-6 mb-12">
+                                    <div className="flex justify-between items-center py-4 border-b border-white/5">
+                                        <div className="text-lg text-white font-medium italic">SDR Capabilities</div>
+                                        <div className="flex items-center gap-2 text-green-400 font-bold font-mono"><CheckCircle2 className="w-4 h-4" /> INCLUDED</div>
+                                    </div>
+                                    <div className="flex justify-between items-center py-4 border-b border-white/5">
+                                        <div className="text-lg text-white font-medium italic">VA Capabilities</div>
+                                        <div className="flex items-center gap-2 text-green-400 font-bold font-mono"><CheckCircle2 className="w-4 h-4" /> INCLUDED</div>
+                                    </div>
+                                    <div className="flex justify-between items-center py-4 border-b border-white/5">
+                                        <div className="text-lg text-white font-medium italic">Research Capabilities</div>
+                                        <div className="flex items-center gap-2 text-green-400 font-bold font-mono"><CheckCircle2 className="w-4 h-4" /> INCLUDED</div>
+                                    </div>
+                                </div>
+
+                                <div className="flex justify-between items-end">
+                                    <span className="text-xs font-black text-green-600 uppercase tracking-widest">ONE-TIME SETUP</span>
+                                    <span className="text-5xl font-black text-white italic tracking-tighter">$500</span>
                                 </div>
                             </div>
                         </div>
-                    </motion.div>
+                    </div>
+                </div>
+            </section>
+
+            {/* PRICING - THE OFFER */}
+            <section className="py-24 lg:py-32 bg-white/[0.01] border-y border-white/5 relative overflow-hidden" id="pricing">
+                <div className="max-w-[1400px] mx-auto px-6 lg:px-8 relative z-10">
+                    <div className="text-center mb-20">
+                        <div className="inline-flex items-center gap-3 px-4 py-2 bg-white/5 border border-white/10 rounded-full mb-8">
+                            <span className="text-[10px] font-black text-slate-400 uppercase tracking-[0.4em]">INFRASTRUCTURE_LEVELS</span>
+                        </div>
+                        <h2 className="text-4xl lg:text-7xl font-black font-display italic tracking-tight uppercase text-white leading-[0.85]">
+                            CHOOSE YOUR <br />
+                            <span className="text-transparent bg-clip-text bg-gradient-to-r from-red-500 to-orange-600">LETHALITY.</span>
+                        </h2>
+                    </div>
+
+                    <div className="grid grid-cols-1 lg:grid-cols-3 gap-6 items-start">
+
+                        {/* TIER 1: SCOUT */}
+                        <motion.div
+                            initial={{ opacity: 0, y: 20 }}
+                            whileInView={{ opacity: 1, y: 0 }}
+                            transition={{ delay: 0.1 }}
+                            className="bg-[#05070a] border border-white/5 rounded-[32px] p-8 lg:p-10 relative group hover:border-white/10 transition-all"
+                        >
+                            <div className="mb-8">
+                                <h3 className="text-2xl font-black italic uppercase tracking-tighter text-slate-500 mb-2">TIER_01</h3>
+                                <h2 className="text-4xl font-black italic uppercase tracking-tighter text-white mb-6">SCOUT</h2>
+                                <div className="text-5xl font-black text-white italic tracking-tighter mb-2">$500</div>
+                                <div className="text-[10px] font-black uppercase tracking-widest text-slate-600">ONE-TIME SETUP</div>
+                            </div>
+
+                            <p className="text-sm text-slate-400 font-medium leading-relaxed mb-8 border-b border-white/5 pb-8">
+                                The entry point. A single, local OpenClaw unit running on your machine. Perfect for automating personal workflows and basic scraping.
+                            </p>
+
+                            <ul className="space-y-4 mb-10">
+                                {[
+                                    "Local Machine Deployment",
+                                    "Standard Web Serching",
+                                    "Basic Desktop Control",
+                                    "Single Workflow Setup",
+                                    "1 Hour Guidance Call"
+                                ].map((feature, i) => (
+                                    <li key={i} className="flex items-start gap-3">
+                                        <CheckCircle2 className="w-4 h-4 text-slate-500 mt-0.5 shrink-0" />
+                                        <span className="text-slate-300 text-sm font-bold uppercase tracking-tight">{feature}</span>
+                                    </li>
+                                ))}
+                            </ul>
+
+                            <Link to="/contact">
+                                <button className="w-full py-4 bg-white/5 text-white text-xs font-black uppercase tracking-[0.2em] rounded-xl hover:bg-white/10 transition-colors border border-white/5">
+                                    DEPLOY SCOUT
+                                </button>
+                            </Link>
+                        </motion.div>
+
+                        {/* TIER 2: VANGUARD */}
+                        <motion.div
+                            initial={{ opacity: 0, y: 20 }}
+                            whileInView={{ opacity: 1, y: 0 }}
+                            transition={{ delay: 0.2 }}
+                            className="bg-[#05070a] border border-red-500/20 rounded-[32px] p-8 lg:p-10 relative group shadow-[0_0_50px_rgba(239,68,68,0.1)]"
+                        >
+                            <div className="absolute top-0 right-0 w-32 h-32 bg-red-500/10 blur-[60px] rounded-full pointer-events-none" />
+                            <div className="absolute -top-3 left-1/2 -translate-x-1/2 px-4 py-1 bg-red-500 text-white text-[9px] font-black uppercase tracking-widest rounded-full">Recommended</div>
+
+                            <div className="mb-8 relative z-10">
+                                <h3 className="text-2xl font-black italic uppercase tracking-tighter text-red-500 mb-2">TIER_02</h3>
+                                <h2 className="text-4xl font-black italic uppercase tracking-tighter text-white mb-6">VANGUARD</h2>
+                                <div className="text-5xl font-black text-white italic tracking-tighter mb-2">$2,000</div>
+                                <div className="text-[10px] font-black uppercase tracking-widest text-red-400">ONE-TIME BUILD</div>
+                            </div>
+
+                            <p className="text-sm text-slate-400 font-medium leading-relaxed mb-8 border-b border-white/5 pb-8 relative z-10">
+                                Serious infrastructure. We set up a multi-agent swarm that integrates with your CRM and databases. Built for growth-stage companies.
+                            </p>
+
+                            <ul className="space-y-4 mb-10 relative z-10">
+                                {[
+                                    "Cloud VPS Deployment",
+                                    "Multi-Agent Orchestration",
+                                    "3 Custom Skill Injections",
+                                    "CRM Integration (HubSpot/GHL)",
+                                    "Database Persistence (Supabase)",
+                                    "Slack/Discord Bot Interface"
+                                ].map((feature, i) => (
+                                    <li key={i} className="flex items-start gap-3">
+                                        <Zap className="w-4 h-4 text-red-500 mt-0.5 shrink-0" />
+                                        <span className="text-white text-sm font-bold uppercase tracking-tight">{feature}</span>
+                                    </li>
+                                ))}
+                            </ul>
+
+                            <Link to="/contact" className="relative z-10">
+                                <button className="w-full py-4 bg-gradient-to-r from-red-600 to-orange-600 text-white text-xs font-black uppercase tracking-[0.2em] rounded-xl hover:shadow-[0_0_30px_rgba(239,68,68,0.4)] transition-all shadow-lg">
+                                    BUILD VANGUARD
+                                </button>
+                            </Link>
+                        </motion.div>
+
+                        {/* TIER 3: DOMINION */}
+                        <motion.div
+                            initial={{ opacity: 0, y: 20 }}
+                            whileInView={{ opacity: 1, y: 0 }}
+                            transition={{ delay: 0.3 }}
+                            className="bg-[#05070a] border border-white/5 rounded-[32px] p-8 lg:p-10 relative group hover:border-white/10 transition-all"
+                        >
+                            <div className="mb-8">
+                                <h3 className="text-2xl font-black italic uppercase tracking-tighter text-slate-500 mb-2">TIER_03</h3>
+                                <h2 className="text-4xl font-black italic uppercase tracking-tighter text-white mb-6">DOMINION</h2>
+                                <div className="text-5xl font-black text-white italic tracking-tighter mb-2">$5,000</div>
+                                <div className="text-[10px] font-black uppercase tracking-widest text-slate-600">ENTERPRISE INFRA</div>
+                            </div>
+
+                            <p className="text-sm text-slate-400 font-medium leading-relaxed mb-8 border-b border-white/5 pb-8">
+                                Total autonomy. A private server cluster running uncensored models, voice agents, and infinite context. You own the metal.
+                            </p>
+
+                            <ul className="space-y-4 mb-10">
+                                {[
+                                    "Private Server Cluster Setup",
+                                    "Uncensored Local LLM Hosting",
+                                    "Voice/Phone Agent Capabilities",
+                                    "Unlimited Custom Skills",
+                                    "Anti-Detect Browser Fingerprinting",
+                                    "Dedicated Solutions Architect"
+                                ].map((feature, i) => (
+                                    <li key={i} className="flex items-start gap-3">
+                                        <CheckCircle2 className="w-4 h-4 text-white mt-0.5 shrink-0" />
+                                        <span className="text-slate-300 text-sm font-bold uppercase tracking-tight">{feature}</span>
+                                    </li>
+                                ))}
+                            </ul>
+
+                            <Link to="/contact">
+                                <button className="w-full py-4 bg-white text-black text-xs font-black uppercase tracking-[0.2em] rounded-xl hover:bg-slate-200 transition-colors">
+                                    INITIATE DOMINION
+                                </button>
+                            </Link>
+                        </motion.div>
+
+                    </div>
                 </div>
             </section>
 
@@ -901,7 +1338,7 @@ const OpenClawPage: React.FC = () => {
             </section>
 
             <Footer />
-        </div>
+        </div >
     );
 };
 
