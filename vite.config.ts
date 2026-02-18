@@ -7,4 +7,12 @@ export default defineConfig({
     host: '0.0.0.0',
   },
   plugins: [react()],
+  build: {
+    rollupOptions: {
+      input: {
+        main: 'index.html',
+        openclaw: 'openclaw.html',
+      },
+    },
+  },
 });
