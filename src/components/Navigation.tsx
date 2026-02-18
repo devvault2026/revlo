@@ -30,7 +30,7 @@ const Navigation: React.FC = () => {
         { name: 'Websites', path: '/websites' },
         { name: 'Build', path: '/elite-development' },
         { name: 'GHL', path: '/ghl-automation' },
-        { name: 'Takeoff', path: '/takeoff-agent' },
+        { name: 'OpenClaw', path: '/openclaw' },
         { name: 'Team', path: '/team' },
         { name: 'SCOUT', path: '/scout' },
     ];
