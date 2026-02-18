@@ -5,6 +5,8 @@ export interface BlogPost {
     content: string;
     date: string;
     author: string;
+    authorRole: string;
+    authorImage: string;
     readTime: string;
     category: string;
     image: string;
@@ -17,6 +19,8 @@ export const blogPosts: BlogPost[] = [
         excerpt: 'OpenClaw just dropped a series of upgrades that redefine what AI agents are capable of. From Sonnet 4.6 to 1-million token context windows, AI is now an Operating System.',
         date: 'February 18, 2026',
         author: 'Jaryd Pacquette',
+        authorRole: 'Founder & Lead Operator',
+        authorImage: '/619228587_1473924384299979_5558935500619533353_n.jpg',
         readTime: '5 min read',
         category: 'AI Infrastructure',
         image: 'https://res.cloudinary.com/dpfapm0tl/image/upload/v1771435259/ChatGPT_Image_Feb_18_2026_12_20_07_PM_xujfpp.png',
