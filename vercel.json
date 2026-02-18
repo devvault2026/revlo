@@ -1,6 +1,10 @@
 {
     "rewrites": [
         {
+            "source": "/openclaw",
+            "destination": "/openclaw.html"
+        },
+        {
             "source": "/(.*)",
             "destination": "/index.html"
         }
