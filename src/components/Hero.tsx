@@ -81,12 +81,25 @@ const Hero: React.FC = () => {
                         <motion.div
                             initial={{ opacity: 0, y: 20 }}
                             animate={{ opacity: 1, y: 0 }}
-                            className="inline-flex items-center gap-3 px-4 py-2 glass rounded-full"
+                            className="flex flex-col items-start gap-4"
                         >
-                            <div className="w-2 h-2 bg-green-500 rounded-full animate-pulse" />
-                            <span className="text-[10px] font-black uppercase tracking-[0.3em] text-purple-400">
-                                Status: Building the Future
-                            </span>
+                            <a href="/openclaw" className="group relative inline-flex items-center gap-3 px-3 py-1 bg-red-500/10 border border-red-500/20 rounded-full hover:bg-red-500/20 transition-all cursor-pointer">
+                                <span className="relative flex h-2 w-2">
+                                    <span className="animate-ping absolute inline-flex h-full w-full rounded-full bg-red-500 opacity-75"></span>
+                                    <span className="relative inline-flex rounded-full h-2 w-2 bg-red-500"></span>
+                                </span>
+                                <span className="text-[10px] font-black uppercase tracking-[0.2em] text-red-400 group-hover:text-red-300 transition-colors">
+                                    #1 NEW OFFER: DEPLOY OPENCLAW AGENT
+                                </span>
+                                <ArrowRight className="w-3 h-3 text-red-400 group-hover:translate-x-1 transition-transform" />
+                            </a>
+
+                            <div className="inline-flex items-center gap-3 px-4 py-2 glass rounded-full">
+                                <div className="w-2 h-2 bg-green-500 rounded-full animate-pulse" />
+                                <span className="text-[10px] font-black uppercase tracking-[0.3em] text-purple-400">
+                                    Status: Building the Future
+                                </span>
+                            </div>
                         </motion.div>
 
                         <div className="space-y-8">

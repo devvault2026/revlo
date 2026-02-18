@@ -10,6 +10,7 @@ import Services from '../components/Services';
 import Projects from '../components/Projects';
 import FounderOperator from '../components/FounderOperator';
 import Contact from '../components/Contact';
+import OpenClawIntro from '../components/OpenClawIntro';
 
 const HomePage: React.FC = () => {
     return (
@@ -20,6 +21,7 @@ const HomePage: React.FC = () => {
             transition={{ duration: 0.5 }}
         >
             <Hero />
+            <OpenClawIntro />
             <PromoVideo />
             <Results />
             <Manifesto />

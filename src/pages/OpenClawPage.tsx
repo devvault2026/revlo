@@ -92,7 +92,7 @@ const ReactiveBubble = React.memo(({ mouseX, mouseY }: { mouseX: any, mouseY: an
 const OpenClawMascot = () => {
     return (
         <motion.div
-            className="absolute -top-28 -right-12 z-50 pointer-events-none select-none w-40 h-40 hidden lg:block"
+            className="absolute -top-20 -right-2 lg:-top-28 lg:-right-12 z-50 pointer-events-none select-none w-32 h-32 lg:w-40 lg:h-40 block"
             animate={{
                 y: [0, -12, 0],
                 rotate: [0, 2, -2, 0]
@@ -185,9 +185,9 @@ const OpenClawPage: React.FC = () => {
         const previousTitle = document.title;
 
         // Banger Title & Description
-        const title = "OPENCLAW // AUTONOMOUS OPERATOR";
-        const description = "Claude is a chat bot. OpenClaw is an employee. The only AI that controls your browser, manages your life, and executes complex workflows with ZERO human intervention. Deploy the agent that actually does things.";
-        const image = "https://res.cloudinary.com/dpfapm0tl/raw/upload/v1771379537/architect-plan-2026-02-17_mkkqrc.md"; // User provided asset
+        const title = "OPENCLAW BY REVLO // #1 AUTONOMOUS INFRASTRUCTURE AGENCY";
+        const description = "Deploy the unimaginable. Revlo builds OpenClaw agents that generate revenue in your sleep. The world's #1 infrastructure for autonomous browser control, operational dominance, and wealth generation with ZERO human intervention.";
+        const image = "https://res.cloudinary.com/dpfapm0tl/image/upload/v1771383151/ChatGPT_Image_Feb_17_2026_09_52_11_PM_pm7mkm.png";
 
         document.title = title;
 
@@ -323,7 +323,7 @@ const OpenClawPage: React.FC = () => {
             <Navigation />
 
             {/* HERO SECTION - TACTICAL COMMAND CENTER */}
-            <section className="relative h-screen overflow-hidden flex flex-col justify-center">
+            <section className="relative min-h-screen lg:h-screen overflow-hidden flex flex-col justify-center py-24 lg:py-0">
                 {/* Live Tactical Background Elements */}
                 <div className="absolute inset-0 overflow-hidden pointer-events-none">
                     {/* Interactive Bubbles */}
@@ -363,7 +363,7 @@ const OpenClawPage: React.FC = () => {
                                 </span>
                             </div>
 
-                            <h1 className="text-4xl sm:text-6xl lg:text-[7rem] font-black font-display italic tracking-tight mb-6 leading-[0.85] lg:leading-[0.8] uppercase text-white text-left relative z-10">
+                            <h1 className="text-5xl sm:text-6xl lg:text-[7rem] font-black font-display italic tracking-tight mb-6 leading-[0.85] lg:leading-[0.8] uppercase text-white text-left relative z-10">
                                 <span className="relative inline-block group/impossible">
                                     {/* Layout Placeholder - Invisible but dictates size */}
                                     <span className="relative z-10 text-transparent select-none" aria-hidden="true">OPENCLAW</span>
@@ -392,7 +392,7 @@ const OpenClawPage: React.FC = () => {
                                                 x="50%"
                                                 y="80%"
                                                 textAnchor="middle"
-                                                className="font-black font-display italic text-4xl sm:text-6xl lg:text-[7rem] uppercase select-none"
+                                                className="font-black font-display italic text-5xl sm:text-6xl lg:text-[7rem] uppercase select-none"
                                                 fill="none"
                                                 stroke="#ef4444"
                                                 strokeWidth="3"
@@ -410,7 +410,7 @@ const OpenClawPage: React.FC = () => {
                                                 x="50%"
                                                 y="80%"
                                                 textAnchor="middle"
-                                                className="font-black font-display italic text-4xl sm:text-6xl lg:text-[7rem] uppercase select-none"
+                                                className="font-black font-display italic text-5xl sm:text-6xl lg:text-[7rem] uppercase select-none"
                                                 fill="white"
                                                 style={{ letterSpacing: '-0.05em' }}
                                             >
@@ -429,7 +429,7 @@ const OpenClawPage: React.FC = () => {
                                 <span className="text-white font-bold">All from WhatsApp, Telegram, or any chat app you already use.</span>
                             </p>
 
-                            <div className="hidden lg:flex flex-col gap-4">
+                            <div className="flex flex-col gap-4 mt-8 lg:mt-0">
                                 <div className="text-[10px] font-black uppercase tracking-[0.4em] text-slate-500 flex items-center gap-4 py-2 px-6 glass rounded-full border border-white/5">
                                     <Smartphone className="w-4 h-4 text-green-500" />
                                     <span>INTERFACE: <span className="text-white italic">ANY CHAT APP</span></span>
