@@ -1,4 +1,5 @@
 import React, { useState } from 'react';
+import { Helmet } from 'react-helmet-async';
 import { motion, AnimatePresence, useMotionValue, useSpring, useTransform, useAnimationFrame } from 'framer-motion';
 import {
     Cpu,
@@ -181,41 +182,7 @@ const OpenClawPage: React.FC = () => {
     }, [mouseX, mouseY]);
 
     // Social Sharing & SEO Metadata
-    React.useEffect(() => {
-        const previousTitle = document.title;
-
-        // Banger Title & Description
-        const title = "OPENCLAW BY REVLO // #1 AUTONOMOUS INFRASTRUCTURE AGENCY";
-        const description = "Deploy the unimaginable. Revlo builds OpenClaw agents that generate revenue in your sleep. The world's #1 infrastructure for autonomous browser control, operational dominance, and wealth generation with ZERO human intervention.";
-        const image = "https://res.cloudinary.com/dpfapm0tl/image/upload/v1771383151/ChatGPT_Image_Feb_17_2026_09_52_11_PM_pm7mkm.png";
-
-        document.title = title;
-
-        // Helper to set meta tags
-        const setMeta = (name: string, content: string, attr: 'name' | 'property' = 'name') => {
-            let element = document.querySelector(`meta[${attr}="${name}"]`);
-            if (!element) {
-                element = document.createElement('meta');
-                element.setAttribute(attr, name);
-                document.head.appendChild(element);
-            }
-            element.setAttribute('content', content);
-        };
-
-        setMeta('description', description);
-        setMeta('og:title', title, 'property');
-        setMeta('og:description', description, 'property');
-        setMeta('og:image', image, 'property');
-        setMeta('twitter:card', 'summary_large_image', 'name');
-        setMeta('twitter:title', title, 'name');
-        setMeta('twitter:description', description, 'name');
-        setMeta('twitter:image', image, 'name');
-
-        return () => {
-            document.title = previousTitle;
-            // Optional: Revert meta tags or leave them (usually fine to leave in SPA)
-        };
-    }, []);
+    // React.useEffect removed - replaced by Helmet below
     const fadeIn = {
         initial: { opacity: 0, y: 30 },
         whileInView: { opacity: 1, y: 0 },
@@ -320,6 +287,26 @@ const OpenClawPage: React.FC = () => {
 
     return (
         <div className="min-h-screen bg-[#020408] text-white selection:bg-red-500/30">
+            <Helmet>
+                <title>OPENCLAW BY REVLO // #1 AUTONOMOUS INFRASTRUCTURE AGENCY</title>
+                <meta name="description" content="Deploy the unimaginable. Revlo builds OpenClaw agents that generate revenue in your sleep. The world's #1 infrastructure for autonomous browser control, operational dominance, and wealth generation with ZERO human intervention." />
+
+                {/* Open Graph / Facebook */}
+                <meta property="og:type" content="website" />
+                <meta property="og:url" content="https://www.wearerevlo.com/openclaw" />
+                <meta property="og:title" content="OPENCLAW BY REVLO // #1 AUTONOMOUS INFRASTRUCTURE AGENCY" />
+                <meta property="og:description" content="Deploy the unimaginable. Revlo builds OpenClaw agents that generate revenue in your sleep. The world's #1 infrastructure for autonomous browser control, operational dominance, and wealth generation with ZERO human intervention." />
+                <meta property="og:image" content="https://res.cloudinary.com/dpfapm0tl/image/upload/v1771383151/ChatGPT_Image_Feb_17_2026_09_52_11_PM_pm7mkm.png" />
+                <meta property="og:image:width" content="1200" />
+                <meta property="og:image:height" content="630" />
+
+                {/* Twitter */}
+                <meta name="twitter:card" content="summary_large_image" />
+                <meta name="twitter:url" content="https://www.wearerevlo.com/openclaw" />
+                <meta name="twitter:title" content="OPENCLAW BY REVLO // #1 AUTONOMOUS INFRASTRUCTURE AGENCY" />
+                <meta name="twitter:description" content="Deploy the unimaginable. Revlo builds OpenClaw agents that generate revenue in your sleep. The world's #1 infrastructure for autonomous browser control, operational dominance, and wealth generation with ZERO human intervention." />
+                <meta name="twitter:image" content="https://res.cloudinary.com/dpfapm0tl/image/upload/v1771383151/ChatGPT_Image_Feb_17_2026_09_52_11_PM_pm7mkm.png" />
+            </Helmet>
             <Navigation />
 
             {/* HERO SECTION - TACTICAL COMMAND CENTER */}
