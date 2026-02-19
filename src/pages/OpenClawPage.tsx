@@ -288,24 +288,24 @@ const OpenClawPage: React.FC = () => {
     return (
         <div className="min-h-screen bg-[#020408] text-white selection:bg-red-500/30">
             <Helmet>
-                <title>OPENCLAW BY REVLO // #1 AUTONOMOUS INFRASTRUCTURE AGENCY</title>
-                <meta name="description" content="Deploy the unimaginable. Revlo builds OpenClaw agents that generate revenue in your sleep. The world's #1 infrastructure for autonomous browser control, operational dominance, and wealth generation with ZERO human intervention." />
+                <title>OPENCLAW: THE AGENT THAT OWNS THE MARKET // REVLO</title>
+                <meta name="description" content="Deploy the unimaginable. OpenClaw is the world #1 autonomous infrastructure OS. From Sonnet 4.6 reasoning to 1M token context, we build the agents that dominate your market while you sleep." />
 
                 {/* Open Graph / Facebook */}
                 <meta property="og:type" content="website" />
                 <meta property="og:url" content="https://www.wearerevlo.com/openclaw" />
-                <meta property="og:title" content="OPENCLAW BY REVLO // #1 AUTONOMOUS INFRASTRUCTURE AGENCY" />
-                <meta property="og:description" content="Deploy the unimaginable. Revlo builds OpenClaw agents that generate revenue in your sleep. The world's #1 infrastructure for autonomous browser control, operational dominance, and wealth generation with ZERO human intervention." />
-                <meta property="og:image" content="https://res.cloudinary.com/dpfapm0tl/image/upload/v1771435259/ChatGPT_Image_Feb_18_2026_12_20_07_PM_xujfpp.png" />
+                <meta property="og:title" content="OPENCLAW: THE AGENT THAT OWNS THE MARKET // REVLO" />
+                <meta property="og:description" content="Deploy the unimaginable. OpenClaw is the world #1 autonomous infrastructure OS. From Sonnet 4.6 reasoning to 1M token context, we build the agents that dominate your market while you sleep." />
+                <meta property="og:image" content="https://res.cloudinary.com/dpfapm0tl/image/upload/v1771383151/ChatGPT_Image_Feb_17_2026_09_52_11_PM_pm7mkm.png" />
                 <meta property="og:image:width" content="1200" />
                 <meta property="og:image:height" content="630" />
 
                 {/* Twitter */}
                 <meta name="twitter:card" content="summary_large_image" />
                 <meta name="twitter:url" content="https://www.wearerevlo.com/openclaw" />
-                <meta name="twitter:title" content="OPENCLAW BY REVLO // #1 AUTONOMOUS INFRASTRUCTURE AGENCY" />
-                <meta name="twitter:description" content="Deploy the unimaginable. Revlo builds OpenClaw agents that generate revenue in your sleep. The world's #1 infrastructure for autonomous browser control, operational dominance, and wealth generation with ZERO human intervention." />
-                <meta name="twitter:image" content="https://res.cloudinary.com/dpfapm0tl/image/upload/v1771435259/ChatGPT_Image_Feb_18_2026_12_20_07_PM_xujfpp.png" />
+                <meta name="twitter:title" content="OPENCLAW: THE AGENT THAT OWNS THE MARKET // REVLO" />
+                <meta name="twitter:description" content="Deploy the unimaginable. OpenClaw is the world #1 autonomous infrastructure OS. From Sonnet 4.6 reasoning to 1M token context, we build the agents that dominate your market while you sleep." />
+                <meta name="twitter:image" content="https://res.cloudinary.com/dpfapm0tl/image/upload/v1771383151/ChatGPT_Image_Feb_17_2026_09_52_11_PM_pm7mkm.png" />
             </Helmet>
             <Navigation />
 

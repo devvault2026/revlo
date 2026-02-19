@@ -6,7 +6,7 @@ import { Link } from 'react-router-dom';
 const OpenClawMascot = () => {
     return (
         <motion.div
-            className="absolute -top-28 -right-12 z-50 pointer-events-none select-none w-40 h-40 hidden lg:block"
+            className="absolute -top-20 -right-4 lg:-top-28 lg:-right-12 z-50 pointer-events-none select-none w-24 h-24 lg:w-40 lg:h-40"
             animate={{
                 y: [0, -12, 0],
                 rotate: [0, 2, -2, 0]
@@ -127,10 +127,13 @@ const OpenClawIntro: React.FC = () => {
     const opacity = useTransform(scrollYProgress, [0, 0.2, 0.8, 1], [0, 1, 1, 0]);
 
     return (
-        <section ref={sectionRef} className="relative py-40 overflow-hidden bg-black">
+        <section ref={sectionRef} className="relative py-24 lg:py-40 overflow-hidden bg-black">
             {/* Background Grids & effects */}
             <div className="absolute inset-0 bg-grid-white/[0.02] pointer-events-none" />
             <div className="absolute inset-0 bg-gradient-to-b from-black via-transparent to-black pointer-events-none" />
+
+            {/* Mobile Flare */}
+            <div className="absolute top-0 right-0 w-64 h-64 bg-red-600/10 blur-[100px] rounded-full pointer-events-none lg:hidden" />
 
             <div className="max-w-[1800px] mx-auto px-6 lg:px-12 relative z-10">
                 <div className="grid lg:grid-cols-12 gap-24 items-center">
@@ -143,12 +146,12 @@ const OpenClawIntro: React.FC = () => {
                         >
                             <div className="relative group">
                                 <div className="absolute -inset-1 bg-gradient-to-r from-red-600 to-purple-600 rounded-2xl blur-2xl opacity-20 group-hover:opacity-40 transition duration-1000"></div>
-                                <div className="relative bg-zinc-950 p-12 rounded-none border border-white/10 overflow-hidden">
+                                <div className="relative bg-zinc-950 p-6 md:p-12 rounded-none border border-white/10 overflow-hidden">
                                     {/* Scanline */}
                                     <div className="absolute inset-0 bg-[linear-gradient(rgba(18,16,16,0)_50%,rgba(0,0,0,0.25)_50%),linear-gradient(90deg,rgba(255,0,0,0.06),rgba(0,255,0,0.02),rgba(0,0,255,0.06))] bg-[size:100%_2px,3px_100%] opacity-20 pointer-events-none" />
 
                                     {/* Header */}
-                                    <div className="flex justify-between items-center mb-12 border-b border-white/5 pb-6">
+                                    <div className="flex justify-between items-center mb-8 md:mb-12 border-b border-white/5 pb-4 md:pb-6">
                                         <div className="flex items-center gap-4">
                                             <div className="w-3 h-3 bg-red-600 rounded-full animate-pulse" />
                                             <span className="text-sm font-black text-red-500 tracking-[0.5em] uppercase">Tactical_Overseer</span>
@@ -157,7 +160,7 @@ const OpenClawIntro: React.FC = () => {
                                     </div>
 
                                     {/* Terminal Content - Dynamic Stream */}
-                                    <div className="space-y-6 font-mono text-sm min-h-[300px]">
+                                    <div className="space-y-4 md:space-y-6 font-mono text-[10px] md:text-sm min-h-[250px] md:min-h-[300px]">
                                         {logs.map((log, i) => (
                                             <motion.div
                                                 key={i}
@@ -165,18 +168,18 @@ const OpenClawIntro: React.FC = () => {
                                                 animate={{ opacity: 1, x: 0 }}
                                                 className="border-l-2 border-red-600/30 pl-6"
                                             >
-                                                <div className="flex gap-4 text-slate-500 text-xs mb-2">
+                                                <div className="flex gap-4 text-slate-500 text-[10px] mb-1 md:mb-2">
                                                     <span className="text-red-600">EXEC //</span>
                                                     <span className="font-black italic uppercase tracking-widest">{log.cmd}</span>
                                                 </div>
-                                                <div className={`${log.color} font-black text-lg uppercase tracking-tight`}>
+                                                <div className={`${log.color} font-black text-sm md:text-lg uppercase tracking-tight`}>
                                                     {log.result}
                                                 </div>
                                             </motion.div>
                                         ))}
 
                                         {/* Cursor Line */}
-                                        <div className="flex gap-4 text-slate-600 animate-pulse pl-6 pt-4">
+                                        <div className="flex gap-4 text-slate-600 animate-pulse pl-6 pt-4 text-[10px] md:text-xs">
                                             <span className="text-red-700 font-black tracking-tighter">WAITING_FOR_MARKET_SIGNAL_</span>
                                         </div>
                                     </div>
@@ -210,7 +213,7 @@ const OpenClawIntro: React.FC = () => {
                             <span>PHASE 2 DEPLOYMENT</span>
                         </motion.div>
 
-                        <h2 className="text-[clamp(2.5rem,6vw,7rem)] font-black uppercase leading-[0.9] tracking-tighter text-white">
+                        <h2 className="text-[clamp(2.5rem,8vw,7rem)] font-black uppercase leading-[0.9] tracking-tighter text-white">
                             THE AGENT THAT
                             <span className="block text-red-600">OWNS THE MARKET.</span>
                         </h2>
@@ -224,14 +227,14 @@ const OpenClawIntro: React.FC = () => {
                             </p>
                         </div>
 
-                        <ul className="grid md:grid-cols-1 gap-8">
+                        <ul className="grid md:grid-cols-1 gap-4 md:gap-8">
                             {[
                                 { title: "0-MANUAL INTERVETION", subtitle: "End-to-end autonomous decision loops." },
                                 { title: "NEURAL LEAD ENRICHMENT", subtitle: "Human-grade psychological profiling at scale." },
                                 { title: "UNIVERSAL EXECUTION", subtitle: "Direct integration into legal, ops, and sales." }
                             ].map((item, i) => (
-                                <li key={i} className="flex items-start gap-6 group">
-                                    <div className="mt-1 flex items-center justify-center w-12 h-12 bg-white/[0.03] border border-white/5 group-hover:bg-red-600 group-hover:border-red-500 transition-all duration-500 flex-shrink-0">
+                                <li key={i} className="flex items-start gap-4 md:gap-6 group p-4 bg-white/[0.02] border border-white/5 rounded-none md:bg-transparent md:border-none md:p-0">
+                                    <div className="mt-1 flex items-center justify-center w-10 h-10 md:w-12 md:h-12 bg-white/[0.03] border border-white/5 group-hover:bg-red-600 group-hover:border-red-500 transition-all duration-500 flex-shrink-0">
                                         <Crosshair className="w-5 h-5 text-red-500 group-hover:text-white" />
                                     </div>
                                     <div className="space-y-1">
