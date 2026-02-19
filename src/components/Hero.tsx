@@ -2,26 +2,85 @@ import React, { useState, useEffect } from 'react';
 import { motion, AnimatePresence } from 'framer-motion';
 import { ArrowRight, TrendingUp, Rocket, Zap, ShieldCheck, Activity, Bell, MessageSquare, PhoneIncoming, DollarSign, Calendar } from 'lucide-react';
 
-const leadNotifications = [
-    { type: 'message', sender: 'Sarah Johnson', content: "Just saw your ad, can we talk about the project?", time: 'NOW', color: 'text-green-400', icon: '💬' },
-    { type: 'call', sender: 'Unknown (404)', content: "Missed Call", time: '2m ago', color: 'text-red-400', icon: '📞' },
-    { type: 'message', sender: 'Michael Chen', content: "The proposal looks amazing. Sending the deposit now.", time: '5m ago', color: 'text-blue-400', icon: '💬' },
-    { type: 'payment', sender: 'STRIPE', content: "Payment received: $2,500.00", time: '12m ago', color: 'text-purple-400', icon: '💰' },
-    { type: 'calendar', sender: 'CALENDLY', content: "New Lead Booked: 2:30 PM Tomorrow", time: '15m ago', color: 'text-blue-400', icon: '📅' },
-    { type: 'message', sender: 'David K.', content: "Found your company on LinkedIn, let's connect.", time: '22m ago', color: 'text-green-400', icon: '💬' },
-];
-
 const Hero: React.FC = () => {
-    const [currentNotificationIndex, setCurrentNotificationIndex] = useState(0);
     const [currentTime, setCurrentTime] = useState(new Date());
+    const [stats, setStats] = useState({
+        calls: 142402,
+        leads: 894320,
+        revenue: 42450000,
+        uptime: 99.99
+    });
+
+    interface Notification {
+        id: number;
+        app: string;
+        title: string;
+        body: string;
+        icon: React.ReactNode;
+        color: string;
+        time: string;
+    }
+
+    const [activeNotifications, setActiveNotifications] = useState<Notification[]>([]);
+
+    const notificationPool: Omit<Notification, 'id'>[] = [
+        { app: 'Stripe', title: 'Payment Received', body: '$85,750.00 from HyperScale Corp.', icon: <DollarSign className="w-4 h-4 text-white" />, color: 'bg-indigo-600', time: 'now' },
+        { app: 'RevloClaw', title: 'Task Completed', body: 'Neural lead extraction for EMEA finished (12,402 leads).', icon: <Zap className="w-4 h-4 text-white" />, color: 'bg-red-600', time: 'just now' },
+        { app: 'Messages', title: 'Jaryd OS', body: 'Q1 revenue just crossed the $4.2M mark. Scale up.', icon: <MessageSquare className="w-4 h-4 text-white" />, color: 'bg-green-500', time: 'now' },
+        { app: 'Discord', title: 'Operations Node', body: 'Deployment of 150 AI sales clones complete.', icon: <Activity className="w-4 h-4 text-white" />, color: 'bg-[#5865F2]', time: 'just now' },
+        { app: 'Mail', title: 'Contract Signed', body: 'Global Logistics partnership sealed ($500k ARR).', icon: <ShieldCheck className="w-4 h-4 text-white" />, color: 'bg-emerald-500', time: '2m ago' },
+        { app: 'Stripe', title: 'Payout Scheduled', body: '$412,000.00 arriving in 24 hours.', icon: <DollarSign className="w-4 h-4 text-white" />, color: 'bg-indigo-600', time: 'now' },
+        { app: 'Discord', title: 'Market Pulse', body: 'High-intent signal cluster detected in Fintech.', icon: <Activity className="w-4 h-4 text-white" />, color: 'bg-[#5865F2]', time: 'just now' },
+        { app: 'RevloClaw', title: 'Scrape Success', body: 'Competitor alpha sources successfully mapped.', icon: <Zap className="w-4 h-4 text-white" />, color: 'bg-red-600', time: '5m ago' },
+        { app: 'Messages', title: 'The Core', body: 'Autonomous marketing ROI is currently 1,420%.', icon: <PhoneIncoming className="w-4 h-4 text-white" />, color: 'bg-green-500', time: 'now' },
+        { app: 'Stripe', title: 'New Multi-Year Deal', body: '$250,000.00 upfront payment verified.', icon: <DollarSign className="w-4 h-4 text-white" />, color: 'bg-indigo-600', time: 'now' },
+        { app: 'Mail', title: 'Strategic Intro', body: 'Managing Director at Sequoia requested a call.', icon: <Bell className="w-4 h-4 text-white" />, color: 'bg-red-500', time: '12m ago' },
+        { app: 'RevloClaw', title: 'Neural Update', body: 'Model weights optimized. Closing rate +14%.', icon: <Zap className="w-4 h-4 text-white" />, color: 'bg-red-600', time: 'just now' },
+        { app: 'Discord', title: 'Global Sync', body: '9 nodes expanded to 42. Infinite horizontal scale.', icon: <Activity className="w-4 h-4 text-white" />, color: 'bg-[#5865F2]', time: 'now' },
+        { app: 'Messages', title: 'Alpha Strategist', body: 'Market dominance achieved in Real Estate vertical.', icon: <MessageSquare className="w-4 h-4 text-white" />, color: 'bg-green-500', time: 'now' },
+        { app: 'Stripe', title: 'Transfer Complete', body: '$1,200,000.00 successfully bridged to treasury.', icon: <DollarSign className="w-4 h-4 text-white" />, color: 'bg-indigo-600', time: 'now' },
+        { app: 'Mail', title: 'Acquisition Inquiry', body: 'T1 Private Equity firm scoping Revlo assets.', icon: <Bell className="w-4 h-4 text-white" />, color: 'bg-red-500', time: '1h ago' },
+        { app: 'RevloClaw', title: 'Automation Win', body: 'Closed Alpha Corp ($50k) without human input.', icon: <ShieldCheck className="w-4 h-4 text-white" />, color: 'bg-emerald-500', time: 'now' },
+        { app: 'Discord', title: 'Neural Core', body: 'LLM pass #84 finalized. Sentiment accuracy: 99.8%.', icon: <Activity className="w-4 h-4 text-white" />, color: 'bg-[#5865F2]', time: 'now' },
+        { app: 'Messages', title: 'Growth Vault', body: 'Viral loop initiated. Users +14,000 in 2 hours.', icon: <Rocket className="w-4 h-4 text-white" />, color: 'bg-green-500', time: 'now' },
+        { app: 'Stripe', title: 'Partner Payout', body: '$62,400.00 commission distributed to nodes.', icon: <DollarSign className="w-4 h-4 text-white" />, color: 'bg-indigo-600', time: '2h ago' },
+        { app: 'Mail', title: 'Gov. Contract', body: 'Preliminary approval for agency-wide deployment.', icon: <Bell className="w-4 h-4 text-white" />, color: 'bg-red-500', time: 'now' },
+        { app: 'RevloClaw', title: 'Task Completed', body: 'Competitor 10-K analysis finished. Arbitrage found.', icon: <Zap className="w-4 h-4 text-white" />, color: 'bg-red-600', time: 'now' },
+        { app: 'Discord', title: 'Infrastructure', body: 'Auto-scaling triggered. Cluster capacity +400%.', icon: <Activity className="w-4 h-4 text-white" />, color: 'bg-[#5865F2]', time: 'now' },
+        { app: 'Messages', title: 'Strategic Op', body: 'Signal-to-close ratio hit all-time high of 42%.', icon: <TrendingUp className="w-4 h-4 text-white" />, color: 'bg-green-500', time: 'now' },
+        { app: 'Stripe', title: 'Revenue Surge', body: 'Last hour: $142,500.00 in new MRR processed.', icon: <DollarSign className="w-4 h-4 text-white" />, color: 'bg-indigo-600', time: 'now' },
+        { app: 'Mail', title: 'White Label Op', body: 'Global Agency requesting enterprise license.', icon: <Bell className="w-4 h-4 text-white" />, color: 'bg-red-500', time: 'now' },
+        { app: 'RevloClaw', title: 'Scrape Success', body: 'LinkedIn database sync complete (8M records).', icon: <Zap className="w-4 h-4 text-white" />, color: 'bg-red-600', time: 'just now' },
+        { app: 'Discord', title: 'Security Node', body: 'Attempted breach neutralized. Zero data loss.', icon: <ShieldCheck className="w-4 h-4 text-white" />, color: 'bg-[#5865F2]', time: '3h ago' },
+        { app: 'Messages', title: 'Empire Core', body: 'Wealth generation metrics are off the charts.', icon: <MessageSquare className="w-4 h-4 text-white" />, color: 'bg-green-500', time: 'now' },
+        { app: 'Stripe', title: 'Payment Success', body: '$25,000.00 from Fintech Vanguard.', icon: <DollarSign className="w-4 h-4 text-white" />, color: 'bg-indigo-600', time: 'now' }
+    ];
 
     useEffect(() => {
-        const timer = setInterval(() => {
-            setCurrentNotificationIndex((prev) => (prev + 1) % leadNotifications.length);
-        }, 3500);
-        const clockTimer = setInterval(() => setCurrentTime(new Date()), 60000);
+        const interval = setInterval(() => {
+            setStats(prev => ({
+                ...prev,
+                calls: prev.calls + Math.floor(Math.random() * 2),
+                leads: prev.leads + Math.floor(Math.random() * 3),
+                revenue: prev.revenue + Math.floor(Math.random() * 100),
+            }));
+
+            // Randomly push a new notification
+            if (Math.random() > 0.6) {
+                const randomItem = notificationPool[Math.floor(Math.random() * notificationPool.length)];
+                const randomNotif = { ...randomItem, id: Date.now() };
+                setActiveNotifications(prev => [randomNotif, ...prev].slice(0, 5));
+            }
+        }, 2500);
+
+        const clockTimer = setInterval(() => setCurrentTime(new Date()), 1000);
+
+        // Initial set of notifications
+        const initialNotifs = notificationPool.slice(0, 4).map((n, i) => ({ ...n, id: i }));
+        setActiveNotifications(initialNotifs);
+
         return () => {
-            clearInterval(timer);
+            clearInterval(interval);
             clearInterval(clockTimer);
         };
     }, []);
@@ -33,279 +92,280 @@ const Hero: React.FC = () => {
         }
     };
 
-    const scrollToRevloOS = () => {
-        const element = document.getElementById('revlo-os');
-        if (element) {
-            element.scrollIntoView({ behavior: 'smooth' });
-        }
-    };
-
     return (
-        <section id="home" className="relative min-h-screen flex items-center pt-20 overflow-hidden bg-[#020408]">
-            {/* DYNAMIC MESH BACKGROUND */}
-            <div className="absolute inset-0 z-0 pointer-events-none">
+        <section id="home" className="relative min-h-screen flex items-center pt-32 pb-20 overflow-hidden bg-black">
+            {/* HYPER-TECH BACKGROUND */}
+            <div className="absolute inset-0 z-0 overflow-hidden">
+                <div className="absolute inset-0 bg-[radial-gradient(circle_at_50%_50%,rgba(17,24,39,1)_0%,rgba(0,0,0,1)_100%)]" />
+
+                {/* Visualizing "The Core" */}
                 <motion.div
                     animate={{
-                        x: [0, 100, -50, 0],
-                        y: [0, -100, 50, 0],
-                        scale: [1, 1.2, 0.8, 1],
+                        scale: [1, 1.1, 1],
+                        opacity: [0.3, 0.5, 0.3],
+                        rotate: [0, 90, 180, 270, 360]
                     }}
-                    transition={{ duration: 25, repeat: Infinity, ease: "easeInOut" }}
-                    className="absolute top-[-10%] left-[-10%] w-[80%] h-[80%] bg-purple-600/10 rounded-full blur-[120px]"
+                    transition={{ duration: 20, repeat: Infinity, ease: "linear" }}
+                    className="absolute top-1/2 left-1/2 -translate-x-1/2 -translate-y-1/2 w-[800px] h-[800px] border border-red-500/20 rounded-full blur-[2px]"
                 />
                 <motion.div
                     animate={{
-                        x: [0, -150, 100, 0],
-                        y: [0, 100, -150, 0],
-                        scale: [1, 1.3, 0.9, 1],
+                        scale: [1.2, 1, 1.2],
+                        opacity: [0.1, 0.2, 0.1],
+                        rotate: [360, 270, 180, 90, 0]
                     }}
-                    transition={{ duration: 30, repeat: Infinity, ease: "easeInOut" }}
-                    className="absolute bottom-[-20%] right-[-10%] w-[90%] h-[90%] bg-blue-600/10 rounded-full blur-[140px]"
+                    transition={{ duration: 25, repeat: Infinity, ease: "linear" }}
+                    className="absolute top-1/2 left-1/2 -translate-x-1/2 -translate-y-1/2 w-[1000px] h-[1000px] border border-purple-500/10 rounded-full"
                 />
-                <motion.div
-                    animate={{
-                        x: [0, 120, -100, 0],
-                        y: [0, 80, -120, 0],
-                        scale: [1, 1.1, 1.2, 1],
-                    }}
-                    transition={{ duration: 22, repeat: Infinity, ease: "easeInOut" }}
-                    className="absolute top-[20%] right-[10%] w-[60%] h-[60%] bg-red-600/10 rounded-full blur-[110px]"
-                />
-                <div className="absolute inset-0 bg-grid-white opacity-[0.02]" />
+
+                <div className="absolute inset-0 bg-[url('https://grainy-gradients.vercel.app/noise.svg')] opacity-20 brightness-50" />
+                <div className="absolute inset-0 bg-grid-white/[0.02] bg-[size:40px_40px]" />
             </div>
 
-            <div className="relative z-10 max-w-7xl mx-auto px-6 lg:px-8 py-20">
-                <div className="grid lg:grid-cols-2 gap-12 items-center">
-                    {/* Content */}
-                    <div className="space-y-10">
-                        <motion.div
-                            initial={{ opacity: 0, y: 20 }}
-                            animate={{ opacity: 1, y: 0 }}
-                            className="flex flex-col items-start gap-4"
-                        >
-                            <a href="/openclaw" className="group relative inline-flex items-center gap-3 px-3 py-1 bg-red-500/10 border border-red-500/20 rounded-full hover:bg-red-500/20 transition-all cursor-pointer">
-                                <span className="relative flex h-2 w-2">
-                                    <span className="animate-ping absolute inline-flex h-full w-full rounded-full bg-red-500 opacity-75"></span>
-                                    <span className="relative inline-flex rounded-full h-2 w-2 bg-red-500"></span>
-                                </span>
-                                <span className="text-[10px] font-black uppercase tracking-[0.2em] text-red-400 group-hover:text-red-300 transition-colors">
-                                    #1 NEW OFFER: DEPLOY OPENCLAW AGENT
-                                </span>
-                                <ArrowRight className="w-3 h-3 text-red-400 group-hover:translate-x-1 transition-transform" />
-                            </a>
+            <div className="relative z-10 max-w-[1800px] mx-auto px-6 lg:px-12 w-full">
+                <div className="grid lg:grid-cols-12 gap-16 items-start">
 
-                            <div className="inline-flex items-center gap-3 px-4 py-2 glass rounded-full">
-                                <div className="w-2 h-2 bg-green-500 rounded-full animate-pulse" />
-                                <span className="text-[10px] font-black uppercase tracking-[0.3em] text-purple-400">
-                                    Status: Building the Future
+                    {/* LEFT COLUMN: THE OFFER */}
+                    <div className="lg:col-span-12 xl:col-span-7 space-y-12 relative z-10">
+                        <motion.div
+                            initial={{ opacity: 0, x: -20 }}
+                            animate={{ opacity: 1, x: 0 }}
+                            className="flex flex-col items-start gap-6"
+                        >
+                            <div className="inline-flex items-center gap-4 px-6 py-2 bg-red-600/10 border border-red-600/30 rounded-full backdrop-blur-md">
+                                <span className="relative flex h-3 w-3">
+                                    <span className="animate-ping absolute inline-flex h-full w-full rounded-full bg-red-500 opacity-75"></span>
+                                    <span className="relative inline-flex rounded-full h-3 w-3 bg-red-500"></span>
+                                </span>
+                                <span className="text-[12px] font-black uppercase tracking-[0.4em] text-red-500">
+                                    DEBUNKING THE AGENCY MYTH: WE ARE THE CORE ENGINE.
                                 </span>
                             </div>
                         </motion.div>
 
                         <div className="space-y-8">
                             <motion.h1
-                                initial={{ opacity: 0, x: -30 }}
-                                animate={{ opacity: 1, x: 0 }}
-                                transition={{ duration: 0.8 }}
-                                className="text-6xl lg:text-8xl font-black font-display leading-[0.85] tracking-tighter italic overflow-visible py-4"
+                                initial={{ opacity: 0, y: 30 }}
+                                animate={{ opacity: 1, y: 0 }}
+                                transition={{ duration: 0.8, ease: [0.16, 1, 0.3, 1] }}
+                                className="text-[clamp(2.5rem,8vw,7.5rem)] font-black leading-[0.9] tracking-[-0.04em] uppercase"
                             >
-                                <span className="block text-white">IRREFUTABLE</span>
-                                <span className="inline-block gradient-text pr-24 pb-4 whitespace-nowrap">ELITE SCALE.</span>
+                                <span className="block text-white opacity-40">FULLY</span>
+                                <span className="block text-white">AUTONOMOUS</span>
+                                <span className="inline-block gradient-text-alt pb-4">EMPIRES.</span>
                             </motion.h1>
 
-                            <motion.p
+                            <motion.div
                                 initial={{ opacity: 0, y: 20 }}
                                 animate={{ opacity: 1, y: 0 }}
-                                transition={{ delay: 0.4 }}
-                                className="text-xl lg:text-3xl text-slate-400 leading-tight max-w-2xl font-bold tracking-tight"
+                                transition={{ delay: 0.3 }}
+                                className="max-w-3xl"
                             >
-                                The New Standard in AI Agents & Digital Design. <br />
-                                <span className="text-white/80">I build the systems that build your business—from Human-Grade Voice AI to World-Class Web Design starting at $750. No jargon. Just scale.</span>
-                            </motion.p>
+                                <p className="text-lg lg:text-2xl font-bold text-slate-400 uppercase tracking-tight leading-tight">
+                                    We don't build software. we deploy <span className="text-white">self-selling, self-operating, self-evolving</span> digital machines that generate irrefutable market dominance.
+                                </p>
+                            </motion.div>
                         </div>
 
                         <motion.div
-                            initial={{ opacity: 0, y: 20 }}
+                            initial={{ opacity: 0, y: 30 }}
                             animate={{ opacity: 1, y: 0 }}
                             transition={{ delay: 0.5 }}
-                            className="flex flex-wrap gap-6"
+                            className="flex flex-wrap gap-8 items-center"
                         >
                             <motion.button
                                 onClick={scrollToContact}
-                                className="group px-12 py-6 bg-white text-black font-black uppercase tracking-widest text-sm rounded-2xl shadow-2xl hover:bg-slate-200 transition-all duration-300 flex items-center gap-3"
-                                whileHover={{ scale: 1.05, y: -2 }}
-                                whileTap={{ scale: 0.95 }}
+                                className="group relative px-10 py-6 bg-white text-black font-black uppercase tracking-[0.2em] text-base rounded-none hover:bg-red-600 hover:text-white transition-all duration-500 shadow-[15px_15px_0px_rgba(255,255,255,0.1)] hover:shadow-[0px_0px_40px_rgba(239,68,68,0.4)]"
+                                whileHover={{ scale: 1.02, y: -2 }}
+                                whileTap={{ scale: 0.98 }}
                             >
-                                PARTNER WITH ME
-                                <ArrowRight className="w-4 h-4 group-hover:translate-x-1 transition-transform" />
+                                INITIATE DEPLOYMENT
+                                <div className="absolute -top-1 -right-1 w-3 h-3 bg-red-500" />
+                                <div className="absolute -bottom-1 -left-1 w-3 h-3 bg-red-500" />
                             </motion.button>
 
-                            <motion.button
-                                onClick={scrollToRevloOS}
-                                className="px-12 py-6 glass text-white font-black uppercase tracking-widest text-sm rounded-2xl hover:bg-white/10 transition-all duration-300"
-                                whileHover={{ scale: 1.05, y: -2 }}
-                                whileTap={{ scale: 0.95 }}
-                            >
-                                OUR STRATEGY
-                            </motion.button>
-                        </motion.div>
-
-                        {/* Interactive Stats */}
-                        <motion.div
-                            initial={{ opacity: 0 }}
-                            animate={{ opacity: 1 }}
-                            transition={{ delay: 0.8 }}
-                            className="flex gap-12 pt-10 border-t border-white/5"
-                        >
-                            {[
-                                { label: 'Revenue Growth', value: '347%' },
-                                { label: 'Leads / Mo', value: '12,500' },
-                                { label: 'System Uptime', value: '99.9%' }
-                            ].map((stat, i) => (
-                                <div key={i} className="space-y-2">
-                                    <div className="text-3xl font-black font-display text-white tracking-tighter">
-                                        {stat.value}
-                                    </div>
-                                    <div className="text-[9px] font-black uppercase tracking-[0.2em] text-slate-500">
-                                        {stat.label}
-                                    </div>
-                                </div>
-                            ))}
+                            <div className="space-y-1">
+                                <div className="text-[10px] font-black text-white/40 uppercase tracking-[0.4em]">Starting from</div>
+                                <div className="text-xl font-black text-white tracking-widest uppercase italic">$15k / mo partnerships</div>
+                            </div>
                         </motion.div>
                     </div>
 
-                    {/* Enhanced iPhone Mockup */}
-                    <div className="relative h-[800px] flex items-center justify-center lg:justify-end">
-                        {/* Floating Interaction Nodes */}
+                    {/* RIGHT COLUMN: THE IPHONE 17 PRO COMMAND CENTER */}
+                    <div className="lg:col-span-12 xl:col-span-5 flex justify-end items-center lg:mt-24 xl:mt-0 xl:translate-x-20">
                         <motion.div
-                            animate={{ y: [0, -15, 0] }}
-                            transition={{ duration: 4, repeat: Infinity, ease: "easeInOut" }}
-                            className="absolute top-10 -left-10 z-20 p-5 glass rounded-3xl shadow-2xl backdrop-blur-3xl border border-white/20"
-                        >
-                            <div className="flex items-center gap-4">
-                                <div className="w-12 h-12 bg-gradient-to-br from-purple-500 to-blue-500 rounded-2xl flex items-center justify-center shadow-lg">
-                                    <Activity className="text-white w-6 h-6" />
-                                </div>
-                                <div>
-                                    <div className="text-[9px] font-black text-slate-400 uppercase tracking-widest mb-1">Neural Load</div>
-                                    <div className="text-2xl font-black text-white leading-none tracking-tighter text-glow">89.4%</div>
-                                </div>
-                            </div>
-                        </motion.div>
-
-                        <motion.div
-                            animate={{ y: [0, 15, 0] }}
-                            transition={{ duration: 5, repeat: Infinity, ease: "easeInOut", delay: 0.5 }}
-                            className="absolute bottom-40 -right-10 z-20 p-5 glass rounded-3xl shadow-2xl backdrop-blur-3xl border border-white/20"
-                        >
-                            <div className="flex items-center gap-4">
-                                <div className="w-12 h-12 bg-gradient-to-br from-red-500 to-purple-600 rounded-2xl flex items-center justify-center shadow-lg">
-                                    <Zap className="text-white w-6 h-6" />
-                                </div>
-                                <div>
-                                    <div className="text-[9px] font-black text-slate-400 uppercase tracking-widest mb-1">Deployments</div>
-                                    <div className="text-2xl font-black text-white leading-none tracking-tighter text-glow">1,402</div>
-                                </div>
-                            </div>
-                        </motion.div>
-
-                        {/* Phone Container */}
-                        <motion.div
-                            initial={{ rotateY: -15, rotateX: 5, y: -30, x: -10, opacity: 0 }}
-                            animate={{ rotateY: -5, rotateX: 0, y: -60, x: -30, opacity: 1 }}
-                            transition={{ duration: 1, delay: 0.5 }}
+                            initial={{ opacity: 0, scale: 0.8, rotateY: 15, x: 100 }}
+                            animate={{ opacity: 1, scale: 1, rotateY: 0, x: 0 }}
+                            transition={{ duration: 1.5, ease: [0.22, 1, 0.36, 1] }}
                             className="relative"
                         >
-                            {/* Outer Glow */}
-                            <div className="absolute inset-0 bg-purple-500/10 blur-[100px] rounded-full animate-pulse" />
+                            <motion.div
+                                animate={{
+                                    y: [0, -20, 0],
+                                    rotateZ: [0, 1, 0],
+                                    rotateY: [0, 5, 0]
+                                }}
+                                transition={{ duration: 8, repeat: Infinity, ease: "easeInOut" }}
+                                className="relative z-10"
+                            >
+                                {/* THE IPHONE 17 PRO (ZERO BEZEL) */}
+                                <div className="relative w-[360px] h-[740px] bg-zinc-950 rounded-[4.5rem] p-[2px] shadow-[0_0_100px_rgba(0,0,0,0.8)] overflow-hidden border border-white/10 group">
+                                    {/* Titanium Frame Layer */}
+                                    <div className="absolute inset-0 bg-gradient-to-tr from-zinc-800 via-zinc-400/20 to-zinc-800" />
 
-                            {/* Device Frame */}
-                            <div className="relative w-[300px] h-[620px] bg-slate-900 rounded-[3.5rem] p-3 shadow-[0_0_100px_rgba(139,92,246,0.2)] border border-white/10">
-                                <div className="w-full h-full bg-black rounded-[2.8rem] overflow-hidden relative">
-                                    {/* Dynamic Island */}
-                                    <div className="absolute top-0 left-1/2 -translate-x-1/2 w-32 h-8 bg-black rounded-b-3xl z-50 flex items-center justify-center">
-                                        <div className="w-1.5 h-1.5 bg-green-500 rounded-full animate-pulse mr-2" />
-                                        <div className="text-[8px] font-black text-white/40 tracking-[0.2em] uppercase">SYSTEM ONLINE</div>
-                                    </div>
+                                    {/* Glass Screen */}
+                                    <div className="absolute inset-[4px] rounded-[4.3rem] overflow-hidden bg-black flex flex-col items-center shadow-inner">
+                                        <div className="absolute inset-0 bg-[url('https://grainy-gradients.vercel.app/noise.svg')] opacity-[0.05] mix-blend-overlay" />
+                                        <div className="absolute inset-0 bg-gradient-to-b from-zinc-900/50 via-black to-black" />
 
-                                    {/* UI Screen Content */}
-                                    <div className="absolute inset-0 bg-[#020408] pt-14 p-4 flex flex-col">
-                                        {/* Clock Area */}
-                                        <div className="text-center mt-4 mb-8">
-                                            <div className="text-5xl font-light text-white tracking-tighter">
-                                                {currentTime.toLocaleTimeString([], { hour: '2-digit', minute: '2-digit', hour12: false })}
-                                            </div>
-                                            <div className="text-[10px] font-black text-slate-500 uppercase tracking-[0.3em] mt-2">
-                                                {currentTime.toLocaleDateString([], { weekday: 'long', month: 'long', day: 'numeric' })}
-                                            </div>
+                                        {/* Dynamic Island V2 - Floating Glass */}
+                                        <div className="absolute top-4 w-28 h-7 bg-black/60 backdrop-blur-3xl rounded-full z-50 flex items-center justify-between px-3 border border-white/10">
+                                            <div className="w-1 h-1 bg-blue-500 rounded-full animate-pulse" />
+                                            <div className="w-8 h-1 bg-white/10 rounded-full" />
+                                            <div className="w-1.5 h-1.5 bg-zinc-800 rounded-full" />
                                         </div>
 
-                                        {/* Incoming Load Feed */}
-                                        <div className="flex-1 relative overflow-hidden px-1">
-                                            <div className="absolute inset-0 z-10 pointer-events-none bg-gradient-to-b from-[#020408]/20 via-transparent to-[#020408]/80" />
+                                        {/* iOS 22 Interface */}
+                                        <div className="w-full h-full flex flex-col items-center pt-28 px-4 z-10 relative overflow-hidden">
+                                            {/* Clock */}
+                                            <motion.div
+                                                className="text-7xl font-thin text-white tracking-widest mb-1 font-sans"
+                                                animate={{ opacity: [0.8, 1, 0.8] }}
+                                                transition={{ duration: 4, repeat: Infinity }}
+                                            >
+                                                {currentTime.toLocaleTimeString([], { hour: '2-digit', minute: '2-digit' })}
+                                            </motion.div>
+                                            <div className="text-[10px] font-black uppercase tracking-[0.5em] text-white/30 mb-12">
+                                                Wednesday, February 18
+                                            </div>
 
-                                            <div className="space-y-2 pt-4">
+                                            {/* Notifications */}
+                                            <div className="w-full space-y-3 px-2 overflow-y-auto max-h-[420px] scrollbar-none pb-12">
                                                 <AnimatePresence mode="popLayout">
-                                                    {leadNotifications.map((lead, i) => {
-                                                        const isCurrent = i === currentNotificationIndex;
-                                                        const isNext = i === (currentNotificationIndex + 1) % leadNotifications.length;
-                                                        if (!isCurrent && !isNext) return null;
+                                                    {activeNotifications.map((notif) => (
+                                                        <motion.div
+                                                            key={notif.id}
+                                                            initial={{ opacity: 0, y: 30, scale: 0.9, filter: 'blur(10px)' }}
+                                                            animate={{ opacity: 1, y: 0, scale: 1, filter: 'blur(0px)' }}
+                                                            exit={{ opacity: 0, scale: 0.95, filter: 'blur(5px)' }}
+                                                            transition={{ type: "spring", damping: 20, stiffness: 100 }}
+                                                            className="w-full bg-white/[0.05] backdrop-blur-[50px] border border-white/10 rounded-[2.2rem] p-5 flex flex-col gap-1 shadow-2xl relative overflow-hidden"
+                                                        >
+                                                            {/* Apple Glass Highlight */}
+                                                            <div className="absolute top-0 left-0 w-full h-1/2 bg-gradient-to-b from-white/[0.05] to-transparent pointer-events-none" />
 
-                                                        return (
-                                                            <motion.div
-                                                                key={`${lead.sender}-${i}`}
-                                                                initial={{ opacity: 0, y: 10, scale: 0.9 }}
-                                                                animate={{ opacity: 1, y: 0, scale: 1 }}
-                                                                exit={{ opacity: 0, y: -20, scale: 0.95, filter: 'blur(10px)' }}
-                                                                transition={{ duration: 0.5, ease: [0.16, 1, 0.3, 1] }}
-                                                                className="p-4 bg-white/[0.08] backdrop-blur-2xl rounded-[24px] border border-white/10 relative overflow-hidden group shadow-[0_8px_32px_rgba(0,0,0,0.4)]"
-                                                            >
-                                                                <div className="flex items-start gap-3">
-                                                                    <div className={`w-10 h-10 rounded-xl bg-gradient-to-br from-white/10 to-white/5 flex items-center justify-center text-xl shadow-lg border border-white/10`}>
-                                                                        {lead.type === 'message' && <MessageSquare className="w-5 h-5 text-green-400" />}
-                                                                        {lead.type === 'call' && <PhoneIncoming className="w-5 h-5 text-red-400" />}
-                                                                        {lead.type === 'payment' && <DollarSign className="w-5 h-5 text-purple-400" />}
-                                                                        {lead.type === 'calendar' && <Calendar className="w-5 h-5 text-blue-400" />}
+                                                            <div className="flex items-center justify-between mb-1.5">
+                                                                <div className="flex items-center gap-3">
+                                                                    <div className={`w-9 h-9 ${notif.color} rounded-[1rem] flex items-center justify-center shadow-lg transform rotate-2 relative overflow-hidden`}>
+                                                                        {notif.app === 'RevloClaw' ? (
+                                                                            <div className="relative w-full h-full flex items-center justify-center bg-red-600">
+                                                                                {/* Animated OpenClaw Mascot Figure */}
+                                                                                <div className="relative w-6 h-6">
+                                                                                    {/* Antennas */}
+                                                                                    <div className="absolute -top-1 left-1/2 -translate-x-1/2 w-full flex justify-center gap-1.5">
+                                                                                        <motion.div
+                                                                                            animate={{ height: [2, 4, 2], y: [0, -1, 0] }}
+                                                                                            transition={{ duration: 1.5, repeat: Infinity }}
+                                                                                            className="w-[1.5px] bg-white/60 rounded-full"
+                                                                                        />
+                                                                                        <motion.div
+                                                                                            animate={{ height: [4, 2, 4], y: [0, -1, 0] }}
+                                                                                            transition={{ duration: 1.5, repeat: Infinity, delay: 0.2 }}
+                                                                                            className="w-[1.5px] bg-white/60 rounded-full"
+                                                                                        />
+                                                                                    </div>
+                                                                                    {/* Head/Body */}
+                                                                                    <div className="absolute inset-0 bg-black rounded-full flex items-center justify-center border border-white/20 shadow-[0_0_10px_rgba(0,0,0,0.5)]">
+                                                                                        {/* Eyes */}
+                                                                                        <div className="flex gap-1">
+                                                                                            <motion.div
+                                                                                                animate={{ opacity: [1, 0.4, 1], scale: [1, 1.2, 1] }}
+                                                                                                transition={{ duration: 0.2, repeat: Infinity, repeatDelay: 3 }}
+                                                                                                className="w-1.5 h-1.5 bg-cyan-400 rounded-full shadow-[0_0_8px_rgba(34,211,238,1)]"
+                                                                                            />
+                                                                                            <motion.div
+                                                                                                animate={{ opacity: [1, 0.4, 1], scale: [1, 1.2, 1] }}
+                                                                                                transition={{ duration: 0.2, repeat: Infinity, repeatDelay: 3.1 }}
+                                                                                                className="w-1.5 h-1.5 bg-cyan-400 rounded-full shadow-[0_0_8px_rgba(34,211,238,1)]"
+                                                                                            />
+                                                                                        </div>
+                                                                                    </div>
+                                                                                    {/* Scanline Effect */}
+                                                                                    <motion.div
+                                                                                        animate={{ y: [-4, 24] }}
+                                                                                        transition={{ duration: 2, repeat: Infinity, ease: "linear" }}
+                                                                                        className="absolute inset-x-0 h-[1px] bg-cyan-400/20 blur-[0.5px] z-20"
+                                                                                    />
+                                                                                </div>
+                                                                            </div>
+                                                                        ) : notif.icon}
                                                                     </div>
-                                                                    <div className="flex-1 min-w-0">
-                                                                        <div className="flex justify-between items-center mb-0.5">
-                                                                            <span className="text-[11px] font-bold text-white/90 truncate tracking-tight">
-                                                                                {lead.type === 'message' ? 'Messages' :
-                                                                                    lead.type === 'call' ? 'Phone' :
-                                                                                        lead.type === 'payment' ? 'Stripe' : 'Calendar'}
-                                                                            </span>
-                                                                            <span className="text-[9px] font-medium text-white/40 uppercase">{lead.time}</span>
-                                                                        </div>
-                                                                        <div className="text-[12px] font-bold text-white leading-tight mb-0.5">{lead.sender}</div>
-                                                                        <div className="text-[12px] text-white/70 leading-snug line-clamp-2 font-medium">
-                                                                            {lead.content}
-                                                                        </div>
+                                                                    <div className="flex flex-col">
+                                                                        <span className="text-[9px] font-black text-white/40 uppercase tracking-[0.1em]">{notif.app}</span>
+                                                                        <span className="text-[13px] font-black text-white truncate max-w-[140px]">{notif.title}</span>
                                                                     </div>
                                                                 </div>
-                                                            </motion.div>
-                                                        );
-                                                    })}
+                                                                <span className="text-[8px] font-bold text-white/20 uppercase tracking-widest">{notif.time}</span>
+                                                            </div>
+                                                            <div className="text-[11px] font-medium text-white/60 leading-snug px-1 line-clamp-2 italic font-mono">
+                                                                {notif.body}
+                                                            </div>
+                                                        </motion.div>
+                                                    ))}
                                                 </AnimatePresence>
                                             </div>
-                                        </div>
 
-                                        {/* Bottom Action Area */}
-                                        <div className="mt-auto py-6 flex flex-col items-center gap-4">
-                                            <div className="flex gap-12 text-white/40">
-                                                <Zap className="w-6 h-6" />
-                                                <Activity className="w-6 h-6" />
+                                            {/* Lock Screen Tools */}
+                                            <div className="absolute bottom-10 left-0 w-full px-10 flex justify-between z-20">
+                                                <div className="w-14 h-14 rounded-full bg-white/5 backdrop-blur-3xl border border-white/10 flex items-center justify-center text-white/40 group-hover:text-red-500 transition-colors">
+                                                    <Zap className="w-6 h-6" />
+                                                </div>
+                                                <div className="w-14 h-14 rounded-full bg-white/5 backdrop-blur-3xl border border-white/10 flex items-center justify-center text-white/40 group-hover:text-red-500 transition-colors">
+                                                    <ShieldCheck className="w-6 h-6" />
+                                                </div>
                                             </div>
-                                            <div className="w-32 h-1 bg-white/20 rounded-full" />
-                                        </div>
 
-                                        {/* Scanline Effect */}
-                                        <div className="absolute inset-0 pointer-events-none bg-[linear-gradient(rgba(18,16,16,0)_50%,rgba(0,0,0,0.25)_50%),linear-gradient(90deg,rgba(255,0,0,0.06),rgba(0,255,0,0.02),rgba(0,0,255,0.06))] bg-[size:100%_2px,3px_100%] opacity-10" />
+                                            {/* Home Indicator */}
+                                            <div className="absolute bottom-3 w-40 h-1 bg-white/20 rounded-full" />
+                                        </div>
                                     </div>
+
+                                    {/* Screen Reflection Overlay */}
+                                    <div className="absolute inset-0 bg-gradient-to-tr from-white/5 via-transparent to-transparent pointer-events-none z-50 opacity-40" />
                                 </div>
-                            </div>
+                            </motion.div>
+
+                            {/* Massive Ambient Glow */}
+                            <div className="absolute -inset-60 bg-red-600/[0.02] blur-[150px] -z-10 animate-pulse" />
+                            <div className="absolute -inset-40 bg-blue-600/[0.01] blur-[150px] -z-10" />
                         </motion.div>
                     </div>
+
                 </div>
+
+                {/* BOTTOM TIER INFO */}
+                <motion.div
+                    initial={{ opacity: 0, y: 50 }}
+                    animate={{ opacity: 1, y: 0 }}
+                    transition={{ delay: 1 }}
+                    className="mt-32 grid md:grid-cols-4 gap-12 border-t border-white/5 pt-12"
+                >
+                    {[
+                        { label: 'Core Philosophy', value: 'AUTONOMY FIRST' },
+                        { label: 'Market Positioning', value: 'TOP TIER AGENCY' },
+                        { label: 'Technology Stack', value: 'NEURAL INFRA' },
+                        { label: 'Business Model', value: 'SELF-SELLING ASSETS' }
+                    ].map((item, i) => (
+                        <div key={i} className="space-y-2 group cursor-crosshair">
+                            <div className="text-[10px] font-black text-white/30 uppercase tracking-[0.5em] group-hover:text-red-500 transition-colors">
+                                {item.label}
+                            </div>
+                            <div className="text-xl font-black text-white tracking-widest uppercase italic">
+                                {item.value}
+                            </div>
+                        </div>
+                    ))}
+                </motion.div>
             </div>
         </section>
     );

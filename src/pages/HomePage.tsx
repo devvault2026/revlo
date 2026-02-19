@@ -22,12 +22,12 @@ const HomePage: React.FC = () => {
         >
             <Hero />
             <OpenClawIntro />
-            <PromoVideo />
+            <Services />
+            <RevloOS />
             <Results />
             <Manifesto />
+            <PromoVideo />
             <Process />
-            <RevloOS />
-            <Services />
             <Projects />
             <FounderOperator />
             <Contact />

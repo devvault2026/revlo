@@ -82,36 +82,13 @@ const OpenClawMascot = () => {
 };
 
 const terminalActions = [
-    { cmd: "detect_inefficiency --all", result: "[SUCCESS] 4,203 email threads analyzed", color: "text-green-400", delay: 2400 },
-    { cmd: "deploy_agent --context='inbox_zero'", result: "[RUNNING] Autonomous response loops active...", color: "text-blue-400", delay: 3600 },
-    { cmd: "scan_calendar --conflict_mode='aggressive'", result: "[RESOLVED] 3 meetings rescheduled seamlessly", color: "text-purple-400", delay: 3000 },
-    { cmd: "scrape_linkedin --target='CTO' --geo='NYC'", result: "[FOUND] 142 qualified leads extracted", color: "text-yellow-400", delay: 4500 },
-    { cmd: "analyze_pnl --q3_forecast", result: "[ALERT] Revenue opportunity detected in SaaS vertical", color: "text-red-400", delay: 3300 },
-    { cmd: "generate_invoice --client='Acme Corp'", result: "[SENT] Invoice #4429 sent via Stripe", color: "text-green-400", delay: 2700 },
-    { cmd: "book_travel --dest='SF' --pref='business'", result: "[BOOKED] United Flight 492 - Seat 3A", color: "text-blue-400", delay: 4200 },
-    { cmd: "monitor_server_logs --error_rate", result: "[STABLE] 99.99% uptime maintained", color: "text-green-400", delay: 2400 },
-    { cmd: "draft_contract --template='nda_v2'", result: "[READY] Contrast sent for e-signature", color: "text-purple-400", delay: 3000 },
-    { cmd: "optimize_ad_spend --platform='meta'", result: "[SAVED] $1,200/mo in waste removed", color: "text-green-400", delay: 3900 },
-    { cmd: "enrich_data --source='clearbit'", result: "[UPDATED] 5,000+ CRM records enriched", color: "text-blue-400", delay: 3300 },
-    { cmd: "slack_summary --channel='#dev'", result: "[POSTED] Daily standup summary to #general", color: "text-yellow-400", delay: 2700 },
-    { cmd: "git_push --force", result: "[DEPLOYED] Production hotfix live", color: "text-red-400", delay: 2100 },
-    { cmd: "check_competitor_pricing", result: "[INSIGHT] Competitor lowered prices by 15%", color: "text-orange-400", delay: 3600 },
-    { cmd: "schedule_zoom --attendees='all_hands'", result: "[INVITE] Calendar invite sent to 45 people", color: "text-blue-400", delay: 3000 },
-    { cmd: "notion_sync --db='tasks'", result: "[SYNCED] 24 tasks moved to 'Done'", color: "text-purple-400", delay: 2400 },
-    { cmd: "order_supplies --coffee='bulk'", result: "[ORDERED] 50lbs coffee arriving Tuesday", color: "text-green-400", delay: 2700 },
-    { cmd: "audit_security --level='paranoid'", result: "[SECURE] No vulnerabilities detected", color: "text-green-400", delay: 4500 },
-    { cmd: "run_payroll --cycle='bi-weekly'", result: "[PROCESSED] $124,000 disbursed", color: "text-green-400", delay: 3300 },
-    { cmd: "tweet_thread --topic='AI_Agent_Future'", result: "[PUBLISHED] Thread gaining traction (120 likes)", color: "text-blue-400", delay: 3900 },
-    { cmd: "research_topic --query='quantum_computing'", result: "[COMPLETED] 30-page briefing doc generated", color: "text-purple-400", delay: 6000 },
-    { cmd: "negotiate_contract --vendor='aws'", result: "[SUCCESS] Rate reduced by 12%", color: "text-green-400", delay: 4200 },
-    { cmd: "organize_files --folder='downloads'", result: "[CLEANED] 430 files archived", color: "text-yellow-400", delay: 1800 },
-    { cmd: "ping_server --latency", result: "[FAST] 12ms response time", color: "text-green-400", delay: 1500 },
-    { cmd: "transcribe_meeting --audio='zoom_rec.mp3'", result: "[DONE] Transcript uploaded to Drive", color: "text-blue-400", delay: 4800 },
-    { cmd: "generate_logo --style='minimal'", result: "[CREATED] 4 variations exported", color: "text-purple-400", delay: 3300 },
-    { cmd: "check_crypto_portfolio", result: "[UPDATE] Portfolio up 4.2% today", color: "text-green-400", delay: 2400 },
-    { cmd: "find_email --name='Sam Altman'", result: "[FOUND] sam@openai.com (verified)", color: "text-red-400", delay: 3000 },
-    { cmd: "summarize_pdf --file='annual_report.pdf'", result: "[SUMMARY] Key points extracted to Notion", color: "text-blue-400", delay: 3600 },
-    { cmd: "system_status --full", result: "[OPTIMAL] Systems operating at 100%", color: "text-green-400", delay: 3000 }
+    { cmd: "init_market_siege --target='FINTECH'", result: "[ACTIVE] Scoped 4,203 high-value targets", color: "text-red-500", delay: 2400 },
+    { cmd: "deploy_voice_clone --campaign='q1_scale'", result: "[RUNNING] 142 AI agents dialling now...", color: "text-blue-400", delay: 3600 },
+    { cmd: "execute_autonomous_close --limit=none", result: "[SUCCESS] 3 contracts sent & signed", color: "text-green-400", delay: 3000 },
+    { cmd: "scrape_competitor_alpha", result: "[FOUND] Pricing and lead sources extracted", color: "text-yellow-400", delay: 4500 },
+    { cmd: "generate_revenue --mode='recursive'", result: "[ALERT] ROI increased by 342% in 24hrs", color: "text-red-400", delay: 3300 },
+    { cmd: "autopilot_marketing_spend", result: "[OPTIMIZED] $5k waste redirected to high-intent", color: "text-green-400", delay: 2700 },
+    { cmd: "system_dominance --status", result: "[STABLE] Market share expanding at 14%/day", color: "text-green-400", delay: 2400 },
 ];
 
 const OpenClawIntro: React.FC = () => {
@@ -150,61 +127,57 @@ const OpenClawIntro: React.FC = () => {
     const opacity = useTransform(scrollYProgress, [0, 0.2, 0.8, 1], [0, 1, 1, 0]);
 
     return (
-        <section ref={sectionRef} className="relative py-32 overflow-hidden bg-[#020408]">
+        <section ref={sectionRef} className="relative py-40 overflow-hidden bg-black">
             {/* Background Grids & effects */}
-            <div className="absolute inset-0 bg-grid-white opacity-[0.03] pointer-events-none" />
-            <div className="absolute inset-0 bg-gradient-to-b from-[#020408] via-transparent to-[#020408] pointer-events-none" />
+            <div className="absolute inset-0 bg-grid-white/[0.02] pointer-events-none" />
+            <div className="absolute inset-0 bg-gradient-to-b from-black via-transparent to-black pointer-events-none" />
 
-            {/* Ambient Glow */}
-            <div className="absolute top-1/2 left-1/2 -translate-x-1/2 -translate-y-1/2 w-[600px] h-[600px] bg-red-600/10 rounded-full blur-[120px] pointer-events-none" />
-
-            <div className="max-w-7xl mx-auto px-6 lg:px-8 relative z-10">
-                <div className="grid lg:grid-cols-2 gap-16 items-center">
+            <div className="max-w-[1800px] mx-auto px-6 lg:px-12 relative z-10">
+                <div className="grid lg:grid-cols-12 gap-24 items-center">
 
                     {/* Left: Tactical Visuals */}
-                    <div className="relative">
+                    <div className="lg:col-span-12 xl:col-span-6 relative order-2 xl:order-1">
                         <motion.div
                             style={{ y, opacity }}
                             className="relative z-10"
                         >
                             <div className="relative group">
-                                <div className="absolute -inset-1 bg-gradient-to-r from-red-500 to-orange-600 rounded-2xl blur opacity-25 group-hover:opacity-75 transition duration-1000 group-hover:duration-200"></div>
-                                <div className="relative glass-dark p-8 rounded-2xl border border-white/10 overflow-hidden">
+                                <div className="absolute -inset-1 bg-gradient-to-r from-red-600 to-purple-600 rounded-2xl blur-2xl opacity-20 group-hover:opacity-40 transition duration-1000"></div>
+                                <div className="relative bg-zinc-950 p-12 rounded-none border border-white/10 overflow-hidden">
                                     {/* Scanline */}
                                     <div className="absolute inset-0 bg-[linear-gradient(rgba(18,16,16,0)_50%,rgba(0,0,0,0.25)_50%),linear-gradient(90deg,rgba(255,0,0,0.06),rgba(0,255,0,0.02),rgba(0,0,255,0.06))] bg-[size:100%_2px,3px_100%] opacity-20 pointer-events-none" />
 
                                     {/* Header */}
-                                    <div className="flex justify-between items-center mb-8 border-b border-white/10 pb-4">
-                                        <div className="flex items-center gap-3">
-                                            <div className="w-2 h-2 bg-red-500 rounded-full animate-pulse" />
-                                            <span className="text-xs font-mono text-red-400 tracking-widest">SYSTEM_ACTIVE</span>
+                                    <div className="flex justify-between items-center mb-12 border-b border-white/5 pb-6">
+                                        <div className="flex items-center gap-4">
+                                            <div className="w-3 h-3 bg-red-600 rounded-full animate-pulse" />
+                                            <span className="text-sm font-black text-red-500 tracking-[0.5em] uppercase">Tactical_Overseer</span>
                                         </div>
-                                        <div className="text-[10px] font-mono text-white/40">V.1.0.4</div>
+                                        <div className="text-[10px] font-mono text-white/20 tracking-widest uppercase italic">DEPLOYMENT: ACTIVE</div>
                                     </div>
 
                                     {/* Terminal Content - Dynamic Stream */}
-                                    <div className="space-y-4 font-mono text-sm min-h-[220px]">
+                                    <div className="space-y-6 font-mono text-sm min-h-[300px]">
                                         {logs.map((log, i) => (
                                             <motion.div
                                                 key={i}
                                                 initial={{ opacity: 0, x: -10 }}
                                                 animate={{ opacity: 1, x: 0 }}
-                                                className="border-l-2 border-white/5 pl-3"
+                                                className="border-l-2 border-red-600/30 pl-6"
                                             >
-                                                <div className="flex gap-3 text-slate-400 text-xs mb-1">
-                                                    <span className="text-red-500">➜</span>
-                                                    <span>{log.cmd}</span>
+                                                <div className="flex gap-4 text-slate-500 text-xs mb-2">
+                                                    <span className="text-red-600">EXEC //</span>
+                                                    <span className="font-black italic uppercase tracking-widest">{log.cmd}</span>
                                                 </div>
-                                                <div className={`${log.color} font-bold text-[13px] pl-4`}>
+                                                <div className={`${log.color} font-black text-lg uppercase tracking-tight`}>
                                                     {log.result}
                                                 </div>
                                             </motion.div>
                                         ))}
 
                                         {/* Cursor Line */}
-                                        <div className="flex gap-3 text-slate-400 animate-pulse pl-3 pt-2">
-                                            <span className="text-red-500">➜</span>
-                                            <span className="border-r-2 border-red-500 pr-1">awaiting_command</span>
+                                        <div className="flex gap-4 text-slate-600 animate-pulse pl-6 pt-4">
+                                            <span className="text-red-700 font-black tracking-tighter">WAITING_FOR_MARKET_SIGNAL_</span>
                                         </div>
                                     </div>
 
@@ -227,32 +200,44 @@ const OpenClawIntro: React.FC = () => {
                     </div>
 
                     {/* Right: Copy & CTA */}
-                    <div className="space-y-8">
-                        <div className="inline-flex items-center gap-2 px-3 py-1 rounded-full bg-red-500/10 border border-red-500/20 text-red-400 text-[10px] font-black uppercase tracking-widest">
-                            <Zap className="w-3 h-3" />
-                            <span>New Release</span>
-                        </div>
+                    <div className="lg:col-span-12 xl:col-span-6 space-y-12 order-1 xl:order-2">
+                        <motion.div
+                            initial={{ opacity: 0, scale: 0.9 }}
+                            whileInView={{ opacity: 1, scale: 1 }}
+                            className="inline-flex items-center gap-4 px-6 py-2 bg-red-600 border border-red-500 text-white text-[10px] font-black uppercase tracking-[0.4em]"
+                        >
+                            <Zap className="w-4 h-4" />
+                            <span>PHASE 2 DEPLOYMENT</span>
+                        </motion.div>
 
-                        <h2 className="text-5xl lg:text-7xl font-black font-display italic uppercase leading-[0.85] tracking-tight text-white">
+                        <h2 className="text-[clamp(2.5rem,6vw,7rem)] font-black uppercase leading-[0.9] tracking-tighter text-white">
                             THE AGENT THAT
-                            <span className="block text-transparent bg-clip-text bg-gradient-to-r from-red-500 via-orange-500 to-red-500">DOES THINGS.</span>
+                            <span className="block text-red-600">OWNS THE MARKET.</span>
                         </h2>
 
-                        <p className="text-xl text-slate-400 font-medium leading-relaxed max-w-lg">
-                            Stop chatting with AI. Start employing it. OpenClaw connects to your browser, email, and calendar to execute complex workflows 24/7 without you lifting a finger.
-                        </p>
+                        <div className="space-y-6 max-w-2xl">
+                            <p className="text-xl lg:text-3xl text-slate-400 font-black leading-tight uppercase tracking-tighter">
+                                Stop Chatting. <span className="text-white">Deploy Autonomy.</span>
+                            </p>
+                            <p className="text-lg lg:text-xl text-slate-500 font-medium leading-relaxed">
+                                OpenClaw isn't just an AI; it's a proprietary neural weapon. It detects high-value signals, negotiates without emotion, and closes with 100% precision—while you sleep. This is the new standard of scale.
+                            </p>
+                        </div>
 
-                        <ul className="space-y-4">
+                        <ul className="grid md:grid-cols-1 gap-8">
                             {[
-                                "Zero Human Intervention Required",
-                                "Runs Locally on Your Machine",
-                                "Controls Browser & Desktop Apps"
+                                { title: "0-MANUAL INTERVETION", subtitle: "End-to-end autonomous decision loops." },
+                                { title: "NEURAL LEAD ENRICHMENT", subtitle: "Human-grade psychological profiling at scale." },
+                                { title: "UNIVERSAL EXECUTION", subtitle: "Direct integration into legal, ops, and sales." }
                             ].map((item, i) => (
-                                <li key={i} className="flex items-center gap-3 text-sm font-bold text-white uppercase tracking-wider">
-                                    <div className="flex items-center justify-center w-6 h-6 rounded-full bg-red-500/20 border border-red-500/40">
-                                        <Crosshair className="w-3 h-3 text-red-500" />
+                                <li key={i} className="flex items-start gap-6 group">
+                                    <div className="mt-1 flex items-center justify-center w-12 h-12 bg-white/[0.03] border border-white/5 group-hover:bg-red-600 group-hover:border-red-500 transition-all duration-500 flex-shrink-0">
+                                        <Crosshair className="w-5 h-5 text-red-500 group-hover:text-white" />
                                     </div>
-                                    {item}
+                                    <div className="space-y-1">
+                                        <div className="text-lg font-black text-white uppercase tracking-tight">{item.title}</div>
+                                        <div className="text-xs text-slate-600 font-bold uppercase tracking-widest">{item.subtitle}</div>
+                                    </div>
                                 </li>
                             ))}
                         </ul>
@@ -260,11 +245,11 @@ const OpenClawIntro: React.FC = () => {
                         <div className="pt-4">
                             <Link to="/openclaw">
                                 <motion.button
-                                    whileHover={{ scale: 1.05 }}
-                                    whileTap={{ scale: 0.95 }}
-                                    className="group relative px-8 py-4 bg-red-600 hover:bg-red-500 text-white font-black uppercase tracking-widest text-sm rounded-xl overflow-hidden transition-colors shadow-[0_0_40px_rgba(220,38,38,0.4)]"
+                                    whileHover={{ scale: 1.02, y: -2 }}
+                                    whileTap={{ scale: 0.98 }}
+                                    className="group relative px-10 py-5 bg-red-600 hover:bg-red-500 text-white font-black uppercase tracking-widest text-xs rounded-none transition-all shadow-[0_0_50px_rgba(220,38,38,0.3)]"
                                 >
-                                    <div className="absolute inset-0 bg-[url('https://grainy-gradients.vercel.app/noise.svg')] opacity-20" />
+                                    <div className="absolute inset-0 bg-black/10 opacity-0 group-hover:opacity-20 transition-opacity" />
                                     <span className="relative z-10 flex items-center gap-3">
                                         Deploy OpenClaw
                                         <ArrowRight className="w-4 h-4 group-hover:translate-x-1 transition-transform" />

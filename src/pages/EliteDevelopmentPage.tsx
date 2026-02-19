@@ -1384,7 +1384,10 @@ const EliteDevelopmentPage: React.FC = () => {
                                 <div className="pt-10 border-t border-white/5 flex flex-col sm:flex-row items-center justify-between gap-6">
                                     <div>
                                         <div className="text-[9px] font-black text-slate-500 uppercase tracking-widest mb-1">Entry Protocol</div>
-                                        <div className="text-4xl font-black text-white italic tracking-tighter">$5,000+</div>
+                                        <div className="flex items-baseline gap-3">
+                                            <div className="text-4xl font-black text-white italic tracking-tighter">$1,500+</div>
+                                            <div className="text-sm font-bold text-slate-500 line-through tracking-tighter opacity-50">$5,000</div>
+                                        </div>
                                     </div>
                                     <Link to="/contact">
                                         <motion.button
