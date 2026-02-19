@@ -1,5 +1,6 @@
 import React from 'react';
 import { motion } from 'framer-motion';
+import { Helmet } from 'react-helmet-async';
 import {
     Layers,
     TrendingUp,
@@ -255,6 +256,18 @@ const ServicesPage: React.FC = () => {
             exit={{ opacity: 0 }}
             className="min-h-screen bg-[#020408] pt-40 pb-20 relative overflow-hidden"
         >
+            <Helmet>
+                <title>Our Services | Revlo — Full-Stack Growth & AI Automation</title>
+                <meta name="description" content="From brand strategy and conversion websites to AI sales agents and autonomous operations. Revlo delivers end-to-end results, not just tools." />
+                <meta property="og:title" content="Our Services | Revlo — Full-Stack Growth & AI Automation" />
+                <meta property="og:description" content="From brand strategy and conversion websites to AI sales agents and autonomous operations. Revlo delivers end-to-end results." />
+                <meta property="og:image" content="https://res.cloudinary.com/dpfapm0tl/image/upload/v1771259282/ChatGPT_Image_Feb_16_2026_11_27_50_AM_uorc1u.png" />
+                <meta property="og:url" content="https://www.wearerevlo.com/services" />
+                <meta name="twitter:card" content="summary_large_image" />
+                <meta name="twitter:title" content="Our Services | Revlo — Full-Stack Growth & AI Automation" />
+                <meta name="twitter:image" content="https://res.cloudinary.com/dpfapm0tl/image/upload/v1771259282/ChatGPT_Image_Feb_16_2026_11_27_50_AM_uorc1u.png" />
+                <link rel="canonical" href="https://www.wearerevlo.com/services" />
+            </Helmet>
             {/* Background elements */}
             <div className="absolute top-0 left-0 w-full h-full bg-grid-white opacity-[0.03] pointer-events-none" />
             <div className="absolute top-[10%] left-[5%] w-[40%] h-[40%] bg-purple-600/10 blur-[120px] rounded-full animate-pulse" />

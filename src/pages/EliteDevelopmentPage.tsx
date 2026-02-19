@@ -1,4 +1,5 @@
 import React, { useState } from 'react';
+import { Helmet } from 'react-helmet-async';
 import { motion, AnimatePresence, useMotionValue, useSpring, useTransform, useAnimationFrame } from 'framer-motion';
 import {
     Cpu,
@@ -283,6 +284,16 @@ const EliteDevelopmentPage: React.FC = () => {
 
     return (
         <div className="min-h-screen bg-[#020408] text-white selection:bg-red-500/30">
+            <Helmet>
+                <title>Elite Development // The One-Man Army | Revlo — IPO-Grade Custom Engineering</title>
+                <meta name="description" content="Direct access to a Category of One operator. Custom engineering for mission-critical software — AI marketplaces, fintech, full-stack. $1,500 blitz projects." />
+                <meta property="og:title" content="Elite Development // The One-Man Army | Revlo" />
+                <meta property="og:description" content="Custom engineering for mission-critical software. If you can dream it, I can build it." />
+                <meta property="og:image" content="https://res.cloudinary.com/dpfapm0tl/image/upload/v1771259282/ChatGPT_Image_Feb_16_2026_11_27_50_AM_uorc1u.png" />
+                <meta property="og:url" content="https://www.wearerevlo.com/elite-development" />
+                <meta name="twitter:card" content="summary_large_image" />
+                <link rel="canonical" href="https://www.wearerevlo.com/elite-development" />
+            </Helmet>
             <Navigation />
 
             {/* HERO SECTION - TACTICAL COMMAND CENTER */}

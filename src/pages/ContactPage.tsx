@@ -1,5 +1,6 @@
 import React from 'react';
 import { motion } from 'framer-motion';
+import { Helmet } from 'react-helmet-async';
 import Contact from '../components/Contact';
 
 const ContactPage: React.FC = () => {
@@ -10,6 +11,16 @@ const ContactPage: React.FC = () => {
             exit={{ opacity: 0 }}
             className="min-h-screen bg-[#020408] pt-32 pb-20 relative overflow-hidden"
         >
+            <Helmet>
+                <title>Book a Strategy Call | Revlo — Scale Your Vision</title>
+                <meta name="description" content="Stop theorizing and start scaling. Get direct access to the architect behind IPO-grade AI systems. Book your strategy session today." />
+                <meta property="og:title" content="Book a Strategy Call | Revlo — Scale Your Vision" />
+                <meta property="og:description" content="Stop theorizing and start scaling. Get direct access to the architect behind IPO-grade AI systems." />
+                <meta property="og:image" content="https://res.cloudinary.com/dpfapm0tl/image/upload/v1771259282/ChatGPT_Image_Feb_16_2026_11_27_50_AM_uorc1u.png" />
+                <meta property="og:url" content="https://www.wearerevlo.com/contact" />
+                <meta name="twitter:card" content="summary_large_image" />
+                <link rel="canonical" href="https://www.wearerevlo.com/contact" />
+            </Helmet>
             {/* Background elements */}
             <div className="absolute top-0 left-0 w-full h-full bg-grid-white opacity-5 pointer-events-none" />
             <div className="absolute top-[10%] left-[5%] w-[40%] h-[40%] bg-purple-600/10 blur-[120px] rounded-full animate-pulse" />

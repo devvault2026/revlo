@@ -1,4 +1,5 @@
 import React, { useState, useEffect } from 'react';
+import { Helmet } from 'react-helmet-async';
 import { motion, AnimatePresence, useTransform, useMotionValue, useSpring, useAnimationFrame } from 'framer-motion';
 import {
     Cpu,
@@ -193,6 +194,16 @@ const GHLAutomationPage = () => {
 
     return (
         <div className="min-h-screen bg-[#020408] text-white selection:bg-blue-500/30 overflow-x-hidden font-sans">
+            <Helmet>
+                <title>GHL Automation & AI Sales Systems | Revlo — 24/7 Autonomous Operations</title>
+                <meta name="description" content="Deploy AI-powered sales agents, automated appointment booking, and CRM integration that works 24/7. Zero lead abandonment. Infinite operational leverage." />
+                <meta property="og:title" content="GHL Automation & AI Sales Systems | Revlo" />
+                <meta property="og:description" content="Deploy AI-powered sales agents and CRM integration that works 24/7. Zero lead abandonment." />
+                <meta property="og:image" content="https://res.cloudinary.com/dpfapm0tl/image/upload/v1771259282/ChatGPT_Image_Feb_16_2026_11_27_50_AM_uorc1u.png" />
+                <meta property="og:url" content="https://www.wearerevlo.com/ghl-automation" />
+                <meta name="twitter:card" content="summary_large_image" />
+                <link rel="canonical" href="https://www.wearerevlo.com/ghl-automation" />
+            </Helmet>
             <Navigation />
 
             {/* CINEMATIC HERO - SCALE ADJUSTED */}

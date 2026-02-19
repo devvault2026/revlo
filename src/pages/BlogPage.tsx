@@ -13,6 +13,12 @@ const BlogPage = () => {
             <Helmet>
                 <title>Intelligence Feed | REVLO AGENTIC INFRASTRUCTURE</title>
                 <meta name="description" content="Operational intel on autonomous browser control, recursive sub-agents, and the future of AI operating systems." />
+                <meta property="og:title" content="Intelligence Feed | REVLO AGENTIC INFRASTRUCTURE" />
+                <meta property="og:description" content="Operational intel on autonomous browser control, recursive sub-agents, and the future of AI operating systems." />
+                <meta property="og:image" content="https://res.cloudinary.com/dpfapm0tl/image/upload/v1771259282/ChatGPT_Image_Feb_16_2026_11_27_50_AM_uorc1u.png" />
+                <meta property="og:url" content="https://www.wearerevlo.com/blog" />
+                <meta name="twitter:card" content="summary_large_image" />
+                <link rel="canonical" href="https://www.wearerevlo.com/blog" />
             </Helmet>
 
             <Navigation />

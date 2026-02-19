@@ -1,5 +1,6 @@
 import React from 'react';
 import { motion } from 'framer-motion';
+import { Helmet } from 'react-helmet-async';
 import { TrendingUp, Users, Clock, DollarSign, Award, Target, Zap, BarChart, ArrowRight } from 'lucide-react';
 import { Link } from 'react-router-dom';
 
@@ -132,6 +133,16 @@ const ResultsPage: React.FC = () => {
             exit={{ opacity: 0 }}
             className="min-h-screen bg-[#020408] pt-40 pb-20 relative overflow-hidden"
         >
+            <Helmet>
+                <title>Partner Success & Results | Revlo — 347% Avg Revenue Growth</title>
+                <meta name="description" content="Real performance data from real businesses. 347% average revenue growth, 10K+ monthly leads, and $500M+ in cumulative partner revenue." />
+                <meta property="og:title" content="Partner Success & Results | Revlo — 347% Avg Revenue Growth" />
+                <meta property="og:description" content="Real performance data from real businesses. 347% average revenue growth and $500M+ in cumulative partner revenue." />
+                <meta property="og:image" content="https://res.cloudinary.com/dpfapm0tl/image/upload/v1771259282/ChatGPT_Image_Feb_16_2026_11_27_50_AM_uorc1u.png" />
+                <meta property="og:url" content="https://www.wearerevlo.com/results" />
+                <meta name="twitter:card" content="summary_large_image" />
+                <link rel="canonical" href="https://www.wearerevlo.com/results" />
+            </Helmet>
             {/* Background elements */}
             <div className="absolute top-0 left-0 w-full h-full bg-grid-white opacity-5 pointer-events-none" />
             <div className="absolute top-[20%] left-[10%] w-[50%] h-[50%] bg-purple-900/10 blur-[150px] rounded-full" />

@@ -36,6 +36,15 @@ const BlogPostPage = () => {
                 <meta property="og:title" content={post.title} />
                 <meta property="og:description" content={post.excerpt} />
                 <meta property="og:image" content={post.image} />
+                <meta property="og:image:width" content="1200" />
+                <meta property="og:image:height" content="630" />
+                <meta property="og:url" content={`https://www.wearerevlo.com/blog/${post.slug}`} />
+                <meta property="og:site_name" content="Revlo Agency" />
+                <meta name="twitter:card" content="summary_large_image" />
+                <meta name="twitter:title" content={post.title} />
+                <meta name="twitter:description" content={post.excerpt} />
+                <meta name="twitter:image" content={post.image} />
+                <link rel="canonical" href={`https://www.wearerevlo.com/blog/${post.slug}`} />
             </Helmet>
 
             <Navigation />

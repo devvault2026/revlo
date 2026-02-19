@@ -1,4 +1,5 @@
 import React from 'react';
+import { Helmet } from 'react-helmet-async';
 import {
     TakeoffHero,
     TakeoffSplitReality,
@@ -17,6 +18,16 @@ import Navigation from '../components/Navigation';
 const TakeoffAgentPage: React.FC = () => {
     return (
         <div className="min-h-screen bg-[#0c0d10] text-zinc-100 font-sans selection:bg-orange-600 selection:text-white">
+            <Helmet>
+                <title>AI Takeoff & Estimating Agent | Revlo — Instant Accurate Bids for Contractors</title>
+                <meta name="description" content="Stop wasting late nights on manual takeoffs. Our vision-enabled AI Agent analyzes PDF/DWG plans and returns measured quantities, material line-items, and draft pricing in minutes." />
+                <meta property="og:title" content="AI Takeoff & Estimating Agent | Revlo" />
+                <meta property="og:description" content="Our vision-enabled AI Agent analyzes blueprints and returns accurate bids in minutes, not hours." />
+                <meta property="og:image" content="https://res.cloudinary.com/dpfapm0tl/image/upload/v1771259282/ChatGPT_Image_Feb_16_2026_11_27_50_AM_uorc1u.png" />
+                <meta property="og:url" content="https://www.wearerevlo.com/takeoff-agent" />
+                <meta name="twitter:card" content="summary_large_image" />
+                <link rel="canonical" href="https://www.wearerevlo.com/takeoff-agent" />
+            </Helmet>
             <Navigation />
 
             <main>

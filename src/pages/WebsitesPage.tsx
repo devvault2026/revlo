@@ -1,4 +1,5 @@
 import React, { useState } from 'react';
+import { Helmet } from 'react-helmet-async';
 import { motion, AnimatePresence, useMotionValue, useSpring, useTransform, useAnimationFrame } from 'framer-motion';
 import {
     Cpu,
@@ -232,6 +233,16 @@ const WebsitesPage: React.FC = () => {
 
     return (
         <div className="min-h-screen bg-[#020408] text-white selection:bg-purple-500/30">
+            <Helmet>
+                <title>Premium Website Design & Brand Strategy | Revlo — Conversion-Engineered</title>
+                <meta name="description" content="We don't just design websites; we build conversion engines. Premium UI/UX infrastructure, SEO-optimized, with instant market authority. Starting at $2,500." />
+                <meta property="og:title" content="Premium Website Design & Brand Strategy | Revlo" />
+                <meta property="og:description" content="We build conversion engines. Premium UI/UX infrastructure, SEO-optimized, with instant market authority." />
+                <meta property="og:image" content="https://res.cloudinary.com/dpfapm0tl/image/upload/v1771259282/ChatGPT_Image_Feb_16_2026_11_27_50_AM_uorc1u.png" />
+                <meta property="og:url" content="https://www.wearerevlo.com/websites" />
+                <meta name="twitter:card" content="summary_large_image" />
+                <link rel="canonical" href="https://www.wearerevlo.com/websites" />
+            </Helmet>
             <Navigation />
 
             {/* HERO SECTION */}

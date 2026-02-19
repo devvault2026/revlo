@@ -1,12 +1,38 @@
 {
     "rewrites": [
         {
+            "source": "/:path*",
+            "has": [
+                {
+                    "type": "header",
+                    "key": "user-agent",
+                    "value": "(?i).*(facebookexternalhit|Facebot|Twitterbot|LinkedInBot|WhatsApp|Slackbot|TelegramBot|Discordbot|Pinterest|Googlebot|bingbot|Baiduspider|DuckDuckBot|Applebot|Slurp|ia_archiver|Embedly|Quora|Showyoubot|outbrain|rogerbot|vkShare|W3C_Validator|redditbot|Snapchat).*"
+                }
+            ],
+            "destination": "/api/og?path=/:path*"
+        },
+        {
             "source": "/openclaw",
             "destination": "/openclaw.html"
         },
         {
             "source": "/(.*)",
             "destination": "/index.html"
+        }
+    ],
+    "headers": [
+        {
+            "source": "/(.*)",
+            "headers": [
+                {
+                    "key": "X-Content-Type-Options",
+                    "value": "nosniff"
+                },
+                {
+                    "key": "X-Frame-Options",
+                    "value": "DENY"
+                }
+            ]
         }
     ]
 }
