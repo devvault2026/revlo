@@ -123,10 +123,10 @@ const Hero: React.FC = () => {
             </div>
 
             <div className="relative z-10 max-w-[1800px] mx-auto px-6 lg:px-12 w-full">
-                <div className="grid lg:grid-cols-12 gap-16 items-start">
+                <div className="grid lg:grid-cols-12 gap-8 items-center min-h-[70vh]">
 
                     {/* LEFT COLUMN: THE OFFER */}
-                    <div className="lg:col-span-12 xl:col-span-7 space-y-12 relative z-10">
+                    <div className="lg:col-span-7 space-y-12 relative z-10">
                         <motion.div
                             initial={{ opacity: 0, x: -20 }}
                             animate={{ opacity: 1, x: 0 }}
@@ -148,7 +148,7 @@ const Hero: React.FC = () => {
                                 initial={{ opacity: 0, y: 30 }}
                                 animate={{ opacity: 1, y: 0 }}
                                 transition={{ duration: 0.8, ease: [0.16, 1, 0.3, 1] }}
-                                className="text-[clamp(2.5rem,8vw,7.5rem)] font-black leading-[0.9] tracking-[-0.04em] uppercase"
+                                className="text-[clamp(2.5rem,10vw,7.5rem)] font-black leading-[0.9] tracking-[-0.04em] uppercase"
                             >
                                 <span className="block text-white opacity-40">FULLY</span>
                                 <span className="block text-white">AUTONOMOUS</span>
@@ -186,13 +186,13 @@ const Hero: React.FC = () => {
 
                             <div className="space-y-1">
                                 <div className="text-[10px] font-black text-white/40 uppercase tracking-[0.4em]">Starting from</div>
-                                <div className="text-xl font-black text-white tracking-widest uppercase italic">$15k / mo partnerships</div>
+                                <div className="text-xl font-black text-white tracking-widest uppercase italic">$500 / mo partnerships</div>
                             </div>
                         </motion.div>
                     </div>
 
                     {/* RIGHT COLUMN: THE IPHONE 17 PRO COMMAND CENTER */}
-                    <div className="lg:col-span-12 xl:col-span-5 flex justify-end items-center lg:mt-24 xl:mt-0 xl:translate-x-20">
+                    <div className="lg:col-span-5 flex justify-center items-center mt-20 lg:mt-0">
                         <motion.div
                             initial={{ opacity: 0, scale: 0.8, rotateY: 15, x: 100 }}
                             animate={{ opacity: 1, scale: 1, rotateY: 0, x: 0 }}
@@ -209,7 +209,7 @@ const Hero: React.FC = () => {
                                 className="relative z-10"
                             >
                                 {/* THE IPHONE 17 PRO (ZERO BEZEL) */}
-                                <div className="relative w-[360px] h-[740px] bg-zinc-950 rounded-[4.5rem] p-[2px] shadow-[0_0_100px_rgba(0,0,0,0.8)] overflow-hidden border border-white/10 group">
+                                <div className="relative w-[300px] sm:w-[360px] h-[620px] sm:h-[740px] bg-zinc-950 rounded-[3.5rem] sm:rounded-[4.5rem] p-[2px] shadow-[0_0_100px_rgba(0,0,0,0.8)] overflow-hidden border border-white/10 group">
                                     {/* Titanium Frame Layer */}
                                     <div className="absolute inset-0 bg-gradient-to-tr from-zinc-800 via-zinc-400/20 to-zinc-800" />
 
@@ -219,9 +219,9 @@ const Hero: React.FC = () => {
                                         <div className="absolute inset-0 bg-gradient-to-b from-zinc-900/50 via-black to-black" />
 
                                         {/* Dynamic Island V2 - Floating Glass */}
-                                        <div className="absolute top-4 w-28 h-7 bg-black/60 backdrop-blur-3xl rounded-full z-50 flex items-center justify-between px-3 border border-white/10">
+                                        <div className="absolute top-4 w-24 sm:w-28 h-6 sm:h-7 bg-black/60 backdrop-blur-3xl rounded-full z-50 flex items-center justify-between px-3 border border-white/10">
                                             <div className="w-1 h-1 bg-blue-500 rounded-full animate-pulse" />
-                                            <div className="w-8 h-1 bg-white/10 rounded-full" />
+                                            <div className="w-6 sm:w-8 h-1 bg-white/10 rounded-full" />
                                             <div className="w-1.5 h-1.5 bg-zinc-800 rounded-full" />
                                         </div>
 
@@ -229,7 +229,7 @@ const Hero: React.FC = () => {
                                         <div className="w-full h-full flex flex-col items-center pt-28 px-4 z-10 relative overflow-hidden">
                                             {/* Clock */}
                                             <motion.div
-                                                className="text-7xl font-thin text-white tracking-widest mb-1 font-sans"
+                                                className="text-5xl sm:text-7xl font-thin text-white tracking-widest mb-1 font-sans"
                                                 animate={{ opacity: [0.8, 1, 0.8] }}
                                                 transition={{ duration: 4, repeat: Infinity }}
                                             >
@@ -316,12 +316,12 @@ const Hero: React.FC = () => {
                                             </div>
 
                                             {/* Lock Screen Tools */}
-                                            <div className="absolute bottom-10 left-0 w-full px-10 flex justify-between z-20">
-                                                <div className="w-14 h-14 rounded-full bg-white/5 backdrop-blur-3xl border border-white/10 flex items-center justify-center text-white/40 group-hover:text-red-500 transition-colors">
-                                                    <Zap className="w-6 h-6" />
+                                            <div className="absolute bottom-10 left-0 w-full px-8 sm:px-10 flex justify-between z-20">
+                                                <div className="w-12 h-12 sm:w-14 sm:h-14 rounded-full bg-white/5 backdrop-blur-3xl border border-white/10 flex items-center justify-center text-white/40 group-hover:text-red-500 transition-colors">
+                                                    <Zap className="w-5 h-5 sm:w-6 sm:h-6" />
                                                 </div>
-                                                <div className="w-14 h-14 rounded-full bg-white/5 backdrop-blur-3xl border border-white/10 flex items-center justify-center text-white/40 group-hover:text-red-500 transition-colors">
-                                                    <ShieldCheck className="w-6 h-6" />
+                                                <div className="w-12 h-12 sm:w-14 sm:h-14 rounded-full bg-white/5 backdrop-blur-3xl border border-white/10 flex items-center justify-center text-white/40 group-hover:text-red-500 transition-colors">
+                                                    <ShieldCheck className="w-5 h-5 sm:w-6 sm:h-6" />
                                                 </div>
                                             </div>
 
