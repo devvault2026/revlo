@@ -234,7 +234,7 @@ const ServicesPage: React.FC = () => {
                 'Fractional CTO Strategy',
                 'Performance Optimization'
             ],
-            price: 'Starting at $1,500',
+            price: '$1,500 (SAVE $3.5K)',
             duration: 'Blitz Project',
             color: 'text-red-500',
             bg: 'bg-red-500/10',
