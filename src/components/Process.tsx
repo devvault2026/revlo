@@ -22,7 +22,7 @@ const steps = [
         status: "active",
         icon: <Users className="w-8 h-8 text-purple-400" />,
         points: [
-            "I deploy agents that never sleep",
+            "We deploy agents that never sleep",
             "Every lead is called in 30 seconds",
             "Real human-grade voice interaction",
             "Your calendar fills while you focus"

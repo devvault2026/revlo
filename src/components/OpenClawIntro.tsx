@@ -223,15 +223,15 @@ const OpenClawIntro: React.FC = () => {
                                 Stop Chatting. <span className="text-white">Deploy Autonomy.</span>
                             </p>
                             <p className="text-lg lg:text-xl text-slate-500 font-medium leading-relaxed">
-                                OpenClaw isn't just an AI; it's a proprietary neural weapon. It detects high-value signals, negotiates without emotion, and closes with 100% precision—while you sleep. This is the new standard of scale.
+                                OpenClaw isn't just an AI; it's a proprietary neural weapon deployed on <a href="https://www.orgo.ai" target="_blank" rel="noopener noreferrer" className="text-red-400 hover:text-red-300 underline underline-offset-2 transition-colors">Orgo.ai</a> cloud desktops—persistent, sandboxed VMs purpose-built for AI agents. It operates 24/7 without your laptop.
                             </p>
                         </div>
 
                         <ul className="grid md:grid-cols-1 gap-4 md:gap-8">
                             {[
-                                { title: "0-MANUAL INTERVETION", subtitle: "End-to-end autonomous decision loops." },
-                                { title: "NEURAL LEAD ENRICHMENT", subtitle: "Human-grade psychological profiling at scale." },
-                                { title: "UNIVERSAL EXECUTION", subtitle: "Direct integration into legal, ops, and sales." }
+                                { title: "ORGO-POWERED INFRA", subtitle: "Persistent cloud desktops with sub-500ms boot time." },
+                                { title: "0-MANUAL INTERVENTION", subtitle: "End-to-end autonomous decision loops, 24/7." },
+                                { title: "UNIVERSAL EXECUTION", subtitle: "Full desktop control—browser, files, terminal." }
                             ].map((item, i) => (
                                 <li key={i} className="flex items-start gap-4 md:gap-6 group p-4 bg-white/[0.02] border border-white/5 rounded-none md:bg-transparent md:border-none md:p-0">
                                     <div className="mt-1 flex items-center justify-center w-10 h-10 md:w-12 md:h-12 bg-white/[0.03] border border-white/5 group-hover:bg-red-600 group-hover:border-red-500 transition-all duration-500 flex-shrink-0">

@@ -126,7 +126,7 @@ const GHLAutomationPage = () => {
         {
             title: "Autonomous Sales Agents",
             subtitle: "Voice & SMS Automated Closing",
-            description: "HighLevel's native chat is a toy. I build multi-agent systems that handle real human objections via Voice & SMS, booking 24/7 without a single human touch.",
+            description: "HighLevel's native chat is a toy. We build multi-agent systems that handle real human objections via Voice & SMS, booking 24/7 without a single human touch.",
             howItWorks: "Using GHL V2 API + LLM reasoning models. We train agents on your proven sales scripts to handle outbound qualification and inbound booking at a 300% faster clip.",
             goal: "Zero lead decay. Every single lead is touched within 20 seconds. Increased booking rates by 40%.",
             features: ["Outbound Voice Callers", "Context-Aware SMS agents", "Real-time Sentiment Scoring", "Automated CRM Dispositioning"],
@@ -136,7 +136,7 @@ const GHLAutomationPage = () => {
         {
             title: "Digital Flagships",
             subtitle: "Custom UI/UX CRM Architecture",
-            description: "Templates look cheap. I inject custom CSS/JS layers to transform generic GHL pages into high-luxury digital experiences that outperform boutiques in speed and conversion.",
+            description: "Templates look cheap. We inject custom CSS/JS layers to transform generic GHL pages into high-luxury digital experiences that outperform boutiques in speed and conversion.",
             howItWorks: "Boutique frontend architecture built directly inside the GHL builder, but supercharged with custom design tokens, premium animations, and mobile-optimized flows.",
             goal: "Instant Authority. Create a brand that justifies premium pricing and elite positioning in your market.",
             features: ["Custom CSS Design Tokens", "Premium GSAP Animations", "High-Performance Mobile Flow", "Dynamic Pricing Calculators"],
@@ -146,7 +146,7 @@ const GHLAutomationPage = () => {
         {
             title: "Recursive 'Guts'",
             subtitle: "Mission-Critical Workflow Engine",
-            description: "Workflows are the brain. Most are broken. I build complex, recursive systems that manage massive lead volumes across hundreds of locations without ever missing a trigger.",
+            description: "Workflows are the brain. Most are broken. We build complex, recursive systems that manage massive lead volumes across hundreds of locations without ever missing a trigger.",
             howItWorks: "Master snapshot architecture featuring recursive automation logic, self-healing data triggers, and bi-directional sync across your entire sub-account network.",
             goal: "Absolute Scalability. The infrastructure that allows you to manage 1,000 locations with the same effort as 1.",
             features: ["Recursive Multi-Step logic", "Self-Healing Workflows", "Master Snapshot Packaging", "Global Lead Routing"],
@@ -156,8 +156,8 @@ const GHLAutomationPage = () => {
         {
             title: "API Sovereignty",
             subtitle: "Custom Sidebar Apps & Extension",
-            description: "When GHL hits its limit, I go around it. Custom internal apps and sidebars that bring your proprietary data and external tools into one unified command center.",
-            howItWorks: "OAuth 2.0 secure middleware hosted on Vercel. I build custom Dashboards and Sidebar Apps that look and feel like a native part of the GHL UI.",
+            description: "When GHL hits its limit, we go around it. Custom internal apps and sidebars that bring your proprietary data and external tools into one unified command center.",
+            howItWorks: "OAuth 2.0 secure middleware hosted on Vercel. We build custom Dashboards and Sidebar Apps that look and feel like a native part of the GHL UI.",
             goal: "Proprietary IP Assets. Build a platform your clients can never leave because your tools are irreplaceable.",
             features: ["Sidebar Iframe Dashboards", "OAuth 2.0 Bi-directional Sync", "Custom Middleware Apps", "Client Data Portals"],
             icon: <Layers className="w-5 h-5" />,
@@ -170,7 +170,7 @@ const GHLAutomationPage = () => {
             phase: "PHASE 00",
             title: "Operational Recon & Audit",
             duration: "WEEK 01",
-            desc: "We deconstruct the mess. I audit your existing GHL account to find data leaks, broken workflows, and missed revenue.",
+            desc: "We deconstruct the mess. We audit your existing GHL account to find data leaks, broken workflows, and missed revenue.",
             deliverables: ["Sub-Account Friction Audit", "Custom API Blueprint", "Conversion Path Analysis"],
             icon: <Search className="w-5 h-5" />
         },
@@ -178,7 +178,7 @@ const GHLAutomationPage = () => {
             phase: "PHASE 01",
             title: "The Build-Out",
             duration: "WEEKS 02-03",
-            desc: "The heavy heavy. I develop your custom funnels, train the AI agents on your scripts, and install the recursive workflow 'guts'.",
+            desc: "The heavy heavy. We develop your custom funnels, train the AI agents on your scripts, and install the recursive workflow 'guts'.",
             deliverables: ["Custom Funnel Infrastructure", "AI Agent Logic Training", "Master Workflow Deployment"],
             icon: <Settings className="w-5 h-5" />
         },
@@ -186,7 +186,7 @@ const GHLAutomationPage = () => {
             phase: "PHASE 02",
             title: "Full-Force Launch",
             duration: "WEEK 04",
-            desc: "Live deployment. We push the systems into the wild. I monitor all triggers and tune the conversion dial for maximum ROI.",
+            desc: "Live deployment. We push the systems into the wild. We monitor all triggers and tune the conversion dial for maximum ROI.",
             deliverables: ["Live Environment Sync", "Stress-Test Monitoring", "90-Day Scaling Roadmap"],
             icon: <Rocket className="w-5 h-5" />
         }
@@ -282,7 +282,7 @@ const GHLAutomationPage = () => {
 
                             <p className="text-lg sm:text-xl lg:text-2xl text-slate-400 font-medium italic leading-tight mb-10 max-w-xl border-l-4 border-blue-600 pl-6 lg:pl-8 text-left">
                                 HighLevel is just a database. <br />
-                                <span className="text-white font-black uppercase tracking-tight">I build the custom machine that forces growth.</span>
+                                <span className="text-white font-black uppercase tracking-tight">We build the custom machine that forces growth.</span>
                             </p>
 
                             <div className="grid grid-cols-2 lg:grid-cols-4 gap-8 mt-4 w-full">
@@ -348,7 +348,7 @@ const GHLAutomationPage = () => {
                                                 whileHover={{ scale: 1.02, x: 5, boxShadow: "0 0 40px rgba(59,130,246,0.3)" }}
                                                 className="w-full py-6 bg-white text-black text-[13px] font-black uppercase tracking-[0.3em] rounded-[20px] flex items-center justify-center gap-4 italic shadow-2xl transition-all relative overflow-hidden"
                                             >
-                                                BOOK MY GHL AUDIT
+                                                BOOK OUR GHL AUDIT
                                                 <ArrowRight className="w-5 h-5 group-hover:translate-x-2 transition-transform" />
                                             </motion.button>
                                         </Link>
@@ -446,7 +446,7 @@ const GHLAutomationPage = () => {
                             </h2>
                         </div>
                         <p className="text-lg lg:text-2xl text-slate-400 font-medium leading-tight max-w-md italic border-l-2 border-white/10 pl-8 lg:pb-12 text-left">
-                            "Templates are for beginners. I build custom engines into GHL that your competitors can't even conceptualize."
+                            "Templates are for beginners. We build custom engines into GHL that your competitors can't even conceptualize."
                         </p>
                     </div>
 

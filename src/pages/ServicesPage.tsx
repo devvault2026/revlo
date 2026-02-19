@@ -30,7 +30,7 @@ const ServicesPage: React.FC = () => {
             process: [
                 {
                     step: '01. COMPETITIVE AUDIT',
-                    desc: 'We analyze your market landscape to identify gaps and define your "Category of One" positioning.'
+                    desc: 'We analyze your market landscape to identify gaps and define your elite positioning.'
                 },
                 {
                     step: '02. BRAND ARCHITECTURE',
@@ -204,9 +204,9 @@ const ServicesPage: React.FC = () => {
         },
         {
             icon: <Code className="w-8 h-8" />,
-            title: 'Elite Development // The One-Man Army',
+            title: 'Elite Development // The Elite Core Engine',
             shortDesc: 'Custom engineering for mission-critical software.',
-            description: 'The ultimate leverage. Direct access to a Category of One operator to build complex, IPO-grade systems—from AI marketplaces to secure fintech. If you can dream it, I can build it. With or without AI.',
+            description: 'The ultimate leverage. Direct access to high-level system architects to build complex, IPO-grade systems—from AI marketplaces to secure fintech. If you can dream it, we can build it. With or without AI.',
             process: [
                 {
                     step: '01. MISSION BRIEF',
@@ -214,7 +214,7 @@ const ServicesPage: React.FC = () => {
                 },
                 {
                     step: '02. RAPID PROTOTYPE',
-                    desc: 'I deploy a functional MVP in weeks, not months, focusing on core value and architectural robustness.'
+                    desc: 'We deploy a functional MVP in weeks, not months, focusing on core value and architectural robustness.'
                 },
                 {
                     step: '03. HARDENING & SCALE',

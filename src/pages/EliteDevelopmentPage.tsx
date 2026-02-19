@@ -123,7 +123,7 @@ const EliteDevelopmentPage: React.FC = () => {
             phase: "PHASE 00",
             title: "THE EXTRACTION",
             duration: "WEEK 01",
-            desc: "We dive deep into your business DNA. I don't just take requirements; I extract the vision that you can't yet put into words.",
+            desc: "We dive deep into your business DNA. We don't just take requirements; we extract the vision that you can't yet put into words.",
             deliverables: ["Technical Audit", "Market Gap Analysis", "System Blueprint", "GTM Hypothesis"],
             icon: <Search className="w-6 h-6" />
         },
@@ -139,7 +139,7 @@ const EliteDevelopmentPage: React.FC = () => {
             phase: "PHASE 02",
             title: "THE 90-DAY BLITZ",
             duration: "WEEK 04-12",
-            desc: "Hyper-speed execution. Daily commits, weekly functional prototypes, and live feedback loops.",
+            desc: "Hyper-speed execution. Daily commits, weekly functional prototypes, and live feedback loops. We move at the velocity of light.",
             deliverables: ["Responsive UI/UX", "Complex Feature Build", "AI Orchestration", "Real-time Systems"],
             icon: <Zap className="w-6 h-6" />
         },
@@ -163,8 +163,8 @@ const EliteDevelopmentPage: React.FC = () => {
 
     const engagementExperience = [
         {
-            title: "Direct Founder Access",
-            desc: "Skip the account managers. You have a direct line to my private Discord. We move at the speed of your business, with zero filters.",
+            title: "Direct Partners Access",
+            desc: "Skip the account managers. You have a direct line to our private Discord. We move at the speed of your business, with zero filters.",
             icon: <MessageSquare className="w-5 h-5" />
         },
         {
@@ -174,7 +174,7 @@ const EliteDevelopmentPage: React.FC = () => {
         },
         {
             title: "100% IP Transfer",
-            desc: "I build institutional-grade systems that you own entirely. No vendor lock-in, no hidden code—your business, your assets.",
+            desc: "We build institutional-grade systems that you own entirely. No vendor lock-in, no hidden code—your business, your assets.",
             icon: <Shield className="w-5 h-5" />
         }
     ];
@@ -235,7 +235,7 @@ const EliteDevelopmentPage: React.FC = () => {
 
     const comparisons = [
         { label: "Feedback Loop", agency: "2-Week Sprints / 3 Meetings", revlo: "Instant Discord Clips / Daily Commits" },
-        { label: "Execution", agency: "Junior Devs & Interns", revlo: "The Founder. 100% Skin in the Game" },
+        { label: "Execution", agency: "Junior Devs & Interns", revlo: "The Founders. The Elite Core Engine" },
         { label: "Pricing", agency: "Retainers for 'Account Management'", revlo: "Lumped into Raw Development Power" },
         { label: "Technical Speed", agency: "Locked into Legacy Frameworks", revlo: "Bleeding Edge AI & Real-time Systems" },
         { label: "Ownership", agency: "Vague IP Clauses / Dependent Support", revlo: "100% Clean Code / Independent Infrastructure" }
@@ -244,7 +244,7 @@ const EliteDevelopmentPage: React.FC = () => {
     const faqs = [
         {
             q: "WHY NOT JUST HIRE A TRADITIONAL AGENCY?",
-            a: "Because you're paying for their rent, their HR department, and their account managers. With me, you pay for raw code and tactical strategy. Agencies give you a project manager; I give you a partner."
+            a: "Because you're paying for their rent, their HR department, and their account managers. With us, you pay for raw code and tactical strategy. Agencies give you a project manager; we give you partners."
         },
         {
             q: "HOW FAST CAN WE DEPLOY?",
@@ -252,11 +252,11 @@ const EliteDevelopmentPage: React.FC = () => {
         },
         {
             q: "WHO OWNS THE INTELLECTUAL PROPERTY?",
-            a: "You. 100%. I provide the documentation and the architecture, but you hold the keys. No vendor lock-in. No hidden bullshit."
+            a: "You. 100%. We provide the documentation and the architecture, but you hold the keys. No vendor lock-in. No hidden bullshit."
         },
         {
             q: "WHAT IF THE SCOPE CHANGES?",
-            a: "In the 2026 economy, if your scope isn't changing, you're dead. I build modular architectures that are designed to pivot and expand as the market shifts."
+            a: "In the 2026 economy, if your scope isn't changing, you're dead. We build modular architectures that are designed to pivot and expand as the market shifts."
         }
     ];
 
@@ -285,10 +285,10 @@ const EliteDevelopmentPage: React.FC = () => {
     return (
         <div className="min-h-screen bg-[#020408] text-white selection:bg-red-500/30">
             <Helmet>
-                <title>Elite Development // The One-Man Army | Revlo — IPO-Grade Custom Engineering</title>
-                <meta name="description" content="Direct access to a Category of One operator. Custom engineering for mission-critical software — AI marketplaces, fintech, full-stack. $1,500 blitz projects." />
-                <meta property="og:title" content="Elite Development // The One-Man Army | Revlo" />
-                <meta property="og:description" content="Custom engineering for mission-critical software. If you can dream it, I can build it." />
+                <title>Elite Development // The Elite Core Engine | Revlo — IPO-Grade Custom Engineering</title>
+                <meta name="description" content="Direct access to high-level architects. Custom engineering for mission-critical software — AI marketplaces, fintech, full-stack. $1,500 blitz projects." />
+                <meta property="og:title" content="Elite Development // The Elite Core Engine | Revlo" />
+                <meta property="og:description" content="Custom engineering for mission-critical software. If you can dream it, we can build it." />
                 <meta property="og:image" content="https://res.cloudinary.com/dpfapm0tl/image/upload/v1771259282/ChatGPT_Image_Feb_16_2026_11_27_50_AM_uorc1u.png" />
                 <meta property="og:url" content="https://www.wearerevlo.com/elite-development" />
                 <meta name="twitter:card" content="summary_large_image" />
@@ -372,7 +372,7 @@ const EliteDevelopmentPage: React.FC = () => {
                         >
                             <div className="inline-flex items-center gap-3 px-4 py-2 glass rounded-full mb-8 border border-red-500/20 animate-flicker">
                                 <span className="text-[10px] font-black text-red-500 uppercase tracking-[0.5em]">
-                                    ARCHITECT // THE ELITE OPERATOR
+                                    ARCHITECTS // THE ELITE CORE ENGINE
                                 </span>
                             </div>
 
@@ -472,8 +472,8 @@ const EliteDevelopmentPage: React.FC = () => {
                             </h1>
 
                             <p className="text-lg lg:text-2xl text-slate-400 font-medium leading-tight mb-10 max-w-xl text-left">
-                                Where others see roadblocks, I see blueprints. <br />
-                                <span className="text-white font-bold">I architect market dominance through single-operator efficiency.</span>
+                                Where others see roadblocks, we see blueprints. <br />
+                                <span className="text-white font-bold">We architect market dominance through elite-team efficiency.</span>
                             </p>
 
                             <div className="hidden lg:flex flex-col gap-4">
@@ -519,7 +519,7 @@ const EliteDevelopmentPage: React.FC = () => {
                                     {/* Authorization Header */}
                                     <div className="flex justify-between items-end">
                                         <div className="space-y-1">
-                                            <div className="text-[9px] font-black text-blue-500 uppercase tracking-[0.5em]">FOUNDER_DIRECT</div>
+                                            <div className="text-[9px] font-black text-blue-500 uppercase tracking-[0.5em]">PARTNER_DIRECT</div>
                                             <div className="text-xl font-black text-white italic tracking-tighter uppercase leading-none">EXECUTIVE_ACCESS</div>
                                         </div>
                                         <div className="text-right">
@@ -951,7 +951,7 @@ const EliteDevelopmentPage: React.FC = () => {
                                     <span className="gradient-text italic tracking-[-0.03em]">ARSENAL.</span>
                                 </h2>
                                 <p className="text-xl text-slate-400 leading-relaxed font-medium italic max-w-xl border-l border-white/5 pl-8">
-                                    "I select technologies not based on hype, but on their ability to provide a sustainable competitive advantage for your business."
+                                    "We select technologies not based on hype, but on their ability to provide a sustainable competitive advantage for your business."
                                 </p>
 
                                 <div className="grid gap-12">
@@ -1095,7 +1095,7 @@ const EliteDevelopmentPage: React.FC = () => {
                                     "Architecture is more than code. It is the calculated removal of friction between a visionary idea and market dominance."
                                 </p>
                                 <p className="text-base lg:text-lg text-slate-400 leading-relaxed font-light italic max-w-xl">
-                                    I don't just build systems; I build foundations for the next decade of your enterprise. My philosophy is simple: Eliminate complexity, prioritize velocity, and maintain absolute quality.
+                                    We don't just build systems; we build foundations for the next decade of your enterprise. Our philosophy is simple: Eliminate complexity, prioritize velocity, and maintain absolute quality.
                                 </p>
                             </div>
 
@@ -1133,10 +1133,10 @@ const EliteDevelopmentPage: React.FC = () => {
                                     </h3>
                                     <div className="grid gap-4 lg:gap-6">
                                         {[
-                                            { label: "Boredom Over Chaos", desc: "Doing the reps even when my mind begged for distraction." },
+                                            { label: "Boredom Over Chaos", desc: "Doing the reps even when our minds begged for distraction." },
                                             { label: "Discipline Over Dopamine", desc: "Setting standards no one sees and doing the work no one praises." },
                                             { label: "Full Responsibility", desc: "Making brutally honest choices instead of spinning stories." },
-                                            { label: "Embodiment", desc: "Walking every day as if I’m already the man I want to become." }
+                                            { label: "Embodiment", desc: "Walking every day as if we’re already the team we want to become." }
                                         ].map((work, i) => (
                                             <motion.div
                                                 key={i}
@@ -1162,17 +1162,17 @@ const EliteDevelopmentPage: React.FC = () => {
 
                                     <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
                                         {[
-                                            "I am not cursed. Suffering was a choice.",
-                                            "I bend reality with intent.",
-                                            "I walk into challenges as if I hold the solution.",
-                                            "I suffer on purpose to build.",
-                                            "I will write new stories.",
-                                            "I will tune into clarity.",
+                                            "We are not cursed. Suffering was a choice.",
+                                            "We bend reality with intent.",
+                                            "We walk into challenges as if we hold the solution.",
+                                            "We suffer on purpose to build.",
+                                            "We will write new stories.",
+                                            "We will tune into clarity.",
                                             "Gratitude and grit are the path.",
-                                            "I act like the man I want to be."
+                                            "We act like the team we want to be."
                                         ].map((point, i) => (
                                             <div key={i} className="flex gap-4 p-5 border border-white/5 rounded-2xl text-[9px] font-bold text-slate-400 uppercase tracking-widest hover:bg-white/[0.05] hover:text-white transition-all cursor-default group">
-                                                <span className="text-red-500 font-black">I.{i + 1}</span>
+                                                <span className="text-red-500 font-black">WE.{i + 1}</span>
                                                 {point}
                                             </div>
                                         ))}
@@ -1191,7 +1191,7 @@ const EliteDevelopmentPage: React.FC = () => {
                                         You’re not lost – you’re in transit. The discomfort means you’re shedding an old skin.
                                     </p>
                                     <div className="text-[10px] font-black uppercase tracking-[0.4em] text-red-600 italic font-mono">
-                                        I CHOOSE ACTION. // START.
+                                        WE CHOOSE ACTION. // START.
                                     </div>
                                 </motion.div>
                             </div>
@@ -1247,7 +1247,7 @@ const EliteDevelopmentPage: React.FC = () => {
                                 <span className="gradient-text italic tracking-[-0.04em]">REVLO.OS.</span>
                             </h2>
                             <p className="text-xl text-slate-400 font-medium leading-relaxed italic mb-12 max-w-xl border-l-2 border-white/10 pl-10">
-                                "I build your vision on top of Revlo.OS—a proprietary suite of internal modules that shave months off development time."
+                                "We build your vision on top of Revlo.OS—a proprietary suite of internal modules that shave months off development time."
                             </p>
 
                             <div className="grid gap-6">
@@ -1475,7 +1475,7 @@ const EliteDevelopmentPage: React.FC = () => {
                     {/* Guarantees Section */}
                     <div className="mt-24 grid md:grid-cols-3 gap-8">
                         {[
-                            { title: "Revenue Guarantee", desc: "For retention partners, we map code to bank balances. If we don't hit the target, I keep working." },
+                            { title: "Revenue Guarantee", desc: "For retention partners, we map code to bank balances. If we don't hit the target, we keep working." },
                             { title: "IP Protection", desc: "You own 100% of the code, documentation, and infrastructure. Forever. No lock-in." },
                             { title: "Velocity Standard", desc: "No feature takes longer than a week without a visual prototype. We move fast." }
                         ].map((g, i) => (

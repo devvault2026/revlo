@@ -78,7 +78,7 @@ const Projects: React.FC = () => {
                     </h2>
 
                     <p className="text-xl text-slate-400 leading-relaxed font-medium max-w-3xl">
-                        I don't just consult—I build. From high-end, conversion-heavy web design to complex multi-agent AI systems, I provide the elite infrastructure for the 2026 digital economy.
+                        We don't just consult—we build. From high-end, conversion-heavy web design to complex multi-agent AI systems, we provide the elite infrastructure for the 2026 digital economy.
                     </p>
                 </motion.div>
 

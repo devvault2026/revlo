@@ -30,30 +30,21 @@ client.on("messageCreate", async (message) => {
     if (!prompt) return message.reply("Ask me something.");
 
     try {
-        // ⚠️ THIS WILL BE YOUR OPENCLAW API
-        // Ensure OPENCLAW_API_URL is set in .env
-        // Defaulting to http://localhost:8000/v1/chat/completions which is standard for local LLM servers
-        // But respecting user's original intent if they set it.
-        const apiUrl = process.env.OPENCLAW_API_URL || "http://localhost:8000/v1/chat/completions";
+        // OpenClaw Gateway API
+        const apiUrl = process.env.OPENCLAW_API_URL || "http://localhost:18789/v1/chat/completions";
+        const authToken = process.env.OPENCLAW_GATEWAY_TOKEN || "";
 
-        // Adjust payload structure based on API
-        // If it's OpenAI compatible:
-        const payload = {
-            model: "gpt-3.5-turbo", // or whatever model OpenClaw uses
-            messages: [{ role: "user", content: prompt }],
+        const headers = {
+            "Content-Type": "application/json",
         };
-
-        // If it's the custom endpoint from snippet:
-        // const payload = { message: prompt };
-
-        // We'll stick to the snippet's likely intention but make it configurable
-        // If the user's snippet was strictly { message: prompt }, we should support that.
-        // Let's assume the user knows the payload structure or we should stick to the snippet's { message: prompt } for now
-        // but allow URL configuration.
+        if (authToken) {
+            headers["Authorization"] = `Bearer ${authToken}`;
+        }
 
         const response = await axios.post(apiUrl, {
-            message: prompt,
-        });
+            model: process.env.OPENCLAW_MODEL || "google/gemini-3-flash-preview",
+            messages: [{ role: "user", content: prompt }],
+        }, { headers });
 
         // Handle response structure
         // If the API returns { reply: "..." }

@@ -3,6 +3,25 @@ import { motion } from 'framer-motion';
 import { Star, Shield, Zap, Target, Cpu, Code, TrendingUp } from 'lucide-react';
 
 const FounderOperator: React.FC = () => {
+    const operators = [
+        {
+            name: 'JARYD',
+            role: 'ARCHITECT',
+            status: 'Operator Active // J-2026',
+            image: '/619228587_1473924384299979_5558935500619533353_n.jpg',
+            initial: 'J',
+            color: 'text-red-500'
+        },
+        {
+            name: 'AUSTYN',
+            role: 'WIZARD',
+            status: 'Node Online // A-2026',
+            image: 'https://res.cloudinary.com/dpfapm0tl/image/upload/v1771518723/440322966_122102586140298307_3460827367128600753_n_nhr5s1.jpg',
+            initial: 'A',
+            color: 'text-blue-500'
+        }
+    ];
+
     const skills = [
         { name: 'Elite Engineering', desc: 'Full-stack systems that scale to IPO levels.', icon: <Code className="w-4 h-4" /> },
         { name: 'Product Architecture', desc: 'Turning "Impossible" ideas into market leaders.', icon: <Cpu className="w-4 h-4" /> },
@@ -19,58 +38,62 @@ const FounderOperator: React.FC = () => {
 
             <div className="max-w-7xl mx-auto px-6 lg:px-8 relative z-10">
                 <div className="grid lg:grid-cols-2 gap-20 items-center">
-                    {/* Left: Tactical Visual Repo */}
+                    {/* Left: Operators Grid */}
                     <motion.div
                         initial={{ opacity: 0, scale: 0.95 }}
                         whileInView={{ opacity: 1, scale: 1 }}
                         transition={{ duration: 0.8 }}
                         viewport={{ once: true }}
-                        className="relative"
+                        className="grid grid-cols-2 gap-6"
                     >
-                        <div className="relative aspect-square max-w-md mx-auto">
-                            {/* Rotating Ring */}
-                            <motion.div
-                                animate={{ rotate: 360 }}
-                                transition={{ duration: 20, repeat: Infinity, ease: "linear" }}
-                                className="absolute inset-0 border border-white/5 rounded-[48px] border-dashed"
-                            />
+                        {operators.map((op, idx) => (
+                            <div key={idx} className="relative aspect-[3/4] group">
+                                {/* Rotating Ring for the active operator */}
+                                {idx === 0 && (
+                                    <motion.div
+                                        animate={{ rotate: 360 }}
+                                        transition={{ duration: 20, repeat: Infinity, ease: "linear" }}
+                                        className="absolute -inset-4 border border-white/5 rounded-[48px] border-dashed"
+                                    />
+                                )}
 
-                            {/* Inner Glass Box */}
-                            <div className="absolute inset-4 glass rounded-[40px] border border-white/10 overflow-hidden group shadow-2xl">
-                                <img
-                                    src="/619228587_1473924384299979_5558935500619533353_n.jpg"
-                                    alt="Founder"
-                                    className="w-full h-full object-cover grayscale brightness-50 group-hover:grayscale-0 group-hover:brightness-100 transition-all duration-700"
-                                />
-                                <div className="absolute inset-0 bg-gradient-to-t from-black via-transparent to-transparent opacity-60" />
+                                {/* Inner Glass Box */}
+                                <div className="absolute inset-0 glass rounded-[32px] border border-white/10 overflow-hidden shadow-2xl transition-all duration-500 group-hover:border-white/30">
+                                    {op.image ? (
+                                        <img
+                                            src={op.image}
+                                            alt={op.name}
+                                            className="w-full h-full object-cover grayscale brightness-50 group-hover:grayscale-0 group-hover:brightness-100 transition-all duration-700"
+                                        />
+                                    ) : (
+                                        <div className="w-full h-full bg-white/5 flex items-center justify-center text-6xl font-black italic text-white opacity-20 group-hover:opacity-100 transition-opacity">
+                                            {op.initial}
+                                        </div>
+                                    )}
+                                    <div className="absolute inset-0 bg-gradient-to-t from-black via-transparent to-transparent opacity-60" />
 
-                                {/* Status Overlay */}
-                                <div className="absolute bottom-8 left-8 right-8">
-                                    <div className="flex items-center gap-3 mb-2">
-                                        <div className="w-2 h-2 bg-green-500 rounded-full animate-pulse" />
-                                        <span className="text-[10px] font-black text-white/50 uppercase tracking-[0.3em]">Operator Active // J-2026</span>
+                                    {/* Status Overlay */}
+                                    <div className="absolute bottom-6 left-6 right-6">
+                                        <div className="flex items-center gap-2 mb-1">
+                                            <div className={`w-1.5 h-1.5 rounded-full animate-pulse ${idx === 0 ? 'bg-red-500' : 'bg-blue-500'}`} />
+                                            <span className="text-[8px] font-black text-white/50 uppercase tracking-[0.3em]">{op.status}</span>
+                                        </div>
+                                        <div className="text-lg font-black italic text-white uppercase tracking-tighter">
+                                            {op.name} <span className={`block text-[10px] not-italic ${op.color}`}>{op.role}</span>
+                                        </div>
                                     </div>
-                                    <div className="text-2xl font-black italic text-white uppercase tracking-tighter">JARYD // ARCHITECT</div>
                                 </div>
                             </div>
+                        ))}
 
-                            {/* Floating Tech Badges */}
-                            <motion.div
-                                animate={{ y: [0, -10, 0] }}
-                                transition={{ duration: 4, repeat: Infinity }}
-                                className="absolute -top-6 -right-6 p-4 glass rounded-2xl border border-white/10 backdrop-blur-3xl shadow-2xl"
-                            >
-                                <Target className="w-6 h-6 text-red-500" />
-                            </motion.div>
-
-                            <motion.div
-                                animate={{ y: [0, 10, 0] }}
-                                transition={{ duration: 5, repeat: Infinity, delay: 0.5 }}
-                                className="absolute -bottom-6 -left-6 p-4 glass rounded-2xl border border-white/10 backdrop-blur-3xl shadow-2xl"
-                            >
-                                <Shield className="w-6 h-6 text-blue-500" />
-                            </motion.div>
-                        </div>
+                        {/* Floating Tech Badges */}
+                        <motion.div
+                            animate={{ y: [0, -10, 0] }}
+                            transition={{ duration: 4, repeat: Infinity }}
+                            className="absolute -top-6 left-1/2 -translate-x-1/2 p-4 glass rounded-2xl border border-white/10 backdrop-blur-3xl shadow-2xl z-20"
+                        >
+                            <Target className="w-6 h-6 text-red-500" />
+                        </motion.div>
                     </motion.div>
 
                     {/* Right: Narrative */}
@@ -82,18 +105,18 @@ const FounderOperator: React.FC = () => {
                         >
                             <div className="inline-block px-4 py-2 glass rounded-full mb-8">
                                 <span className="text-[10px] font-black text-red-500 uppercase tracking-[0.4em]">
-                                    Founder & Lead Operator
+                                    Founders & Lead Operators
                                 </span>
                             </div>
 
                             <h2 className="text-5xl lg:text-8xl font-black font-display mb-8 tracking-tighter italic text-white leading-[0.85] uppercase">
-                                THE <span className="gradient-text-alt">ONE-MAN</span> <br />ARMY.
+                                THE <span className="gradient-text-alt">ELITE</span> <br />ENGINE.
                             </h2>
 
                             <p className="text-xl text-slate-400 leading-relaxed font-medium mb-12">
-                                I don't hide behind a "team" of entry-level developers or account managers.
-                                When you partner with Revlo, you get direct access to the architect.
-                                I build the code, I design the systems, and I orchestrate the growth.
+                                We don't hide behind a "team" of entry-level developers or account managers.
+                                When you partner with Revlo, you get direct access to the core team.
+                                We build the code, we design the systems, and we orchestrate the growth.
                                 Total ownership. Total accountability. Irrefutable results.
                             </p>
 
@@ -133,7 +156,7 @@ const FounderOperator: React.FC = () => {
                         "AGENCY BLOAT IS <span className="text-red-600">POISON.</span> SPEED IS THE ANTIDOTE."
                     </h3>
                     <p className="text-xl text-slate-400 leading-relaxed max-w-4xl mx-auto font-medium relative z-10">
-                        I am the category of one. My expertise is amplified by Revlo OS, a proprietary stack of systems designed
+                        We are the category of one. Our expertise is amplified by Revlo OS, a proprietary stack of systems designed
                         to outperform entire departments. You aren't just buying services; you're securing a strategic advantage
                         that your competitors literally cannot replicate.
                     </p>

@@ -193,17 +193,17 @@ const OpenClawPage: React.FC = () => {
     const protocolSteps = [
         {
             phase: "PHASE 01",
-            title: "THE INSTALLATION",
+            title: "ORGO CLOUD DEPLOYMENT",
             duration: "HOUR 01",
-            desc: "We install OpenClaw on your machine. Mac, Windows, or Linux. Private by default—your data stays yours.",
-            deliverables: ["Environment Setup", "Node.js Configuration", "Privacy Hardening", "Local LLM Connection"],
+            desc: "We spin up a dedicated Orgo.ai cloud desktop—a persistent, sandboxed virtual machine purpose-built for AI agents. Sub-500ms boot time. Your own isolated environment with dedicated resources.",
+            deliverables: ["Orgo.ai VM Provisioned", "Sandboxed Environment", "Dedicated Resources", "Sub-500ms Boot Time"],
             icon: <Terminal className="w-6 h-6" />
         },
         {
             phase: "PHASE 02",
             title: "NEURAL CONNECTION",
             duration: "HOUR 02",
-            desc: "Connecting the brain. We link OpenClaw to your preferred chat apps—WhatsApp, Telegram, Discord, or Slack.",
+            desc: "Connecting the brain. We link OpenClaw to your preferred chat apps—WhatsApp, Telegram, Discord, or Slack—all running inside the Orgo sandbox.",
             deliverables: ["Comms Integration", "Authorized User Setup", "Secure Tunneling", "Real-time Response"],
             icon: <MessageSquare className="w-6 h-6" />
         },
@@ -211,7 +211,7 @@ const OpenClawPage: React.FC = () => {
             phase: "PHASE 03",
             title: "SKILL INJECTION",
             duration: "HOUR 03-04",
-            desc: "We configure the autonomous skills. Browser control, file access, calendar management, and custom workflows.",
+            desc: "We configure the autonomous skills. Browser control, file access, calendar management, and custom workflows—all executing on the Orgo cloud desktop.",
             deliverables: ["Browser Automation", "File System Access", "Calendar Sync", "Email Management"],
             icon: <Zap className="w-6 h-6" />
         },
@@ -219,13 +219,14 @@ const OpenClawPage: React.FC = () => {
             phase: "PHASE 04",
             title: "AUTONOMOUS OPERATIONS",
             duration: "PERMANENT",
-            desc: "The system runs itself. Zero human intervention. It learns, remembers, and acts on your behalf 24/7.",
-            deliverables: ["Persistent Memory", "Self-Healing Workflows", "Proactive Tasks", "24/7 Availability"],
+            desc: "The system runs itself on Orgo's always-on infrastructure. Zero human intervention. It learns, remembers, and acts on your behalf 24/7—no machine left running, no laptop needed.",
+            deliverables: ["Persistent Memory", "Self-Healing Workflows", "Proactive Tasks", "24/7 Cloud Uptime"],
             icon: <Bot className="w-6 h-6" />
         }
     ];
 
     const techArsenal = [
+        { category: "Infra", tools: ["Orgo.ai", "Cloud VMs", "Sandboxed Env"], reason: "Persistent Agent Computing" },
         { category: "Comms", tools: ["WhatsApp", "Telegram", "Discord"], reason: "Universal Control Interface" },
         { category: "Brain", tools: ["Claude", "GPT-4", "Local LLMs"], reason: "Cognitive Reasoning Core" },
         { category: "Vision", tools: ["Browser", "Screen Analysis", "OCR"], reason: "Visual Context Understanding" },
@@ -269,11 +270,15 @@ const OpenClawPage: React.FC = () => {
     const faqs = [
         {
             q: "DOES IT REALLY REQUIRE ZERO HUMAN INTERVENTION?",
-            a: "Once configured, yes. It has persistent memory and autonomous loops. It checks your calendar, sorts your email, and executes tasks without you needing to hold its hand."
+            a: "Once configured, yes. It runs on a persistent Orgo.ai cloud desktop 24/7. It checks your calendar, sorts your email, and executes tasks without you needing to hold its hand—no laptop required."
         },
         {
             q: "IS MY DATA SAFE?",
-            a: "OpenClaw runs on YOUR machine or YOUR private cloud instance. Your data never leaves your control. No middleman, no walled gardens."
+            a: "Every OpenClaw deployment runs in its own isolated Orgo.ai virtual machine with dedicated resources. Your workspace is sandboxed from every other user on the platform—your data and processes stay completely separate."
+        },
+        {
+            q: "WHY DO YOU USE ORGO.AI?",
+            a: "Orgo provides purpose-built cloud desktops for AI agents with sub-500ms boot time. Each workspace is a full desktop environment your agent can see and control through screenshots, mouse, and keyboard. It works with any AI model (Claude, GPT-4o, Gemini) and runs 24/7 without you needing your own hardware."
         },
         {
             q: "WHAT IF I WANT TO ADD NEW SKILLS?",
@@ -281,7 +286,7 @@ const OpenClawPage: React.FC = () => {
         },
         {
             q: "CAN IT REALLY CONTROL MY BROWSER?",
-            a: "Yes. It can open browsers, click buttons, fill forms, and scrape data. It interacts with the web just like a human user would."
+            a: "Yes. Inside the Orgo cloud desktop, it can open browsers, click buttons, fill forms, and scrape data. It interacts with the web just like a human user would—but 24/7."
         }
     ];
 
@@ -1006,9 +1011,9 @@ const OpenClawPage: React.FC = () => {
                             <div className="mb-6 opacity-50 group-hover:opacity-100 transition-opacity">
                                 <Cpu className="w-10 h-10 text-white" />
                             </div>
-                            <h4 className="text-xl font-black italic uppercase tracking-tight text-white mb-4">LOCAL_FIRST COMPUTE</h4>
+                            <h4 className="text-xl font-black italic uppercase tracking-tight text-white mb-4">ORGO_CLOUD COMPUTE</h4>
                             <p className="text-slate-400 text-sm leading-relaxed">
-                                We prefer bare-metal execution. Your agent runs on your hardware or a private, isolated VPS. This means 0ms latency and zero reliance on congested public API queues.
+                                Every OpenClaw agent runs on a dedicated <a href="https://www.orgo.ai" target="_blank" rel="noopener noreferrer" className="text-red-400 hover:text-red-300 underline underline-offset-2 transition-colors">Orgo.ai</a> cloud desktop—a persistent virtual machine purpose-built for AI agents. Sub-500ms boot time. Isolated resources. No shared infrastructure. Your agent gets its own full desktop environment.
                             </p>
                         </div>
                         <div className="p-8 border-l border-white/10 hover:border-red-500/50 transition-colors group">
@@ -1017,7 +1022,7 @@ const OpenClawPage: React.FC = () => {
                             </div>
                             <h4 className="text-xl font-black italic uppercase tracking-tight text-white mb-4">ANTI_FRAGILE MESH</h4>
                             <p className="text-slate-400 text-sm leading-relaxed">
-                                If one LLM provider goes down (e.g., OpenAI), OpenClaw automatically reroutes reasoning to Claude, Gemini, or a local Llama instance. The mission never stops.
+                                If one LLM provider goes down (e.g., OpenAI), OpenClaw automatically reroutes reasoning to Claude, Gemini, or a local Llama instance. Orgo supports any computer-use capable model. The mission never stops.
                             </p>
                         </div>
                         <div className="p-8 border-l border-white/10 hover:border-red-500/50 transition-colors group">
@@ -1026,7 +1031,7 @@ const OpenClawPage: React.FC = () => {
                             </div>
                             <h4 className="text-xl font-black italic uppercase tracking-tight text-white mb-4">INFINITE HORIZON</h4>
                             <p className="text-slate-400 text-sm leading-relaxed">
-                                Traditional SaaS tools box you in. OpenClaw accesses the browser, the file system, and the terminal. If a human can do it on a computer, OpenClaw can do it.
+                                Traditional SaaS tools box you in. Inside the Orgo cloud desktop, OpenClaw accesses the browser, the file system, and the terminal. If a human can do it on a computer, OpenClaw can do it—24/7 without your laptop.
                             </p>
                         </div>
                     </div>
@@ -1064,6 +1069,70 @@ const OpenClawPage: React.FC = () => {
                 </div>
             </section>
 
+            {/* POWERED BY ORGO */}
+            <section className="py-16 lg:py-24 bg-[#020408] border-t border-white/5 relative overflow-hidden">
+                <div className="absolute inset-0 bg-gradient-to-r from-cyan-500/5 via-transparent to-blue-500/5 pointer-events-none" />
+                <div className="max-w-7xl mx-auto px-6 lg:px-8 relative z-10">
+                    <div className="grid lg:grid-cols-2 gap-12 lg:gap-20 items-center">
+                        <div>
+                            <div className="inline-flex items-center gap-3 px-6 py-3 bg-cyan-500/10 border border-cyan-500/20 rounded-full mb-8">
+                                <Cpu className="w-4 h-4 text-cyan-400" />
+                                <span className="text-[10px] font-black text-cyan-400 uppercase tracking-[0.3em]">INFRASTRUCTURE_PARTNER</span>
+                            </div>
+                            <h2 className="text-4xl lg:text-6xl font-black italic tracking-tight uppercase text-white mb-8 leading-[0.85]">
+                                POWERED BY <br />
+                                <a href="https://www.orgo.ai" target="_blank" rel="noopener noreferrer" className="text-transparent bg-clip-text bg-gradient-to-r from-cyan-400 to-blue-500 hover:from-cyan-300 hover:to-blue-400 transition-all">ORGO.AI</a>
+                            </h2>
+                            <p className="text-lg text-slate-400 font-medium italic leading-relaxed mb-8">
+                                We chose <a href="https://www.orgo.ai" target="_blank" rel="noopener noreferrer" className="text-cyan-400 hover:text-cyan-300 underline underline-offset-2 transition-colors">Orgo</a> because they built the only infrastructure that treats AI agents as first-class citizens. Every OpenClaw deployment runs on a persistent Orgo cloud desktop—a full virtual machine your agent can see and control through screenshots, mouse, and keyboard.
+                            </p>
+                            <div className="space-y-4">
+                                {[
+                                    { label: "SUB-500MS BOOT", desc: "Agents spin up in under half a second. No cold starts." },
+                                    { label: "FULL DESKTOP ACCESS", desc: "Not just an API—a real desktop environment with browser, file system, and terminal." },
+                                    { label: "SANDBOXED VMS", desc: "Each workspace runs in its own isolated VM with dedicated resources. Zero cross-contamination." },
+                                    { label: "MODEL AGNOSTIC", desc: "Works with Claude, GPT-4o, Gemini, or any computer-use capable model." },
+                                ].map((item, i) => (
+                                    <div key={i} className="flex items-start gap-4 group">
+                                        <div className="mt-1 w-2 h-2 rounded-full bg-cyan-500 shrink-0 group-hover:shadow-[0_0_10px_rgba(34,211,238,0.6)] transition-shadow" />
+                                        <div>
+                                            <span className="text-xs font-black text-white uppercase tracking-wider">{item.label}</span>
+                                            <span className="text-xs text-slate-500 font-medium ml-2">{item.desc}</span>
+                                        </div>
+                                    </div>
+                                ))}
+                            </div>
+                        </div>
+                        <div className="relative">
+                            <div className="absolute -inset-4 bg-gradient-to-r from-cyan-500/20 to-blue-500/20 blur-3xl rounded-full opacity-30" />
+                            <div className="relative glass-dark rounded-[32px] border border-cyan-500/20 p-8 lg:p-12 overflow-hidden">
+                                <div className="absolute inset-0 bg-gradient-to-b from-cyan-500/5 to-transparent pointer-events-none" />
+                                <div className="relative z-10">
+                                    <div className="text-[9px] font-black text-cyan-500 uppercase tracking-[0.5em] mb-6">WHY_ORGO</div>
+                                    <div className="space-y-6">
+                                        <div className="p-4 bg-white/[0.03] rounded-2xl border border-white/5">
+                                            <div className="text-xs font-black text-white uppercase tracking-tight mb-2">THE PROBLEM WITH LOCAL</div>
+                                            <p className="text-xs text-slate-500 leading-relaxed">Running agents on your laptop means they stop when you close the lid. Sleep, power outages, and updates kill your uptime.</p>
+                                        </div>
+                                        <div className="p-4 bg-white/[0.03] rounded-2xl border border-white/5">
+                                            <div className="text-xs font-black text-white uppercase tracking-tight mb-2">THE PROBLEM WITH GENERIC VPS</div>
+                                            <p className="text-xs text-slate-500 leading-relaxed">Standard VPS providers weren't built for AI. No native screen control, no agent-optimized tooling, painful setup.</p>
+                                        </div>
+                                        <div className="p-4 bg-cyan-500/10 rounded-2xl border border-cyan-500/20">
+                                            <div className="text-xs font-black text-cyan-400 uppercase tracking-tight mb-2">THE ORGO ADVANTAGE</div>
+                                            <p className="text-xs text-slate-400 leading-relaxed">
+                                                Purpose-built for computer-use agents. High-performance, low-latency cloud desktops with native screen-control APIs.
+                                                OpenClaw stays active 24/7 on Orgo's infrastructure, ensuring zero lead decay and 100% reliability without relying on your personal hardware.
+                                            </p>
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </section>
+
             {/* SECURITY */}
             <section className="py-16 bg-[#020408] border-t border-white/5 relative overflow-hidden">
                 <div className="max-w-7xl mx-auto px-6 text-center">
@@ -1075,17 +1144,21 @@ const OpenClawPage: React.FC = () => {
                         PARTNERED WITH <span className="text-blue-500">VIRUSTOTAL.</span>
                     </h2>
                     <p className="text-lg text-slate-400 font-medium italic max-w-2xl mx-auto mb-12">
-                        Every file operation, every script, and every download is scanned in real-time. OpenClaw operates with a military-grade security perimeter.
+                        Every file operation, every script, and every download is scanned in real-time. OpenClaw operates with a military-grade security perimeter inside sandboxed Orgo environments.
                     </p>
 
-                    <div className="flex justify-center gap-8 opacity-60 grayscale hover:grayscale-0 transition-all duration-500">
+                    <div className="flex flex-wrap justify-center gap-8 opacity-60 grayscale hover:grayscale-0 transition-all duration-500">
                         <div className="flex items-center gap-2">
                             <Shield className="w-6 h-6 text-blue-500" />
                             <span className="text-xl font-black text-white italic tracking-tighter">VIRUSTOTAL</span>
                         </div>
                         <div className="flex items-center gap-2">
+                            <Cpu className="w-6 h-6 text-cyan-500" />
+                            <span className="text-xl font-black text-white italic tracking-tighter">ORGO.AI</span>
+                        </div>
+                        <div className="flex items-center gap-2">
                             <Lock className="w-6 h-6 text-green-500" />
-                            <span className="text-xl font-black text-white italic tracking-tighter">LOCAL_ENCRYPTION</span>
+                            <span className="text-xl font-black text-white italic tracking-tighter">SANDBOXED_VMS</span>
                         </div>
                     </div>
                 </div>
@@ -1241,7 +1314,7 @@ const OpenClawPage: React.FC = () => {
 
                             <ul className="space-y-4 mb-10 relative z-10">
                                 {[
-                                    "Cloud VPS Deployment",
+                                    "Orgo Cloud Deployment",
                                     "Multi-Agent Orchestration",
                                     "3 Custom Skill Injections",
                                     "CRM Integration (HubSpot/GHL)",

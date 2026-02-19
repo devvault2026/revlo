@@ -23,6 +23,24 @@ const TeamPage: React.FC = () => {
             image: '/619228587_1473924384299979_5558935500619533353_n.jpg',
             id: 'LEAD-001'
         },
+        {
+            name: 'AUSTYN CHALIFOUR',
+            role: 'Fullstack Developer & AI Wizard',
+            title: 'OPENCLAW TECHNICIAN // SYSTEMS ARCHITECT',
+            bio: 'Specializing in neural architecture, fullstack automation, and the core development of the OpenClaw infrastructure.',
+            extendedBio: 'Austyn is the technical force behind our most complex AI integrations. With a deep understanding of fullstack ecosystems and neural networks, he ensures that every OpenClaw deployment is optimized for peak performance and autonomous efficiency. His work bridges the gap between raw data and intelligent execution.',
+            expertise: ['FULLSTACK DEV', 'AI ARCHITECTURE', 'OPENCLAW CORE', 'NEURAL SYSTEMS', 'AUTOMATION LIBRARIES', 'SCALABLE INFRA'],
+            achievements: [
+                'Leading OpenClaw technical deployment',
+                'Architected proprietary AI scoring engines',
+                'Integrated complex multi-agent systems',
+                'Optimized cloud-native neural pipelines',
+            ],
+            gradient: 'from-blue-500 to-cyan-400',
+            initial: 'A',
+            image: 'https://res.cloudinary.com/dpfapm0tl/image/upload/v1771518723/440322966_122102586140298307_3460827367128600753_n_nhr5s1.jpg',
+            id: 'TECH-002'
+        },
     ];
 
     return (
@@ -52,11 +70,11 @@ const TeamPage: React.FC = () => {
                     </div>
 
                     <h1 className="text-6xl lg:text-8xl font-black font-display mb-10 tracking-tighter italic text-white leading-tight">
-                        YOUR GROWTH <span className="gradient-text-alt">PARTNER.</span>
+                        YOUR GROWTH <span className="gradient-text-alt">PARTNERS.</span>
                     </h1>
 
                     <p className="text-xl text-slate-400 leading-relaxed font-medium">
-                        Deep expertise across high-impact growth channels. I don't just provide a service—I build
+                        Deep expertise across high-impact growth channels. We don't just provide a service—we build
                         the proprietary systems that turn your business into a market leader.
                     </p>
                 </motion.div>
@@ -170,12 +188,12 @@ const TeamPage: React.FC = () => {
 
                         <div className="relative z-10 max-w-4xl mx-auto">
                             <h2 className="text-5xl lg:text-7xl font-black font-display mb-10 tracking-tighter italic text-white leading-tight">
-                                THE ARCHITECT&apos;S <span className="gradient-text-alt">SYSTEM.</span>
+                                THE ARCHITECTS&apos; <span className="gradient-text-alt">SYSTEMS.</span>
                             </h2>
 
                             <p className="text-xl text-slate-400 leading-relaxed mb-12 font-medium">
-                                My branding and growth strategies are amplified by the proprietary Revlo OS orchestration.
-                                I build the system, deploy the intelligence, and scale your business with surgical precision.
+                                Our branding and growth strategies are amplified by the proprietary Revlo OS orchestration.
+                                We build the system, deploy the intelligence, and scale your business with surgical precision.
                             </p>
 
                             <Link to="/contact">

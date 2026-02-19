@@ -184,7 +184,7 @@ const WebsitesPage: React.FC = () => {
 
     const comparisons = [
         { label: "Performance", agency: "Bloated Wordpress Plugins", revlo: "Hand-Coded Next.js Optimization" },
-        { label: "Design", agency: "Generic Templates / Cookie Cutter", revlo: "Custom 'Category of One' Identity" },
+        { label: "Design", agency: "Generic Templates / Cookie Cutter", revlo: "Custom 'Elite-Tier' Identity" },
         { label: "SEO", agency: "Basic Meta Tags Plugin", revlo: "Semantic HTML & Technical SEO Core" },
         { label: "Security", agency: "Vulnerable to common hacks", revlo: "Enterprise-Grade Static Security" },
         { label: "Ownership", agency: "Dependent on their platform", revlo: "You Own The Code 100%" }
