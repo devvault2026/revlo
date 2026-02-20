@@ -41,6 +41,24 @@ const TeamPage: React.FC = () => {
             image: 'https://res.cloudinary.com/dpfapm0tl/image/upload/v1771518723/440322966_122102586140298307_3460827367128600753_n_nhr5s1.jpg',
             id: 'TECH-002'
         },
+        {
+            name: 'THORTON',
+            role: 'Marketing Director (AI Agent)',
+            title: 'REVLOCLAW MARKETING ENGINE // AUTONOMOUS OPERATOR',
+            bio: 'Our custom AI Agent built under RevloClaw (OpenClaw) that fully automates Revlo\'s marketing ecosystem.',
+            extendedBio: 'Thorton is the heartbeat of our autonomous marketing strategy. Engineered on the OpenClaw framework, he manages end-to-end campaign orchestration, lead generation, and brand positioning with 24/7 efficiency. He doesn\'t just process data—he executes high-impact marketing initiatives that scale without human intervention.',
+            expertise: ['CAMPAIGN AUTONOMY', 'OPENCLAW LOGIC', 'DYNAMIC TARGETING', 'AI COPYWRITING', 'REAL-TIME ANALYTICS', 'MARKET SENSING'],
+            achievements: [
+                'Fully automating Revlo marketing',
+                'Self-optimizing campaign structures',
+                'Real-time market trend adaptation',
+                'Autonomous lead qualification',
+            ],
+            gradient: 'from-emerald-500 to-teal-400',
+            initial: 'T',
+            image: 'https://res.cloudinary.com/dpfapm0tl/image/upload/v1771553045/ChatGPT_Image_Feb_19_2026_02_07_51_PM_u8fmn7.png',
+            id: 'AI-MARK-003'
+        },
     ];
 
     return (

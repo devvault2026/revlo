@@ -13,6 +13,24 @@ const Team: React.FC = () => {
             initial: 'JS',
             image: '/619228587_1473924384299979_5558935500619533353_n.jpg',
         },
+        {
+            name: 'Austyn',
+            role: 'AI Systems Architect',
+            bio: 'The technical force behind our most complex AI integrations. Austyn ensures that every OpenClaw deployment is optimized for peak performance and autonomous efficiency.',
+            expertise: ['AI Architecture', 'Development', 'Systems Design'],
+            color: 'text-blue-400',
+            initial: 'AC',
+            image: 'https://res.cloudinary.com/dpfapm0tl/image/upload/v1771518723/440322966_122102586140298307_3460827367128600753_n_nhr5s1.jpg',
+        },
+        {
+            name: 'Thorton',
+            role: 'Marketing AI Agent',
+            bio: 'A custom AI agent built under RevloClaw that fully automates end-to-end marketing, campaign orchestration, and real-time brand positioning.',
+            expertise: ['Marketing Autonomy', 'Campaign Logic', 'Dynamic Targeting'],
+            color: 'text-emerald-400',
+            initial: 'MT',
+            image: 'https://res.cloudinary.com/dpfapm0tl/image/upload/v1771553045/ChatGPT_Image_Feb_19_2026_02_07_51_PM_u8fmn7.png',
+        },
     ];
 
     return (
@@ -36,13 +54,13 @@ const Team: React.FC = () => {
                     </h2>
 
                     <p className="text-xl text-slate-400 leading-relaxed font-medium">
-                        Deep expertise in business development and digital orchestration. I am not just a service provider;
-                        I am a partner dedicated to your success.
+                        Deep expertise across high-impact growth channels. We are not just a service provider;
+                        we are a dedicated unit built to turn your business into a market leader.
                     </p>
                 </motion.div>
 
                 {/* Team Grid */}
-                <div className="max-w-md mx-auto">
+                <div className="grid grid-cols-1 md:grid-cols-3 gap-12">
                     {teamMembers.map((member, index) => (
                         <motion.div
                             key={index}
@@ -110,13 +128,13 @@ const Team: React.FC = () => {
                     <div className="absolute inset-0 bg-gradient-to-r from-purple-500/5 via-blue-500/5 to-red-500/5 animate-pulse" />
 
                     <div className="relative z-10">
-                        <h3 className="text-3xl lg:text-5xl font-black font-display mb-8 text-white italic tracking-tighter">
-                            THE POWER OF <span className="gradient-text">ONE + OS.</span>
+                        <h3 className="text-3xl lg:text-5xl font-black font-display mb-8 text-white italic tracking-tighter uppercase">
+                            THE POWER OF <span className="gradient-text">THE ENGINE.</span>
                         </h3>
                         <p className="text-xl text-slate-400 leading-relaxed max-w-4xl mx-auto font-medium">
-                            My expertise, amplified by the proprietary Revlo OS, ensures that every aspect of your growth is covered.
+                            Our collective expertise, amplified by the proprietary Revlo OS and autonomous agents like Thorton, ensures that every aspect of your growth is covered.
                             From initial strategy and branding to daily operations and lead acquisition,
-                            I work in sync with neural systems to turn your business into a market leader. This isn&apos;t just
+                            we work in sync with neural systems to turn your business into a market leader. This isn&apos;t just
                             consulting. This is a dedicated partnership built for scale.
                         </p>
                     </div>

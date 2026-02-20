@@ -19,6 +19,14 @@ const FounderOperator: React.FC = () => {
             image: 'https://res.cloudinary.com/dpfapm0tl/image/upload/v1771518723/440322966_122102586140298307_3460827367128600753_n_nhr5s1.jpg',
             initial: 'A',
             color: 'text-blue-500'
+        },
+        {
+            name: 'THORTON',
+            role: 'MARKETING',
+            status: 'AI Engine // T-2026',
+            image: 'https://res.cloudinary.com/dpfapm0tl/image/upload/v1771553045/ChatGPT_Image_Feb_19_2026_02_07_51_PM_u8fmn7.png',
+            initial: 'T',
+            color: 'text-emerald-500'
         }
     ];
 
@@ -44,7 +52,7 @@ const FounderOperator: React.FC = () => {
                         whileInView={{ opacity: 1, scale: 1 }}
                         transition={{ duration: 0.8 }}
                         viewport={{ once: true }}
-                        className="grid grid-cols-2 gap-6"
+                        className="grid grid-cols-1 sm:grid-cols-3 gap-6"
                     >
                         {operators.map((op, idx) => (
                             <div key={idx} className="relative aspect-[3/4] group">
@@ -75,7 +83,7 @@ const FounderOperator: React.FC = () => {
                                     {/* Status Overlay */}
                                     <div className="absolute bottom-6 left-6 right-6">
                                         <div className="flex items-center gap-2 mb-1">
-                                            <div className={`w-1.5 h-1.5 rounded-full animate-pulse ${idx === 0 ? 'bg-red-500' : 'bg-blue-500'}`} />
+                                            <div className={`w-1.5 h-1.5 rounded-full animate-pulse ${op.color.replace('text-', 'bg-')}`} />
                                             <span className="text-[8px] font-black text-white/50 uppercase tracking-[0.3em]">{op.status}</span>
                                         </div>
                                         <div className="text-lg font-black italic text-white uppercase tracking-tighter">
