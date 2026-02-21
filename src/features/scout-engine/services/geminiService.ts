@@ -1,5 +1,6 @@
 import { GoogleGenAI } from "@google/genai";
 import { Lead, LeadStage } from "../types";
+import { safeJsonParse } from "../../../utils/safeJson";
 
 const generateId = () => Math.random().toString(36).substr(2, 9);
 
@@ -171,7 +172,8 @@ async function processJsonLead(jsonStr: string): Promise<Lead | null> {
     const endIdx = cleanJson.lastIndexOf('}');
     if (startIdx === -1 || endIdx === -1) return null;
 
-    const leadData = JSON.parse(cleanJson.substring(startIdx, endIdx + 1));
+    const leadData = safeJsonParse<any>(cleanJson.substring(startIdx, endIdx + 1), null);
+    if (!leadData) return null;
     return {
       ...leadData,
       id: generateId(),
@@ -281,14 +283,8 @@ export async function enrichLeadData(lead: Lead): Promise<Partial<Lead>> {
       };
     }
 
-    let enriched: EnrichedData = {};
-    if (startIdx !== -1 && endIdx !== -1) {
-      try {
-        enriched = JSON.parse(cleanJson.substring(startIdx, endIdx + 1));
-      } catch (parseError) {
-        console.error("Failed to parse enrichment JSON:", parseError);
-      }
-    }
+    const jsonCandidate = cleanJson.substring(startIdx, endIdx + 1);
+    const enriched = safeJsonParse<EnrichedData>(jsonCandidate, {});
 
     return {
       email: enriched.email?.includes('@') ? enriched.email : lead.email,

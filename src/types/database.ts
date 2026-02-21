@@ -138,6 +138,7 @@ export type Database = {
                     user_id: string | null
                     user_rating_count: number | null
                     website: string | null
+                    slug: string | null
                 }
                 Insert: {
                     address?: string | null

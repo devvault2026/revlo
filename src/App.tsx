@@ -40,6 +40,7 @@ import GHLAutomationPage from './pages/GHLAutomationPage';
 import WebsitesPage from './pages/WebsitesPage';
 import BlogPage from './pages/BlogPage';
 import BlogPostPage from './pages/BlogPostPage';
+import DemoPage from './pages/DemoPage';
 
 // Components
 import Navigation from './components/Navigation';
@@ -136,6 +137,7 @@ function App() {
                                             <ScoutPage />
                                         </ProtectedRoute>
                                     } />
+                                    <Route path="/demo/:slug" element={<DemoPage />} />
                                     <Route path="/offer/esdr/payment" element={<EsdrPaymentPage />} />
                                     <Route path="/offers/esdr/payment" element={<EsdrPaymentPage />} />
 

@@ -1,13 +1,21 @@
+// Scout Console Main Entry
 import React, { useState, useRef, useEffect, useMemo } from 'react';
-import { Search, Loader2, Zap, AlertTriangle, Download, Terminal, ChevronRight, Globe, Shield, Target, Cpu, Activity, Fingerprint, Lock, Star, Radiation, Home } from 'lucide-react';
+import {
+  Search, Loader2, Zap, AlertTriangle, Download, Terminal, ChevronRight, Globe,
+  Shield, Target, Cpu, Activity, Fingerprint, Lock, Star, Radiation, Home,
+  Brain, ToggleLeft, ToggleRight, ArrowRight
+} from 'lucide-react';
 import { motion, AnimatePresence, useMotionValue, useSpring, useTransform, useAnimationFrame } from 'framer-motion';
 import { Link } from 'react-router-dom';
 import LeadResult from '../features/scout-engine/components/LeadResult';
 import KnowledgePanel from '../features/scout-engine/components/KnowledgePanel';
 import { streamLeads, deepScanLead, enrichLeadData } from '../features/scout-engine/services/geminiService';
-import { Lead, AppState } from '../features/scout-engine/types';
+import { Lead, AppState, EnrichmentMode } from '../features/scout-engine/types';
 import LiveCoach from '../features/scout-engine/components/LiveCoach';
 import PitchModal from '../features/scout-engine/components/PitchModal';
+import CRMView from '../features/scout-engine/components/CRMView';
+import EnrichmentJobNotifications from '../features/scout-engine/components/EnrichmentJobNotifications';
+import { deepEnrichLead } from '../features/scout-engine/services/enrichmentService';
 import { useAuth } from '../context/AuthContext';
 
 // Constants
@@ -208,10 +216,13 @@ function ScoutPage() {
   const [selectedLead, setSelectedLead] = useState<Lead | null>(null);
   const [isStreaming, setIsStreaming] = useState(false);
   const [errorMsg, setErrorMsg] = useState<string | null>(null);
+  const [currentView, setCurrentView] = useState<'RECON' | 'CRM'>('RECON');
+  const [selectedLeadIds, setSelectedLeadIds] = useState<Set<string>>(new Set());
 
   const [isPanelExpanded, setIsPanelExpanded] = useState(false);
   const [showCoach, setShowCoach] = useState(false);
   const [showPitch, setShowPitch] = useState(false);
+  const [enrichmentMode, setEnrichmentMode] = useState<EnrichmentMode>('manual');
 
   const exportLeads = () => {
     if (leads.length === 0) return;
@@ -226,6 +237,21 @@ function ScoutPage() {
     document.body.appendChild(link);
     link.click();
     document.body.removeChild(link);
+  };
+
+  const toggleLeadSelection = (id: string) => {
+    const next = new Set(selectedLeadIds);
+    if (next.has(id)) next.delete(id);
+    else next.add(id);
+    setSelectedLeadIds(next);
+  };
+
+  const selectAllLeads = () => {
+    if (selectedLeadIds.size === leads.length) {
+      setSelectedLeadIds(new Set());
+    } else {
+      setSelectedLeadIds(new Set(leads.map(l => l.id)));
+    }
   };
 
   const handleSearch = async (e: React.FormEvent) => {
@@ -274,6 +300,38 @@ function ScoutPage() {
               console.error("Auto-enrichment failed for", lead.businessName);
             }
           })();
+
+          // AUTO-DEEP ENRICHMENT (Deepseek + Brave Search)
+          if (enrichmentMode === 'auto') {
+            const deepEnrichTask = (async () => {
+              await new Promise(r => setTimeout(r, count * 3000 + 2000)); // Stagger deep enrichments
+              try {
+                const dossier = await deepEnrichLead(lead);
+                setLeads(currentLeads => currentLeads.map(l => {
+                  if (l.id === lead.id) {
+                    const enriched = {
+                      ...l,
+                      dossier,
+                      isEnriched: true,
+                      enrichmentStatus: 'complete' as const,
+                      estimatedOwnerName: dossier.ownerName || l.estimatedOwnerName,
+                      email: dossier.emailFound || l.email,
+                      phoneNumber: dossier.phoneFound || l.phoneNumber,
+                      painPoints: dossier.painPoints.length > 0 ? dossier.painPoints : l.painPoints,
+                      suggestedPitch: dossier.tailoredPitch || l.suggestedPitch,
+                      leadScore: dossier.opportunityScore || l.leadScore,
+                    };
+                    if (selectedLead?.id === l.id) setSelectedLead(enriched);
+                    return enriched;
+                  }
+                  return l;
+                }));
+              } catch (err) {
+                console.error('Auto deep enrichment failed for', lead.businessName, err);
+              }
+            })();
+            enrichmentQueue.push(deepEnrichTask);
+          }
           enrichmentQueue.push(enrichmentTask);
         }
       }
@@ -307,22 +365,6 @@ function ScoutPage() {
 
       {/* TOP TACTICAL BAR */}
       <div className="fixed top-0 left-0 right-0 h-1 z-[120] bg-gradient-to-r from-transparent via-purple-500/20 to-transparent" />
-      <div className="fixed top-8 left-1/2 -translate-x-1/2 z-[110] hidden lg:flex items-center gap-8">
-        <div className="flex flex-col items-center">
-          <span className="text-[7px] font-black text-white/20 uppercase tracking-[0.5em] mb-1 italic">SATELLITE POSITION</span>
-          <span className="text-[10px] font-mono text-purple-500/40 tabular-nums uppercase">40.7128° N, 74.0060° W</span>
-        </div>
-        <div className="w-px h-6 bg-white/5" />
-        <div className="flex flex-col items-center">
-          <span className="text-[7px] font-black text-white/20 uppercase tracking-[0.5em] mb-1 italic">NEURAL LINK</span>
-          <div className="flex items-center gap-2">
-            <div className={`w-1 h-1 rounded-full ${isSynced ? 'bg-green-500 animate-pulse' : syncError ? 'bg-red-500' : 'bg-yellow-500'}`} />
-            <span className={`text-[10px] font-black uppercase tracking-widest ${isSynced ? 'text-green-500/60' : syncError ? 'text-red-500/60' : 'text-yellow-500/60'}`}>
-              {isSynced ? 'Synchronized' : syncError ? 'Link Failed' : 'Handshake...'}
-            </span>
-          </div>
-        </div>
-      </div>
 
       <AnimatePresence mode="wait">
 
@@ -337,29 +379,42 @@ function ScoutPage() {
               </div>
             </Link>
 
-            {/* User Profile Bubble */}
+            {/* Operative Bio-Metric PFP - RE-DESIGNED TO BE SLEEK & MINIMAL */}
             {user && (
               <motion.div
-                initial={{ opacity: 0, x: 20 }}
-                animate={{ opacity: 1, x: 0 }}
-                className="fixed top-8 right-8 z-[110] flex items-center gap-4 group"
+                initial={{ opacity: 0, scale: 0.8 }}
+                animate={{ opacity: 1, scale: 1 }}
+                className="fixed top-8 right-8 z-[110] group cursor-pointer"
+                onClick={() => { }} // User context menu or same
               >
-                <div className="flex flex-col items-end">
-                  <span className="text-[10px] font-black uppercase tracking-widest text-white/40 group-hover:text-purple-400 transition-colors">
-                    {syncError ? 'STATION OFFLINE' : 'Authorized Operative'}
-                  </span>
-                  <span className={`text-xs font-black uppercase italic tracking-tight transition-colors ${syncError ? 'text-red-500' : 'text-white group-hover:text-purple-300'}`}>
-                    {syncError ? 'SYNC REQUIRED' : user.fullName || 'Authorized'}
-                  </span>
-                </div>
-                <div className="relative">
-                  <div className={`absolute -inset-1 rounded-2xl blur opacity-30 group-hover:opacity-100 transition duration-500 ${syncError ? 'bg-red-600' : 'bg-gradient-to-r from-purple-600 to-fuchsia-600'}`} />
-                  <img
-                    src={user.imageUrl}
-                    alt="Operative"
-                    className={`relative w-12 h-12 rounded-2xl object-cover border transition-all duration-500 ${syncError ? 'border-red-500/50' : 'border-white/10 group-hover:border-purple-500/50'}`}
-                  />
-                  <div className={`absolute -bottom-1 -right-1 w-3.5 h-3.5 rounded-full border-4 border-[#010103] shadow-lg ${syncError ? 'bg-red-500' : 'bg-green-500 shadow-[0_0_10px_rgba(34,197,94,0.5)]'}`} />
+                <div className="relative w-12 h-12">
+                  {/* Electrified Effect Halo */}
+                  <svg className="absolute -inset-2 w-[calc(100%+16px)] h-[calc(100%+16px)] pointer-events-none opacity-40 group-hover:opacity-100 transition-opacity duration-500">
+                    <circle
+                      cx="50%"
+                      cy="50%"
+                      r="22"
+                      fill="none"
+                      stroke={syncError ? "#ef4444" : "#a855f7"}
+                      strokeWidth="1.5"
+                      strokeDasharray="4 8"
+                      className="animate-[bolt_4s_linear_infinite]"
+                      style={{ filter: `drop-shadow(0 0 8px ${syncError ? '#ef4444' : '#a855f7'})` }}
+                    />
+                  </svg>
+
+                  <div className={`relative w-full h-full rounded-full p-[2px] bg-gradient-to-b ${syncError ? 'from-red-500/50 to-transparent' : 'from-purple-500/50 to-transparent'} z-10`}>
+                    <div className="w-full h-full rounded-full overflow-hidden border border-white/10 group-hover:border-white/20 transition-all duration-500">
+                      <img
+                        src={user.imageUrl}
+                        alt="Operative"
+                        className="w-full h-full object-cover grayscale-[0.5] group-hover:grayscale-0 transition-all duration-700"
+                      />
+                    </div>
+                  </div>
+
+                  {/* Mini Tactical Status */}
+                  <div className={`absolute -bottom-0.5 -right-0.5 w-3.5 h-3.5 rounded-full border-[2px] border-[#010103] z-20 ${syncError ? 'bg-red-500' : 'bg-green-500 shadow-[0_0_10px_rgba(34,197,94,0.6)]'}`} />
                 </div>
               </motion.div>
             )}
@@ -372,31 +427,31 @@ function ScoutPage() {
                   <ElectricBolt />
                 </div>
 
-                <div className="relative flex items-center bg-[#070709]/90 backdrop-blur-md rounded-[1.75rem] border border-white/10 p-2.5 pr-3 shadow-[0_30px_70px_rgba(0,0,0,0.8)] group-hover:border-white/20 transition-all duration-500">
-                  <div className="pl-5 pr-3 text-purple-500/30 group-hover:text-purple-400 transition-all">
-                    <Terminal className="w-6 h-6" />
+                <div className="relative flex items-center bg-[#070709]/95 backdrop-blur-2xl rounded-[1.75rem] border border-white/10 p-1.5 pr-2.5 shadow-[0_40px_100px_rgba(0,0,0,0.9)] group-hover:border-white/20 transition-all duration-700">
+                  <div className="pl-6 pr-4 text-purple-500/20 group-hover:text-purple-500/40 transition-all duration-700">
+                    <Terminal className="w-5 h-5" />
                   </div>
                   <input
                     type="text"
                     value={query}
                     onChange={(e) => setQuery(e.target.value)}
                     autoFocus
-                    className="flex-1 h-12 bg-transparent text-white placeholder-slate-800 focus:outline-none font-black italic text-xl tracking-tight uppercase"
+                    className="flex-1 h-14 bg-transparent text-white placeholder-slate-900 focus:outline-none font-black italic text-2xl tracking-tight uppercase"
                     placeholder="INITIATE DEEP SCAN..."
-                  />
-                  <motion.div
-                    animate={{ opacity: [1, 0] }}
-                    transition={{ duration: 0.8, repeat: Infinity }}
-                    className={`absolute left-[54px] top-6 w-0.5 h-6 bg-purple-500/40 pointer-events-none ${query ? 'hidden' : 'block'}`}
                   />
                   <button
                     type="submit"
                     disabled={!query}
-                    className="bg-gradient-to-r from-purple-600 to-fuchsia-600 text-white px-8 h-12 rounded-2xl flex items-center justify-center gap-3 hover:shadow-[0_0_30px_rgba(168,85,247,0.4)] transition-all transform active:scale-95 disabled:opacity-50 group/btn"
+                    className={`w-12 h-12 rounded-xl flex items-center justify-center transition-all duration-500 relative overflow-hidden group/btn ${query ? 'bg-purple-500 text-white shadow-[0_0_20px_rgba(168,85,247,0.3)] hover:scale-105 active:scale-95' : 'bg-white/[0.03] text-white/10 cursor-not-allowed'}`}
                   >
-                    <Zap className="w-4 h-4 text-yellow-300" />
-                    <span className="text-[10px] font-black uppercase tracking-widest italic relative z-10">IGNITE ENGINE</span>
-                    <ChevronRight className="w-4 h-4 group-hover/btn:translate-x-1 transition-transform" />
+                    <Search className={`w-5 h-5 transition-transform duration-500 ${query ? 'group-hover/btn:scale-110' : ''}`} />
+                    {query && (
+                      <motion.div
+                        initial={{ opacity: 0 }}
+                        animate={{ opacity: 1 }}
+                        className="absolute inset-0 bg-gradient-to-tr from-white/20 to-transparent opacity-0 group-hover/btn:opacity-100 transition-opacity"
+                      />
+                    )}
                   </button>
                 </div>
               </form>
@@ -427,44 +482,98 @@ function ScoutPage() {
         )}
 
         {(appState === AppState.SEARCHING || appState === AppState.RESULTS || appState === AppState.ERROR) && (
-          <div key="results-screen" className="flex-1 flex flex-col h-screen overflow-hidden bg-black/60 backdrop-blur-3xl z-10 transition-all duration-1000">
-            <header className="h-16 shrink-0 border-b border-white/5 flex items-center px-6 lg:px-8 bg-black/40 backdrop-blur-3xl z-30">
-              <div className="cursor-pointer flex items-center gap-3 opacity-80 hover:opacity-100 transition-opacity" onClick={() => setAppState(AppState.IDLE)}>
-                <img src="/logo.png" className="w-6 h-6 object-contain brightness-0 invert" alt="Revlo" />
-                <span className="font-black text-sm tracking-widest text-white italic">REVLO <span className="text-purple-500">SCOUT</span></span>
-              </div>
-              <div className="ml-auto flex items-center gap-4">
-                {user && (
-                  <div className="flex items-center gap-3 px-3 py-1.5 bg-white/5 border border-white/5 rounded-xl">
-                    <img
-                      src={user.imageUrl}
-                      alt="Operative"
-                      className="w-6 h-6 rounded-lg object-cover border border-white/10"
-                    />
-                    <span className="text-[10px] font-bold text-slate-400 capitalize truncate max-w-[80px]">{(user.firstName || 'User').toLowerCase()}</span>
-                  </div>
-                )}
-                <div className="hidden lg:flex items-center gap-2 px-3 py-1.5 bg-white/5 rounded-lg border border-white/5">
-                  <Activity className="w-3 h-3 text-green-500" />
-                  <span className="text-[9px] font-bold uppercase tracking-widest text-slate-400">System_Online</span>
+          <div key="results-screen" className="flex-1 flex flex-col h-screen overflow-hidden bg-[#010103] z-10 transition-all duration-1000">
+            {/* FLOATING RESULTS HEADER - 100X TOP SHELF */}
+            <header className="fixed top-6 left-6 right-6 h-16 flex items-center justify-between px-8 bg-black/40 backdrop-blur-3xl border border-white/5 rounded-3xl z-[130] shadow-2xl">
+              <div
+                className="cursor-pointer flex items-center gap-3 hover:scale-105 transition-all duration-500"
+                onClick={() => setAppState(AppState.IDLE)}
+              >
+                <img src="/logo.png" className="w-7 h-7 object-contain brightness-0 invert" alt="Revlo" />
+                <div className="flex flex-col">
+                  <span className="text-[7px] font-black text-purple-500/50 uppercase tracking-[0.4em] mb-0.5 leading-none">Intelligence_Link</span>
+                  <span className="font-black text-sm tracking-widest text-white italic leading-none">REVLO <span className="text-purple-500">SCOUT</span></span>
                 </div>
-                <button onClick={exportLeads} className="bg-white text-black px-5 py-2 rounded-lg text-[9px] font-black uppercase tracking-widest shadow-xl italic hover:bg-purple-500 hover:text-white transition-all">Export Intelligence</button>
+              </div>
+
+              <div className="flex items-center gap-6">
+                {/* SYSTEM TELEMETRY (Minimalist) */}
+                <div className="hidden xl:flex items-center gap-8 px-6 py-2 bg-white/[0.02] rounded-2xl border border-white/5">
+                  <div className="flex flex-col items-center">
+                    <span className="text-[7px] font-black text-white/20 uppercase tracking-widest mb-1">Status</span>
+                    <div className="flex items-center gap-1.5">
+                      <div className="w-1 h-1 rounded-full bg-green-500 animate-pulse" />
+                      <span className="text-[9px] font-black uppercase text-green-500/60">Online</span>
+                    </div>
+                  </div>
+                  <div className="w-px h-4 bg-white/5" />
+                  <div className="flex flex-col items-center">
+                    <span className="text-[7px] font-black text-white/20 uppercase tracking-widest mb-1">Enrichment</span>
+                    <span className="text-[9px] font-black uppercase text-purple-500/60">{enrichmentMode}</span>
+                  </div>
+                </div>
+
+                <div className="flex items-center gap-3">
+                  <div className="flex bg-black/40 border border-white/5 p-1 rounded-2xl">
+                    <button
+                      onClick={() => setCurrentView('RECON')}
+                      className={`px-4 py-2 rounded-xl text-[10px] font-black uppercase tracking-widest transition-all ${currentView === 'RECON' ? 'bg-purple-500 text-white shadow-lg' : 'text-slate-500 hover:text-white'}`}
+                    >
+                      Recon
+                    </button>
+                    <button
+                      onClick={() => setCurrentView('CRM')}
+                      className={`px-4 py-2 rounded-xl text-[10px] font-black uppercase tracking-widest transition-all flex items-center gap-2 ${currentView === 'CRM' ? 'bg-purple-500 text-white shadow-lg' : 'text-slate-500 hover:text-white'}`}
+                    >
+                      CRM
+                      {selectedLeadIds.size > 0 && (
+                        <span className="bg-purple-400 text-black px-1.5 py-0.5 rounded-md text-[8px]">{selectedLeadIds.size}</span>
+                      )}
+                    </button>
+                  </div>
+
+                  <button
+                    onClick={exportLeads}
+                    className="h-10 px-5 bg-white text-black text-[9px] font-black uppercase tracking-widest rounded-xl hover:bg-purple-500 hover:text-white transition-all duration-500 flex items-center gap-2 active:scale-95"
+                  >
+                    <Download className="w-3.5 h-3.5" />
+                    Export
+                  </button>
+
+                  {/* Reuse the premium PFP logic if needed, or keep it simple but sleek here */}
+                  <div className="w-10 h-10 rounded-full p-[1px] bg-gradient-to-b from-purple-500/50 to-transparent">
+                    <div className="w-full h-full rounded-full overflow-hidden border border-white/10 shadow-lg">
+                      <img src={user?.imageUrl} className="w-full h-full object-cover" alt="User" />
+                    </div>
+                  </div>
+                </div>
               </div>
             </header>
+
+            {/* SPACER FOR FIXED HEADER */}
+            <div className="h-28 shrink-0" />
 
             {/* SPLIT PANE WORKSPACE */}
             <div className="flex-1 flex overflow-hidden relative">
 
               {/* LEFT PANE: LEAD COMMAND CENTER (LIST) */}
-              <div className={`flex flex-col min-w-0 transition-all duration-500 ease-[bezier(0.23,1,0.32,1)] border-r border-white/5 ${selectedLead ? (isPanelExpanded ? 'w-0 opacity-0 overflow-hidden' : 'w-[45%] opacity-100') : 'w-full opacity-100'}`}>
+              <div className={`flex flex-col min-w-0 transition-all duration-500 ease-[bezier(0.23,1,0.32,1)] border-r border-white/5 ${selectedLead || currentView === 'CRM' ? (isPanelExpanded || currentView === 'CRM' ? 'w-0 opacity-0 overflow-hidden' : 'w-[45%] opacity-100') : 'w-full opacity-100'}`}>
 
                 {/* List Toolbar */}
                 <div className="h-14 shrink-0 border-b border-white/5 flex items-center px-8 justify-between bg-black/40 backdrop-blur-md sticky top-0 z-20">
-                  <div className="flex items-center gap-3">
-                    <div className="p-1.5 bg-purple-500/10 rounded-lg">
-                      <Target className="w-4 h-4 text-purple-500" />
+                  <div className="flex items-center gap-6">
+                    <button
+                      onClick={selectAllLeads}
+                      className="p-1 px-2 border border-white/10 rounded-lg hover:border-purple-500/50 transition-all"
+                    >
+                      <div className={`w-3.5 h-3.5 rounded border transition-all ${selectedLeadIds.size === leads.length && leads.length > 0 ? 'bg-purple-500 border-purple-500' : 'border-white/20'}`} />
+                    </button>
+                    <div className="flex items-center gap-3">
+                      <div className="p-1.5 bg-purple-500/10 rounded-lg">
+                        <Target className="w-4 h-4 text-purple-500" />
+                      </div>
+                      <span className="text-[11px] font-black uppercase tracking-[0.2em] text-slate-400">{leads.length} Targets Found</span>
                     </div>
-                    <span className="text-[11px] font-black uppercase tracking-[0.2em] text-slate-400">{leads.length} Targets Found</span>
                   </div>
                   {isStreaming && (
                     <div className="flex items-center gap-2 px-3 py-1.5 bg-purple-500/5 rounded-full border border-purple-500/10">
@@ -491,7 +600,9 @@ function ScoutPage() {
                             key={lead.id}
                             lead={lead}
                             isSelected={selectedLead?.id === lead.id}
-                            onSelect={(l) => {
+                            isMarked={selectedLeadIds.has(lead.id)}
+                            onToggleMark={() => toggleLeadSelection(lead.id)}
+                            onSelect={(l: Lead) => {
                               setSelectedLead(l);
                               // Auto-collapse if switching leads to show context, unless user explicitly expanded
                               if (isPanelExpanded) setIsPanelExpanded(false);
@@ -503,6 +614,28 @@ function ScoutPage() {
                   </AnimatePresence>
                 </div>
               </div>
+
+              {/* CRM View Overlay */}
+              <AnimatePresence>
+                {currentView === 'CRM' && (
+                  <motion.div
+                    initial={{ opacity: 0, x: 20 }}
+                    animate={{ opacity: 1, x: 0 }}
+                    exit={{ opacity: 0, x: 20 }}
+                    className="flex-1 flex flex-col bg-black/20 overflow-hidden"
+                  >
+                    <CRMView
+                      selectedLeads={leads.filter(l => selectedLeadIds.has(l.id))}
+                      onClose={() => setCurrentView('RECON')}
+                      onRemoveLead={(id: string) => toggleLeadSelection(id)}
+                      onUpdateLead={(updatedLead: Lead) => {
+                        setLeads(prev => prev.map(l => l.id === updatedLead.id ? updatedLead : l));
+                        if (selectedLead?.id === updatedLead.id) setSelectedLead(updatedLead);
+                      }}
+                    />
+                  </motion.div>
+                )}
+              </AnimatePresence>
 
               {/* RIGHT PANE: INTELLIGENCE PANEL (DETAIL) */}
               <AnimatePresence mode="wait">
@@ -532,7 +665,12 @@ function ScoutPage() {
                       onStartCoach={() => setShowCoach(true)}
                       onDeepScan={handleDeepScan}
                       onUpdateLead={(updatedLead) => {
-                        setLeads(prev => prev.map(l => l.id === updatedLead.id ? updatedLead : l));
+                        setLeads(prev => prev.map(l => {
+                          if (l.id === updatedLead.id) return updatedLead;
+                          // If we are currently focused on this lead and its ID just transitioned (e.g. temp -> UUID)
+                          if (selectedLead && l.id === selectedLead.id) return updatedLead;
+                          return l;
+                        }));
                         setSelectedLead(updatedLead);
                       }}
                     />
@@ -559,6 +697,11 @@ function ScoutPage() {
         )}
 
       </AnimatePresence>
+
+      {/* ENRICHMENT JOB NOTIFICATIONS (always visible) */}
+      <EnrichmentJobNotifications />
+
+      {/* AnimatePresence end already rendered above */}
 
       <style>{`
         .custom-scrollbar::-webkit-scrollbar { width: 4px; }

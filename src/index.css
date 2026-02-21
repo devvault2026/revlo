@@ -263,3 +263,183 @@
 .mermaid .label {
     @apply text-slate-200 font-sans text-xs !important;
 }
+
+/* Tactical Shine Button (User Requested) */
+.btn-tactical {
+    position: relative;
+    padding: 10px 20px;
+    border-radius: 8px;
+    border: 1px solid rgba(61, 106, 255, 0.4);
+    font-size: 11px;
+    text-transform: uppercase;
+    font-weight: 900;
+    letter-spacing: 2px;
+    background: rgba(2, 4, 8, 0.8);
+    color: #fff;
+    overflow: hidden;
+    box-shadow: 0 4px 15px rgba(0, 0, 0, 0.4);
+    transition: all 0.3s cubic-bezier(0.23, 1, 0.32, 1);
+    display: flex;
+    align-items: center;
+    gap: 10px;
+    white-space: nowrap;
+}
+
+.btn-tactical:hover {
+    background: rgb(61, 106, 255);
+    border-color: rgb(61, 106, 255);
+    box-shadow: 0 0 30px 5px rgba(61, 106, 255, 0.5);
+    transform: translateY(-2px);
+}
+
+.command-bar {
+    position: absolute;
+    bottom: 24px;
+    left: 50%;
+    transform: translateX(-50%);
+    padding: 12px 24px;
+    background: rgba(10, 10, 15, 0.8);
+    backdrop-filter: blur(20px);
+    border: 1px solid rgba(255, 255, 255, 0.08);
+    border-radius: 20px;
+    display: flex;
+    align-items: center;
+    gap: 16px;
+    z-index: 50;
+    box-shadow: 0 20px 40px rgba(0, 0, 0, 0.6);
+}
+
+.btn-tactical:active {
+    transform: scale(0.96) translateY(0);
+    transition: all 0.1s;
+}
+
+.btn-tactical:hover::before {
+    animation: sh02 0.6s 0s linear;
+}
+
+.btn-tactical::before {
+    content: '';
+    display: block;
+    width: 0px;
+    height: 86%;
+    position: absolute;
+    top: 7%;
+    left: 0%;
+    opacity: 0;
+    background: #fff;
+    box-shadow: 0 0 50px 30px #fff;
+    transform: skewX(-20deg);
+}
+
+@keyframes sh02 {
+    from {
+        opacity: 0;
+        left: 0%;
+    }
+
+    50% {
+        opacity: 1;
+    }
+
+    to {
+        opacity: 0;
+        left: 100%;
+    }
+}
+
+.btn-tactical:active {
+    box-shadow: 0 0 0 0 transparent;
+    transition: box-shadow 0.2s ease-in;
+    transform: scale(0.98);
+}
+
+/* Stage-specific variations */
+.btn-tactical-purple {
+    border-color: rgba(168, 85, 247, 0.5);
+}
+
+.btn-tactical-purple:hover {
+    background: rgb(168, 85, 247);
+    border-color: rgb(168, 85, 247);
+    box-shadow: 0 0 30px 5px rgba(168, 85, 247, 0.6);
+}
+
+.btn-tactical-emerald {
+    border-color: rgba(16, 185, 129, 0.5);
+}
+
+.btn-tactical-emerald:hover {
+    background: rgb(16, 185, 129);
+    border-color: rgb(16, 185, 129);
+    box-shadow: 0 0 30px 5px rgba(16, 185, 129, 0.6);
+}
+
+.btn-tactical-fuchsia {
+    border-color: rgba(217, 70, 239, 0.5);
+}
+
+.btn-tactical-fuchsia:hover {
+    background: rgb(217, 70, 239);
+    border-color: rgb(217, 70, 239);
+    box-shadow: 0 0 30px 5px rgba(217, 70, 239, 0.6);
+}
+
+.btn-tactical-orange {
+    border-color: rgba(249, 115, 22, 0.5);
+}
+
+.btn-tactical-orange:hover {
+    background: rgb(249, 115, 22);
+    border-color: rgb(249, 115, 22);
+    box-shadow: 0 0 30px 5px rgba(249, 115, 22, 0.6);
+}
+
+/* Custom Launch/Next Button - RE-DESIGNED FOR TOP SHELF */
+.btn-launch-next {
+    display: flex;
+    align-items: center;
+    font-family: inherit;
+    cursor: pointer;
+    font-weight: 900;
+    font-size: 10px;
+    padding: 0.7em 1.5em;
+    color: white;
+    background: linear-gradient(to right, #0f0c29, #302b63, #24243e);
+    border: 1px solid rgba(255, 255, 255, 0.1);
+    letter-spacing: 0.15em;
+    border-radius: 12px;
+    text-transform: uppercase;
+    transition: all 0.4s cubic-bezier(0.23, 1, 0.32, 1);
+    white-space: nowrap;
+    box-shadow: 0 4px 15px rgba(0, 0, 0, 0.4);
+}
+
+.btn-launch-next svg {
+    margin-right: 6px;
+    transform: rotate(30deg);
+    transition: transform 0.6s cubic-bezier(0.76, 0, 0.24, 1);
+}
+
+.btn-launch-next span {
+    transition: transform 0.6s cubic-bezier(0.76, 0, 0.24, 1);
+}
+
+.btn-launch-next:hover {
+    border-color: rgba(168, 85, 247, 0.4);
+    background: linear-gradient(to right, #1a164d, #3d377b, #2d2d4d);
+    box-shadow: 0 0 30px rgba(168, 85, 247, 0.25);
+    transform: translateY(-1px);
+}
+
+.btn-launch-next:hover svg {
+    transform: translateX(4px) rotate(90deg) scale(1.1);
+}
+
+.btn-launch-next:hover span {
+    transform: translateX(6px);
+}
+
+.btn-launch-next:active {
+    transform: scale(0.96) translateY(0);
+}

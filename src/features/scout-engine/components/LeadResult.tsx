@@ -1,15 +1,17 @@
 import React from 'react';
 import { Lead, LeadStage } from '../types';
-import { MoreVertical, Globe, ShieldAlert, BarChart3, Lock, Target, ArrowRight, Activity, Mail, Phone, Star, ChevronRight } from 'lucide-react';
+import { MoreVertical, Globe, ShieldAlert, BarChart3, Lock, Target, ArrowRight, Activity, Mail, Phone, Star, ChevronRight, Brain, FileText } from 'lucide-react';
 import { motion } from 'framer-motion';
 
 interface LeadResultProps {
   lead: Lead;
   onSelect: (lead: Lead) => void;
   isSelected: boolean;
+  isMarked?: boolean;
+  onToggleMark?: () => void;
 }
 
-const LeadResult: React.FC<LeadResultProps> = ({ lead, onSelect, isSelected }) => {
+const LeadResult: React.FC<LeadResultProps> = ({ lead, onSelect, isSelected, isMarked, onToggleMark }) => {
   const hasEmail = lead.email && lead.email.includes('@');
   const hasPhone = lead.phoneNumber && lead.phoneNumber.length > 5;
   const hasSocials = Object.values(lead.socials || {}).some(v => !!v);
@@ -22,6 +24,20 @@ const LeadResult: React.FC<LeadResultProps> = ({ lead, onSelect, isSelected }) =
         : 'bg-transparent border-white/5 hover:bg-white/[0.02] hover:border-white/10'
         }`}
     >
+      {/* Selection Checkbox */}
+      <div
+        onClick={(e) => {
+          e.stopPropagation();
+          onToggleMark?.();
+        }}
+        className={`shrink-0 w-6 h-6 rounded-lg border flex items-center justify-center transition-all ${isMarked ? 'bg-purple-500 border-purple-500 shadow-[0_0_15px_rgba(168,85,247,0.4)]' : 'border-white/10 hover:border-white/30 bg-white/5'}`}
+      >
+        {isMarked && (
+          <motion.div initial={{ scale: 0 }} animate={{ scale: 1 }}>
+            <Target className="w-3.5 h-3.5 text-white" />
+          </motion.div>
+        )}
+      </div>
       {/* Selection Indicator */}
       {isSelected && (
         <motion.div layoutId="selectionLine" className="absolute left-0 top-0 bottom-0 w-1 bg-purple-500 shadow-[0_0_20px_rgba(168,85,247,0.8)]" />
@@ -46,13 +62,25 @@ const LeadResult: React.FC<LeadResultProps> = ({ lead, onSelect, isSelected }) =
               Critical
             </div>
           )}
+          {lead.dossier && (
+            <div className="flex items-center gap-1 px-2 py-0.5 rounded-sm bg-purple-500/20 text-purple-400 text-[8px] font-black uppercase tracking-widest border border-purple-500/30">
+              <Brain className="w-2.5 h-2.5" />
+              Enriched
+            </div>
+          )}
+          {lead.prd && (
+            <div className="flex items-center gap-1 px-2 py-0.5 rounded-sm bg-emerald-500/20 text-emerald-400 text-[8px] font-black uppercase tracking-widest border border-emerald-500/30">
+              <FileText className="w-2.5 h-2.5" />
+              PRD
+            </div>
+          )}
         </div>
         <div className="flex items-center gap-3 opacity-70 group-hover:opacity-100 transition-opacity">
           <span className="text-[10px] font-bold text-slate-500 uppercase tracking-widest">{lead.industry}</span>
           <span className="w-1 h-1 rounded-full bg-slate-700" />
           <span className={`text-[9px] font-black px-2 py-0.5 rounded border uppercase tracking-wider ${lead.currentStage === LeadStage.DONE ? 'bg-green-500/10 border-green-500/30 text-green-500' :
-              lead.currentStage === LeadStage.SCOUTED ? 'bg-purple-500/10 border-purple-500/30 text-purple-500' :
-                'bg-blue-500/10 border-blue-500/30 text-blue-500'
+            lead.currentStage === LeadStage.SCOUTED ? 'bg-purple-500/10 border-purple-500/30 text-purple-500' :
+              'bg-blue-500/10 border-blue-500/30 text-blue-500'
             }`}>
             {lead.currentStage}
           </span>
