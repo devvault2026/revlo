@@ -4,20 +4,53 @@ import { Database } from '../types/database';
 const supabaseUrl = import.meta.env.VITE_SUPABASE_URL;
 const supabaseAnonKey = import.meta.env.VITE_SUPABASE_ANON_KEY;
 
-if (!supabaseUrl || !supabaseAnonKey) {
-    console.warn('Supabase credentials not found. Please set VITE_SUPABASE_URL and VITE_SUPABASE_ANON_KEY in .env.local');
+const isValidSupabaseUrl = (() => {
+    if (!supabaseUrl) return false;
+    try {
+        const url = new URL(supabaseUrl);
+        return url.protocol === 'http:' || url.protocol === 'https:';
+    } catch {
+        return false;
+    }
+})();
+
+const missingSupabaseConfigMessage =
+    'Supabase credentials not found. Please set VITE_SUPABASE_URL and VITE_SUPABASE_ANON_KEY in .env.local (see .env.example).';
+
+const invalidSupabaseUrlMessage =
+    `Invalid Supabase URL: ${supabaseUrl}. Please set VITE_SUPABASE_URL to a valid HTTP(S) URL in .env.local.`;
+
+const supabaseClientErrorMessage =
+    !supabaseUrl || !supabaseAnonKey
+        ? missingSupabaseConfigMessage
+        : !isValidSupabaseUrl
+        ? invalidSupabaseUrlMessage
+        : missingSupabaseConfigMessage;
+
+if (!supabaseUrl || !supabaseAnonKey || !isValidSupabaseUrl) {
+    console.warn(supabaseClientErrorMessage);
 }
 
-export const supabase = createClient<Database>(
-    supabaseUrl || '',
-    supabaseAnonKey || '',
+const missingSupabaseProxy = new Proxy(
+    {},
     {
-        auth: {
-            persistSession: true,
-            autoRefreshToken: true,
+        get: () => {
+            return () => {
+                throw new Error(supabaseClientErrorMessage);
+            };
         },
     }
 );
+
+export const supabase =
+    supabaseUrl && supabaseAnonKey && isValidSupabaseUrl
+        ? createClient<Database>(supabaseUrl, supabaseAnonKey, {
+              auth: {
+                  persistSession: true,
+                  autoRefreshToken: true,
+              },
+          })
+        : (missingSupabaseProxy as any);
 
 // --- TYPE EXPORTS ---
 export type Profile = Database['public']['Tables']['profiles']['Row'];

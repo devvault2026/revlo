@@ -315,7 +315,7 @@ const OpenClawPage: React.FC = () => {
             <Navigation />
 
             {/* HERO SECTION - TACTICAL COMMAND CENTER */}
-            <section className="relative min-h-screen lg:h-screen overflow-hidden flex flex-col justify-center py-24 lg:py-0">
+            <section className="relative min-h-screen lg:min-h-screen overflow-hidden flex flex-col justify-center pt-40 pb-12 lg:pt-48 lg:pb-20">
                 {/* Live Tactical Background Elements */}
                 <div className="absolute inset-0 overflow-hidden pointer-events-none">
                     {/* Interactive Bubbles */}
