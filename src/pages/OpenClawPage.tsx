@@ -315,7 +315,7 @@ const OpenClawPage: React.FC = () => {
             <Navigation />
 
             {/* HERO SECTION - TACTICAL COMMAND CENTER */}
-            <section className="relative min-h-screen lg:min-h-screen overflow-hidden flex flex-col justify-center pt-40 pb-12 lg:pt-48 lg:pb-20">
+            <section className="relative min-h-screen lg:h-screen overflow-hidden flex flex-col justify-center pt-20 pb-12 lg:pt-0 lg:pb-0">
                 {/* Live Tactical Background Elements */}
                 <div className="absolute inset-0 overflow-hidden pointer-events-none">
                     {/* Interactive Bubbles */}
@@ -341,7 +341,7 @@ const OpenClawPage: React.FC = () => {
                 </div>
 
                 <div className="max-w-7xl mx-auto px-6 lg:px-8 relative z-10 w-full">
-                    <div className="grid grid-cols-1 lg:grid-cols-[1fr,0.8fr] gap-12 lg:gap-16 items-center">
+                    <div className="grid grid-cols-1 lg:grid-cols-[1fr,0.8fr] gap-8 lg:gap-12 items-center">
                         {/* LEFT: TYPOGRAPHY */}
                         <motion.div
                             initial={{ opacity: 0, x: -50 }}
@@ -349,13 +349,13 @@ const OpenClawPage: React.FC = () => {
                             transition={{ duration: 1, ease: "easeOut" }}
                             className="flex flex-col items-start text-left"
                         >
-                            <div className="inline-flex items-center gap-3 px-4 py-2 glass rounded-full mb-8 border border-red-500/20 animate-flicker">
+                            <div className="inline-flex items-center gap-3 px-4 py-2 glass rounded-full mb-4 lg:mb-6 border border-red-500/20 animate-flicker">
                                 <span className="text-[10px] font-black text-red-500 uppercase tracking-[0.5em]">
                                     AGENT // AUTONOMOUS_SYSTEM
                                 </span>
                             </div>
 
-                            <h1 className="text-5xl sm:text-6xl lg:text-[7rem] font-black font-display italic tracking-tight mb-6 leading-[0.85] lg:leading-[0.8] uppercase text-white text-left relative z-10">
+                            <h1 className="text-4xl sm:text-6xl lg:text-[6rem] font-black font-display italic tracking-tight mb-4 lg:mb-6 leading-[0.85] lg:leading-[0.8] uppercase text-white text-left relative z-10">
                                 <span className="relative inline-block group/impossible">
                                     {/* Layout Placeholder - Invisible but dictates size */}
                                     <span className="relative z-10 text-transparent select-none" aria-hidden="true">OPENCLAW</span>
@@ -384,7 +384,7 @@ const OpenClawPage: React.FC = () => {
                                                 x="50%"
                                                 y="80%"
                                                 textAnchor="middle"
-                                                className="font-black font-display italic text-5xl sm:text-6xl lg:text-[7rem] uppercase select-none"
+                                                className="font-black font-display italic text-4xl sm:text-6xl lg:text-[6rem] uppercase select-none"
                                                 fill="none"
                                                 stroke="#ef4444"
                                                 strokeWidth="3"
@@ -402,7 +402,7 @@ const OpenClawPage: React.FC = () => {
                                                 x="50%"
                                                 y="80%"
                                                 textAnchor="middle"
-                                                className="font-black font-display italic text-5xl sm:text-6xl lg:text-[7rem] uppercase select-none"
+                                                className="font-black font-display italic text-4xl sm:text-6xl lg:text-[6rem] uppercase select-none"
                                                 fill="white"
                                                 style={{ letterSpacing: '-0.05em' }}
                                             >
@@ -413,15 +413,15 @@ const OpenClawPage: React.FC = () => {
                                     <div className="absolute -inset-4 bg-red-500/10 blur-2xl opacity-0 group-hover/impossible:opacity-100 transition-opacity rounded-full z-0" />
                                 </span>
                                 <br />
-                                <span className="gradient-text-alt tracking-[-0.02em] text-4xl sm:text-5xl lg:text-6xl text-slate-300">ACTUALLY DOES THINGS.</span>
+                                <span className="gradient-text-alt tracking-[-0.02em] text-3xl sm:text-5xl lg:text-5xl text-slate-300">ACTUALLY DOES THINGS.</span>
                             </h1>
 
-                            <p className="text-lg lg:text-2xl text-slate-400 font-medium leading-tight mb-10 max-w-2xl text-left">
+                            <p className="text-base lg:text-xl text-slate-400 font-medium leading-tight mb-6 lg:mb-8 max-w-2xl text-left">
                                 Clears your inbox, sends emails, manages your calendar, checks you in for flights.<br />
                                 <span className="text-white font-bold">All from WhatsApp, Telegram, or any chat app you already use.</span>
                             </p>
 
-                            <div className="flex flex-col gap-4 mt-8 lg:mt-0">
+                            <div className="flex flex-col gap-3 mt-4 lg:mt-0">
                                 <div className="text-[10px] font-black uppercase tracking-[0.4em] text-slate-500 flex items-center gap-4 py-2 px-6 glass rounded-full border border-white/5">
                                     <Smartphone className="w-4 h-4 text-green-500" />
                                     <span>INTERFACE: <span className="text-white italic">ANY CHAT APP</span></span>
@@ -438,7 +438,7 @@ const OpenClawPage: React.FC = () => {
                             initial={{ opacity: 0, scale: 0.9, x: 50 }}
                             whileInView={{ opacity: 1, scale: 1, x: 0 }}
                             transition={{ duration: 0.8, delay: 0.2 }}
-                            className="relative group lg:pl-12 max-w-[680px] lg:ml-auto w-full mt-12 lg:mt-0"
+                            className="relative group lg:pl-12 max-w-[580px] lg:ml-auto w-full mt-8 lg:mt-0"
                         >
                             {/* The Animated Mascot */}
                             <OpenClawMascot />
@@ -449,7 +449,7 @@ const OpenClawPage: React.FC = () => {
                                 <div className="absolute inset-0 bg-gradient-to-b from-transparent via-red-500/5 to-transparent h-1/2 w-full animate-scan-v pointer-events-none z-20" />
                                 <div className="absolute inset-0 opacity-20 pointer-events-none" style={{ backgroundImage: 'radial-gradient(circle at 2px 2px, rgba(255,255,255,0.1) 1px, transparent 0)', backgroundSize: '24px 24px' }} />
 
-                                <div className="bg-white/5 border-b border-white/5 px-6 py-3 flex justify-between items-center relative z-30">
+                                <div className="bg-white/5 border-b border-white/5 px-6 py-2 flex justify-between items-center relative z-30">
                                     <div className="flex items-center gap-3">
                                         <div className="w-1.5 h-1.5 rounded-full bg-red-500 animate-pulse" />
                                         <span className="text-[9px] font-black text-white uppercase tracking-[0.4em]">SYSTEM_READY</span>
@@ -457,35 +457,35 @@ const OpenClawPage: React.FC = () => {
                                     <div className="text-[7px] font-mono text-white/40">SYS_TIME: {new Date().toLocaleTimeString()}</div>
                                 </div>
 
-                                <div className="p-6 lg:p-8 flex flex-col gap-4 relative z-30">
+                                <div className="p-5 lg:p-7 flex flex-col gap-3 relative z-30">
                                     <div className="flex justify-between items-end">
                                         <div className="space-y-1">
                                             <div className="text-[9px] font-black text-red-500 uppercase tracking-[0.5em]">FULL_CONFIG</div>
-                                            <div className="text-xl font-black text-white italic tracking-tighter uppercase leading-none">ZERO_INTERVENTION</div>
+                                            <div className="text-lg font-black text-white italic tracking-tighter uppercase leading-none">ZERO_INTERVENTION</div>
                                         </div>
                                         <div className="text-right">
                                             <div className="text-[7px] font-black text-white/40 uppercase tracking-widest">SETUP_COST</div>
-                                            <div className="text-[14px] font-black text-white uppercase">$500.00</div>
+                                            <div className="text-[12px] font-black text-white uppercase">$500.00</div>
                                         </div>
                                     </div>
 
-                                    <div className="space-y-2">
-                                        <h3 className="text-2xl lg:text-4xl font-black italic tracking-tighter text-white uppercase leading-[0.8] text-left">
+                                    <div className="space-y-1">
+                                        <h3 className="text-2xl lg:text-3xl font-black italic tracking-tighter text-white uppercase leading-[0.8] text-left">
                                             DEPLOY YOUR <br />
                                             <span className="text-red-500 text-glow">DREAM TEAM.</span>
                                         </h3>
-                                        <p className="text-[9px] text-slate-400 font-medium tracking-tight max-w-[220px]">
+                                        <p className="text-[9px] text-slate-400 font-medium tracking-tight max-w-[200px]">
                                             Fully autonomous systems. <br />
                                             Running <span className="text-white">24/7 operations.</span>
                                         </p>
                                     </div>
 
-                                    <div className="relative group/btn">
+                                    <div className="relative group/btn mt-2">
                                         <Link to="/contact">
                                             <motion.button
                                                 whileHover={{ scale: 1.02, boxShadow: "0 0 60px rgba(239, 68, 68, 0.15)" }}
                                                 whileTap={{ scale: 0.98 }}
-                                                className="group w-full py-6 bg-red-600 text-white text-[14px] font-black uppercase tracking-[0.4em] rounded-2xl flex items-center justify-center gap-4 italic relative overflow-hidden transition-all shadow-[0_20px_40px_rgba(239,68,68,0.2)]"
+                                                className="group w-full py-5 bg-red-600 text-white text-[13px] font-black uppercase tracking-[0.3em] rounded-2xl flex items-center justify-center gap-4 italic relative overflow-hidden transition-all shadow-[0_20px_40px_rgba(239,68,68,0.2)]"
                                             >
                                                 INITIATE SETUP
                                                 <ArrowRight className="w-5 h-5 group-hover:translate-x-3 transition-transform" />
