@@ -50,7 +50,7 @@ export const NotificationProvider: React.FC<{ children: React.ReactNode }> = ({ 
                 schema: 'public',
                 table: 'notifications',
                 filter: `user_id=eq.${user.id}`
-            }, (payload) => {
+            }, (payload: any) => {
                 const newNotif = payload.new as Notification;
                 setNotifications(prev => [newNotif, ...prev]);
                 showToast(newNotif.title, 'info');
@@ -64,7 +64,7 @@ export const NotificationProvider: React.FC<{ children: React.ReactNode }> = ({ 
                 schema: 'public',
                 table: 'notifications',
                 filter: `user_id=eq.${user.id}`
-            }, (payload) => {
+            }, (payload: any) => {
                 const updatedNotif = payload.new as Notification;
                 setNotifications(prev => prev.map(n => n.id === updatedNotif.id ? updatedNotif : n));
             })

@@ -109,7 +109,7 @@ const RevloOSAppPageContent: React.FC = () => {
 
                 // 1. Load Leads from Supabase
                 const leadData = await getLeads();
-                const mappedLeads = (leadData || []).map(l => mapDbLeadToLead(l));
+                const mappedLeads = (leadData || []).map((l: any) => mapDbLeadToLead(l));
 
                 setRemoteLeads(mappedLeads);
                 setSessions([{ id: 'default', name: 'Main Pipeline', createdAt: new Date().toISOString(), leads: mappedLeads }]);
@@ -144,7 +144,7 @@ const RevloOSAppPageContent: React.FC = () => {
                 }
 
                 if (agentData && agentData.length > 0) {
-                    setAgents(agentData.map(a => ({
+                    setAgents(agentData.map((a: any) => ({
                         id: a.id,
                         name: a.name,
                         role: a.role as any,
@@ -175,7 +175,7 @@ const RevloOSAppPageContent: React.FC = () => {
 
                 // 4. Load Vault
                 const vaultData = await getVaultDocuments();
-                setVaultDocs((vaultData || []).map(d => ({ ...d, createdAt: d.created_at, type: d.type as any, tags: d.tags || [] })) as any);
+                setVaultDocs((vaultData || []).map((d: any) => ({ ...d, createdAt: d.created_at, type: d.type as any, tags: d.tags || [] })) as any);
 
             } catch (err: any) {
                 if (err?.name === 'AbortError') return;
@@ -188,13 +188,13 @@ const RevloOSAppPageContent: React.FC = () => {
         // 2. Real-time Subscription to Leads
         const channel = supabase
             .channel('public:leads')
-            .on('postgres_changes', { event: '*', schema: 'public', table: 'leads' }, (payload) => {
+            .on('postgres_changes', { event: '*', schema: 'public', table: 'leads' }, (payload: any) => {
                 if (payload.eventType === 'INSERT') {
                     const newLead = mapDbLeadToLead(payload.new);
                     setRemoteLeads(prev => [newLead, ...prev]);
                 } else if (payload.eventType === 'UPDATE') {
                     const updatedLead = mapDbLeadToLead(payload.new);
-                    setRemoteLeads(prev => prev.map(l => l.id === updatedLead.id ? updatedLead : l));
+                    setRemoteLeads(prev => prev.map((l: any) => l.id === updatedLead.id ? updatedLead : l));
                 }
             })
             .subscribe();
@@ -274,7 +274,7 @@ const RevloOSAppPageContent: React.FC = () => {
             } as any);
             // Refresh list (or update locally which we'll do via refresh or manual update state)
             const vaultData = await getVaultDocuments();
-            setVaultDocs((vaultData || []).map(d => ({ ...d, createdAt: d.created_at, type: d.type as any, tags: d.tags || [] })) as any);
+            setVaultDocs((vaultData || []).map((d: any) => ({ ...d, createdAt: d.created_at, type: d.type as any, tags: d.tags || [] })) as any);
             showToast('Strategic asset archived', 'success');
         } catch (err) {
             showToast('Vault sync failed', 'error');
