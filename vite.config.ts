@@ -20,11 +20,54 @@ export default defineConfig({
   },
   plugins: [react()],
   build: {
+    // Optimize bundle size
+    minify: 'terser',
+    terserOptions: {
+      compress: {
+        drop_debugger: true,
+        drop_console: true,
+      },
+    },
+    // Better chunk splitting strategy
     rollupOptions: {
       input: {
         main: 'index.html',
         openclaw: 'openclaw.html',
       },
+      output: {
+        manualChunks: (id) => {
+          // Vendor chunks
+          if (id.includes('node_modules')) {
+            if (id.includes('@clerk')) return 'chunk-clerk';
+            if (id.includes('framer-motion')) return 'chunk-motion';
+            if (id.includes('react-router')) return 'chunk-router';
+            if (id.includes('supabase')) return 'chunk-supabase';
+            return 'vendors';
+          }
+          // Page chunks (lazy loaded)
+          if (id.includes('/pages/')) {
+            const match = id.match(/\/pages\/([^/]+)/);
+            if (match) return `page-${match[1]}`;
+          }
+          // Feature chunks
+          if (id.includes('/features/')) {
+            const match = id.match(/\/features\/([^/]+)/);
+            if (match) return `feature-${match[1]}`;
+          }
+        },
+      },
     },
+    chunkSizeWarningLimit: 1000,
+  },
+  optimizeDeps: {
+    include: [
+      'react',
+      'react-dom',
+      'react-router-dom',
+      'framer-motion',
+      '@clerk/clerk-react',
+      'lucide-react',
+      'react-helmet-async',
+    ],
   },
 });

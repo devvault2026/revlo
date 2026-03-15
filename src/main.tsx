@@ -4,6 +4,7 @@ import { HelmetProvider } from 'react-helmet-async';
 import { ClerkProvider } from '@clerk/clerk-react';
 import App from './App';
 import './index.css';
+import { reportWebVitals, reportNavigationTiming } from './utils/webVitals';
 
 const PUBLISHABLE_KEY = import.meta.env.VITE_CLERK_PUBLISHABLE_KEY;
 
@@ -52,4 +53,10 @@ if (!isPublishableKeyValid(PUBLISHABLE_KEY)) {
             </HelmetProvider>
         </React.StrictMode>
     );
+
+    // Initialize web vitals monitoring in production
+    if (import.meta.env.PROD) {
+        reportWebVitals();
+        reportNavigationTiming();
+    }
 }

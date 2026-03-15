@@ -1,9 +1,10 @@
-import React, { useState, useEffect } from 'react';
+import React, { useState, useEffect, useCallback } from 'react';
 import { motion, AnimatePresence } from 'framer-motion';
 import { ArrowRight, TrendingUp, Rocket, Zap, ShieldCheck, Activity, Bell, MessageSquare, PhoneIncoming, DollarSign, Calendar } from 'lucide-react';
 
 const Hero: React.FC = () => {
     const [currentTime, setCurrentTime] = useState(new Date());
+    const [isClient, setIsClient] = useState(false);
     const [stats, setStats] = useState({
         calls: 142402,
         leads: 894320,
@@ -34,29 +35,19 @@ const Hero: React.FC = () => {
         { app: 'RevloClaw', title: 'Scrape Success', body: 'Competitor alpha sources successfully mapped.', icon: <Zap className="w-4 h-4 text-white" />, color: 'bg-red-600', time: '5m ago' },
         { app: 'Messages', title: 'The Core', body: 'Autonomous marketing ROI is currently 1,420%.', icon: <PhoneIncoming className="w-4 h-4 text-white" />, color: 'bg-green-500', time: 'now' },
         { app: 'Stripe', title: 'New Multi-Year Deal', body: '$250,000.00 upfront payment verified.', icon: <DollarSign className="w-4 h-4 text-white" />, color: 'bg-indigo-600', time: 'now' },
-        { app: 'Mail', title: 'Strategic Intro', body: 'Managing Director at Sequoia requested a call.', icon: <Bell className="w-4 h-4 text-white" />, color: 'bg-red-500', time: '12m ago' },
-        { app: 'RevloClaw', title: 'Neural Update', body: 'Model weights optimized. Closing rate +14%.', icon: <Zap className="w-4 h-4 text-white" />, color: 'bg-red-600', time: 'just now' },
-        { app: 'Discord', title: 'Global Sync', body: '9 nodes expanded to 42. Infinite horizontal scale.', icon: <Activity className="w-4 h-4 text-white" />, color: 'bg-[#5865F2]', time: 'now' },
-        { app: 'Messages', title: 'Alpha Strategist', body: 'Market dominance achieved in Real Estate vertical.', icon: <MessageSquare className="w-4 h-4 text-white" />, color: 'bg-green-500', time: 'now' },
-        { app: 'Stripe', title: 'Transfer Complete', body: '$1,200,000.00 successfully bridged to treasury.', icon: <DollarSign className="w-4 h-4 text-white" />, color: 'bg-indigo-600', time: 'now' },
-        { app: 'Mail', title: 'Acquisition Inquiry', body: 'T1 Private Equity firm scoping Revlo assets.', icon: <Bell className="w-4 h-4 text-white" />, color: 'bg-red-500', time: '1h ago' },
-        { app: 'RevloClaw', title: 'Automation Win', body: 'Closed Alpha Corp ($50k) without human input.', icon: <ShieldCheck className="w-4 h-4 text-white" />, color: 'bg-emerald-500', time: 'now' },
-        { app: 'Discord', title: 'Neural Core', body: 'LLM pass #84 finalized. Sentiment accuracy: 99.8%.', icon: <Activity className="w-4 h-4 text-white" />, color: 'bg-[#5865F2]', time: 'now' },
-        { app: 'Messages', title: 'Growth Vault', body: 'Viral loop initiated. Users +14,000 in 2 hours.', icon: <Rocket className="w-4 h-4 text-white" />, color: 'bg-green-500', time: 'now' },
-        { app: 'Stripe', title: 'Partner Payout', body: '$62,400.00 commission distributed to nodes.', icon: <DollarSign className="w-4 h-4 text-white" />, color: 'bg-indigo-600', time: '2h ago' },
-        { app: 'Mail', title: 'Gov. Contract', body: 'Preliminary approval for agency-wide deployment.', icon: <Bell className="w-4 h-4 text-white" />, color: 'bg-red-500', time: 'now' },
-        { app: 'RevloClaw', title: 'Task Completed', body: 'Competitor 10-K analysis finished. Arbitrage found.', icon: <Zap className="w-4 h-4 text-white" />, color: 'bg-red-600', time: 'now' },
-        { app: 'Discord', title: 'Infrastructure', body: 'Auto-scaling triggered. Cluster capacity +400%.', icon: <Activity className="w-4 h-4 text-white" />, color: 'bg-[#5865F2]', time: 'now' },
-        { app: 'Messages', title: 'Strategic Op', body: 'Signal-to-close ratio hit all-time high of 42%.', icon: <TrendingUp className="w-4 h-4 text-white" />, color: 'bg-green-500', time: 'now' },
-        { app: 'Stripe', title: 'Revenue Surge', body: 'Last hour: $142,500.00 in new MRR processed.', icon: <DollarSign className="w-4 h-4 text-white" />, color: 'bg-indigo-600', time: 'now' },
-        { app: 'Mail', title: 'White Label Op', body: 'Global Agency requesting enterprise license.', icon: <Bell className="w-4 h-4 text-white" />, color: 'bg-red-500', time: 'now' },
-        { app: 'RevloClaw', title: 'Scrape Success', body: 'LinkedIn database sync complete (8M records).', icon: <Zap className="w-4 h-4 text-white" />, color: 'bg-red-600', time: 'just now' },
-        { app: 'Discord', title: 'Security Node', body: 'Attempted breach neutralized. Zero data loss.', icon: <ShieldCheck className="w-4 h-4 text-white" />, color: 'bg-[#5865F2]', time: '3h ago' },
-        { app: 'Messages', title: 'Empire Core', body: 'Wealth generation metrics are off the charts.', icon: <MessageSquare className="w-4 h-4 text-white" />, color: 'bg-green-500', time: 'now' },
-        { app: 'Stripe', title: 'Payment Success', body: '$25,000.00 from Fintech Vanguard.', icon: <DollarSign className="w-4 h-4 text-white" />, color: 'bg-indigo-600', time: 'now' }
     ];
 
+    // Delay expensive animations and state updates
     useEffect(() => {
+        setIsClient(true);
+        const initialNotifs = notificationPool.slice(0, 4).map((n, i) => ({ ...n, id: i }));
+        setActiveNotifications(initialNotifs);
+    }, []);
+
+    // Start expensive updates only after page is interactive
+    useEffect(() => {
+        if (!isClient) return;
+
         const interval = setInterval(() => {
             setStats(prev => ({
                 ...prev,
@@ -65,25 +56,20 @@ const Hero: React.FC = () => {
                 revenue: prev.revenue + Math.floor(Math.random() * 100),
             }));
 
-            // Randomly push a new notification
             if (Math.random() > 0.6) {
                 const randomItem = notificationPool[Math.floor(Math.random() * notificationPool.length)];
                 const randomNotif = { ...randomItem, id: Date.now() };
                 setActiveNotifications(prev => [randomNotif, ...prev].slice(0, 5));
             }
-        }, 2500);
+        }, 3000); // Increased interval to reduce frame drops
 
         const clockTimer = setInterval(() => setCurrentTime(new Date()), 1000);
-
-        // Initial set of notifications
-        const initialNotifs = notificationPool.slice(0, 4).map((n, i) => ({ ...n, id: i }));
-        setActiveNotifications(initialNotifs);
 
         return () => {
             clearInterval(interval);
             clearInterval(clockTimer);
         };
-    }, []);
+    }, [isClient]);
 
     const scrollToContact = () => {
         const element = document.getElementById('contact');
