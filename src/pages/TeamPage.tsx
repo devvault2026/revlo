@@ -59,6 +59,24 @@ const TeamPage: React.FC = () => {
             image: 'https://res.cloudinary.com/dpfapm0tl/image/upload/v1771553045/ChatGPT_Image_Feb_19_2026_02_07_51_PM_u8fmn7.png',
             id: 'AI-MARK-003'
         },
+        {
+            name: 'VLASTIMIL VRSKOVY',
+            role: 'Fullstack Developer & OpenClaw Setups Pro',
+            title: 'DEPLOYMENT ARCHITECT // OPENCLAW SPECIALIST',
+            bio: 'Expert in fullstack development and OpenClaw infrastructure deployment. Vlastimil specializes in architecting and executing production-grade system setups.',
+            extendedBio: 'Vlastimil brings deep expertise in fullstack development and the complete OpenClaw deployment pipeline. He is responsible for architecting robust infrastructure implementations, ensuring every system is optimized for scale and reliability. With a focus on production-grade quality and meticulous execution, Vlastimil transforms complex requirements into elegant, performant solutions.',
+            expertise: ['FULLSTACK DEV', 'OPENCLAW DEPLOYMENT', 'INFRASTRUCTURE SETUP', 'SYSTEM ARCHITECTURE', 'PRODUCTION OPTIMIZATION', 'TECHNICAL LEADERSHIP'],
+            achievements: [
+                'Deployed OpenClaw across multiple verticals',
+                'Architected scalable infrastructure solutions',
+                'Led high-complexity integration projects',
+                'Optimized production systems for 99.9% uptime',
+            ],
+            gradient: 'from-orange-500 to-red-400',
+            initial: 'V',
+            image: 'https://res.cloudinary.com/dpfapm0tl/image/upload/v1773617573/547292508_10162777298947479_1451578536619261068_n_rrb8va.jpg',
+            id: 'TECH-004'
+        },
     ];
 
     return (

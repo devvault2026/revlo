@@ -31,6 +31,15 @@ const Team: React.FC = () => {
             initial: 'MT',
             image: 'https://res.cloudinary.com/dpfapm0tl/image/upload/v1771553045/ChatGPT_Image_Feb_19_2026_02_07_51_PM_u8fmn7.png',
         },
+        {
+            name: 'Vlastimil',
+            role: 'Fullstack Developer & OpenClaw Pro',
+            bio: 'Expert in fullstack development and OpenClaw infrastructure deployment. Vlastimil specializes in architecting production-grade system setups and complex implementations.',
+            expertise: ['Fullstack Development', 'OpenClaw Deployment', 'Infrastructure Design'],
+            color: 'text-orange-400',
+            initial: 'VV',
+            image: 'https://res.cloudinary.com/dpfapm0tl/image/upload/v1773617573/547292508_10162777298947479_1451578536619261068_n_rrb8va.jpg',
+        },
     ];
 
     return (
