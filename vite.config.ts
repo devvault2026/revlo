@@ -20,14 +20,6 @@ export default defineConfig({
   },
   plugins: [react()],
   build: {
-    // Optimize bundle size
-    minify: 'terser',
-    terserOptions: {
-      compress: {
-        drop_debugger: true,
-        drop_console: true,
-      },
-    },
     // Better chunk splitting strategy
     rollupOptions: {
       input: {
