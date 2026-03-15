@@ -20,6 +20,8 @@ import LoginPage from './pages/LoginPage';
 import RegisterPage from './pages/RegisterPage';
 import ForgotPasswordPage from './pages/ForgotPasswordPage';
 import NotFoundPage from './pages/NotFoundPage';
+import DemoPage from './pages/DemoPage';
+import CareersPage from './pages/CareersPage';
 
 // Admin Pages
 import AdminPage from './pages/AdminPage';
@@ -41,7 +43,6 @@ import RoofingPage from './pages/RoofingPage';
 import WebsitesPage from './pages/WebsitesPage';
 import BlogPage from './pages/BlogPage';
 import BlogPostPage from './pages/BlogPostPage';
-import DemoPage from './pages/DemoPage';
 
 // Components
 import Navigation from './components/Navigation';
@@ -99,6 +100,13 @@ function App() {
                                         <>
                                             <Navigation />
                                             <ContactPage />
+                                            <Footer />
+                                        </>
+                                    } />
+                                    <Route path="/careers" element={
+                                        <>
+                                            <Navigation />
+                                            <CareersPage />
                                             <Footer />
                                         </>
                                     } />

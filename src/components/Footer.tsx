@@ -64,6 +64,11 @@ const Footer: React.FC = () => {
                                 </Link>
                             </li>
                             <li>
+                                <Link to="/careers" className="text-sm font-medium text-slate-500 hover:text-white transition-all uppercase tracking-[0.2em]">
+                                    Careers
+                                </Link>
+                            </li>
+                            <li>
                                 <Link to="/services" className="text-sm font-medium text-slate-500 hover:text-white transition-all uppercase tracking-[0.2em]">
                                     Partner Portal
                                 </Link>
