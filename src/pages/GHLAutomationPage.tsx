@@ -207,7 +207,7 @@ const GHLAutomationPage = () => {
             <Navigation />
 
             {/* CINEMATIC HERO - SCALE ADJUSTED */}
-            <section className="relative min-h-[90vh] flex flex-col justify-center pt-24 pb-32">
+            <section className="relative h-screen flex flex-col justify-center pt-24 overflow-hidden">
                 {/* Background Tactical Layer */}
                 <div className="absolute inset-0 pointer-events-none overflow-hidden">
                     <svg className="hidden">
@@ -380,7 +380,7 @@ const GHLAutomationPage = () => {
                 </div>
 
                 {/* THE TACTICAL DATA RIBBON SYSTEM - 3 PARTS - BOXING OFF HERO */}
-                <div className="absolute bottom-[-60px] left-0 w-full z-40 -rotate-1 skew-x-[0.2deg]">
+                <div className="absolute bottom-10 left-0 w-full z-40 -rotate-1 skew-x-[0.2deg]">
                     {/* Part 1: Top Technical Strip (Slim & Subtle) */}
                     <div className="w-full bg-blue-500/5 border-y border-white/5 py-1 overflow-hidden backdrop-blur-sm">
                         <div className="flex animate-marquee whitespace-nowrap gap-16 items-center opacity-30">

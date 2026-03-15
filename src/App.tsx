@@ -37,6 +37,7 @@ import TakeoffAgentPage from './pages/TakeoffAgentPage';
 import EliteDevelopmentPage from './pages/EliteDevelopmentPage';
 import OpenClawPage from './pages/OpenClawPage';
 import GHLAutomationPage from './pages/GHLAutomationPage';
+import RoofingPage from './pages/RoofingPage';
 import WebsitesPage from './pages/WebsitesPage';
 import BlogPage from './pages/BlogPage';
 import BlogPostPage from './pages/BlogPostPage';
@@ -112,6 +113,7 @@ function App() {
                                     <Route path="/elite-development" element={<EliteDevelopmentPage />} />
                                     <Route path="/openclaw" element={<OpenClawPage />} />
                                     <Route path="/ghl-automation" element={<GHLAutomationPage />} />
+                                    <Route path="/roofing" element={<RoofingPage />} />
                                     <Route path="/websites" element={<WebsitesPage />} />
                                     <Route path="/blog" element={
                                         <>

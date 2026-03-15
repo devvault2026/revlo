@@ -297,7 +297,7 @@ const EliteDevelopmentPage: React.FC = () => {
             <Navigation />
 
             {/* HERO SECTION - TACTICAL COMMAND CENTER */}
-            <section className="relative h-screen overflow-hidden flex flex-col justify-center">
+            <section className="relative h-screen overflow-hidden flex flex-col justify-center pt-24">
                 {/* Live Tactical Background Elements */}
                 <div className="absolute inset-0 overflow-hidden pointer-events-none">
                     {/* Interactive Purple Bubbles (from Scout Page) */}
@@ -616,7 +616,7 @@ const EliteDevelopmentPage: React.FC = () => {
                 </div>
 
                 {/* THE TACTICAL DATA RIBBON - BOXING OFF HERO */}
-                <div className="absolute bottom-8 left-0 w-full z-40 -rotate-1 skew-x-[0.2deg]">
+                <div className="absolute bottom-10 left-0 w-full z-40 -rotate-1 skew-x-[0.2deg]">
                     {/* Thin technical data strip (Top) */}
                     <div className="w-full bg-red-500/10 border-y border-white/5 py-1 overflow-hidden backdrop-blur-sm">
                         <div className="flex animate-marquee whitespace-nowrap gap-20 items-center opacity-40">
