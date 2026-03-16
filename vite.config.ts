@@ -25,6 +25,7 @@ export default defineConfig({
       input: {
         main: 'index.html',
         openclaw: 'openclaw.html',
+        roofing: 'roofing.html',
       },
       output: {
         manualChunks: (id) => {
