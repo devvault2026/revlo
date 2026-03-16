@@ -131,41 +131,41 @@ const RoofingPage = () => {
     const roofingModules = [
         {
             title: "Module A: The 'Hunter'",
-            subtitle: "Intelligence & Prospecting",
-            description: "This isn't just a map; it's a Dynamic Battlefield. We move beyond simple pins and into storm-triggered territory sovereignty.",
-            howItWorks: "Supabase Edge Functions hook into NOAA & HailTrace. When hail exceeds 1.5\", the system auto-queries Regrid/Atom to map every home in the swath and auto-assigns 'Lasso' territories to reps based on proximity and closing weight.",
-            goal: "Eliminate lead decay. Be the first on the ground with property pre-intel (owner name, roof age, street view) before the rep even steps out of the truck.",
-            features: ["Storm-Triggered Carving", "NOAA/HailTrace API Hook", "Mapbox GL JS 'Lasso' UI", "Property Pre-Intel Search"],
+            subtitle: "Autonomous Lead Agent",
+            description: "A LangGraph agent that wakes at 3 AM. When storms hit your territory, it detects, maps, and assigns leads automatically. Zero human intervention.",
+            howItWorks: "Supabase Edge Functions hook into NOAA & HailTrace in real-time. When hail exceeds 1.5\", the Hunter agent spins up, queries Regrid/Atom for every property in the storm swath, and auto-carves 'Lasso' territories for reps. Pre-intel loads instantly (owner name, roof age, street view).",
+            goal: "YOU GET: 5-second lead response time. No lead decay. Your team is first on the ground with data advantage. While competitors are still reading emails, you're already quoting.",
+            features: ["🤖 Autonomous Storm Detection", "⚡ 5-Second Lead Response", "🗺️ Auto Territory Carving", "📍 Property Pre-Intel Loaded"],
             icon: <Target className="w-5 h-5" />,
             color: "orange"
         },
         {
             title: "Module B: The 'Closer'",
-            subtitle: "High-Velocity Sales",
-            description: "Contract signed before the ladder is back on the truck. We replace generic PDF estimates with a custom Glassmorphic Proposal Engine.",
-            howItWorks: "Backend pings Roofr/EagleView for dimensions. AI pricing logic applies your specific margins for GAF vs Owens Corning. Gemini 1.5 Pro scans rep-uploaded photos for granular loss, overlaying AI-detected markers to build instant homeowner trust.",
-            goal: "Accelerated Closing. The homeowner chooses a tier (Good/Better/Best) in a stunning UI, and the price updates in real-time. Justify the claim with AI precision.",
-            features: ["AI Damage Simulator", "Custom Aerial Estimator", "Dynamic Proposal Logic", "Glassmorphic Sales UI"],
+            subtitle: "Autonomous Sales Agent",
+            description: "A LangGraph agent that runs pricing, detects damage, and generates proposals in 90 seconds. The rep takes a photo. The agent closes.",
+            howItWorks: "Rep uploads 5 photos. The Closer agent pings Roofr/EagleView for aerial measurements, runs your custom pricing logic (GAF vs Owens Corning margins), and Gemini 1.5 Pro vision-scans for hail impact and wind-lift markers. Glassmorphic UI updates in real-time as the homeowner chooses tiers.",
+            goal: "YOU GET: Contracts signed 2X faster. Homeowners see AI damage markers, not verbal claims. No office admin time spent on estimates. Your rep spends more time with more leads.",
+            features: ["🤖 AI Damage Detection", "⚡ 90-Second Proposals", "💰 Dynamic Pricing", "📋 DocuSign Auto-Sync"],
             icon: <Zap className="w-5 h-5" />,
             color: "amber"
         },
         {
             title: "Module C: The 'Orchestrator'",
-            subtitle: "Owner Infrastructure",
-            description: "Transition from a 'hustle' to a scalable system. A 16:9 responsive Command Center for total operational visibility.",
-            howItWorks: "The 'Pulse' map shows real-time dots of every rep's location and knock history. Upon e-signature (DocuSign/PandaDoc API), a webhook automatically generates a Material Takeoff list and notifies the production team.",
-            goal: "Operational Sovereignty. Monitor revenue velocity and production handoffs from a single dashboard. Turn your field reps into a precision-guided sales force.",
-            features: ["'Pulse' Real-time Map", "Revenue Velocity Ticker", "Automated Material Takeoff", "Production Webhook Hooks"],
+            subtitle: "Autonomous Ops Agent",
+            description: "A LangGraph agent that watches your entire operation in real-time. Reps move. The Orchestrator tracks. Contracts sign. Material takeoffs auto-generate.",
+            howItWorks: "The 'Pulse' map shows real-time dots for every rep's location and knock history. Upon e-signature, a webhook fires automatically—the Orchestrator generates Material Takeoff lists and notifies production via Slack/email. No manual data entry. Revenue velocity ticker updates live.",
+            goal: "YOU GET: Zero administrative friction between sales and production. Your office doesn't bottleneck. Field reps stay in the field. Production gets materials before the crew arrives. One dashboard. Total visibility.",
+            features: ["🤖 Autonomous Workflow", "📊 Real-time 'Pulse' Map", "💵 Revenue Velocity Ticker", "📦 Auto Material Takeoff"],
             icon: <Activity className="w-5 h-5" />,
             color: "yellow"
         },
         {
             title: "Module D: The 'Sales Clone'",
-            subtitle: "Voice & SMS AI Agents",
-            description: "Replace your entire sales front-line with 24/7 autonomous agents. 1-click installable voice bots that handle inbound/outbound calls and web chat.",
-            howItWorks: "Neural models trained on your elite closing scripts. These agents handle objections, qualify leads, and book appointments directly into your calendar with near-human empathy and zero latency.",
-            goal: "Zero lead abandonment. Every phone call answered, every website visitor engaged, and every lead followed up within 20 seconds, 24/7.",
-            features: ["Inbound/Outbound AI Calls", "Website Voice Interface", "Context-Aware Chatbots", "1-Click Site Embedding"],
+            subtitle: "24/7 Autonomous Voice Agent",
+            description: "A LangGraph agent trained on YOUR closing scripts. Handles every inbound call, every web chat. Never misses a lead. Runs 24/7.",
+            howItWorks: "Neural models trained on your elite reps' call recordings and closing tactics. The agent handles objections, qualifies leads, and books appointments directly into your calendar. It learns from your outcomes. Next week it closes better.",
+            goal: "YOU GET: Zero lead abandonment. Every call answered. Every chat engaged. Every lead followed up within 20 seconds, 24/7/365. Sales velocity that never sleeps. Leads that would have called your competitor the next day are already in your system.",
+            features: ["🤖 24/7 Autonomous Calls", "🎤 Human-Grade Voice", "💬 Web Chat + SMS", "📞 Calendar Auto-Book"],
             icon: <Phone className="w-5 h-5" />,
             color: "blue"
         }
@@ -216,20 +216,36 @@ const RoofingPage = () => {
 
     const faqs = [
         {
-            q: "WHY NOT JUST USE JOBNIMBUS OR ACCULYNX?",
-            a: "Those are great CRMs, but they are 'SaaS-tape'. You're paying per-user fees for a platform you don't own. We build the layer on top that automates the prospecting and sales—integrating with your CRM or replacing it entirely."
+            q: "WHAT IS LANGGRAPH? HOW DOES SUBGRAPH STATE ISOLATION HELP ROOFERS?",
+            a: "LangGraph is a framework that lets independent AI agents work in parallel. Your Hunter agent negotiates territory (State A), your Closer agent runs pricing (State B), and your Orchestrator tracks production (State C)—all simultaneously on the same project. They never collide. Zero data overlap. This is the 'isolating subgraph state' you need for autonomous scale."
         },
         {
-            q: "HOW ACCURATE IS THE AI DAMAGE DETECTION?",
-            a: "We use Gemini 1.5 Pro's Vision capabilities. While it doesn't replace a physical inspection, it provides a visual 'trust layer' by highlighting granular loss and wind-lift markers that homeowners (and adjusters) find undeniable."
+            q: "DO I REALLY OWN 100% OF THIS?",
+            a: "Yes, 100%. We deploy Supabase (your DB), Vercel (your compute), and Cloudflare (your storage) under YOUR AWS/personal accounts. You own the code, the data, the IP. No vendor lock-in. No monthly per-seat tax. If we disappear tomorrow, your system runs forever."
         },
         {
-            q: "DO WE OWN THE CODE?",
-            a: "100%. We build this on your own Supabase, Cloudflare, and Vercel accounts. You own the Intellectual Property, the data, and the engine. No vendor lock-in."
+            q: "HOW MUCH WILL THIS ACTUALLY SAVE ME?",
+            a: "Math: Typical roofing ops spending $80-200k/year on JobNimbus ($200/seat × 5 reps), Twilio per-message fees, EagleView per-estimate, plus a $50-70k/year office manager. With Revlo: $25-99k/year depending on tier, one flat fee, all autonomous. You're looking at 40-70% savings PLUS faster closures and zero lead decay."
         },
         {
-            q: "WHAT APIS DO YOU CONNECT TO?",
-            a: "NOAA/HailTrace for weather, Regrid/Atom for property data, Mapbox for geospatial, Roofr/EagleView for measurements, and Twilio for automated SMS hooks."
+            q: "WHAT IF MY REPS AREN'T TECH-SAVVY?",
+            a: "The UI is dead simple. Reps see a map, tap a territory, take 5 photos. The agents handle everything else. We provide onboarding videos and live support during your 90-day deployment. By week 4, your team is fluent."
+        },
+        {
+            q: "HOW LONG IS DEPLOYMENT?",
+            a: "90 days from signed contract to live. Week 1: Recon. Week 2-5: Build & training. Week 6-8: Field deployment & tuning. Week 9-12: Scale & optimization. Most teams hit their first ROI within 30 days of going live (storm hits, system detects, leads flow)."
+        },
+        {
+            q: "WHAT IF THERE'S A BUG OR THE SYSTEM BREAKS?",
+            a: "You get fractional support included with every tier. Our team monitors production 24/7. We have SLA guarantees and redundancy built in (Supabase handles DB failover). No agent is running on a single thread—everything is architected for resilience."
+        },
+        {
+            q: "CAN I INTEGRATE THIS WITH MY EXISTING CRM?",
+            a: "Yes. The system can write to JobNimbus, Acculynx, Pipedrive, or any CRM with an API. Or we replace your CRM entirely and you get even more savings. Your choice."
+        },
+        {
+            q: "WHAT ABOUT DATA PRIVACY AND SECURITY?",
+            a: "Bank-level encryption (AES-256), row-level security on Supabase, Vercel serverless isolation, and GDPR/CCPA compliance built-in. Your data never leaves your Supabase instance. We never touch it."
         }
     ];
 
@@ -294,7 +310,7 @@ const RoofingPage = () => {
             <Navigation />
 
             {/* CINEMATIC HERO */}
-            <section className="relative h-screen flex flex-col justify-center pt-24 overflow-hidden">
+            <section className="relative py-20 lg:py-32 overflow-hidden">
                 <div className="absolute inset-0 pointer-events-none overflow-hidden">
                     <svg className="hidden">
                         <defs>
@@ -331,57 +347,57 @@ const RoofingPage = () => {
                 </div>
 
                 <div className="max-w-7xl mx-auto px-6 lg:px-8 relative z-10 w-full">
-                    <div className="grid lg:grid-cols-[0.9fr,1.1fr] gap-12 items-center">
+                    <div className="grid lg:grid-cols-2 gap-8 lg:gap-16 items-start">
                         <motion.div
                             initial={{ opacity: 0, x: -30 }}
                             animate={{ opacity: 1, x: 0 }}
                             transition={{ duration: 0.8 }}
-                            className="flex flex-col items-start"
+                            className="flex flex-col items-start space-y-4 lg:space-y-6"
                         >
-                            <div className="inline-flex items-center gap-3 px-3 py-1.5 bg-orange-500/10 border border-orange-500/20 rounded-full mb-8">
-                                <span className="text-[9px] font-black text-orange-500 uppercase tracking-[0.4em] font-mono">
-                                    // ELIMINATE_SaaS_TAPE
+                            <div className="inline-flex items-center gap-2 px-3 py-1 bg-orange-500/10 border border-orange-500/20 rounded-full">
+                                <span className="text-[8px] sm:text-[9px] lg:text-[10px] font-black text-orange-500 uppercase tracking-[0.25em] font-mono">
+                                    AUTONOMOUS_AGENTS
                                 </span>
                             </div>
 
-                            <h1 className="text-4xl sm:text-5xl lg:text-[6.5rem] font-black font-display italic tracking-tight mb-8 leading-[0.85] lg:leading-[0.8] uppercase text-white relative z-10">
+                            <h1 className="text-4xl sm:text-5xl lg:text-6xl xl:text-7xl font-black font-display italic tracking-tight leading-[0.95] uppercase text-white relative z-10">
                                 <span className="relative inline-block group/infinite">
                                     <span className="relative z-10 text-white">ROOFER</span>
                                     <div className="absolute inset-0 pointer-events-none z-0 overflow-visible">
                                         <svg className="w-full h-full overflow-visible">
                                             <motion.text
                                                 x="0" y="0.82em"
-                                                className="font-black font-display italic text-4xl sm:text-5xl lg:text-[6.5rem] uppercase select-none"
-                                                fill="none" stroke="#f97316" strokeWidth="3" strokeDasharray="150 1500"
-                                                animate={{ strokeDashoffset: [0, -1650] }}
+                                                className="font-black font-display italic uppercase select-none"
+                                                style={{ fontSize: 'inherit' }}
+                                                fill="none" stroke="#f97316" strokeWidth="2.5" strokeDasharray="100 1100"
+                                                animate={{ strokeDashoffset: [0, -1200] }}
                                                 transition={{ duration: 4, repeat: Infinity, ease: "linear" }}
                                                 filter="url(#arc-roofing) url(#glow-roofing)"
-                                                style={{ letterSpacing: '-0.02em' }}
                                             >ROOFER</motion.text>
                                         </svg>
                                     </div>
                                 </span>
                                 <br />
-                                <span className="text-transparent bg-clip-text bg-gradient-to-r from-orange-400 via-orange-600 to-amber-800 tracking-tight">EXECUTION.</span>
+                                <span className="text-transparent bg-clip-text bg-gradient-to-r from-orange-400 via-orange-600 to-amber-800">AUTONOMOUS EMPIRE.</span>
                             </h1>
 
-                            <p className="text-lg sm:text-xl lg:text-2xl text-slate-400 font-medium italic leading-tight mb-10 max-w-xl border-l-4 border-orange-600 pl-6 lg:pl-8 text-left">
-                                Move away from disparate apps. <br />
-                                <span className="text-white font-black uppercase tracking-tight">Build the proprietary engine that eliminates the Data Tax.</span>
+                            <p className="text-sm sm:text-base lg:text-lg text-slate-400 font-medium italic leading-tight max-w-lg border-l-4 border-orange-600 pl-3 py-0">
+                                Your <span className="text-white font-black">Hunter agent wakes at 3 AM.</span> Storms hit. Leads flow in.<br />
+                                Your <span className="text-white font-black">Closer agent quotes while you sleep.</span> Contracts land.
                             </p>
 
-                            <div className="grid grid-cols-2 lg:grid-cols-4 gap-8 mt-4 w-full">
+                            <div className="grid grid-cols-2 lg:grid-cols-4 gap-4 lg:gap-8 w-full pt-2 lg:pt-4">
                                 {[
-                                    { val: ">1.5\"", l: "STORM RADIUS" },
+                                    { val: "24/7", l: "AUTONOMOUS" },
                                     { val: "100%", l: "OWNERSHIP" },
-                                    { val: "5 MIN", l: "LEAD CONTACT" },
-                                    { val: "AI", l: "DAMAGE SCAN" }
+                                    { val: "0", l: "DECAY" },
+                                    { val: "60%", l: "SAVINGS" }
                                 ].map((stat, i) => (
-                                    <div key={i} className="flex flex-col group">
-                                        <div className="text-3xl font-black italic text-white tracking-tighter">{stat.val}</div>
-                                        <div className="flex items-center gap-1.5 mt-1">
-                                            <div className="w-1 h-1 rounded-full bg-orange-500/50" />
-                                            <span className="text-[8px] font-black text-slate-600 uppercase tracking-widest">{stat.l}</span>
+                                    <div key={i} className="flex flex-col">
+                                        <div className="text-2xl sm:text-3xl lg:text-4xl xl:text-5xl font-black italic text-white tracking-tighter leading-none">{stat.val}</div>
+                                        <div className="flex items-center gap-1 mt-1 lg:mt-2">
+                                            <div className="w-0.5 h-0.5 rounded-full bg-orange-500/50" />
+                                            <span className="text-[7px] lg:text-[8px] font-black text-slate-600 uppercase tracking-widest">{stat.l}</span>
                                         </div>
                                     </div>
                                 ))}
@@ -391,70 +407,58 @@ const RoofingPage = () => {
                         <motion.div
                             initial={{ opacity: 0, scale: 0.95, x: 30 }}
                             animate={{ opacity: 1, scale: 1, x: 0 }}
-                            className="relative group block lg:block max-w-[680px] lg:ml-auto w-full mt-12 lg:mt-0"
+                            transition={{ duration: 0.8 }}
+                            className="relative group w-full mt-6 lg:mt-0"
                         >
-                            <div className="absolute -inset-6 bg-orange-600/10 blur-[80px] opacity-30 group-hover:opacity-60 transition-opacity duration-1000" />
+                            <div className="absolute -inset-4 lg:-inset-6 bg-orange-600/10 blur-[80px] opacity-30 group-hover:opacity-60 transition-opacity duration-1000" />
 
-                            <div className="glass-dark border border-white/10 rounded-[40px] overflow-hidden shadow-2xl relative z-10">
-                                <div className="bg-white/5 border-b border-white/5 px-8 py-4 flex justify-between items-center backdrop-blur-3xl">
-                                    <div className="flex items-center gap-3">
+                            <div className="glass-dark border border-white/10 rounded-[28px] lg:rounded-[40px] overflow-hidden shadow-2xl relative z-10">
+                                <div className="bg-white/5 border-b border-white/5 px-5 lg:px-8 py-3 lg:py-4 flex justify-between items-center backdrop-blur-3xl">
+                                    <div className="flex items-center gap-2 lg:gap-3">
                                         <div className="w-2 h-2 rounded-full bg-green-500 animate-pulse shadow-[0_0_10px_#22c55e]" />
-                                        <span className="text-[9px] font-black text-white uppercase tracking-[0.4em] font-mono">MISSION_LOG: FEE_ACTIVE</span>
+                                        <span className="text-[7px] lg:text-[8px] font-black text-white uppercase tracking-[0.2em] lg:tracking-[0.3em] font-mono">MISSION_LOG: FEE_ACTIVE</span>
                                     </div>
-                                    <div className="text-[7px] font-mono text-white/40">{new Date().toLocaleTimeString()}</div>
+                                    <div className="text-[6px] font-mono text-white/40 hidden sm:block">{new Date().toLocaleTimeString()}</div>
                                 </div>
 
-                                <div className="p-10 space-y-10">
-                                    <div className="flex justify-between items-end">
+                                <div className="p-5 lg:p-8 space-y-5 lg:space-y-8">
+                                    <div className="flex justify-between items-end gap-3 lg:gap-4">
                                         <div className="space-y-1">
-                                            <div className="text-[9px] font-black text-orange-500 uppercase tracking-[0.4em]">PROPRIETARY_CORE</div>
-                                            <div className="text-2xl font-black text-white italic tracking-tighter uppercase leading-none">REVLO_EDGE</div>
+                                            <div className="text-[8px] lg:text-[9px] font-black text-orange-500 uppercase tracking-[0.2em] lg:tracking-[0.3em]">PROPRIETARY_CORE</div>
+                                            <div className="text-xl lg:text-3xl font-black text-white italic tracking-tighter uppercase leading-none">REVLO_EDGE</div>
                                         </div>
                                         <div className="text-right">
-                                            <div className="text-[8px] font-black text-white/40 uppercase tracking-widest leading-none">SYSTEM_STATUS</div>
-                                            <div className="text-xl font-black text-green-500 uppercase mt-1">OPTIMIZED</div>
+                                            <div className="text-[7px] lg:text-[8px] font-black text-white/40 uppercase tracking-widest leading-none">STATUS</div>
+                                            <div className="text-base lg:text-xl font-black text-green-500 uppercase">OPTIMIZED</div>
                                         </div>
                                     </div>
 
-                                    <div className="space-y-3">
-                                        <h3 className="text-3xl lg:text-4xl font-black italic tracking-tight text-white uppercase leading-[0.8]">
-                                            STOP THE <br />
-                                            <span className="text-orange-500 text-glow-orange">DATA TAX.</span>
+                                    <div className="space-y-3 lg:space-y-4">
+                                        <h3 className="text-3xl lg:text-4xl font-black italic tracking-tight text-white uppercase leading-tight">
+                                            AGENTS THAT <br />
+                                            <span className="text-orange-500 text-glow-orange">NEVER SLEEP.</span>
                                         </h3>
-                                        <p className="text-[12px] text-slate-400 font-medium leading-relaxed max-w-[240px]">
-                                            Full Custom Field Execution Engine (FEE) built for maximum leverage.
+                                        <p className="text-[10px] lg:text-base text-slate-400 font-medium leading-relaxed">
+                                            Built with LangGraph. Four agents, parallel state, zero overlap. All at your ownership.
                                         </p>
                                     </div>
 
-                                    <div className="relative group/btn">
-                                        <Link to="/contact">
-                                            <motion.button
-                                                whileHover={{ scale: 1.02, x: 5, boxShadow: "0 0 40px rgba(249,115,22,0.3)" }}
-                                                className="w-full py-6 bg-white text-black text-[13px] font-black uppercase tracking-[0.3em] rounded-[20px] flex items-center justify-center gap-4 italic shadow-2xl transition-all relative overflow-hidden"
-                                            >
-                                                REQUEST BLUEPRINT
-                                                <ArrowRight className="w-5 h-5 group-hover:translate-x-2 transition-transform" />
-                                            </motion.button>
-                                        </Link>
-                                    </div>
+                                    <Link to="/contact" className="block">
+                                        <motion.button
+                                            whileHover={{ scale: 1.02, x: 3, boxShadow: "0 0 40px rgba(249,115,22,0.3)" }}
+                                            className="w-full py-4 lg:py-6 bg-white text-black text-[12px] lg:text-base font-black uppercase tracking-[0.1em] lg:tracking-[0.2em] rounded-[16px] flex items-center justify-center gap-2 italic shadow-2xl transition-all relative overflow-hidden"
+                                        >
+                                            SEE PRICING
+                                            <ArrowRight className="w-4 lg:w-5 h-4 lg:h-5 group-hover:translate-x-1 transition-transform" />
+                                        </motion.button>
+                                    </Link>
 
-                                    <div className="pt-8 flex items-center justify-between border-t border-white/5">
-                                        <div className="flex gap-4 items-center">
-                                            <div className="flex -space-x-3">
-                                                <div className="w-10 h-10 rounded-full border-2 border-[#020408] overflow-hidden bg-slate-900 shadow-xl">
-                                                    <img src="https://res.cloudinary.com/dpfapm0tl/image/upload/v1771260716/ChatGPT_Image_Feb_16_2026_11_51_38_AM_elz0tz.png" alt="Rep 1" className="w-full h-full object-cover" />
-                                                </div>
-                                                <div className="w-10 h-10 rounded-full border-2 border-[#020408] overflow-hidden bg-slate-900 shadow-xl">
-                                                    <img src="https://res.cloudinary.com/dpfapm0tl/image/upload/v1771260637/280035b5-28eb-46de-afb9-34e98fdc48cb_ijq1zm.jpg" alt="Rep 2" className="w-full h-full object-cover" />
-                                                </div>
-                                                <div className="w-10 h-10 rounded-full border-2 border-[#020408] overflow-hidden bg-slate-900 shadow-xl">
-                                                    <img src="https://res.cloudinary.com/dpfapm0tl/image/upload/v1770163492/icon_x6kgnr.png" alt="Rep 3" className="w-full h-full object-cover" />
-                                                </div>
-                                            </div>
-                                            <span className="text-[9px] font-black text-white italic uppercase tracking-widest ml-2">FIELD OPS ACTIVE</span>
+                                    <div className="pt-3 lg:pt-5 flex items-center justify-between border-t border-white/5">
+                                        <div className="text-[8px] lg:text-[9px] font-black text-white italic uppercase tracking-widest">
+                                            💰 Save 60%
                                         </div>
                                         <div className="flex gap-0.5">
-                                            {[1, 2, 3, 4, 5].map(i => <div key={i} className={`w-1 h-3 rounded-sm ${i < 5 ? 'bg-orange-500' : 'bg-white/10'}`} />)}
+                                            {[1, 2, 3, 4, 5].map(i => <div key={i} className={`w-0.5 h-2 lg:h-2.5 rounded-sm ${i < 5 ? 'bg-orange-500' : 'bg-white/10'}`} />)}
                                         </div>
                                     </div>
                                 </div>
@@ -464,7 +468,7 @@ const RoofingPage = () => {
                 </div>
 
                 {/* THE TACTICAL DATA RIBBON SYSTEM */}
-                <div className="absolute bottom-10 left-0 w-full z-40 -rotate-1 skew-x-[0.2deg]">
+                <div className="absolute bottom-0 left-0 w-full z-40 -rotate-1 skew-x-[0.2deg]">
                     <div className="w-full bg-orange-500/5 border-y border-white/5 py-1 overflow-hidden backdrop-blur-sm">
                         <div className="flex animate-marquee whitespace-nowrap gap-16 items-center opacity-30">
                             {[...Array(10)].map((_, i) => (
@@ -1106,7 +1110,91 @@ const RoofingPage = () => {
                 </div>
             </section>
 
-            {/* SECTION 5: COMPARISON - DOMINANCE VS THE STANDARD */}
+            {/* SECTION 5: WHAT YOU'RE ACTUALLY GETTING - WIIFM */}
+            <section className="py-32 relative border-t border-white/5 bg-black">
+                <div className="max-w-6xl mx-auto px-6 lg:px-8 relative z-10">
+                    <div className="text-center mb-32 max-w-3xl mx-auto space-y-6">
+                        <span className="text-[10px] font-black text-orange-500 uppercase tracking-[0.8em] block font-mono">// YOU GET</span>
+                        <h2 className="text-5xl lg:text-8xl font-black font-display italic tracking-tight uppercase text-white leading-none">
+                            A <span className="text-orange-500">DIGITAL TWIN</span> OF YOUR <br />BEST OPS MANAGER.
+                        </h2>
+                        <p className="text-xl text-slate-400 italic font-medium">Not just software. A system that thinks, adapts, and executes like your elite team.</p>
+                    </div>
+
+                    <div className="grid md:grid-cols-2 gap-8">
+                        <div className="glass-dark border border-white/5 p-12 rounded-[40px] space-y-8 hover:border-orange-500/30 transition-all">
+                            <div className="flex items-start gap-4">
+                                <div className="w-12 h-12 rounded-xl bg-orange-500/10 border border-orange-500/20 flex items-center justify-center flex-shrink-0 text-orange-500 mt-1">
+                                    <Target className="w-6 h-6" />
+                                </div>
+                                <div className="space-y-4">
+                                    <h3 className="text-2xl font-black italic uppercase text-white">Lead Hunts Itself</h3>
+                                    <p className="text-sm text-slate-400 italic leading-relaxed">Your 'Hunter' agent wakes up at 3 AM when hail hits. Storms are detected, properties are mapped, reps are alerted. All while you sleep. No leads go cold.</p>
+                                    <div className="flex items-center gap-2 text-[11px] font-black text-orange-500 uppercase tracking-wider pt-2">
+                                        <Check className="w-4 h-4" />
+                                        5-SECOND RESPONSE TIME
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+
+                        <div className="glass-dark border border-white/5 p-12 rounded-[40px] space-y-8 hover:border-orange-500/30 transition-all">
+                            <div className="flex items-start gap-4">
+                                <div className="w-12 h-12 rounded-xl bg-orange-500/10 border border-orange-500/20 flex items-center justify-center flex-shrink-0 text-orange-500 mt-1">
+                                    <Zap className="w-6 h-6" />
+                                </div>
+                                <div className="space-y-4">
+                                    <h3 className="text-2xl font-black italic uppercase text-white">Sales Closes on Demand</h3>
+                                    <p className="text-sm text-slate-400 italic leading-relaxed">Your 'Closer' agent runs pricing logic, uploads photos, and AI-detects damage markers in 90 seconds. Homeowners see proof, not promises. Contracts land faster.</p>
+                                    <div className="flex items-center gap-2 text-[11px] font-black text-orange-500 uppercase tracking-wider pt-2">
+                                        <Check className="w-4 h-4" />
+                                        2X FASTER PROPOSALS
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+
+                        <div className="glass-dark border border-white/5 p-12 rounded-[40px] space-y-8 hover:border-orange-500/30 transition-all">
+                            <div className="flex items-start gap-4">
+                                <div className="w-12 h-12 rounded-xl bg-orange-500/10 border border-orange-500/20 flex items-center justify-center flex-shrink-0 text-orange-500 mt-1">
+                                    <Activity className="w-6 h-6" />
+                                </div>
+                                <div className="space-y-4">
+                                    <h3 className="text-2xl font-black italic uppercase text-white">Operations Runs Itself</h3>
+                                    <p className="text-sm text-slate-400 italic leading-relaxed">Your 'Orchestrator' agent watches every rep in real-time, auto-generates material takeoffs, syncs with production. No office manager needed for the execution layer.</p>
+                                    <div className="flex items-center gap-2 text-[11px] font-black text-orange-500 uppercase tracking-wider pt-2">
+                                        <Check className="w-4 h-4" />
+                                        ZERO ADMINISTRATIVE FRICTION
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+
+                        <div className="glass-dark border border-white/5 p-12 rounded-[40px] space-y-8 hover:border-orange-500/30 transition-all">
+                            <div className="flex items-start gap-4">
+                                <div className="w-12 h-12 rounded-xl bg-orange-500/10 border border-orange-500/20 flex items-center justify-center flex-shrink-0 text-orange-500 mt-1">
+                                    <Phone className="w-6 h-6" />
+                                </div>
+                                <div className="space-y-4">
+                                    <h3 className="text-2xl font-black italic uppercase text-white">24/7 Sales Agents</h3>
+                                    <p className="text-sm text-slate-400 italic leading-relaxed">Calls don't get missed. Chats don't go unanswered. Your Voice AI agent quotes jobs at 2 AM with zero latency. Every lead gets followed up that same day.</p>
+                                    <div className="flex items-center gap-2 text-[11px] font-black text-orange-500 uppercase tracking-wider pt-2">
+                                        <Check className="w-4 h-4" />
+                                        NEVER LOSE A LEAD TO SILENCE
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+
+                    <div className="mt-24 p-12 bg-gradient-to-r from-orange-600/5 to-amber-600/5 border border-orange-500/20 rounded-[40px] text-center space-y-4">
+                        <p className="text-lg font-black italic uppercase text-orange-500">YOU OWN 100% OF THIS</p>
+                        <p className="text-2xl font-black italic uppercase text-white max-w-3xl mx-auto">Built on your Supabase database, your Vercel infrastructure, your Cloudflare storage. No vendor lock-in. No monthly per-user taxes. This is your asset forever.</p>
+                    </div>
+                </div>
+            </section>
+
+            {/* SECTION 5.5: COMPARISON - DOMINANCE VS THE STANDARD */}
             <section className="py-32 relative border-t border-white/5 bg-[#020408]">
                 <div className="max-w-7xl mx-auto px-6 lg:px-8 relative z-10">
                     <div className="text-center mb-32 max-w-4xl mx-auto">
@@ -1153,6 +1241,189 @@ const RoofingPage = () => {
                                         </div>
                                     </li>
                                 ))}
+                            </ul>
+                        </div>
+                    </div>
+                </div>
+            </section>
+
+            {/* SECTION 6.5: PRICING - CUT 60% FROM INDUSTRY STANDARD */}
+            <section id="pricing" className="py-32 relative border-t border-white/5 overflow-hidden bg-black">
+                <div className="max-w-6xl mx-auto px-6 lg:px-8 relative z-10">
+                    <div className="text-center mb-32 max-w-3xl mx-auto space-y-6">
+                        <span className="text-[10px] font-black text-green-500 uppercase tracking-[0.8em] block font-mono">// INVESTMENT</span>
+                        <h2 className="text-5xl lg:text-8xl font-black font-display italic tracking-tight uppercase text-white leading-none">
+                            AGGRESSIVE <span className="text-green-500">PRICING.</span>
+                        </h2>
+                        <p className="text-xl text-slate-400 italic font-medium">60-70% cheaper than hiring another office manager or paying SaaS per-seat fees. You get sovereign ownership, zero per-user tax.</p>
+                    </div>
+
+                    <div className="grid md:grid-cols-3 gap-8 mb-16">
+                        {/* TIER 1: HUNTER ONLY */}
+                        <motion.div
+                            initial={{ opacity: 0, y: 20 }}
+                            whileInView={{ opacity: 1, y: 0 }}
+                            viewport={{ once: true }}
+                            className="glass-dark border border-white/5 rounded-[40px] overflow-hidden group hover:border-green-500/30 transition-all"
+                        >
+                            <div className="p-8 lg:p-10 space-y-12 h-full flex flex-col">
+                                <div className="space-y-4">
+                                    <h3 className="text-2xl lg:text-3xl font-black italic uppercase text-white tracking-tight">HUNTER TIER</h3>
+                                    <p className="text-sm text-slate-400">Storm detection + lead mapping only. Manual closing.</p>
+                                </div>
+
+                                <div className="space-y-2">
+                                    <div className="text-5xl font-black text-green-500 italic">$2,500</div>
+                                    <p className="text-[10px] font-black text-slate-500 uppercase tracking-widest">/month (billed annually at $25k/year)</p>
+                                </div>
+
+                                <ul className="space-y-4 flex-1">
+                                    {[
+                                        "Storm-triggered lead detection",
+                                        "Mapbox territory carving",
+                                        "Property pre-intel (owner name, roof age)",
+                                        "Rep assignment logic",
+                                        "5-minute lead response time"
+                                    ].map((item, i) => (
+                                        <li key={i} className="flex items-start gap-3 text-sm text-slate-400">
+                                            <Check className="w-4 h-4 text-green-500 flex-shrink-0 mt-0.5" />
+                                            <span>{item}</span>
+                                        </li>
+                                    ))}
+                                </ul>
+
+                                <Link to="/contact" className="mt-auto">
+                                    <motion.button
+                                        whileHover={{ scale: 1.05 }}
+                                        className="w-full px-8 py-4 bg-white/5 border border-green-500/30 text-white text-sm font-black uppercase tracking-[0.3em] rounded-[24px] italic hover:bg-green-500/10 transition-all"
+                                    >
+                                        EXPLORE
+                                    </motion.button>
+                                </Link>
+                            </div>
+                        </motion.div>
+
+                        {/* TIER 2: HUNTER + CLOSER (POPULAR) */}
+                        <motion.div
+                            initial={{ opacity: 0, y: 20 }}
+                            whileInView={{ opacity: 1, y: 0 }}
+                            viewport={{ once: true }}
+                            transition={{ delay: 0.1 }}
+                            className="glass-dark border-2 border-green-500/50 rounded-[40px] overflow-hidden group shadow-[0_0_60px_rgba(34,197,94,0.15)] relative"
+                        >
+                            <div className="absolute top-4 right-4 px-3 py-1 bg-green-500 text-black text-[9px] font-black uppercase tracking-widest rounded-full">
+                                MOST POPULAR
+                            </div>
+                            <div className="p-8 lg:p-10 space-y-12 h-full flex flex-col">
+                                <div className="space-y-4">
+                                    <h3 className="text-2xl lg:text-3xl font-black italic uppercase text-white tracking-tight">HUNTER + CLOSER</h3>
+                                    <p className="text-sm text-slate-400">Full storm-to-signature automation.</p>
+                                </div>
+
+                                <div className="space-y-2">
+                                    <div className="text-5xl font-black text-green-500 italic">$5,900</div>
+                                    <p className="text-[10px] font-black text-slate-500 uppercase tracking-widest">/month (billed annually at $59k/year)</p>
+                                </div>
+
+                                <ul className="space-y-4 flex-1">
+                                    {[
+                                        "Everything in Hunter Tier",
+                                        "AI damage detection (Vision LLM)",
+                                        "Dynamic proposal engine",
+                                        "Custom pricing tiers (Good/Better/Best)",
+                                        "Aerial measurements sync (Roofr/EagleView)",
+                                        "Real-time proposal UI on tablets",
+                                        "DocuSign e-signature integration"
+                                    ].map((item, i) => (
+                                        <li key={i} className="flex items-start gap-3 text-sm text-slate-400">
+                                            <Check className="w-4 h-4 text-green-500 flex-shrink-0 mt-0.5" />
+                                            <span>{item}</span>
+                                        </li>
+                                    ))}
+                                </ul>
+
+                                <Link to="/contact" className="mt-auto">
+                                    <motion.button
+                                        whileHover={{ scale: 1.05, boxShadow: "0 0 40px rgba(34,197,94,0.3)" }}
+                                        className="w-full px-8 py-4 bg-green-500 text-black text-sm font-black uppercase tracking-[0.3em] rounded-[24px] italic hover:bg-green-600 transition-all"
+                                    >
+                                        GET STARTED
+                                    </motion.button>
+                                </Link>
+                            </div>
+                        </motion.div>
+
+                        {/* TIER 3: FULL SUITE + AGENTS */}
+                        <motion.div
+                            initial={{ opacity: 0, y: 20 }}
+                            whileInView={{ opacity: 1, y: 0 }}
+                            viewport={{ once: true }}
+                            transition={{ delay: 0.2 }}
+                            className="glass-dark border border-white/5 rounded-[40px] overflow-hidden group hover:border-green-500/30 transition-all"
+                        >
+                            <div className="p-8 lg:p-10 space-y-12 h-full flex flex-col">
+                                <div className="space-y-4">
+                                    <h3 className="text-2xl lg:text-3xl font-black italic uppercase text-white tracking-tight">SOVEREIGN SUITE</h3>
+                                    <p className="text-sm text-slate-400">Full automation + 24/7 voice agents.</p>
+                                </div>
+
+                                <div className="space-y-2">
+                                    <div className="text-5xl font-black text-green-500 italic">$9,900</div>
+                                    <p className="text-[10px] font-black text-slate-500 uppercase tracking-widest">/month (billed annually at $99k/year)</p>
+                                </div>
+
+                                <ul className="space-y-4 flex-1">
+                                    {[
+                                        "Everything in Hunter + Closer",
+                                        "Command Center dashboard",
+                                        "Rep real-time location tracking ('Pulse')",
+                                        "Revenue velocity ticker",
+                                        "Automated material takeoff generation",
+                                        "24/7 voice AI agents (inbound/outbound)",
+                                        "Website voice interface",
+                                        "Auto-review request SMS loop (Twilio)",
+                                        "Finance pre-qualification (GreenSky/Sunlight)"
+                                    ].map((item, i) => (
+                                        <li key={i} className="flex items-start gap-3 text-sm text-slate-400">
+                                            <Check className="w-4 h-4 text-green-500 flex-shrink-0 mt-0.5" />
+                                            <span>{item}</span>
+                                        </li>
+                                    ))}
+                                </ul>
+
+                                <Link to="/contact" className="mt-auto">
+                                    <motion.button
+                                        whileHover={{ scale: 1.05 }}
+                                        className="w-full px-8 py-4 bg-white/5 border border-green-500/30 text-white text-sm font-black uppercase tracking-[0.3em] rounded-[24px] italic hover:bg-green-500/10 transition-all"
+                                    >
+                                        EXPLORE
+                                    </motion.button>
+                                </Link>
+                            </div>
+                        </motion.div>
+                    </div>
+
+                    {/* PRICING CONTEXT */}
+                    <div className="grid lg:grid-cols-2 gap-8 text-center lg:text-left">
+                        <div className="p-8 bg-white/[0.02] border border-white/5 rounded-[32px] space-y-4">
+                            <h4 className="text-xl font-black italic uppercase text-white">❌ What You're Paying NOW</h4>
+                            <ul className="space-y-2 text-sm text-slate-400">
+                                <li>JobNimbus/Acculynx: $150-300/mo per user (× field reps)</li>
+                                <li>Twilio SMS fees: $0.01-0.03 per message (× 1000s/month)</li>
+                                <li>Roofr/EagleView: Custom per-estimate pricing</li>
+                                <li>Office manager salary: $45-70k/year</li>
+                                <li className="font-black text-orange-500 pt-2">TOTAL: $80k-250k+ annually (no ownership)</li>
+                            </ul>
+                        </div>
+
+                        <div className="p-8 bg-green-600/[0.05] border border-green-500/20 rounded-[32px] space-y-4">
+                            <h4 className="text-xl font-black italic uppercase text-green-500">✅ What You Pay With Revlo</h4>
+                            <ul className="space-y-2 text-sm text-slate-400">
+                                <li>Hunter Tier: $25k/year (you run proposals manually)</li>
+                                <li>Hunter + Closer: $59k/year (full workflow automation)</li>
+                                <li>Sovereign Suite: $99k/year (+ 24/7 voice agents)</li>
+                                <li>No per-user seats. No per-message fees.</li>
+                                <li className="font-black text-green-500 pt-2">SAVINGS: 40-70% annual cost reduction (+ 100% ownership)</li>
                             </ul>
                         </div>
                     </div>
@@ -1241,7 +1512,7 @@ const RoofingPage = () => {
                 </div>
             </section>
 
-            {/* CALL TO ACTION */}
+            {/* FINAL CTA - CLEAR CALL-TO-ACTION */}
             <section className="py-32 relative overflow-hidden">
                 <div className="max-w-5xl mx-auto px-6 lg:px-8 text-center relative z-10">
                     <motion.div
@@ -1250,30 +1521,34 @@ const RoofingPage = () => {
                         viewport={{ once: true }}
                         className="space-y-12"
                     >
-                        <h2 className="text-5xl lg:text-8xl font-black italic uppercase text-white tracking-tighter leading-none">
-                            BUILD YOUR <br />
-                            <span className="text-orange-500">LEGACY ASSET.</span>
+                        <h2 className="text-5xl lg:text-7xl font-black italic uppercase text-white tracking-tighter leading-none">
+                            READY FOR <br />
+                            <span className="text-orange-500">AUTONOMOUS SCALE.</span>
                         </h2>
-                        <p className="text-xl lg:text-3xl text-slate-400 italic font-medium max-w-2xl mx-auto">
-                            Stop paying monthly per-user fees for legacy software. Build a proprietary engine that you own forever.
+                        <p className="text-lg lg:text-2xl text-slate-400 italic font-medium max-w-3xl mx-auto">
+                            Your Hunter agent. Your Closer agent. Your Orchestrator. Your 24/7 Voice Clone. All built on YOUR infrastructure. All owned by YOU forever. Starting at $25k/year (60% cheaper than hiring a manager).
                         </p>
-                        <div className="flex flex-col sm:flex-row gap-6 justify-center">
+                        <div className="space-y-4 text-sm text-slate-400 italic max-w-2xl mx-auto">
+                            <p>💬 Questions? Let's talk about how autonomous subgraph state isolation works for your roofing operation.</p>
+                            <p>📅 Most sales close within 90 days of first deployment.</p>
+                        </div>
+                        <div className="flex flex-col sm:flex-row gap-6 justify-center pt-4">
                             <Link to="/contact">
                                 <motion.button
                                     whileHover={{ scale: 1.05, boxShadow: "0 0 50px rgba(249,115,22,0.4)" }}
                                     className="px-12 py-6 bg-orange-500 text-black text-sm font-black uppercase tracking-[0.4em] rounded-[24px] italic"
                                 >
-                                    GET STARTED
+                                    BOOK STRATEGY CALL
                                 </motion.button>
                             </Link>
-                            <Link to="/services">
+                            <a href="#pricing">
                                 <motion.button
                                     whileHover={{ scale: 1.05 }}
                                     className="px-12 py-6 bg-white/5 border border-white/10 text-white text-sm font-black uppercase tracking-[0.4em] rounded-[24px] italic backdrop-blur-xl"
                                 >
-                                    VIEW SOLUTIONS
+                                    SEE PRICING
                                 </motion.button>
-                            </Link>
+                            </a>
                         </div>
                     </motion.div>
                 </div>
