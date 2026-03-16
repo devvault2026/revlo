@@ -13,12 +13,12 @@ const FounderOperator: React.FC = () => {
             color: 'text-red-500'
         },
         {
-            name: 'AUSTYN',
-            role: 'WIZARD',
-            status: 'Node Online // A-2026',
-            image: 'https://res.cloudinary.com/dpfapm0tl/image/upload/v1771518723/440322966_122102586140298307_3460827367128600753_n_nhr5s1.jpg',
-            initial: 'A',
-            color: 'text-blue-500'
+            name: 'PAUL',
+            role: 'AI MAGICIAN',
+            status: 'Node Online // P-2026',
+            image: 'https://res.cloudinary.com/dpfapm0tl/image/upload/v1773685997/509359683_10162901278796718_4130707908931625304_n_dbzhj0.jpg',
+            initial: 'P',
+            color: 'text-purple-500'
         },
         {
             name: 'THORTON',

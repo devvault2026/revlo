@@ -24,22 +24,22 @@ const TeamPage: React.FC = () => {
             id: 'LEAD-001'
         },
         {
-            name: 'AUSTYN CHALIFOUR',
-            role: 'Fullstack Developer & AI Wizard',
-            title: 'OPENCLAW TECHNICIAN // SYSTEMS ARCHITECT',
-            bio: 'Specializing in neural architecture, fullstack automation, and the core development of the OpenClaw infrastructure.',
-            extendedBio: 'Austyn is the technical force behind our most complex AI integrations. With a deep understanding of fullstack ecosystems and neural networks, he ensures that every OpenClaw deployment is optimized for peak performance and autonomous efficiency. His work bridges the gap between raw data and intelligent execution.',
-            expertise: ['FULLSTACK DEV', 'AI ARCHITECTURE', 'OPENCLAW CORE', 'NEURAL SYSTEMS', 'AUTOMATION LIBRARIES', 'SCALABLE INFRA'],
+            name: 'PAUL CARPENTER, THE AI MAGICIAN',
+            role: 'Autonomous AI Architect & Mindset Innovator',
+            title: 'OPENCLAW VISIONARY // AUTONOMOUS SYSTEMS ARCHITECT',
+            bio: 'A former celebrity magician who turned his stagecraft mindset into AI mastery. Paul orchestrates autonomous systems and multi-agent orchestration with theatrical precision.',
+            extendedBio: 'Paul Carpenter is the visionary architect behind our most transformative AI integrations. As a previous air talent and celebrity magician who performed alongside major acts, Paul brings a unique perspective to autonomous systems—he understands that true magic happens when the impossible becomes inevitable. He now applies his mastery of mindset, presence, and orchestration to build AI agents and autonomous systems that execute with flawless precision. His work doesn\'t just deploy technology; it transforms how businesses think about automation and intelligence.',
+            expertise: ['AUTONOMOUS ORCHESTRATION', 'MULTI-AGENT SYSTEMS', 'AI MINDSET', 'AGENT ARCHITECTURE', 'AUTONOMOUS WORKFLOWS', 'STRATEGIC AUTOMATION'],
             achievements: [
-                'Leading OpenClaw technical deployment',
-                'Architected proprietary AI scoring engines',
-                'Integrated complex multi-agent systems',
-                'Optimized cloud-native neural pipelines',
+                'Architected next-generation autonomous agent frameworks',
+                'Transformed business operations through agent autonomy',
+                'Engineered multi-agent coordination systems',
+                'Revolutionized AI implementation strategy and mindset',
             ],
-            gradient: 'from-blue-500 to-cyan-400',
-            initial: 'A',
-            image: 'https://res.cloudinary.com/dpfapm0tl/image/upload/v1771518723/440322966_122102586140298307_3460827367128600753_n_nhr5s1.jpg',
-            id: 'TECH-002'
+            gradient: 'from-purple-500 to-pink-400',
+            initial: 'P',
+            image: 'https://res.cloudinary.com/dpfapm0tl/image/upload/v1773685997/509359683_10162901278796718_4130707908931625304_n_dbzhj0.jpg',
+            id: 'MAGIC-002'
         },
         {
             name: 'THORTON',
