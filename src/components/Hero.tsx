@@ -61,7 +61,7 @@ const Hero: React.FC = () => {
                 const randomNotif = { ...randomItem, id: Date.now() };
                 setActiveNotifications(prev => [randomNotif, ...prev].slice(0, 5));
             }
-        }, 3000); // Increased interval to reduce frame drops
+        }, 5000); // Increased interval to 5 seconds for better scroll performance
 
         const clockTimer = setInterval(() => setCurrentTime(new Date()), 1000);
 
@@ -84,24 +84,22 @@ const Hero: React.FC = () => {
             <div className="absolute inset-0 z-0 overflow-hidden">
                 <div className="absolute inset-0 bg-[radial-gradient(circle_at_50%_50%,rgba(17,24,39,1)_0%,rgba(0,0,0,1)_100%)]" />
 
-                {/* Visualizing "The Core" */}
+                {/* Visualizing "The Core" - Optimized for smooth scrolling */}
                 <motion.div
                     animate={{
-                        scale: [1, 1.1, 1],
-                        opacity: [0.3, 0.5, 0.3],
-                        rotate: [0, 90, 180, 270, 360]
+                        rotate: [0, 360]
                     }}
-                    transition={{ duration: 20, repeat: Infinity, ease: "linear" }}
+                    transition={{ duration: 60, repeat: Infinity, ease: "linear" }}
                     className="absolute top-1/2 left-1/2 -translate-x-1/2 -translate-y-1/2 w-[800px] h-[800px] border border-red-500/20 rounded-full blur-[2px]"
+                    style={{ willChange: 'transform' }}
                 />
                 <motion.div
                     animate={{
-                        scale: [1.2, 1, 1.2],
-                        opacity: [0.1, 0.2, 0.1],
-                        rotate: [360, 270, 180, 90, 0]
+                        rotate: [360, 0]
                     }}
-                    transition={{ duration: 25, repeat: Infinity, ease: "linear" }}
+                    transition={{ duration: 80, repeat: Infinity, ease: "linear" }}
                     className="absolute top-1/2 left-1/2 -translate-x-1/2 -translate-y-1/2 w-[1000px] h-[1000px] border border-purple-500/10 rounded-full"
+                    style={{ willChange: 'transform' }}
                 />
 
                 <div className="absolute inset-0 bg-[url('https://grainy-gradients.vercel.app/noise.svg')] opacity-20 brightness-50" />
@@ -120,7 +118,7 @@ const Hero: React.FC = () => {
                         >
                             <div className="inline-flex items-center gap-4 px-6 py-2 bg-red-600/10 border border-red-600/30 rounded-full backdrop-blur-md">
                                 <span className="relative flex h-3 w-3">
-                                    <span className="animate-ping absolute inline-flex h-full w-full rounded-full bg-red-500 opacity-75"></span>
+                                    <span className="absolute inline-flex h-full w-full rounded-full bg-red-500 opacity-75" style={{ animation: 'pulse-slow 3s ease-in-out infinite' }}></span>
                                     <span className="relative inline-flex rounded-full h-3 w-3 bg-red-500"></span>
                                 </span>
                                 <span className="text-[12px] font-black uppercase tracking-[0.4em] text-red-500">
