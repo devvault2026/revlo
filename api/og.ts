@@ -111,6 +111,12 @@ const pages: Record<string, PageSEO> = {
         image: DEFAULT_IMAGE,
         url: `${SITE_URL}/projects/snowblowr`,
     },
+    '/roofing': {
+        title: 'Storm-Triggered Roofing Leads | AI-Powered Damage Assessment | Revlo',
+        description: 'Capture 100% of roofing opportunities with AI-powered storm detection, automated damage assessment, and field-ready estimates. Replace manual workflows with ROI-crushing automation. See 3-4X more leads.',
+        image: 'https://res.cloudinary.com/dpfapm0tl/image/upload/v1773620304/Gemini_Generated_Image_38f8as38f8as38f8_e76fin.png',
+        url: `${SITE_URL}/roofing`,
+    },
 };
 
 // ─── Bot Detection ───
