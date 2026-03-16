@@ -277,13 +277,18 @@ const RoofingPage = () => {
     return (
         <div className="min-h-screen bg-[#020408] text-white selection:bg-orange-500/30 overflow-x-hidden font-sans">
             <Helmet>
-                <title>Roofing Execution Engine (FEE) | Revlo — Proprietary Roofing Infrastructure</title>
-                <meta name="description" content="Move away from SaaS-tape. Build a unified custom engine for your roofing business. Storm-triggered prospecting, AI damage assessment, and real-time field orchestration." />
-                <meta property="og:title" content="Roofing Execution Engine (FEE) | Revlo" />
-                <meta property="og:description" content="The Technical Blueprint for High-Performance Roofing Operations. Full Custom proprietary infrastructure." />
-                <meta property="og:image" content="https://res.cloudinary.com/dpfapm0tl/image/upload/v1771259282/ChatGPT_Image_Feb_16_2026_11_27_50_AM_uorc1u.png" />
+                <title>Storm-Triggered Roofing Leads | AI-Powered Damage Assessment | Revlo</title>
+                <meta name="description" content="Capture 100% of roofing opportunities with AI-powered storm detection, automated damage assessment, and field-ready estimates. Replace manual workflows with ROI-crushing automation. See 3-4X more leads." />
+                <meta property="og:type" content="website" />
+                <meta property="og:title" content="Storm-Triggered Roofing Leads | AI-Powered Damage Assessment | Revlo" />
+                <meta property="og:description" content="Capture 100% of roofing opportunities. AI detects storms + damage. Auto-generates estimates. Field teams execute flawlessly. Zero manual work. Pure ROI." />
+                <meta property="og:image" content="https://res.cloudinary.com/dpfapm0tl/image/upload/v1773620304/Gemini_Generated_Image_38f8as38f8as38f8_e76fin.png" />
                 <meta property="og:url" content="https://www.wearerevlo.com/roofing" />
+                <meta property="og:site_name" content="Revlo" />
                 <meta name="twitter:card" content="summary_large_image" />
+                <meta name="twitter:title" content="Storm-Triggered Roofing Leads | AI-Powered Damage Assessment | Revlo" />
+                <meta name="twitter:description" content="Capture 100% of roofing opportunities. AI detects storms + damage. Auto-generates estimates. Zero manual work. Pure ROI." />
+                <meta name="twitter:image" content="https://res.cloudinary.com/dpfapm0tl/image/upload/v1773620304/Gemini_Generated_Image_38f8as38f8as38f8_e76fin.png" />
                 <link rel="canonical" href="https://www.wearerevlo.com/roofing" />
             </Helmet>
             <Navigation />
