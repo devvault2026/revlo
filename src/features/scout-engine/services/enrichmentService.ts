@@ -13,10 +13,17 @@ import { Lead, EnrichmentDossier, RevloOffer, EnrichmentJob } from '../types';
 import { safeJsonParse } from '../../../utils/safeJson';
 
 // === CONFIGURATION ===
-const DEEPSEEK_API_KEY = import.meta.env.VITE_DEEPSEEK_API_KEY || 'sk-908e1afa07e646e38cfd3599b46ad1b5';
+const DEEPSEEK_API_KEY = import.meta.env.VITE_DEEPSEEK_API_KEY;
 const DEEPSEEK_API_URL = '/api/deepseek/v1/chat/completions';
-const BRAVE_SEARCH_API_KEY = import.meta.env.VITE_BRAVE_SEARCH_API_KEY || 'BSAmedYHRIYKEvYgNpqDKMtLH_M73bh';
+const BRAVE_SEARCH_API_KEY = import.meta.env.VITE_BRAVE_SEARCH_API_KEY;
 const BRAVE_SEARCH_URL = '/api/brave/res/v1/web/search';
+
+if (!DEEPSEEK_API_KEY) {
+    console.warn('VITE_DEEPSEEK_API_KEY not set. Deepseek features will not work.');
+}
+if (!BRAVE_SEARCH_API_KEY) {
+    console.warn('VITE_BRAVE_SEARCH_API_KEY not set. Search features will not work.');
+}
 
 // === REVLO SERVICE CATALOG (Used for offer matching) ===
 const REVLO_SERVICES: RevloOffer[] = [

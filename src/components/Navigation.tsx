@@ -34,6 +34,7 @@ const Navigation: React.FC = () => {
 
     const navLinks = [
         { name: 'Home', path: '/' },
+        { name: 'Launch', path: '/marketplace' },
         { name: 'Solutions', path: '/services' },
         { name: 'Websites', path: '/websites' },
         { name: 'Build', path: '/elite-development' },

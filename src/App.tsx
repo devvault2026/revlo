@@ -22,6 +22,7 @@ const HomePage = React.lazy(() => import('./pages/HomePage'));
 // Lazy-loaded pages - secondary pages
 const ServicesPage = React.lazy(() => import('./pages/ServicesPage'));
 const TeamPage = React.lazy(() => import('./pages/TeamPage'));
+const TeamMemberDetailPage = React.lazy(() => import('./pages/TeamMemberDetailPage'));
 const RevloOSAppPage = React.lazy(() => import('./pages/RevloOSAppPage'));
 const ResultsPage = React.lazy(() => import('./pages/ResultsPage'));
 const ContactPage = React.lazy(() => import('./pages/ContactPage'));
@@ -30,7 +31,9 @@ const RegisterPage = React.lazy(() => import('./pages/RegisterPage'));
 const ForgotPasswordPage = React.lazy(() => import('./pages/ForgotPasswordPage'));
 const NotFoundPage = React.lazy(() => import('./pages/NotFoundPage'));
 const DemoPage = React.lazy(() => import('./pages/DemoPage'));
-const CareersPage = React.lazy(() => import('./pages/CareersPage'));
+import CareersPage from './pages/CareersPage';
+import MarketplacePage from './pages/MarketplacePage';
+import MarketplaceDetailPage from './pages/MarketplaceDetailPage';
 
 // Lazy-loaded admin/project pages
 const AdminPage = React.lazy(() => import('./pages/AdminPage'));
@@ -99,6 +102,13 @@ function App() {
                                                 <Footer />
                                             </>
                                         } />
+                                        <Route path="/team/:slug" element={
+                                            <>
+                                                <Navigation />
+                                                <TeamMemberDetailPage />
+                                                <Footer />
+                                            </>
+                                        } />
                                         <Route path="/revlo-os" element={
                                             <ProtectedRoute>
                                                 <RevloOSAppPage />
@@ -145,7 +155,27 @@ function App() {
                                                 <Footer />
                                             </>
                                         } />
-                                        <Route path="/blog/:slug" element={<BlogPostPage />} />
+                                        <Route path="/blog/:slug" element={
+                                            <>
+                                                <Navigation />
+                                                <BlogPostPage />
+                                                <Footer />
+                                            </>
+                                        } />
+                                        <Route path="/marketplace" element={
+                                            <React.Fragment>
+                                                <Navigation />
+                                                <MarketplacePage />
+                                                <Footer />
+                                            </React.Fragment>
+                                        } />
+                                        <Route path="/marketplace/:slug" element={
+                                            <React.Fragment>
+                                                <Navigation />
+                                                <MarketplaceDetailPage />
+                                                <Footer />
+                                            </React.Fragment>
+                                        } />
                                         <Route path="/offers/esdr" element={
                                             <>
                                                 <Navigation />

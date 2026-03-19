@@ -27,6 +27,11 @@ const Footer: React.FC = () => {
                         <h4 className="text-[10px] font-black uppercase tracking-[0.4em] text-white mb-8">Capabilities</h4>
                         <ul className="space-y-4">
                             <li>
+                                <Link to="/marketplace" className="text-sm font-medium text-slate-500 hover:text-white transition-all uppercase tracking-[0.2em]">
+                                    Launch Marketplace
+                                </Link>
+                            </li>
+                            <li>
                                 <Link to="/services" className="text-sm font-medium text-slate-500 hover:text-white transition-all uppercase tracking-[0.2em]">
                                     Brand Strategy
                                 </Link>

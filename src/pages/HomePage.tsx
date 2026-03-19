@@ -6,6 +6,7 @@ import Results from '../components/Results';
 import Manifesto from '../components/Manifesto';
 import Process from '../components/Process';
 import RevloOS from '../components/RevloOS';
+import MarketplaceShowcase from '../components/MarketplaceShowcase';
 import Services from '../components/Services';
 import Projects from '../components/Projects';
 import FounderOperator from '../components/FounderOperator';
@@ -41,6 +42,7 @@ const HomePage: React.FC = () => {
             <Hero />
             <OpenClawIntro />
             <Services />
+            <MarketplaceShowcase />
             <RevloOS />
             <Results />
             <Manifesto />
