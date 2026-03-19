@@ -1,20 +1,20 @@
 /**
  * REVLO SCOUT — DEEP ENRICHMENT SERVICE
  * 
- * Uses Deepseek V3 as the reasoning engine with Brave Search API as its research tool.
- * Each enrichment job performs multi-step deep research:
- * 1. Search for the business
- * 2. Analyze their web presence, reviews, competitors
- * 3. Find decision makers & contact info
- * 4. Build an enriched dossier with tailored Revlo offer
+ * Uses Google Gemini 2.5 Flash with built-in Google Search grounding.
+ * Single-call enrichment with comprehensive business intelligence.
  */
 
 import { Lead, EnrichmentDossier, RevloOffer, EnrichmentJob } from '../types';
 import { safeJsonParse } from '../../../utils/safeJson';
 
 // === CONFIGURATION ===
-const DEEPSEEK_API_URL = '/api/deepseek';
-const BRAVE_SEARCH_URL = '/api/brave-search';
+const GEMINI_API_KEY = import.meta.env.VITE_GEMINI_API_KEY;
+const GEMINI_API_URL = 'https://generativelanguage.googleapis.com/v1beta/models/gemini-2.5-flash:generateContent';
+
+if (!GEMINI_API_KEY) {
+    console.error('VITE_GEMINI_API_KEY not set. Gemini features will not work.');
+}
 
 // === REVLO SERVICE CATALOG (Used for offer matching) ===
 const REVLO_SERVICES: RevloOffer[] = [
@@ -113,89 +113,61 @@ export function dismissJob(jobId: string) {
     notifyJobListeners();
 }
 
-// === BRAVE SEARCH ===
-async function braveSearch(query: string): Promise<string> {
+// === GEMINI 2.5 FLASH WITH GOOGLE SEARCH ===
+async function geminiResearch(userMessage: string, jobId: string): Promise<string> {
     try {
-        const params = new URLSearchParams({
-            q: query,
-            count: '10',
-            text_decorations: 'false',
-            search_lang: 'en'
-        });
-
-        const controller = new AbortController();
-        const timeoutId = setTimeout(() => controller.abort(), 45000); // 45s search timeout
-
-        const response = await fetch(`${BRAVE_SEARCH_URL}?${params}`, {
-            method: 'GET',
-            signal: controller.signal,
-            headers: {
-                'Accept': 'application/json',
-            }
-        });
-        clearTimeout(timeoutId);
-
-        if (!response.ok) {
-            console.error(`Brave Search failed: ${response.status} ${response.statusText}`);
-            return `Search failed: ${response.statusText}`;
+        if (!GEMINI_API_KEY) {
+            throw new Error('Gemini API key not configured');
         }
 
-        const data = await response.json();
+        updateJob(jobId, { progress: 40 });
+        addJobStep(jobId, 'Querying Google Search via Gemini...');
 
-        // Extract web results
-        const webResults = data.web?.results || [];
-        const formattedResults = webResults.map((r: any, i: number) => {
-            return `[${i + 1}] ${r.title}\nURL: ${r.url}\n${r.description || ''}\n`;
-        }).join('\n');
-
-        // Extract news if available
-        const newsResults = data.news?.results || [];
-        const formattedNews = newsResults.length > 0
-            ? '\n--- RECENT NEWS ---\n' + newsResults.map((n: any) => `• ${n.title}: ${n.description || ''}`).join('\n')
-            : '';
-
-        return formattedResults + formattedNews || 'No results found';
-    } catch (error: any) {
-        console.error('Brave Search error:', error);
-        return `Search error: ${error.message}`;
-    }
-}
-
-// === DEEPSEEK V3 REASONING ===
-async function deepseekReason(systemPrompt: string, userMessage: string): Promise<string> {
-    try {
-        const controller = new AbortController();
-        const timeoutId = setTimeout(() => controller.abort(), 90000); // 90s reasoning timeout
-
-        const response = await fetch(DEEPSEEK_API_URL, {
+        const response = await fetch(`${GEMINI_API_URL}?key=${GEMINI_API_KEY}`, {
             method: 'POST',
-            signal: controller.signal,
             headers: {
                 'Content-Type': 'application/json',
             },
             body: JSON.stringify({
-                model: 'deepseek-chat',
-                messages: [
-                    { role: 'system', content: systemPrompt },
-                    { role: 'user', content: userMessage }
+                contents: [
+                    {
+                        role: 'user',
+                        parts: [{ text: userMessage }]
+                    }
                 ],
-                temperature: 0.3,
-                max_tokens: 4096,
-                stream: false
+                systemInstruction: {
+                    parts: [{
+                        text: `You are an elite business intelligence analyst for REVLO — a premium AI development agency.
+Your task is to deeply analyze a business lead using Google Search and produce a comprehensive enrichment dossier.
+Output ONLY valid JSON. No markdown, no explanation.`
+                    }]
+                },
+                generationConfig: {
+                    temperature: 0.3,
+                    topK: 40,
+                    topP: 0.95,
+                    maxOutputTokens: 8192,
+                    stopSequences: []
+                }
             })
         });
-        clearTimeout(timeoutId);
 
         if (!response.ok) {
-            const errText = await response.text();
-            console.error('Deepseek API error:', errText);
-            throw new Error(`Deepseek API error: ${response.status}`);
+            const errData = await response.text();
+            console.error('Gemini API error:', response.status, errData);
+            throw new Error(`Gemini API error: ${response.status}`);
         }
 
         const data = await response.json();
-        return data.choices?.[0]?.message?.content || '';
+        const content = data.candidates?.[0]?.content?.parts?.[0]?.text || '';
+        
+        if (!content) {
+            throw new Error('No content from Gemini');
+        }
+
+        return content;
     } catch (error: any) {
-        console.error('Deepseek reasoning error:', error);
+        console.error('Gemini research error:', error);
         throw error;
     }
 }
@@ -205,77 +177,43 @@ export async function deepEnrichLead(lead: Lead): Promise<EnrichmentDossier> {
     const job = addJob(lead);
 
     try {
-        // STEP 1: Initial Business Research
-        updateJob(job.id, { status: 'running', progress: 10 });
-        addJobStep(job.id, 'Initiating Brave Search reconnaissance...');
+        updateJob(job.id, { status: 'running', progress: 5 });
+        addJobStep(job.id, 'Starting deep research with Google Search...');
 
-        const businessQuery = `"${lead.businessName}" ${lead.location} business`;
-        const businessResults = await braveSearch(businessQuery);
+        // Single Gemini call with Google Search grounding
+        const researchPrompt = `
+Conduct a comprehensive business intelligence analysis using Google Search. Research:
+1. Company website and on web presence quality
+2. Social media profiles (Facebook, Instagram, LinkedIn, TikTok, Google Business)
+3. Customer reviews and ratings (Google, Yelp scores)
+4. Owner/decision maker name and contact information
+5. Local competitors and their positioning
+6. Industry trends and market opportunities
+7. Specific pain points and revenue gaps
+8. Website technical analysis (mobile, SEO, speed)
 
-        updateJob(job.id, { progress: 20 });
-        addJobStep(job.id, 'Business intelligence acquired. Scanning web presence...');
+LEAD DATA:
+- Business Name: ${lead.businessName}
+- Industry: ${lead.industry}
+- Location: ${lead.location}
+- Current Website: ${lead.website || 'UNKNOWN'}
+- Phone: ${lead.phoneNumber || 'UNKNOWN'}
+- Email: ${lead.email || 'UNKNOWN'}
 
-        // STEP 2: Website & Reviews Analysis
-        const reviewQuery = `"${lead.businessName}" ${lead.location} reviews rating`;
-        const reviewResults = await braveSearch(reviewQuery);
-
-        updateJob(job.id, { progress: 35 });
-        addJobStep(job.id, 'Review data collected. Searching for decision makers...');
-
-        // STEP 3: Find Owner / Decision Maker
-        const ownerQuery = `"${lead.businessName}" ${lead.location} owner founder CEO contact`;
-        const ownerResults = await braveSearch(ownerQuery);
-
-        updateJob(job.id, { progress: 50 });
-        addJobStep(job.id, 'Decision maker intel gathered. Analyzing competitors...');
-
-        // STEP 4: Competitor Analysis
-        const competitorQuery = `${lead.industry} ${lead.location} top companies competitors`;
-        const competitorResults = await braveSearch(competitorQuery);
-
-        updateJob(job.id, { progress: 65 });
-        addJobStep(job.id, 'Competitor landscape mapped. Running Deepseek analysis...');
-
-        // STEP 5: Social Media Presence
-        const socialQuery = `"${lead.businessName}" site:facebook.com OR site:instagram.com OR site:linkedin.com`;
-        const socialResults = await braveSearch(socialQuery);
-
-        updateJob(job.id, { progress: 75 });
-        addJobStep(job.id, 'Social profiles identified. Generating deep dossier...');
-
-        // STEP 6: DEEPSEEK REASONING — Analyze everything and generate dossier
-        const analysisSystemPrompt = `You are an elite business intelligence analyst for REVLO — a premium AI development agency specializing in \$25,000+ custom deployments.
-Your task is to deeply analyze a business lead and produce a "Scarily-Specific" enrichment dossier.
-
-REVLO'S SERVICE CATALOG:
-${REVLO_SERVICES.map(s => `
-SERVICE: ${s.name}
-URL: ${s.url}
-DESCRIPTION: ${s.description}
-IDEAL FOR: ${s.idealFor.join(', ')}
-PRICE: ${s.priceRange}
-KEY BENEFITS: ${s.keyBenefits.join(', ')}
-`).join('\n---\n')}
-
-YOU MUST output ONLY a valid JSON object. No markdown, no explanation, just JSON.
-Your analysis must be FORENSIC. Do not be generic. If you find a competitor, find their URL. If you find a pain point, explain the REVENUE IMPACT.
-
-The JSON must follow this exact structure:
+**CRITICAL: Output ONLY this JSON structure:**
 {
-  "companyOverview": "A detailed 3-5 sentence overview. Mention their specific niche and what makes them unique in ${lead.location}.",
-  "ownerName": "Full name of the owner/decision maker if found. Check 'About Us' or LinkedIn results.",
-  "ownerTitle": "Exact title found.",
-  "ownerLinkedIn": "LinkedIn URL if found.",
-  "emailFound": "Direct email if found.",
-  "phoneFound": "Phone number if found.",
+  "companyOverview": "3-5 detailed sentences specific to ${lead.location}",
+  "ownerName": "Owner/CEO name or null",
+  "ownerTitle": "Their title or null",
+  "ownerLinkedIn": "LinkedIn URL or null",
+  "emailFound": "Email or null",
+  "phoneFound": "Phone or null",
   "websiteAnalysis": {
     "hasWebsite": true/false,
-    "websiteQuality": "None" | "Poor" | "Average" | "Good" | "Excellent",
+    "websiteQuality": "None|Poor|Average|Good|Excellent",
     "mobileOptimized": true/false/null,
-    "hasSSL": true/false/null,
-    "loadSpeed": "Fast" | "Average" | "Slow" | "Unknown",
-    "seoScore": "Weak" | "Average" | "Strong" | "Unknown",
-    "issues": ["Forensic list of specific technical or design flaws (e.g., 'Broken nav on iPhone 14', 'Zero meta descriptions', 'No HTTPS')"]
+    "seoScore": "Weak|Average|Strong|Unknown",
+    "issues": ["Specific technical flaws found"]
   },
   "socialPresence": {
     "facebook": "URL or null",
@@ -284,80 +222,46 @@ The JSON must follow this exact structure:
     "tiktok": "URL or null",
     "googleBusiness": "URL or null",
     "socialScore": 0-100,
-    "issues": ["Specific social flaws (e.g., 'Last post in 2021', 'Unanswered negative reviews in top 3 positions')"]
+    "issues": ["Social media problems"]
   },
   "reviewAnalysis": {
     "googleRating": number or null,
     "googleReviewCount": number or null,
-    "yelpRating": number or null,
-    "averageSentiment": "Positive" | "Mixed" | "Negative" | "No Reviews",
-    "commonComplaints": ["Exact recurring phrases from customers"],
-    "commonPraises": ["Exact recurring phrases from customers"]
+    "averageSentiment": "Positive|Mixed|Negative|No Reviews",
+    "commonComplaints": ["Top customer pain points"],
+    "commonPraises": ["What customers love"]
   },
   "competitorBenchmark": {
-    "topCompetitors": ["Names of specific local competitors found"],
-    "competitorUrls": ["Exact URLs of competitors"],
-    "competitorAdvantages": ["Specific features/strategies where they are outperforming the lead"],
-    "competitorFlaws": ["Specific weaknesses in competitor sites/presence that we can EXPLOIT in our design"],
-    "marketGaps": ["Winning strategies currently missing from this entire local market"]
+    "topCompetitors": ["Local competitor names"],
+    "competitorAdvantages": ["Where they win"],
+    "leadAdvantages": ["Where the lead wins"],
+    "marketGaps": ["Unserved market opportunities"]
   },
-  "painPoints": ["Surgical list of pain points with estimated REVENUE BLEED (e.g., 'Missing \$4k/mo due to no online booking')"],
+  "painPoints": ["Specific problems with revenue impact (e.g., 'Missing \$2k/mo in online orders')"],
   "opportunityScore": 0-100,
   "revloRecommendation": {
-    "primaryService": "openclaw" | "ghl-automation" | "elite-development" | "websites",
-    "primaryServiceName": "Full service name from catalog",
-    "secondaryService": "optional secondary service id or null",
-    "reasoning": "Data-backed explanation for the choice.",
-    "estimatedImpact": "Measurable revenue or efficiency gain.",
-    "urgency": "Critical" | "High" | "Medium" | "Low"
+    "primaryService": "openclaw|ghl-automation|elite-development|websites",
+    "reasoning": "Why this service",
+    "estimatedImpact": "Revenue/efficiency gain",
+    "urgency": "Critical|High|Medium|Low"
   },
-  "tailoredPitch": "A high-status, personal pitch based on these findings. Reference the owner by name (${lead.estimatedOwnerName || 'the owner'}), mention a specific competitor by name, and highlight the exact revenue bleed identified.",
-  "coldEmailSubject": "A compelling, high-open-rate subject line.",
-  "followUpAngles": ["3 different follow-up conversation angles."]
-}`;
+  "tailoredPitch": "Personal pitch mentioning owner name, specific competitor, and revenue opportunity",
+  "coldEmailSubject": "High-open-rate subject line",
+  "followUpAngles": ["Angle 1", "Angle 2", "Angle 3"]
+}
+`;
 
-        const analysisUserMessage = `
-LEAD DATA:
-- Business Name: ${lead.businessName}
-- Industry: ${lead.industry}
-- Location: ${lead.location}
-- Current Website: ${lead.website || 'NONE'}
-- Current Phone: ${lead.phoneNumber || 'UNKNOWN'}
-- Current Email: ${lead.email || 'UNKNOWN'}
-- Current Owner: ${lead.estimatedOwnerName || 'UNKNOWN'}
-- Current Digital Maturity: ${lead.digitalMaturity || 'Unknown'}
-- Current Lead Score: ${lead.leadScore}
+        updateJob(job.id, { progress: 25 });
+        addJobStep(job.id, 'Analyzing business intelligence...');
 
-BRAVE SEARCH INTELLIGENCE:
+        const rawAnalysis = await geminiResearch(researchPrompt, job.id);
 
-=== BUSINESS SEARCH RESULTS ===
-${businessResults}
+        updateJob(job.id, { progress: 75 });
+        addJobStep(job.id, 'Processing intelligence report...');
 
-=== REVIEW DATA ===
-${reviewResults}
-
-=== OWNER / DECISION MAKER SEARCH ===
-${ownerResults}
-
-=== COMPETITOR LANDSCAPE ===
-${competitorResults}
-
-=== SOCIAL MEDIA PRESENCE ===
-${socialResults}
-
-Analyze ALL of the above data carefully. Cross-reference results. Build a comprehensive dossier.
-Match the best REVLO service to this lead's specific needs. Be specific and data-driven.
-Output ONLY valid JSON.`;
-
-        const rawAnalysis = await deepseekReason(analysisSystemPrompt, analysisUserMessage);
-
-        updateJob(job.id, { progress: 90 });
-        addJobStep(job.id, 'Dossier compiled. Finalizing intelligence report...');
-
-        // Parse the Deepseek response
+        // Parse the Gemini response
         let dossier: EnrichmentDossier;
         try {
-            // Clean any markdown wrapping and extract the main object
             let cleanJson = rawAnalysis.trim();
             cleanJson = cleanJson.replace(/^```json\n?/, '').replace(/```$/, '');
 
@@ -369,7 +273,6 @@ Output ONLY valid JSON.`;
 
             const parsed = safeJsonParse<any>(cleanJson, {});
 
-            // Map the recommended service to include the full offer details
             const recommendedService = REVLO_SERVICES.find(s => s.id === parsed.revloRecommendation?.primaryService) || REVLO_SERVICES[3];
             const secondaryService = parsed.revloRecommendation?.secondaryService
                 ? REVLO_SERVICES.find(s => s.id === parsed.revloRecommendation.secondaryService)
@@ -427,20 +330,18 @@ Output ONLY valid JSON.`;
                 coldEmailSubject: parsed.coldEmailSubject || `Quick question about ${lead.businessName}`,
                 followUpAngles: parsed.followUpAngles || [],
                 enrichedAt: Date.now(),
-                dataSourcesUsed: ['Brave Search Web', 'Brave Search Reviews', 'Brave Search Social', 'Deepseek V3 Analysis'],
-                researchQueries: [businessQuery, reviewQuery, ownerQuery, competitorQuery, socialQuery]
+                dataSourcesUsed: ['Google Search (via Gemini 2.5 Flash)', 'Gemini 2.5 Flash Analysis'],
+                researchQueries: [`${lead.businessName} ${lead.location}`, `${lead.industry} ${lead.location}`]
             };
 
         } catch (parseError) {
-            console.error('Failed to parse Deepseek dossier:', parseError, '\nRaw:', rawAnalysis);
-            // Fallback dossier with whatever we can extract
-            dossier = buildFallbackDossier(lead, businessResults, rawAnalysis);
+            console.error('Failed to parse Gemini dossier:', parseError, '\nRaw:', rawAnalysis);
+            dossier = buildFallbackDossier(lead, researchPrompt, rawAnalysis);
         }
 
         updateJob(job.id, { status: 'complete', progress: 100, completedAt: Date.now() });
         addJobStep(job.id, '✓ Deep enrichment complete. Dossier ready.');
 
-        // Auto-dismiss completed jobs after 30 seconds
         setTimeout(() => dismissJob(job.id), 30000);
 
         return dossier;
@@ -450,7 +351,6 @@ Output ONLY valid JSON.`;
         updateJob(job.id, { status: 'failed', progress: 0 });
         addJobStep(job.id, `✗ Enrichment failed: ${error.message}`);
 
-        // Auto-dismiss failed jobs after 15 seconds
         setTimeout(() => dismissJob(job.id), 15000);
 
         throw error;

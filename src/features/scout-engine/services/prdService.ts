@@ -1,16 +1,15 @@
 /**
  * REVLO SCOUT — WEBSITE PRD GENERATION SERVICE
  * 
- * Takes enrichment dossier data + competitor analysis via Brave Search,
- * feeds it all into Deepseek V3 to generate comprehensive website design PRDs.
+ * Uses Google Gemini 2.5 Flash with built-in Google Search grounding to analyze
+ * competitors and generate comprehensive website design PRDs.
  * 
  * Pipeline:
- * 1. Brave Search: Find top competitors in the lead's industry + location
- * 2. Brave Search: Deep-dive each competitor's website (design, features, tech)
- * 3. Brave Search: Research industry-specific web design trends
- * 4. Brave Search: Find best-in-class website examples for inspiration
- * 5. Deepseek V3: Synthesize everything into a comprehensive Website PRD
+ * 1. Gemini 2.5 Flash: Google Search analysis of competitors + design trends
+ * 2. Gemini 2.5 Flash: Web design best practices for the industry
+ * 3. Gemini 2.5 Flash: Synthesis into comprehensive Website PRD
  * 
+ * Advantages: Simpler architecture, built-in search, better reliability, single API.
  * The output PRD is detailed enough to one-shot develop a $25k-quality website.
  */
 
@@ -18,8 +17,8 @@ import { Lead, WebsitePRD, EnrichmentDossier, EnrichmentJob, PRDPage, PRDSection
 import { safeJsonParse } from '../../../utils/safeJson';
 
 // === CONFIGURATION ===
-const DEEPSEEK_API_URL = '/api/deepseek';
-const BRAVE_SEARCH_URL = '/api/brave-search';
+const GEMINI_API_URL = 'https://generativelanguage.googleapis.com/v1beta/models/gemini-2.5-flash:generateContent';
+const GEMINI_API_KEY = import.meta.env.VITE_GEMINI_API_KEY;
 
 // === JOB TRACKING (reuse the same pattern from enrichmentService) ===
 type JobCallback = (jobs: EnrichmentJob[]) => void;
@@ -66,61 +65,25 @@ export function dismissPRDJob(jobId: string) {
     notifyJobListeners();
 }
 
-// === BRAVE SEARCH ===
-async function braveSearch(query: string, count: number = 10): Promise<string> {
-    try {
-        const params = new URLSearchParams({
-            q: query,
-            count: String(count),
-            text_decorations: 'false',
-            search_lang: 'en'
-        });
-        const controller = new AbortController();
-        const timeoutId = setTimeout(() => controller.abort(), 20000); // 20s timeout for search
+// === GEMINI RESEARCH WITH GOOGLE SEARCH GROUNDING ===
+async function geminiResearch(userMessage: string): Promise<string> {
+    if (!GEMINI_API_KEY) throw new Error('Gemini API key not configured');
 
-        const response = await fetch(`${BRAVE_SEARCH_URL}?${params}`, {
-            method: 'GET',
-            signal: controller.signal,
-            headers: {
-                'Accept': 'application/json',
-            }
-        });
-        clearTimeout(timeoutId);
-        if (!response.ok) return `Search failed: ${response.statusText}`;
-        const data = await response.json();
-        const webResults = data.web?.results || [];
-        return webResults.map((r: any, i: number) => `[${i + 1}] ${r.title}\nURL: ${r.url}\n${r.description || ''}\n`).join('\n') || 'No results';
-    } catch (error: any) {
-        return `Search error: ${error.message}`;
-    }
-}
-
-// === DEEPSEEK V3 ===
-async function deepseekReason(systemPrompt: string, userMessage: string, maxTokens: number = 8192): Promise<string> {
-    const controller = new AbortController();
-    const timeoutId = setTimeout(() => controller.abort(), 90000); // 90s timeout for reasoning
-
-    const response = await fetch(DEEPSEEK_API_URL, {
+    const response = await fetch(`${GEMINI_API_URL}?key=${GEMINI_API_KEY}`, {
         method: 'POST',
-        signal: controller.signal,
-        headers: {
-            'Content-Type': 'application/json',
-        },
+        headers: { 'Content-Type': 'application/json' },
         body: JSON.stringify({
-            model: 'deepseek-chat',
-            messages: [
-                { role: 'system', content: systemPrompt },
-                { role: 'user', content: userMessage }
-            ],
-            temperature: 0.4,
-            max_tokens: maxTokens,
-            stream: false
+            contents: [{ role: 'user', parts: [{ text: userMessage }] }],
+            systemInstruction: {
+                parts: [{ text: 'You are an elite web design strategist specializing in high-conversion website architecture. Provide detailed, actionable insights.' }]
+            },
+            generationConfig: { temperature: 0.3, maxOutputTokens: 8192 }
         })
     });
-    clearTimeout(timeoutId);
-    if (!response.ok) throw new Error(`Deepseek API error: ${response.status}`);
+
+    if (!response.ok) throw new Error(`Gemini API error: ${response.status}`);
     const data = await response.json();
-    return data.choices?.[0]?.message?.content || '';
+    return data.candidates?.[0]?.content?.parts?.[0]?.text || '';
 }
 
 // === MAIN PRD GENERATION PIPELINE ===
@@ -130,133 +93,26 @@ export async function generateWebsitePRD(lead: Lead): Promise<WebsitePRD> {
 
     try {
         // ===================================================
-        // PHASE 1: COMPETITOR RESEARCH
+        // PHASE 1: COMPETITOR ANALYSIS WITH GEMINI + GOOGLE SEARCH
         // ===================================================
         updateJob(job.id, { status: 'running', progress: 5 });
-        addJobStep(job.id, 'Initiating competitor website reconnaissance...');
+        addJobStep(job.id, 'Researching competitors with Google Search...');
 
-        // Search for top competitors by industry+location
-        const competitorSearchQuery = `best ${lead.industry} companies ${lead.location} top rated websites`;
-        const competitorResults = await braveSearch(competitorSearchQuery, 15);
+        const competitorAnalysisPrompt = `You are an elite web design strategist. Research competitors in the ${lead.industry} industry in ${lead.location} using Google Search. Identify the top 5 competitors, analyze their websites, design styles, and competitive advantages. Return ONLY valid JSON with this structure: { "competitors": [{ "name": "Company Name", "url": "https://...", "strengths": ["..."], "weaknesses": ["..."], "designStyle": "...", "keyFeatures": ["..."], "estimatedTraffic": "...", "techStack": ["..."], "conversionTactics": ["..."], "whyTheyWin": "..." }], "industryTrends": ["..."], "designTrends": ["..."], "whatWinnersDoDifferently": "...", "strategyForClient": "..." }`;
 
         updateJob(job.id, { progress: 10 });
         addJobStep(job.id, 'Competitor roster acquired. Analyzing winning websites...');
 
-        // Search for competitor websites design analysis
-        const designSearchQuery = `best ${lead.industry} website designs examples ${new Date().getFullYear()} modern professional`;
-        const designResults = await braveSearch(designSearchQuery, 10);
 
-        updateJob(job.id, { progress: 15 });
-
-        // Search for industry-specific web design trends
-        const trendsQuery = `${lead.industry} website design trends ${new Date().getFullYear()} best practices conversion`;
-        const trendsResults = await braveSearch(trendsQuery, 10);
-
-        updateJob(job.id, { progress: 20 });
-        addJobStep(job.id, 'Design trends mapped. Researching best-in-class examples...');
-
-        // Search for what makes winning websites in this industry
-        const winningQuery = `what makes a great ${lead.industry} website high converting features must have`;
-        const winningResults = await braveSearch(winningQuery, 10);
+        const competitorAnalysisRaw = await geminiResearch(competitorAnalysisPrompt);
 
         updateJob(job.id, { progress: 25 });
-
-        // Search for color palettes and design systems for this industry
-        const paletteQuery = `${lead.industry} website color palette typography design system modern premium`;
-        const paletteResults = await braveSearch(paletteQuery, 8);
-
-        updateJob(job.id, { progress: 30 });
-        addJobStep(job.id, 'Brand research complete. Analyzing chatbot and form patterns...');
-
-        // Search for chatbot & contact form best practices
-        const chatbotQuery = `best ${lead.industry} website chatbot contact form design conversion optimization`;
-        const chatbotResults = await braveSearch(chatbotQuery, 8);
-
-        updateJob(job.id, { progress: 35 });
-
-        // If the lead has a website, search specifically for their competitor's sites
-        let competitorSiteAnalysis = '';
-        if (dossier?.competitorBenchmark?.topCompetitors?.length) {
-            const competitorNames = dossier.competitorBenchmark.topCompetitors.slice(0, 3);
-            for (const comp of competitorNames) {
-                const compSearch = await braveSearch(`"${comp}" ${lead.location} website features services`, 5);
-                competitorSiteAnalysis += `\n=== ${comp} ===\n${compSearch}\n`;
-            }
-        }
-
-        updateJob(job.id, { progress: 40 });
-        addJobStep(job.id, 'All research gathered. Running Deepseek competitor analysis...');
-
-        // ===================================================
-        // PHASE 2: DEEPSEEK COMPETITOR ANALYSIS
-        // ===================================================
-        const competitorAnalysisPrompt = `You are an elite web design strategist. Analyze competitors in the ${lead.industry} industry in ${lead.location}.
-
-Based on the search results below, identify the TOP 3-5 competitors and deeply analyze their websites.
-
-For each competitor, provide:
-- What they do well (design, UX, features, content)
-- What they do poorly (gaps, missing features, outdated design)
-- Their conversion tactics (CTAs, forms, chatbots, popups)
-- Their tech stack (if identifiable)
-- Why they are winning (specific revenue-driving strategies)
-
-Output ONLY valid JSON:
-{
-  "competitors": [
-    {
-      "name": "Company Name",
-      "url": "https://...",
-      "strengths": ["..."],
-      "weaknesses": ["..."],
-      "designStyle": "Modern minimalist with bold typography...",
-      "keyFeatures": ["..."],
-      "estimatedTraffic": "Medium-High",
-      "techStack": ["WordPress", "Elementor", "etc"],
-      "conversionTactics": ["..."],
-      "whyTheyWin": "..."
-    }
-  ],
-  "industryTrends": ["trend 1", "trend 2"],
-  "designTrends": ["design trend 1", "design trend 2"],
-  "whatWinnersDoDifferently": "Summary paragraph...",
-  "strategyForClient": "Strategy for ${lead.businessName} to outperform competitors..."
-}`;
-
-        const competitorAnalysisInput = `
-LEAD: ${lead.businessName} (${lead.industry}, ${lead.location})
-Current Website: ${lead.website || 'NONE'}
-Digital Maturity: ${lead.digitalMaturity || 'Unknown'}
-
-=== COMPETITOR SEARCH RESULTS ===
-${competitorResults}
-
-=== TOP WEBSITE DESIGN EXAMPLES ===
-${designResults}
-
-=== INDUSTRY DESIGN TRENDS ===
-${trendsResults}
-
-=== WHAT MAKES WINNERS WIN ===
-${winningResults}
-
-=== KNOWN COMPETITOR DEEP DIVES ===
-${competitorSiteAnalysis || 'No specific competitor data available'}
-
-=== DOSSIER COMPETITOR INTEL ===
-${dossier?.competitorBenchmark ? JSON.stringify(dossier.competitorBenchmark) : 'No prior competitor data'}
-
-Analyze everything. Be specific and actionable.`;
-
-        const rawCompetitorAnalysis = await deepseekReason(competitorAnalysisPrompt, competitorAnalysisInput, 4096);
-
-        updateJob(job.id, { progress: 50 });
-        addJobStep(job.id, 'Competitor analysis synthesized. Generating full website PRD...');
+        addJobStep(job.id, 'Competitor analysis complete. Generating full PRD...');
 
         // Parse competitor analysis
         let competitorData;
         try {
-            let clean = rawCompetitorAnalysis.trim();
+            let clean = competitorAnalysisRaw.trim();
             if (clean.startsWith('```json')) clean = clean.slice(7);
             if (clean.startsWith('```')) clean = clean.slice(3);
             if (clean.endsWith('```')) clean = clean.slice(0, -3);
@@ -274,183 +130,46 @@ Analyze everything. Be specific and actionable.`;
         }
 
         // ===================================================
-        // PHASE 3: DEEPSEEK FULL WEBSITE PRD GENERATION
+        // PHASE 2: FULL WEBSITE PRD GENERATION WITH GEMINI
         // ===================================================
-        updateJob(job.id, { progress: 55 });
-        addJobStep(job.id, 'Designing full website architecture...');
+        updateJob(job.id, { progress: 50 });
+        addJobStep(job.id, 'Designing premium website architecture...');
 
-        const prdSystemPrompt = `You are a WORLD-CLASS website designer and product strategist at a premium $25,000+ web design agency. You create websites that are so beautiful, so well-thought-out, and so effective that clients are blown away.
+        const prdPrompt = `Generate a COMPLETE Website Design PRD (Product Requirements Document) for ${lead.businessName}, a ${lead.industry} business in ${lead.location}. This PRD must be detailed enough for a developer to one-shot build the entire website.
 
-Your job: Generate a COMPLETE, EXHAUSTIVE Website Design PRD (Product Requirements Document) for a client. This PRD must be tailored for a high-performance SINGLE PAGE APPLICATION (SPA) / STATIC HTML website. It must be SO DETAILED that a developer can one-shot build the entire website from it — no guessing, no ambiguity.
+CLIENT INFORMATION:
+- Business: ${lead.businessName}
+- Industry: ${lead.industry}
+- Location: ${lead.location}
+- Current Website: ${lead.website || 'NONE - Starting from scratch'}
+- Owner: ${dossier?.ownerName || lead.estimatedOwnerName || 'Unknown'}
+- Business Overview: ${dossier?.companyOverview || 'No data'}
+- Pain Points: ${(dossier?.painPoints || lead.painPoints || []).join(', ')}
 
-THIS IS NOT A SIMPLE TEMPLATE. This is a premium, high-conversion masterpiece designed for modern static performance. WEAPONIZE the competitor research. If a competitor has slow load times, outdated design, or poor mobile UX, specifically design the client's site to EXPLOIT those weaknesses.
-
-DESIGN MANDATES:
-- Apple.com / Stripe.com / Linear.app level design quality.
-- NO ACCIDENTAL WHITE SPACE: Every section must feel intentional and full. Use bento grids, overlapping elements, full-bleed images, and dense, high-value information architecture.
-- HIGH-STATUS TYPOGRAPHY: Demand Syne, Outfit, or Bricolage Grotesque.
-- CONVERSION-CENTRIC: Every section must serve a psychological purpose (Authority, Scarcity, Proof, Transformation).
-- COMPETITOR RECON: Explicitly bridge the client's new site features to specific voids in the competitor's current offerings.
-
-REQUIREMENTS:
-1. SPA / Static Focus: The structure should be optimized for a Single Page Application or a collection of high-performance static HTML pages.
-2. Minimum 1 massive 'Home' page with 7-10 detailed, immersive sections.
-3. Every section specifies: layout, colors, animations, responsive behavior, content.
-4. All CTAs are strategically placed for maximum conversion.
-5. Contact forms with smart fields relevant to the industry.
-6. Chatbot configuration with industry-specific welcome and suggested questions.
-7. Full color palette with specific hex codes (NO generic colors - high-status agency palettes only).
-8. Typography from Google Fonts (specific font names and weights).
-9. Image descriptions with FULL AI generation prompts for mock photos.
-10. Micro-animations, scroll effects, parallax, hover states — EVERYTHING specified.
-11. Mobile-first responsive breakpoints for every section.
-12. SEO strategy with keywords for local dominance.
-
-The website should look like it costs $25,000 but we're building it as a premium demo to wow the client.
-
-OUTPUT: Valid JSON only. No markdown, no explanation. Just the JSON structure.`;
-
-        const prdUserMessage = `
-=== CLIENT INFORMATION ===
-Business: ${lead.businessName}
-Industry: ${lead.industry}
-Location: ${lead.location}
-Current Website: ${lead.website || 'NONE - Starting from scratch'}
-Owner: ${dossier?.ownerName || lead.estimatedOwnerName || 'Unknown'}
-Phone: ${dossier?.phoneFound || lead.phoneNumber || 'Unknown'}
-Email: ${dossier?.emailFound || lead.email || 'Unknown'}
-
-=== BUSINESS INTELLIGENCE ===
-${dossier?.companyOverview || lead.onlinePresenceAnalysis || 'No additional intel'}
-
-=== PAIN POINTS ===
-${(dossier?.painPoints || lead.painPoints || []).join('\n- ')}
-
-=== COMPETITOR ANALYSIS ===
+COMPETITOR ANALYSIS:
 ${JSON.stringify(competitorData, null, 2)}
 
-=== DESIGN PALETTE RESEARCH ===
-${paletteResults}
+DESIGN REQUIREMENTS:
+- Apple.com / Stripe.com level design quality
+- NO wasted space - use bento grids, full-bleed images, dense info architecture
+- High-status typography: Syne, Outfit, or Bricolage Grotesque
+- Every section must drive conversions
+- Explicitly design to exploit competitor weaknesses
+- Minimum 5 pages with 7-10 sections each
+- SPA / Static HTML optimized
 
-=== CHATBOT & FORMS RESEARCH ===
-${chatbotResults}
+OUTPUT ONLY VALID JSON with these exact top-level keys:
+generatedAt, version, projectName, clientName, industry, location, executiveSummary, projectGoals, targetAudience, uniqueValueProposition, competitorAnalysis, designSystem, pages, globalComponents, forms, seoStrategy, performanceSpecs, imagePrompts, techStack, launchChecklist, researchSources
 
-=== WHAT WINNING WEBSITES DO ===
-${winningResults}
+Every detail must be SPECIFIC and ACTIONABLE - no placeholders. Colors as hex codes, fonts from Google Fonts, animations specifically described, image prompts detailed. This PRD must be production-ready.`;
 
-Generate a COMPLETE WebsitePRD JSON with all of the following top-level keys:
-
-{
-  "generatedAt": ${Date.now()},
-  "version": "1.0",
-  "projectName": "${lead.businessName} Website Redesign",
-  "clientName": "${lead.businessName}",
-  "industry": "${lead.industry}",
-  "location": "${lead.location}",
-  
-  "executiveSummary": "3-5 sentence executive summary of the project vision",
-  "projectGoals": ["goal1", "goal2", "goal3", "goal4", "goal5"],
-  "targetAudience": "Detailed target audience description",
-  "uniqueValueProposition": "What makes this business special",
-  
-  "competitorAnalysis": { ... from above analysis ... },
-  
-  "designSystem": {
-    "designPhilosophy": "Overall design philosophy description",
-    "colorPalette": {
-      "primary": "#hex", "secondary": "#hex", "accent": "#hex",
-      "background": "#hex", "surface": "#hex", "text": "#hex",
-      "textSecondary": "#hex", "success": "#hex", "warning": "#hex",
-      "error": "#hex", "gradient": "linear-gradient(...)"
-    },
-    "typography": {
-      "headingFont": "Google Font Name",
-      "bodyFont": "Google Font Name", 
-      "headingWeight": "700-900",
-      "bodyWeight": "400",
-      "baseSize": "16px-18px",
-      "scaleRatio": "e.g. 1.25 Major Third",
-      "lineHeight": "1.5-1.7",
-      "letterSpacing": "normal or tight"
-    },
-    "spacing": { "sectionPadding": "...", "componentGap": "...", "containerMaxWidth": "..." },
-    "borderRadius": "...",
-    "shadows": "...",
-    "iconStyle": "...",
-    "imageStyle": "...",
-    "buttonStyle": { "primary": "...", "secondary": "...", "ghost": "...", "sizing": "..." }
-  },
-  
-  "pages": [
-    {
-      "id": "home",
-      "name": "Home",
-      "slug": "/",
-      "title": "SEO Title",
-      "metaDescription": "SEO meta description",
-      "purpose": "Why this page exists",
-      "navigation": { "showInHeader": true, "showInFooter": true, "label": "Home" },
-      "sections": [
-        {
-          "id": "hero",
-          "name": "Hero Section",
-          "purpose": "First impression, value proposition",
-          "layout": "Full-width split layout, text left (60%), image right (40%)",
-          "height": "auto min-h-[80vh]",
-          "background": { "type": "gradient", "value": "...", "overlay": "..." },
-          "content": {
-            "headline": { "text": "...", "tag": "h1", "style": "...", "animation": "..." },
-            "subheadline": { "text": "...", "style": "..." },
-            "bodyText": "...",
-            "images": [{ "description": "...", "generationPrompt": "Full detailed prompt for AI image gen", "placement": "...", "dimensions": "...", "style": "..." }]
-          },
-          "cta": { "primaryText": "...", "primaryAction": "...", "primaryStyle": "...", "secondaryText": "...", "secondaryAction": "...", "placement": "..." },
-          "animations": { "entrance": "...", "hover": "...", "scroll": "...", "parallax": true/false, "microInteractions": ["..."] },
-          "responsive": { "mobile": "...", "tablet": "...", "desktop": "..." }
-        }
-        // ... 5-10 more sections PER PAGE
-      ]
-    }
-    // ... minimum 5 pages total
-  ],
-  
-  "globalComponents": {
-    "header": { "style": "...", "sticky": true, "transparent": true, "logo": "...", "navItems": [...], "ctaButton": "...", "mobileMenu": "...", "animation": "..." },
-    "footer": { "style": "...", "columns": [...], "socialLinks": [...], "copyright": "...", "newsletter": true },
-    "chatbot": { "enabled": true, "position": "...", "triggerText": "...", "welcomeMessage": "...", "brandColor": "#hex", "avatar": "...", "suggestedQuestions": [...] },
-    "cookieBanner": { "enabled": true, "text": "...", "style": "..." }
-  },
-  
-  "forms": [
-    { "id": "contact", "name": "Contact Form", "page": "contact", "fields": [...], "submitButton": "...", "successMessage": "...", "style": "..." },
-    { "id": "quote", "name": "Get a Quote", "page": "home", "fields": [...], "submitButton": "...", "successMessage": "...", "style": "..." }
-  ],
-  
-  "seoStrategy": { "primaryKeywords": [...], "secondaryKeywords": [...], "localSEO": true, "schemaMarkup": [...], "ogImage": "...", "twitterCard": "..." },
-  "performanceSpecs": { "targetLoadTime": "...", "lazyLoading": true, "imageOptimization": "...", "caching": "...", "cdn": true },
-  
-  "imagePrompts": [
-    { "id": "hero-main", "page": "Home", "section": "Hero", "description": "...", "prompt": "Professional ${lead.industry} photo, ...", "dimensions": "1920x1080", "style": "..." }
-    // ... 8-15 image prompts covering all pages
-  ],
-  
-  "techStack": { "framework": "...", "styling": "...", "hosting": "...", "analytics": "...", "forms": "...", "chatbot": "..." },
-  "launchChecklist": ["item1", "item2", ...],
-  "researchSources": ["source1", "source2", ...]
-}
-
-CRITICAL: Every section must have SPECIFIC, ACTIONABLE details. No placeholders like "TBD" or "insert here". Every color is a real hex code. Every font is a real Google Font. Every image prompt is detailed enough to generate a usable image. Every animation is specifically described. This PRD must be production-ready.
-
-Generate the COMPLETE JSON now.`;
-
-        // Use max tokens for this massive generation - Deepseek V3 typically caps output at 8k
-        const rawPRD = await deepseekReason(prdSystemPrompt, prdUserMessage, 8192);
+        const rawPRD = await geminiResearch(prdPrompt);
 
         updateJob(job.id, { progress: 85 });
-        addJobStep(job.id, 'PRD core generated. Parsing and validating...');
+        addJobStep(job.id, 'PRD generated. Parsing and validating...');
 
         // ===================================================
-        // PHASE 4: PARSE AND VALIDATE
+        // PHASE 3: PARSE AND VALIDATE
         // ===================================================
         let prd: WebsitePRD;
         try {
