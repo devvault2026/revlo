@@ -273,7 +273,7 @@ Every detail must be SPECIFIC and ACTIONABLE - no placeholders. Colors as hex co
                 imagePrompts: parsed.imagePrompts || [],
                 techStack: parsed.techStack || { framework: 'Vanilla Static HTML + Tailwind CSS', styling: 'Tailwind CSS JIT', hosting: 'Static Storage + Global CDN (Orgo)', analytics: 'Privacy-focused Static', forms: 'API-driven Serverless', chatbot: 'Lightweight Static Overlay' },
                 launchChecklist: parsed.launchChecklist || [],
-                researchSources: [competitorSearchQuery, designSearchQuery, trendsQuery, winningQuery, paletteQuery, chatbotQuery]
+                researchSources: ['Google Search (via Gemini 2.5 Flash)', 'Competitor analysis via Gemini', 'Web design best practices via Gemini']
             };
 
             // CRITICAL DEFENSE: If AI returned < 4 sections, trigger the hyper-personalized fallback
