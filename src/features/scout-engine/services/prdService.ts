@@ -18,17 +18,8 @@ import { Lead, WebsitePRD, EnrichmentDossier, EnrichmentJob, PRDPage, PRDSection
 import { safeJsonParse } from '../../../utils/safeJson';
 
 // === CONFIGURATION ===
-const DEEPSEEK_API_KEY = import.meta.env.VITE_DEEPSEEK_API_KEY;
-const DEEPSEEK_API_URL = '/api/deepseek/v1/chat/completions';
-const BRAVE_SEARCH_API_KEY = import.meta.env.VITE_BRAVE_SEARCH_API_KEY;
-const BRAVE_SEARCH_URL = '/api/brave/res/v1/web/search';
-
-if (!DEEPSEEK_API_KEY) {
-    console.warn('VITE_DEEPSEEK_API_KEY not set. Deepseek features will not work.');
-}
-if (!BRAVE_SEARCH_API_KEY) {
-    console.warn('VITE_BRAVE_SEARCH_API_KEY not set. Search features will not work.');
-}
+const DEEPSEEK_API_URL = '/api/deepseek';
+const BRAVE_SEARCH_URL = '/api/brave-search';
 
 // === JOB TRACKING (reuse the same pattern from enrichmentService) ===
 type JobCallback = (jobs: EnrichmentJob[]) => void;
@@ -92,8 +83,6 @@ async function braveSearch(query: string, count: number = 10): Promise<string> {
             signal: controller.signal,
             headers: {
                 'Accept': 'application/json',
-                'Accept-Encoding': 'gzip',
-                'X-Subscription-Token': BRAVE_SEARCH_API_KEY
             }
         });
         clearTimeout(timeoutId);
@@ -116,7 +105,6 @@ async function deepseekReason(systemPrompt: string, userMessage: string, maxToke
         signal: controller.signal,
         headers: {
             'Content-Type': 'application/json',
-            'Authorization': `Bearer ${DEEPSEEK_API_KEY}`
         },
         body: JSON.stringify({
             model: 'deepseek-chat',
