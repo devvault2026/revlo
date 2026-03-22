@@ -15,20 +15,20 @@ const Contact: React.FC = () => {
 
     const features = [
         {
-            title: 'Strategy Session',
-            description: 'A dedicated deep dive into your current market position.',
+            title: 'REVENUE AUDIT',
+            description: 'A 15-minute deep dive to find your biggest money leaks.',
             color: 'text-purple-400',
             icon: <Target className="w-5 h-5" />
         },
         {
-            title: 'Growth Roadmap',
-            description: 'A clear, custom-built execution plan for scaling your revenue.',
+            title: '48-HOUR REBUILD',
+            description: 'A clear execution plan to fix your website and lead systems.',
             color: 'text-blue-400',
             icon: <TrendingUp className="w-5 h-5" />
         },
         {
-            title: 'Strategic Leverage',
-            description: 'Identify the exact points of leverage to multiply your results.',
+            title: 'IMMEDIATE SCALE',
+            description: 'Deploy the infrastructure that gets you customers in 30 days.',
             color: 'text-red-400',
             icon: <Handshake className="w-5 h-5" />
         },
@@ -46,17 +46,16 @@ const Contact: React.FC = () => {
                     >
                         <div className="inline-block px-4 py-2 glass rounded-full mb-8">
                             <span className="text-[10px] font-black text-purple-400 uppercase tracking-[0.4em]">
-                                Partner Inquiry
+                                Revenue Inquiry
                             </span>
                         </div>
 
                         <h2 className="text-5xl lg:text-7xl font-black font-display mb-8 tracking-tighter italic text-white leading-tight uppercase">
-                            PARTNER <span className="gradient-text-alt">WITH ME.</span>
+                            FIX YOUR <span className="gradient-text-alt">REVENUE.</span>
                         </h2>
 
                         <p className="text-xl text-slate-400 leading-relaxed mb-12 font-medium">
-                            Stop speculating about your growth potential. Let&apos;s build a system that delivers predictable revenue.
-                            Your journey as a Revlo partner starts here.
+                            Stop the vague philosophy. Book your revenue audit and let's rebuild your front door in 48 hours.
                         </p>
 
                         <div className="space-y-8">

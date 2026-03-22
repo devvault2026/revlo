@@ -23,20 +23,20 @@ const HomePage: React.FC = () => {
             transition={{ duration: 0.5 }}
         >
             <Helmet>
-                <title>REVLO | ELITE AI DEVELOPMENT LAB: 12X SPEED, 100% OWNERSHIP</title>
-                <meta name="description" content="Deploy the unimaginable. Revlo builds the autonomous infrastructure and neural systems that help brands acquire attention and scale without human friction." />
+                <title>REVLO | REVENUE SYSTEMS IN 48 HOURS</title>
+                <meta name="description" content="Get more customers. Fast. We rebuild your website + lead system in 48 hours to drive revenue and growth without the fluff." />
 
                 {/* Open Graph / Facebook */}
                 <meta property="og:type" content="website" />
                 <meta property="og:url" content="https://www.wearerevlo.com/" />
-                <meta property="og:title" content="REVLO | ELITE AI DEVELOPMENT LAB: 12X SPEED, 100% OWNERSHIP" />
-                <meta property="og:description" content="Deploy the unimaginable. Revlo builds the autonomous infrastructure and neural systems that help brands acquire attention and scale without human friction." />
+                <meta property="og:title" content="REVLO | REVENUE SYSTEMS IN 48 HOURS" />
+                <meta property="og:description" content="Get more customers. Fast. We rebuild your website + lead system in 48 hours to drive revenue and growth without the fluff." />
                 <meta property="og:image" content="https://res.cloudinary.com/dpfapm0tl/image/upload/v1771435259/ChatGPT_Image_Feb_18_2026_12_20_07_PM_xujfpp.png" />
 
                 {/* Twitter */}
                 <meta name="twitter:card" content="summary_large_image" />
-                <meta name="twitter:title" content="REVLO | ELITE AI DEVELOPMENT LAB: 12X SPEED, 100% OWNERSHIP" />
-                <meta name="twitter:description" content="Deploy the unimaginable. Revlo builds the autonomous infrastructure and neural systems that help brands acquire attention and scale without human friction." />
+                <meta name="twitter:title" content="REVLO | REVENUE SYSTEMS IN 48 HOURS" />
+                <meta name="twitter:description" content="Get more customers. Fast. We rebuild your website + lead system in 48 hours to drive revenue and growth without the fluff." />
                 <meta name="twitter:image" content="https://res.cloudinary.com/dpfapm0tl/image/upload/v1771435259/ChatGPT_Image_Feb_18_2026_12_20_07_PM_xujfpp.png" />
             </Helmet>
             <Hero />

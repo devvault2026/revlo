@@ -31,7 +31,7 @@ const MarketplacePage: React.FC = () => {
         fetchItems();
     }, []);
 
-    const categories = ['All', 'Gaming'];
+    const categories = ['All', 'Gaming', 'AI'];
 
     const filteredItems = items.filter(item => {
         const matchesSearch = item.title.toLowerCase().includes(searchQuery.toLowerCase()) || 
@@ -152,7 +152,12 @@ const MarketplacePage: React.FC = () => {
                                             )}
                                         </div>
 
-                                        <div className="absolute bottom-4 right-4">
+                                        <div className="absolute bottom-4 right-4 text-right">
+                                            {item.originalPrice && (
+                                                <div className="text-[10px] font-black text-slate-400 line-through decoration-purple-500/50 decoration-2 mb-[-4px]">
+                                                    ${item.originalPrice}
+                                                </div>
+                                            )}
                                             <div className="text-2xl font-black text-white italic">
                                                 ${item.price}
                                             </div>
@@ -200,19 +205,32 @@ const MarketplacePage: React.FC = () => {
                                             ))}
                                         </ul>
 
-                                        <div className="flex items-center gap-3">
-                                            <Link
-                                                to={`/marketplace/${item.slug}`}
-                                                className="flex-grow flex items-center justify-center gap-2 px-4 py-3 bg-white/5 hover:bg-white/10 border border-white/10 rounded-xl text-[10px] font-black uppercase tracking-[0.2em] text-white transition-all"
-                                            >
-                                                Details
-                                            </Link>
-                                            <Link
-                                                to={`/marketplace/${item.slug}`}
-                                                className="flex items-center justify-center gap-2 px-6 py-3 bg-gradient-to-r from-purple-600 to-fuchsia-600 hover:from-purple-500 hover:to-fuchsia-500 rounded-xl text-[10px] font-black uppercase tracking-[0.2em] text-white transition-all shadow-lg shadow-purple-600/20"
-                                            >
-                                                Purchase
-                                            </Link>
+                                        <div className="flex flex-col gap-3">
+                                            {item.demoUrl && (
+                                                <a
+                                                    href={item.demoUrl}
+                                                    target="_blank"
+                                                    rel="noopener noreferrer"
+                                                    className="flex items-center justify-center gap-2 px-4 py-3 bg-purple-500/10 hover:bg-purple-600/20 border border-purple-500/20 rounded-xl text-[10px] font-black uppercase tracking-[0.2em] text-purple-400 transition-all"
+                                                >
+                                                    <Globe className="w-3 h-3" />
+                                                    View Live Demo
+                                                </a>
+                                            )}
+                                            <div className="flex items-center gap-3">
+                                                <Link
+                                                    to={`/marketplace/${item.slug}`}
+                                                    className="flex-grow flex items-center justify-center gap-2 px-4 py-3 bg-white/5 hover:bg-white/10 border border-white/10 rounded-xl text-[10px] font-black uppercase tracking-[0.2em] text-white transition-all"
+                                                >
+                                                    Details
+                                                </Link>
+                                                <Link
+                                                    to={`/marketplace/${item.slug}`}
+                                                    className="flex items-center justify-center gap-2 px-6 py-3 bg-gradient-to-r from-purple-600 to-fuchsia-600 hover:from-purple-500 hover:to-fuchsia-500 rounded-xl text-[10px] font-black uppercase tracking-[0.2em] text-white transition-all shadow-lg shadow-purple-600/20"
+                                                >
+                                                    Purchase
+                                                </Link>
+                                            </div>
                                         </div>
                                     </div>
                                 </motion.div>

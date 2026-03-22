@@ -122,7 +122,7 @@ const Hero: React.FC = () => {
                                     <span className="relative inline-flex rounded-full h-3 w-3 bg-red-500"></span>
                                 </span>
                                 <span className="text-[12px] font-black uppercase tracking-[0.4em] text-red-500">
-                                    DEBUNKING THE AGENCY MYTH: WE ARE THE CORE ENGINE.
+                                    WE BUILD REVENUE SYSTEMS THAT GET YOU CUSTOMERS IN 30 DAYS OR LESS.
                                 </span>
                             </div>
                         </motion.div>
@@ -132,11 +132,11 @@ const Hero: React.FC = () => {
                                 initial={{ opacity: 0, y: 30 }}
                                 animate={{ opacity: 1, y: 0 }}
                                 transition={{ duration: 0.8, ease: [0.16, 1, 0.3, 1] }}
-                                className="text-[clamp(2.5rem,10vw,7.5rem)] font-black leading-[0.9] tracking-[-0.04em] uppercase"
+                                className="text-[clamp(2.5rem,10vw,7.5rem)] font-black leading-[0.9] tracking-tighter uppercase"
                             >
-                                <span className="block text-white opacity-40">FULLY</span>
-                                <span className="block text-white">AUTONOMOUS</span>
-                                <span className="inline-block gradient-text-alt pb-4">EMPIRES.</span>
+                                <span className="block text-white opacity-40">GET MORE</span>
+                                <span className="block text-white">CUSTOMERS.</span>
+                                <span className="inline-block gradient-text-alt pb-4">FAST.</span>
                             </motion.h1>
 
                             <motion.div
@@ -146,7 +146,7 @@ const Hero: React.FC = () => {
                                 className="max-w-3xl"
                             >
                                 <p className="text-lg lg:text-2xl font-bold text-slate-400 uppercase tracking-tight leading-tight">
-                                    We don't build software. we deploy <span className="text-white">self-selling, self-operating, self-evolving</span> digital machines that generate irrefutable market dominance.
+                                    We rebuild your <span className="text-white">website + lead system in 48 hours</span>. No philosophy. No abstraction. Just high-speed transformation that hits your bottom line.
                                 </p>
                             </motion.div>
                         </div>
@@ -163,14 +163,14 @@ const Hero: React.FC = () => {
                                 whileHover={{ scale: 1.02, y: -2 }}
                                 whileTap={{ scale: 0.98 }}
                             >
-                                INITIATE DEPLOYMENT
+                                BOOK A REVENUE AUDIT
                                 <div className="absolute -top-1 -right-1 w-3 h-3 bg-red-500" />
                                 <div className="absolute -bottom-1 -left-1 w-3 h-3 bg-red-500" />
                             </motion.button>
 
                             <div className="space-y-1">
-                                <div className="text-[10px] font-black text-white/40 uppercase tracking-[0.4em]">Starting from</div>
-                                <div className="text-xl font-black text-white tracking-widest uppercase italic">$500 / mo partnerships</div>
+                                <div className="text-[10px] font-black text-white/40 uppercase tracking-[0.4em]">Flat Offer</div>
+                                <div className="text-xl font-black text-white tracking-widest uppercase italic">$500 - $1500 Entry</div>
                             </div>
                         </motion.div>
                     </div>

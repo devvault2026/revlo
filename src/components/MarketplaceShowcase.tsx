@@ -1,6 +1,6 @@
 import React from 'react';
 import { motion } from 'framer-motion';
-import { ShoppingBag, ArrowRight, Sparkles, Zap, ShieldCheck, Rocket } from 'lucide-react';
+import { ShoppingBag, ArrowRight, Sparkles, Zap, ShieldCheck, Rocket, Globe } from 'lucide-react';
 import { Link } from 'react-router-dom';
 import { marketplaceItems } from '../data/marketplaceData';
 
@@ -96,15 +96,35 @@ const MarketplaceShowcase: React.FC = () => {
                                 </p>
                                 
                                 <div className="flex items-center justify-between">
-                                    <div className="text-xl font-black text-white italic">
-                                        ${item.price}
+                                    <div className="flex items-baseline gap-2">
+                                        <div className="text-xl font-black text-white italic">
+                                            ${item.price}
+                                        </div>
+                                        {item.originalPrice && (
+                                            <div className="text-[10px] font-black text-slate-500 line-through decoration-purple-500/50">
+                                                ${item.originalPrice}
+                                            </div>
+                                        )}
                                     </div>
-                                    <Link
-                                        to={`/marketplace/${item.slug}`}
-                                        className="p-2 bg-white/5 rounded-lg text-slate-400 group-hover:text-white group-hover:bg-purple-600 transition-all"
-                                    >
-                                        <ArrowRight className="w-4 h-4" />
-                                    </Link>
+                                    <div className="flex items-center gap-2">
+                                        {item.demoUrl && (
+                                            <a
+                                                href={item.demoUrl}
+                                                target="_blank"
+                                                rel="noopener noreferrer"
+                                                className="p-2 bg-white/5 rounded-lg text-slate-400 hover:text-purple-400 transition-all"
+                                                title="View Live Demo"
+                                            >
+                                                <Globe className="w-4 h-4" />
+                                            </a>
+                                        )}
+                                        <Link
+                                            to={`/marketplace/${item.slug}`}
+                                            className="p-2 bg-white/5 rounded-lg text-slate-400 group-hover:text-white group-hover:bg-purple-600 transition-all"
+                                        >
+                                            <ArrowRight className="w-4 h-4" />
+                                        </Link>
+                                    </div>
                                 </div>
                             </div>
                         </motion.div>

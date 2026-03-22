@@ -183,9 +183,18 @@ const MarketplaceDetailPage: React.FC = () => {
                                         </div>
                                     </div>
 
-                                    <div className="flex items-baseline gap-2 mb-8">
-                                        <span className="text-5xl font-black italic text-white tracking-tighter">${item.price}</span>
-                                        <span className="text-slate-500 text-sm font-medium uppercase tracking-widest">USD</span>
+                                    <div className="flex items-center gap-4 mb-8">
+                                        <div className="flex flex-col">
+                                            {item.originalPrice && (
+                                                <span className="text-xl font-black text-slate-500 line-through decoration-purple-500/50 decoration-2 mb-[-8px]">
+                                                    ${item.originalPrice}
+                                                </span>
+                                            )}
+                                            <div className="flex items-baseline gap-2">
+                                                <span className="text-6xl font-black italic text-white tracking-tighter">${item.price}</span>
+                                                <span className="text-slate-500 text-sm font-medium uppercase tracking-widest">USD</span>
+                                            </div>
+                                        </div>
                                     </div>
 
                                     <div className="space-y-4 mb-8 border-y border-white/5 py-8">
@@ -204,6 +213,17 @@ const MarketplaceDetailPage: React.FC = () => {
                                     </div>
 
                                     <div className="flex flex-col gap-4">
+                                        {item.demoUrl && (
+                                            <a
+                                                href={item.demoUrl}
+                                                target="_blank"
+                                                rel="noopener noreferrer"
+                                                className="w-full flex items-center justify-center gap-3 py-4 bg-purple-600/10 hover:bg-purple-600/20 border border-purple-500/20 rounded-2xl text-[12px] font-black uppercase tracking-[0.3em] text-purple-400 transition-all group"
+                                            >
+                                                View Live Demo
+                                                <Globe className="w-5 h-5 group-hover:rotate-12 transition-transform" />
+                                            </a>
+                                        )}
                                         <button 
                                             onClick={handlePurchase}
                                             disabled={isPurchasing}

@@ -4,41 +4,41 @@ import { ShieldAlert, Zap, Cpu, Globe, BarChart3, Rocket, XCircle, CheckCircle2,
 
 const steps = [
     {
-        title: "THE MANUAL GRIND",
-        subtitle: "The Business Ceiling",
+        title: "THE AUDIT (HOUR 1-4)",
+        subtitle: "Clarity over Abstraction",
         status: "critical",
-        icon: <XCircle className="w-8 h-8 text-red-500" />,
+        icon: <ShieldAlert className="w-8 h-8 text-red-500" />,
         points: [
-            "Losing money on slow lead response",
-            "Drained human labor doing busy work",
-            "Unable to grow without more hiring",
-            "Inconsistent sales and high stress"
+            "Identify the 'front door' of your revenue",
+            "Strip away the confusing philosophy",
+            "Map the simplest path to a customer",
+            "Finalize the 48-hour transformation plan"
         ],
         alignment: "left"
     },
     {
-        title: "THE AI PARTNERSHIP",
-        subtitle: "Integrated Intelligence",
+        title: "THE REBUILD (HOUR 5-40)",
+        subtitle: "High-Speed Execution",
         status: "active",
-        icon: <Users className="w-8 h-8 text-purple-400" />,
+        icon: <Zap className="w-8 h-8 text-purple-400" />,
         points: [
-            "We deploy agents that never sleep",
-            "Every lead is called in 30 seconds",
-            "Real human-grade voice interaction",
-            "Your calendar fills while you focus"
+            "Rebuild the website for 100% clarity",
+            "Deploy the automated lead capture",
+            "Connect the high-intent scraping engine",
+            "Establish the 24/7 follow-up system"
         ],
         alignment: "right"
     },
     {
-        title: "IRREFUTABLE SCALE",
-        subtitle: "The Elite Enterprise",
+        title: "DEPLOΥ (HOUR 48)",
+        subtitle: "Immediate Outcome",
         status: "optimized",
-        icon: <TrendingUp className="w-8 h-8 text-blue-400" />,
+        icon: <Rocket className="w-8 h-8 text-blue-400" />,
         points: [
-            "Unlimited capacity for new clients",
-            "Radically lower operating costs",
-            "Market dominance through speed",
-            "A business that runs like clockwork"
+            "Go-live with the new revenue system",
+            "Zero friction lead-to-call pipeline",
+            "Predictable customer acquisition",
+            "The foundation for massive scaling"
         ],
         alignment: "left"
     }
@@ -64,7 +64,7 @@ const Process: React.FC = () => {
                     >
                         <Zap className="w-4 h-4 text-purple-400" />
                         <span className="text-[10px] font-black uppercase tracking-[0.3em] text-purple-400">
-                            Roadmap to Scale
+                            THE 48-HOUR REVENUE REBUILD
                         </span>
                     </motion.div>
 
@@ -75,7 +75,7 @@ const Process: React.FC = () => {
                         transition={{ delay: 0.2 }}
                         className="text-5xl lg:text-7xl font-black font-display tracking-tighter italic text-white mb-6 uppercase"
                     >
-                        THE EVOLUTION OF <span className="gradient-text-alt underline decoration-purple-500/30">GROWTH.</span>
+                        FROM CONFUSION TO <span className="gradient-text-alt underline decoration-purple-500/30">CASH.</span>
                     </motion.h2>
                     <motion.p
                         initial={{ opacity: 0, y: 20 }}
@@ -84,8 +84,7 @@ const Process: React.FC = () => {
                         transition={{ delay: 0.3 }}
                         className="text-xl text-slate-400 max-w-2xl mx-auto font-medium"
                     >
-                        From the friction of manual operations to the precision of an automated enterprise.
-                        This is how Revlo transforms your business journey.
+                        We stop the money leaks. We rebuild your front-end and back-end for one purpose: getting you more customers in 30 days or less.
                     </motion.p>
                 </div>
 

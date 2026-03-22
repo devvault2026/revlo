@@ -6,6 +6,7 @@ export interface MarketplaceItem {
     description: string;
     longDescription: string;
     price: number;
+    originalPrice?: number;
     category: 'SaaS' | 'AI' | 'Gaming' | 'Infrastructure';
     image: string;
     features: string[];

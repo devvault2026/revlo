@@ -185,5 +185,62 @@ The market is currently moving from personal assistants to **Autonomous Infrastr
 **Ready to deploy your first sub-agent?**  
 [Check out Revlo's OpenClaw Infrastructure](/openclaw)
 `
+    },
+    {
+        slug: 'celest-yoga-ai-reimagined',
+        title: 'CELEST: BEYOND THE MAT — HOW WE BUILT THE WORLD\'S FIRST ANATOMICALLY-VALIDATED YOGA AI',
+        excerpt: 'Yoga is a fundamental wellness tool, yet it remains inaccessible to millions. We built Celest to break those barriers using Next.js 19, TensorFlow.js, and Google Gemini—creating a "digital teacher" that prioritizes safety and radical accessibility.',
+        date: 'March 22, 2026',
+        author: 'Jaryd Pacquette',
+        authorRole: 'Founder & Lead Operator',
+        authorImage: '/619228587_1473924384299979_5558935500619533353_n.jpg',
+        readTime: '6 min read',
+        category: 'AI & Wellness',
+        image: 'https://images.unsplash.com/photo-1544367567-0f2fcb009e0b?auto=format&fit=crop&q=80&w=1200',
+        content: `
+# Celest: Beyond the Mat — How We Built the World's First Anatomically-Validated Yoga AI
+
+Yoga isn't a luxury for the flexible and wealthy—it's a fundamental wellness tool for everyone. Yet, for many beginners, the barriers are high: fear of injury, lack of expensive equipment, or simply not knowing where to start.
+
+At Revlo, we decided to solve this. Enter **Celest**, a next-generation yoga learning platform built from the ground up to be data-informed, clinically grounded, and radically accessible.
+
+## The Problem: The "Generic Video" Trap
+Most yoga apps treat poses as generic videos. But yoga is a clinical intervention. Without real-time feedback or anatomical awareness, beginners often struggle with form, leading to frustration or injury.
+
+## The Solution: Anatomical Intelligence
+We didn't just build another video library. We built an ecosystem that understands **human movement**.
+
+### 1. AI Safety & Validation (TensorFlow.js + Gemini)
+The core of Celest is its proprietary safety layer. Using **TensorFlow.js**, we perform real-time pose detection directly in the browser. Before you even start a sequence, **Google Gemini** analyzes your profile for contraindications and injury history, flagging unsafe poses and suggesting modifications.
+
+### 2. The Prop Swap™ Revolution
+One of the biggest barriers to yoga is the "gear gatekeeping." Don't have a yoga block? Celest's "Prop Swap" engine automatically maps professional equipment to household items. A thick book becomes a block; a bathrobe belt becomes a strap. We've eliminated the excuse of "I don't have the right equipment."
+
+### 3. Radical Accessibility DNA
+Accessibility isn't a "mode" in Celest; it's the foundation.
+*   **Chair Yoga**: Native support for mobility-constrained practitioners.
+*   **Wall-Assisted Poses**: For those working on balance or strength.
+*   **Bariatric Modifications**: Ensuring yoga is truly for every body.
+*   **Trauma-Informed Options**: Focused on gentle, empowering practice.
+
+## The Prana Methodology: Measuring What Matters
+Forget calorie tracking. Yoga is about the nervous system. We developed the **Prana Score**, a 0-100 index based on three pillars:
+1.  **Breath**: Clinical pranayama techniques for parasympathetic activation.
+2.  **Movement**: Modular sequences for functional strength.
+3.  **Rest**: Integrated recovery periods (Yoga Nidra, Shavasana).
+
+## The Tech Stack: Built for Scale
+To deliver this experience, we leveraged the latest in web technology:
+*   **Frontend**: Next.js 16 & React 19 for streaming-fast UI.
+*   **Auth**: Clerk for enterprise-grade security.
+*   **Database**: Supabase (PostgreSQL) for HIPAA-ready health metrics.
+*   **ML**: TensorFlow.js for client-side pose detection.
+
+## Why This Matters
+Celest represents a shift in how we think about "Digital Wellness." It’s not just about content; it’s about **validated, safe, and inclusive guidance**. By merging clinical yoga science with cutting-edge AI, we're making the ancient practice of yoga available to the modern world—safely.
+
+**Ready to start your journey?**
+[Explore Celest in the Marketplace](/marketplace/celest)
+        `
     }
 ];

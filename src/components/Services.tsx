@@ -8,30 +8,30 @@ const Services: React.FC = () => {
         {
             id: "01",
             icon: <Layers className="w-8 h-8" />,
-            title: 'SELF-SELLING APPS',
-            label: 'AUTONOMOUS GROWTH',
-            description: 'We build digital entities that don\'t just exist—they compete. "Autonomy-First" engineering means your project handles its own marketing, conversion, and operations. You don\'t launch an app; you deploy a market leader.',
-            features: ['AUTONOMOUS GROWTH ENGINES', 'MARKET-DOMINANT UX', 'NEURAL CONVERSION PATHS'],
+            title: 'REVENUE WEBSITES',
+            label: '48-HOUR REBUILD',
+            description: 'We rebuild your website in 48 hours to focus on one thing: getting you customers. No fluff, just high-conversion architecture designed for speed and clarity.',
+            features: ['48-HOUR DEPLOYMENT', 'CONVERSION-OPTIMIZED UX', 'REVENUE-FIRST DESIGN'],
             color: 'text-red-500',
             link: '/websites'
         },
         {
             id: "02",
             icon: <Cpu className="w-8 h-8" />,
-            title: 'AUTONOMOUS OPS',
-            label: 'CORE INFRASTRUCTURE',
-            description: 'Fully autonomous systems that replace expensive human overhead. We map your entire business logic into a self-evolving neural pipeline that manages sales, support, and execution 24/7 with zero error.',
-            features: ['TOTAL WORKFLOW AUTONOMY', 'LMM-POWERED EXECUTION', 'SELF-OPTIMIZING LOGIC'],
+            title: 'LEAD ENGINES',
+            label: 'AUTOMATED PROSPECTING',
+            description: 'Custom lead generation systems that identify, scrape, and qualify high-intent prospects 24/7. Turn your market into a predictable stream of sales opportunities.',
+            features: ['NEURAL LEAD EXTRACTION', 'HIGH-INTENT SCORING', 'AUTOMATED OUTREACH'],
             color: 'text-white',
             link: '/takeoff-agent'
         },
         {
             id: "03",
             icon: <TrendingUp className="w-8 h-8" />,
-            title: 'RECURSIVE REVENUE',
-            label: 'WEALTH ENGINES',
-            description: 'The ultimate business objective. We build the proprietary AI infrastructure that acts as your company\'s central brain, orchestrating high-value operations that generate consistent revenue.',
-            features: ['ELITE NEURAL INFRA', 'RECURSIVE GROWTH LOOPS', 'DATA-FIRST DECISIONING'],
+            title: 'GROWTH AUTOMATION',
+            label: 'SYSTEMATIC SCALING',
+            description: 'Automated follow-up and CRM systems that ensure no lead is left behind. We build the infrastructure that converts attention into revenue without human friction.',
+            features: ['INSTANT LEAD RESPONSE', 'AUTONOMOUS FOLLOW-UP', 'PIPELINE ACCELERATION'],
             color: 'text-blue-500',
             link: '/elite-development'
         }
@@ -57,14 +57,14 @@ const Services: React.FC = () => {
                                 <span className="text-xs font-black text-red-500 uppercase tracking-[1em]">SYSTEM_CAPABILITIES</span>
                             </div>
                             <h2 className="text-[clamp(3.5rem,10vw,10rem)] font-black tracking-tighter text-white uppercase leading-[0.85]">
-                                THE AI <br />
+                                THE REVENUE <br />
                                 <span className="text-transparent bg-clip-text bg-gradient-to-r from-red-600 to-red-400">ARSENAL.</span>
                             </h2>
                         </motion.div>
 
                         <div className="max-w-sm lg:pt-32">
                             <p className="text-sm font-bold text-white/40 uppercase tracking-[0.3em] italic border-l-2 border-red-600/30 pl-6">
-                                "DEBUNKING THE AGENCY MYTH: WE DON'T BUILD SOFTWARE, WE DEPLOY AUTONOMY."
+                                "CONFUSE THEM = LOSE THEM. CLARITY = CASH. WE BUILD THE FRONT DOOR TO YOUR REVENUE."
                             </p>
                         </div>
                     </div>

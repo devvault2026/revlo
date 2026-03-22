@@ -74,11 +74,11 @@ const Projects: React.FC = () => {
                     </div>
 
                     <h2 className="text-5xl lg:text-7xl font-black font-display mb-8 tracking-tighter italic text-white leading-none">
-                        BUILT BY <span className="gradient-text">REVLO.</span>
+                        VERIFIED <span className="gradient-text">BUILDS.</span>
                     </h2>
 
                     <p className="text-xl text-slate-400 leading-relaxed font-medium max-w-3xl">
-                        We don't just consult—we build. From high-end, conversion-heavy web design to complex multi-agent AI systems, we provide the elite infrastructure for the 2026 digital economy.
+                        We don't just "consult"—we execute. These are the systems we've built that are currently driving revenue and automation for our partners.
                     </p>
                 </motion.div>
 
